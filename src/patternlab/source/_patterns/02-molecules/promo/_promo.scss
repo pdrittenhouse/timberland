@@ -1,0 +1,57 @@
+// Custom styles for promo
+
+// The non-printing variables, functions, and mixins of 00-protons/variables
+// are provided to this file via:
+//   webpack.config.js: sass-loader.data|includePaths
+
+.promo {
+
+  &--1-up {
+    background-color: c(gray, ultralight);
+
+    .promo-content {
+      position: absolute;
+      top: rem-calc(40px);
+      left: rem-calc(30px);
+      color: c(black);
+      max-width: 70%;
+    }
+
+    .promo-intro {}
+
+    .promo-text {
+      margin-bottom: rem-calc(20px);
+    }
+
+    .promo-cta {}
+
+    .button-group {}
+  }
+
+  &--2-up {
+
+    .promo-1,
+    .promo-2 {
+      background-color: c(gray, ultralight);
+
+      .promo-intro {}
+
+      .promo-title,
+      .promo-text {
+        padding: rem-calc(10px 20px);
+      }
+
+      .promo-cta {
+        padding: rem-calc(0 20px 20px);
+      }
+
+      .button-group {}
+    }
+
+    .promo-1 {}
+
+    .promo-2 {}
+
+  }
+
+}

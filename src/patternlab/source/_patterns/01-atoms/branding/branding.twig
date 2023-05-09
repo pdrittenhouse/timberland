@@ -1,0 +1,40 @@
+<h1 class="mb-3">Branding Examples</h1>
+
+<div class="mb-3 p-3 bg-light border border-secondary rounded">
+  <p class="lead">Different applications of a branding block.</p>
+  <p>These can be placed inside a Jumbotron to display a branding block.</p>
+</div>
+
+<hr>
+
+<h4>Inline SVG</h4>
+{% include "@atoms/branding/_branding.tpl.twig" with {
+  url: '#',
+  logo_svg_inline: paths.images ~ '/logo.svg',
+  colorOriginal: true,
+  site_name: 'beaconfire RED',
+  site_slogan: 'Site Slogan that Describes the Logo Above with Inline SVG',
+  branding_other_classes: ''
+} %}
+
+<h4>Background Image</h4>
+{% include "@atoms/branding/_branding.tpl.twig" with {
+  url: '#',
+  logo_bg_img_src: paths.images ~ '/logo.svg',
+  site_name: 'beaconfire RED',
+  site_slogan: 'Site Slogan that Describes the Logo Above with Inline SVG',
+  height: '250px',
+  branding_other_classes: ''
+} %}
+
+<h4>Inline Image</h4>
+{% include "@atoms/branding/_branding.tpl.twig" with {
+  url: '#',
+  logo_img_src: paths.images ~ '/logo.png',
+  site_name: 'beaconfire RED',
+  site_slogan: 'Site Slogan that Describes the Logo Above with Src SVG',
+  branding_other_classes: ''
+} %}
+
+test:
+{{ paths.images ~ '/logo.svg' }}

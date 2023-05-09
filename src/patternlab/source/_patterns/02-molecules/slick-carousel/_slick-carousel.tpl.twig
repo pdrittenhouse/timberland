@@ -1,0 +1,129 @@
+{#
+/**
+ * @file
+ * slick carousel
+ * @link https://kenwheeler.github.io/slick/
+ *
+ * Available variables for slick carousel:
+ *  - id [string]: Carousel ID.
+ *  - customControls [bool]: Appends controls to controls element.
+ *  - adaptiveHeight [bool]: Enables adaptive height for single slide horizontal carousels..
+ *  - autoplay [bool]: Enables Autoplay.
+ *  - autoplaySpeed [int]: Autoplay Speed in milliseconds.
+ *  - customControls [bool]: Appends controls to controls element.
+ *  - arrows [bool]: Prev/Next Arrows.
+ *  - asNavFor [string]: Set the slider to be the navigation of other slider (Class or ID Name).
+ *  - centerMode [bool]: Enables centered view with partial prev/next slides. Use with odd numbered slidesToShow counts.
+ *  - centerPadding [string]: Side padding when in center mode (px or %).
+ *  - dots [bool]: Show dot indicators.
+ *  - fade [bool]: Enable fade.
+ *  - infinite [bool]: Infinite loop sliding.
+ *  - initialSlide [int]: Slide to start on.
+ *  - rows [int]: Setting this to more than 1 initializes grid mode. Use slidesPerRow to set how many slides should be in each row.
+ *  - slidesPerRow [int]: With grid mode intialized via the rows option, this sets how many slides are in each grid row. dver.
+ *  - slidesToShow [int]: Number of slides to show.
+ *  - slidesToScroll [int]: Number of slides to scroll.
+ *  - speed [int]: Slide/Fade animation speed in milleseconds.
+ *  - variableWidth [bool]: Variable width slides.
+ *  - vertical [bool]: Vertical slide mode.
+ *  - verticalSwiping [bool]: Vertical swipe mode.
+ *  - rtl [bool]: Change the slider's direction to become right-to-left.
+ *  - slides [array]: Array of slides.
+ *  - slides: Slide content.
+ *  - slick_carousel_classes [array]: Additional component classes.
+ *  - slick_carousel_other_classes [string]: Additional component classes.
+ *  - draggable [bool]: Enable mouse dragging
+ *  - edge_friction [float]: Resistance when swiping edges of non-infinite carousels
+ *  - focus_on_select [bool]: Enable focus on selected element
+ *  - pause_on_focus [bool]: Pause Autoplay On Focus
+ *  - pause_on_hover [bool]: Pause Autoplay On Hover
+ *  - pause_on_dots_hover [bool]: Pause Autoplay when a dot is hovered
+ *  - swipe [bool]: Pause Autoplay when a dot is hovered
+ *  - swipe_to_slide [bool]: Allow users to drag or swipe directly to a slide irrespective of slidesToScroll
+ *  - touch_move [bool]: Enable slide motion with touch
+ *  - touch_threshold [int]: To advance slides, the user must swipe a length of (1/touchThreshold) * the width of the slider
+ *  - easing [string]: Add easing for jQuery animate. Use with easing libraries or default easing methods
+ *  - css_ease [string]: CSS3 Animation Easing
+ *  - responsive [array]: Responsive options
+ */
+#}
+
+{% set slick_wrapper_classes = slick_wrapper_classes|default([])|merge([
+  'slick-carousel-wrapper',
+  customControls == true ? 'show-custom-controls',
+  slick_wrapper_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set slick_wrapper_attributes = slick_wrapper_attributes|default([])|merge([
+  slick_wrapper_classes ? 'class="' ~ slick_wrapper_classes ~ '"',
+  nojs == true ? 'data-nojs="nojs"',
+  customControls == false ? 'data-customcontrols=""' : 'data-customcontrols="true"',
+  adaptiveHeight == true ? 'data-adaptiveheight="true"' : 'data-adaptiveheight="false"',
+  autoplay == true ? 'data-autoplay="true"' : 'data-autoplay="false"',
+  autoplaySpeed ? 'data-autoplayspeed="' ~ autoplaySpeed ~ '"' : 'data-autoplayspeed="3000"',
+  arrows == false ? 'data-arrows="false"' : 'data-arrows="true"',
+  asNavFor ? 'data-asnavfor="' ~ asNavFor ~ '"' : 'data-asnavfor=""',
+  centerMode == true ? 'data-centermode="true"' : 'data-centermode="false"',
+  centerPadding ? 'data-centerpadding="' ~ centerPadding ~ '"' : 'data-centerpadding="50px"',
+  dots == true ? 'data-dots="true"' : 'data-dots="false"',
+  fade == true ? 'data-fade="true"' : 'data-fade="false"',
+  infinite == true ? 'data-infinite="true"' : 'data-infinite="false"',
+  initialSlide ? 'data-initialslide="' ~ initialSlide ~ '"' : 'data-initialslide="0"',
+  rows ? 'data-rows="' ~ rows ~ '"' : 'data-rows="1"',
+  slide ? 'data-slide="' ~ slide ~ '"' : 'data-slide=""',
+  slidesPerRow ? 'data-slidesperrow="' ~ slidesPerRow ~ '"' : 'data-slidesperrow="1"',
+  slidesToShow ? 'data-slidestoshow="' ~ slidesToShow ~ '"' : 'data-slidestoshow="1"',
+  slidesToScroll ? 'data-slidestoscroll="' ~ slidesToScroll ~ '"' : 'data-slidestoscroll="1"',
+  speed ? 'data-speed="' ~ speed ~ '"' : 'data-speed="300"',
+  variableWidth == true ? 'data-variablewidth="true"' : 'data-variablewidth="false"',
+  vertical == true ? 'data-vertical="true"' : 'data-vertical="false"',
+  verticalSwiping == true ? 'data-verticalswiping="true"' : 'data-verticalswiping="false"',
+  rtl == true ? 'data-rtl="true"' : 'data-rtl="false"',
+  responsive ? "data-responsive='" ~ responsive ~ "'" : "data-responsive='[]'",
+  touch_threshold ? 'data-touchthreshold="' ~ touch_threshold ~ '"' : 'data-touchthreshold="5"',
+  easing ? 'data-easing="' ~ easing ~ '"' : 'data-easing="linear"',
+  css_ease ? 'data-cssease="' ~ css_ease ~ '"' : 'data-cssease="linear"',
+  draggable == true ? 'data-draggable="true"' : 'data-draggable="false"',
+  edge_friction ? 'data-edgefriction="' ~ edge_friction ~ '"' : 'data-edgefriction="0.15"',
+  focus_on_select == true ? 'data-focusonselect="true"' : 'data-focusonselect="false"',
+  pause_on_focus == true ? 'data-pauseonfocus="true"' : 'data-pauseonfocus="false"',
+  pause_on_hover == true ? 'data-pauseonhover="true"' : 'data-pauseonhover="false"',
+  pause_on_dots_hover == true ? 'data-pauseondotshover="true"' : 'data-pauseondotshover="false"',
+  swipe == true ? 'data-swipe="true"' : 'data-swipe="false"',
+  swipe_to_slide == true ? 'data-swipetoslide="true"' : 'data-swipetoslide="false"',
+  touch_move == true ? 'data-touchmove="true"' : 'data-touchmove="false"',
+  slick_wrapper_other_attributes,
+]) | sort | join(' ') | trim %}
+
+{% set carouselId = [] %}
+{% set alpha = 'abcdefghijklmnopqrstuvwxyz' %}
+{% set num = '0123456789' %}
+{% for i in 1..10 %}
+  {% set char = random(alpha ~ alpha|upper ~ num ~ '-_') %}
+  {% set carouselId = carouselId|merge([char]) %}
+{% endfor %}
+{% set carouselId = 'slickSlider' ~ carouselId|join %}
+
+{% set slick_carousel_classes = slick_carousel_classes|default([])|merge([
+  'slick-carousel',
+  slick_carousel_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set slick_carousel_attributes = slick_carousel_attributes|default([])|merge([
+  slick_carousel_classes ? 'class="' ~ slick_carousel_classes ~ '"',
+  'id="' ~ id|default(carouselId) ~ '"',
+  slick_carousel_other_attributes,
+]) | sort | join(' ') | trim %}
+
+<div {{ slick_wrapper_attributes }}>
+  {% block slider %}
+    <div {{ slick_carousel_attributes }}>
+      {% block slides %}
+        {% for slide in slides %}
+          <div>{{ slide }}</div>
+        {% endfor %}
+      {% endblock slides %}
+    </div>
+  {% endblock slider %}
+  <div class="slick-carousel-controls"></div>
+</div>

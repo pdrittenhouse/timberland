@@ -1,0 +1,47 @@
+{
+  "name": "acf/slide",
+  "title": "Slide",
+  "description": "A slide block.",
+  "category": "dream",
+  "icon": "slides",
+  "keywords": ["slider", "carousel", "slide", "slides"],
+  "attributes": {},
+  "usesContext": [ "acf/fields" ],
+  "supports": {
+    "jsx": true,
+    "align": true,
+    "alignContent": true,
+    "alignText": true,
+    "anchor": true,
+    "className": true,
+    "multiple": true,
+    "html": false,
+    "inserter": true,
+    "fullHeight": false,
+    "color": {
+      "text": false,
+      "background": true,
+      "link": false,
+      "gradients": true,
+      "linkColor": true
+    },
+    "typography": {
+      "fontSize": true
+    }
+  },
+  "styles": [
+    { "name": "default", "label": "Default", "isDefault": true },
+    { "name": "other", "label": "Other" }
+  ],
+  "editorScript": "./index.js",
+  "script": "./script.js",
+  "editorStyle": "./index.css",
+  "style": "./style.css",
+  "acf": {
+    "mode": "preview",
+    "renderCallback": "dream_block_render",
+    "postTypes": true,
+    "parent": "acf/slider",
+    "reusable": true
+  }
+}

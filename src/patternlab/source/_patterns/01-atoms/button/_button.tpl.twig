@@ -1,0 +1,95 @@
+{#
+/**
+ * @file Button!
+ * Documenting Button Examples from Bootstrap.
+ *
+ * Available variables:
+ * - button_classes: [array]: Classes not specified in the template.
+ * - button_other_classes: [string]: Other classes not specified in the template.
+ * - button_element: [string]: button|a|input choose the element type for your button.
+ * - button_type: [string]: the html 'type' attribute.
+ * - button_outline: [boolean]: True|False, remove all background colors and images from a button.
+ * - buttonless_dropdown: [boolean]: True|False, toggle `btn` base class for dropdowns.
+ * - button_color: [string]: primary|secondary|success|danger|warning|info|light|dark the color of the button.
+ * - button_size: [string]: lg|sm set whether the button is large or small.
+ * - button_block:  [boolean]: True|False set button to occupy the full width the parent element.
+ * - button_active: [boolean]: True|False set button to appear pressed.
+ * - button_other_classes: [array] Other classes not specified in the template.
+ * - button_toggle: [string]: button|collapse set button's data-bs-toggle html value.
+ * - button_link: [string]: the URL the button will lead to.
+ * - button_value: [string]: the html 'value' attribute.
+ * - button_id: [string]: The button's html 'id' attribute.
+ * - button_disabled: [boolean]: True|False set button to appear disabled.
+ * - button_attributes: [array]: Attributes not specified in the template.
+ * - button_other_attributes: [string]: Other attributes not specified in the template.
+ * - button_text: [string]: Display text on the button.
+ * - button_target: [string]: Sets the target attribute if button element is an 'a'.  Sets the data-bs-target attribute if button element is a 'button'.
+ * - button_expanded: [bool]: Sets aria-expanded attribute.
+ * - button_controls: [string]: Defines element that button controls.
+ * - nowrap: [bool]: Prevent wrapping to multiple lines.
+ * - contextual_content: [string: 'popover', 'tooltip']: Type of contextual content.
+ * - title: [string]: Tooltip or popover tile.
+ * - popover_content: [string]: Popover content.
+ * - context_placement: [string ('top', 'bottom', 'left', 'right')]: Placement of tooltips and popovers.
+ * - context_container: [string]: Container element for contextual content.
+ * - close_button: [bool | string: 'black', 'white', 'no-icon']: Display close button.
+ * - hide_label: [bool]: Hide button label text.
+ *
+ * @see https://getbootstrap.com/docs/4.0/components/buttons
+ */
+#}
+
+{% set button_element = button_element | default ('button') %}
+
+{% if button_element != 'a' %}
+  {% set button_type = 'type="' ~ button_type | default('button') ~ '"' %}
+{% endif %}
+
+{% set button_classes = button_classes|default([])|merge([
+  'button',
+  buttonless_dropdown ? '' : 'btn',
+  (button_color and not button_outline) ? 'btn-' ~ button_color,
+  button_outline ? 'btn-outline-' ~ button_color,
+  button_size ? 'btn-' ~ button_size,
+  button_block ? 'btn-block',
+  button_active ? 'active',
+  nowrap == true ? 'text-nowrap',
+  close_button != 'no-icon' and (close_button == 'black' or close_button == 'white') ? 'btn-close',
+  close_button == 'white' and close_button != 'black' and close_button != 'no-icon' ? 'btn-close-white',
+  (button_toggle == 'collapse' or button_toggle == 'dropdown') and (button_expanded == false and button_active == false) ? 'collapsed',
+  button_other_classes
+]) | sort | join(' ') | trim %}
+
+{% set button_attributes = button_attributes|default([])|merge([
+  'role="button"',
+  button_active ? 'aria-pressed="true"',
+  contextual_content ? 'data-bs-toggle="' ~ contextual_content ~ '"',
+  contextual_content == 'tooltip' ? 'data-bs-html="true"',
+  contextual_content is empty and button_toggle ? 'data-bs-toggle="' ~ button_toggle ~ '"',
+  button_element == 'a' and button_link ? 'href=' ~ button_link|e,
+  button_target and button_element == 'a' ? 'target="' ~ button_target ~ '"',
+  button_target and (button_element == 'button' or button_toggle == modal or button_toggle == 'collapse' or button_toggle == 'dropdown') ? 'data-bs-target="' ~ button_target ~ '"',
+  button_value ? 'value="' ~ button_value ~ '"',
+  button_id ? 'id="' ~ button_id ~ '"',
+  button_disabled ? 'disabled',
+  button_expanded ? 'aria-expanded="' ~ button_expanded ~ '"',
+  button_controls ? 'aria-controls="' ~ button_controls ~ '"',
+  contextual_content and title ? 'title="' ~ title ~ '"',
+  contextual_content == 'popover' and popover_content ? 'data-bs-content="' ~ popover_content ~ '"',
+  contextual_content and context_placement ? 'data-bs-placement="' ~ context_placement ~ '"',
+  contextual_content and context_container ? 'data-bs-container="' ~ context_container ~ '"' : contextual_content ? 'data-bs-container="body"',
+  close_button == true ? 'aria-label="Close"',
+  button_other_attributes,
+]) | sort | join(' ') | trim %}
+
+<{{ button_element }} class="{{ button_classes }}" {{ button_attributes }}>
+{% if button_element != 'input' %}
+  {% block left %}{% endblock left %}
+  {% block button_content %}
+    {% if close_button != 'black' and close_button != 'white' and hide_label != true %}
+      <span class="button--label">{{ button_text }}</span>
+    {% endif %}
+  {% endblock button_content %}
+  {% block right %}{% endblock right %}
+{% endif %}
+</{{ button_element }}>

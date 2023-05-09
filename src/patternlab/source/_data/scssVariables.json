@@ -1,0 +1,158 @@
+{
+  "scssColors": {
+    "primary": "rgb(0, 40, 104)",
+    "secondary": "rgb(192, 32, 51)",
+    "tertiary": "rgb(205, 94, 40)",
+    "quaternary": "rgb(253, 215, 0)",
+    "quinary": "rgb(14, 30, 64)",
+    "senary": "rgb(96, 96, 96)",
+    "septenary": "rgb(112, 112, 112)",
+    "octonary": "rgb(0, 40, 104)",
+    "nonary": "rgb(192, 32, 51)",
+    "denary": "rgb(14, 30, 64)",
+    "success": "rgb(144, 238, 144)",
+    "info": "rgb(255, 255, 0)",
+    "warning": "rgb(255, 192, 203)",
+    "danger": "rgb(255, 0, 0)",
+    "light": "rgb(137, 137, 137)",
+    "dark": "rgb(128, 128, 128)",
+    "white": "rgb(255, 255, 255)",
+    "black": "rgb(0, 0, 0)",
+    "gray": "rgb(129, 129, 129)",
+    "gray-dark": "rgb(128, 128, 128)",
+    "gray-light": "rgb(137, 137, 137)",
+    "gray-ultralight": "rgb(236, 236, 236)",
+    "san-marino": "rgb(66, 103, 178)",
+    "azure-radiance": "rgb(0, 120, 255)",
+    "bright-turquoise": "rgb(0, 198, 255)",
+    "dodger-blue": "rgb(29, 161, 242)",
+    "woodsmoke": "rgb(20, 23, 26)",
+    "pale-sky": "rgb(101, 119, 134)",
+    "cadet-blue": "rgb(170, 184, 194)",
+    "mystic": "rgb(225, 232, 237)",
+    "catskill-white": "rgb(245, 248, 250)",
+    "royal-blue": "rgb(64, 93, 230)",
+    "royal-blue-dark": "rgb(88, 81, 219)",
+    "royal-purple": "rgb(131, 58, 180)",
+    "medium-red-violet": "rgb(193, 53, 132)",
+    "cerise-red": "rgb(225, 48, 108)",
+    "torch-red": "rgb(253, 29, 29)",
+    "flamingo": "rgb(245, 96, 64)",
+    "crusta": "rgb(247, 119, 55)",
+    "yellow-orange": "rgb(252, 175, 69)",
+    "salomie": "rgb(255, 220, 128)",
+    "red": "rgb(255, 0, 0)",
+    "mine-shaft": "rgb(40, 40, 40)",
+    "cerulean-blue": "rgb(40, 103, 178)",
+    "green-spring": "rgb(173, 178, 173)",
+    "iron": "rgb(204, 208, 212)",
+    "midnight-blue": "rgb(0, 40, 104)",
+    "blue-zodiac": "rgb(14, 30, 64)",
+    "cardinal": "rgb(192, 32, 51)",
+    "piper": "rgb(205, 94, 40)",
+    "school-bus-yellow": "rgb(253, 215, 0)",
+    "scorpion": "rgb(96, 96, 96)",
+    "dove-gray": "rgb(112, 112, 112)"
+  },
+  "scssBreakpoints": {
+    "xs": 0,
+    "sm": "24.375em",
+    "md": "33.75em",
+    "lg": "62em",
+    "xl": "64em",
+    "xxl": "87.5em",
+    "xxxl": "106.75em",
+    "xxxxl": "143.75em"
+  },
+  "contentWidths": {
+    "sm": "23.125rem",
+    "md": "36rem",
+    "lg": "60rem",
+    "xl": "73.25rem",
+    "xxl": "90rem",
+    "xxxl": "111.25rem",
+    "xxxxl": "150rem"
+  },
+  "scssSpacing": {
+    "0": 0,
+    "1": "0.25rem",
+    "2": "0.5rem",
+    "3": "1rem",
+    "4": "1.5rem",
+    "5": "3rem"
+  },
+  "fontFamilies": {
+    "font-stack-serif": [
+      "Georgia",
+      "Times",
+      "Times New Roman",
+      "serif"
+    ],
+    "font-stack-sans-serif": [
+      "Helvetica Neue",
+      "Helvetica",
+      "Arial",
+      "sans-serif"
+    ],
+    "font-stack-base": [
+      "Georgia",
+      "Times",
+      "Times New Roman",
+      "serif"
+    ],
+    "font-stack-headings": [
+      "Helvetica Neue",
+      "Helvetica",
+      "Arial",
+      "sans-serif"
+    ],
+    "font-stack-monospace": [
+      "Source Code Pro",
+      "monospace"
+    ],
+    "font-stack-code": [
+      "Source Code Pro",
+      "monospace"
+    ],
+    "font-stack-buttons": [
+      "Helvetica Neue",
+      "Helvetica",
+      "Arial",
+      "sans-serif"
+    ]
+  },
+  "fontSizes": {
+    "base": "1rem",
+    "lg": "1.25rem",
+    "sm": "0.875rem"
+  },
+  "fontWeights": {
+    "light": 300,
+    "normal": 400,
+    "bold": 700
+  },
+  "scssIcons": [
+    "arrow-down",
+    "arrow-left",
+    "arrow-right",
+    "arrow-up",
+    "article",
+    "briefcase",
+    "chevron-down",
+    "chevron-left",
+    "chevron-right",
+    "chevron-up",
+    "close",
+    "diamond",
+    "fundraising",
+    "game-controller",
+    "laptop",
+    "menu",
+    "mobile-device",
+    "person",
+    "play",
+    "search",
+    "target-audience",
+    "technology"
+  ]
+}

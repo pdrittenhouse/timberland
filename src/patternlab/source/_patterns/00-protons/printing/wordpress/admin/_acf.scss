@@ -1,0 +1,89 @@
+.acf-field {
+
+    &.headless {
+
+        thead {
+            @include remove;
+        }
+    }
+
+    &.borderless {
+
+
+        .acf-table {
+            border: none;
+
+            th, td {
+                border: none;
+            }
+        }
+    }
+
+    &.remove-padding {
+
+        .acf-table {
+
+            th, td {
+                padding: 0;
+            }
+        }
+    }
+
+    &.unit {
+
+        .acf-input select,
+        .select2-container--default .select2-selection--single {
+            border-radius: 0;
+            height: auto;
+            background-color: c(gray, ultralight);
+        }
+    }
+}
+
+.min-table-style {
+
+    .acf-table {
+
+        > tbody {
+
+            > tr {
+
+                > td {
+                    padding: 0;
+                }
+            }
+        }
+    }
+
+    .acf-row-handle.order,
+    .acf-row-handle.remove {
+        padding: 0;
+    }
+
+    .acf-row-handle.order + td,
+    .acf-row-handle.remove {
+        border-left: none;
+    }
+
+    .block-editor .edit-post-sidebar  & {
+
+        .acf-fields > .acf-field {
+            margin: 8px 4px;
+        }
+    }
+}
+
+.wp-block-acf-row {
+
+  .row {
+
+    > .acf-innerblocks-container {
+      display: contents;
+
+      > .wp-block-acf-column {
+        display: contents;
+      }
+    }
+  }
+
+}

@@ -1,0 +1,58 @@
+.sl-overlay {}
+
+.sl-wrapper {
+
+  button {
+
+    &:hover,
+    &:focus {}
+  }
+
+  .sl-close {
+
+    &:hover,
+    &:focus {}
+  }
+
+  .sl-counter {}
+
+  .sl-navigation {
+
+    button {
+
+      &.sl-next {}
+
+      &.sl-prev {}
+
+      &:hover,
+      &:focus {}
+    }
+  }
+
+  &.sl-dir-rtl {
+
+    .sl-navigation {}
+  }
+
+  .sl-image {
+
+    img {}
+
+    iframe {}
+
+    .sl-caption {
+
+      &.pos-top {}
+
+      &.pos-outside {}
+    }
+
+    .sl-download {}
+  }
+}
+
+.sl-spinner {}
+
+.sl-scrollbar-measure {}
+
+.sl-transition {}

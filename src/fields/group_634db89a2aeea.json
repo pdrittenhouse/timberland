@@ -1,0 +1,54 @@
+{
+    "key": "group_634db89a2aeea",
+    "title": "Module: Text Transform",
+    "fields": [
+        {
+            "key": "field_634dc7f710275",
+            "label": "Text Transform",
+            "name": "text_transform",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "capitalize": "Capitalize",
+                "uppercase": "Uppercase",
+                "lowercase": "Lowercase",
+                "full-width": "Full Width",
+                "full-size-kana": "Full Size Kana"
+            },
+            "default_value": false,
+            "allow_null": 1,
+            "multiple": 0,
+            "ui": 0,
+            "return_format": "value",
+            "ajax": 0,
+            "placeholder": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "block-modules"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1671746693
+}

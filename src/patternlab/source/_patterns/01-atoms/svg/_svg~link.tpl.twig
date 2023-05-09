@@ -1,0 +1,80 @@
+{#
+/**
+ * @file
+ * svg~icon
+ *
+ * Available variables for svgicon:
+ *  - Inherit variables from @atoms/svg/_svg.tpl.twig & @atoms/svg/_svg~icon.tpl.twig
+ *  - url [string]: Link URL
+ *  - target [string]: Link URL target
+ *  - text [string]: Link text
+ *  - position [string]: Link icon position
+ *  - icon [string]: String filename of the SVG to use from svg/ or font awesome icon classes
+ *
+ *  NOTE: An object element in a link is NOT clickable. Do NOT pass in type: 'object' for svg links.
+ */
+#}
+
+{% set svg_link_attributes = svg_link_attributes|default([])|merge([
+  'target="' ~ target | default('_self') ~ '"',
+  'href="' ~ url ~ '"',
+  svg_link_other_attributes
+]) | sort | join(' ') | trim %}
+
+<a class="{{ svg_classes }}" {{ svg_link_attributes }}>
+  {% if position == 'before' %}
+    {% if icon %}
+      {% if icon matches '/(fa[bdlrs] fa)/' %} {# FontAwesome Icon#}
+        <span class="icon" style="font-size: {{ width }};"><i class="{{ icon }} color-fill--{{ fill }}"></i></span>
+      {% else %} {# Custom SVG Icon#}
+        {% include '@atoms/svg/_svg~icon.tpl.twig' with {
+          name: icon,
+          fill: fill,
+          width: width,
+          height: height,
+          svg_other_classes: 'svg--link'
+        } %}
+      {% endif %}
+    {% elseif path %}
+      {% include '@atoms/svg/_svg.tpl.twig' with {
+        path: path,
+        type: type,
+        colorOriginal: colorOriginal,
+        fallback: fallback,
+        alt: alt,
+        svg_other_classes: 'svg--link'
+      } %}
+    {% endif %}
+  {% endif %}
+
+  {% if text %}
+    <span class="svg--link-text">
+      {{ text }}
+    </span>
+  {% endif %}
+
+  {% if position == 'after' %}
+    {% if icon %}
+      {% if icon matches '/(fa[bdlrs] fa)/' %} {# FontAwesome Icon#}
+        <span class="icon" style="font-size: {{ width }};"><i class="{{ icon }} color-fill--{{ fill }}"></i></span>
+      {% else %} {# Custom SVG Icon#}
+        {% include '@atoms/svg/_svg~icon.tpl.twig' with {
+          name: icon,
+          fill: fill,
+          width: width,
+          height: height,
+          svg_other_classes: svg_other_classes
+        } %}
+      {% endif %}
+    {% elseif path %}
+      {% include '@atoms/svg/_svg.tpl.twig' with {
+        path: path,
+        type: type,
+        colorOriginal: colorOriginal,
+        fallback: fallback,
+        alt: alt,
+        svg_other_classes: svg_other_classes
+      } %}
+    {% endif %}
+  {% endif %}
+</a>

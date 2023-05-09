@@ -1,0 +1,15 @@
+{#
+/**
+ * @file
+ * image~aspect-ratio
+ *   Implements images src, alt, width and height.
+ *
+ * Available variables for image:
+ *  - Inherit variables from @atoms/image/_image.tpl.twig
+ */
+#}
+<div class="{{ image_classes }} ar-{{ width }}-{{ height }}">
+  <div class="content">
+    <img src="{{ src }}" alt="{{ alt }}" />
+  </div>
+</div>

@@ -1,0 +1,128 @@
+.post-pager {
+    text-align: center;
+    margin-top: rem-calc(90px);
+
+    .back {
+        @include fontSize(14px, 14px);
+        color: c(dove-gray);
+        letter-spacing: rem-calc(.5px);
+        display: block;
+        margin-bottom: rem-calc(30px);
+        font-weight: bold;
+    }
+
+    &-item {
+        border: rem-calc(2px) solid var(--primary);
+        position: relative;
+
+        &:first-child {
+            border-right-width: rem-calc(1px);
+        }
+
+        &:last-child {
+            border-left-width: rem-calc(1px);
+        }
+
+        &:first-child:last-child {
+            border-width: rem-calc(2px);
+
+            .post-pager-item-content {
+                padding: rem-calc(90px);
+
+                @include media-breakpoint-up(md) {
+                    padding: rem-calc(120px);
+                }
+            }
+        }
+    }
+
+    &-item-content {
+        padding: rem-calc(40px);
+
+        @include media-breakpoint-up(md) {
+            padding: rem-calc(60px);
+        }
+    }
+
+    .prev-post {
+
+        .label {
+            left: rem-calc(15px);
+
+            &:before {
+                @include sprite('arrow-left', (color: var(--primary)));
+                content: "";
+            }
+        }
+    }
+
+    .next-post {
+
+        .label {
+            right: rem-calc(15px);
+
+            &:after {
+                @include sprite('arrow-right', (color: var(--primary)));
+                content: "";
+            }
+        }
+    }
+
+    .label {
+        color: var(--primary);
+        border: none;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: rem-calc(.5px);
+        position: absolute;
+        top: rem-calc(15px);
+
+        &:before,
+        &:after {
+            display: inline-block;
+            width: rem-calc(20px);
+            height: rem-calc(15px);
+        }
+    }
+
+    .date {
+        @include fontSize(15px, 15px);
+        color: var(--gray);
+        text-transform: uppercase;
+        letter-spacing: rem-calc(.5px);
+        display: block;
+        margin-bottom: rem-calc(15px);
+        font-weight: bold;
+    }
+
+    .title {
+        @include absolute-center($undo: true);
+        @include fontSize(28px, 36px);
+        @include font($font-stack-base);
+        color: var(--secondary);
+        font-weight: bold;
+        letter-spacing: rem-calc(.5px);
+        display: block;
+        max-width: rem-calc(250px);
+        margin: 0 auto;
+    }
+
+    .pagination-link {
+        @include cover;
+        @include fontSize(0, 0);
+
+        &.prev {
+
+            a {}
+        }
+
+        &.next {
+
+            a {}
+        }
+
+        a {
+            @include cover;
+        }
+    }
+}

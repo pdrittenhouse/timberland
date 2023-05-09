@@ -1,0 +1,50 @@
+{
+  "name": "acf/row",
+  "title": "Row",
+  "description": "A row block.",
+  "category": "dream",
+  "icon": "table-row-after",
+  "keywords": ["section", "row", "column"],
+  "attributes": {},
+  "providesContext": {
+    "acf/fields": "data"
+  },
+  "usesContext": [ "acf/fields" ],
+  "supports": {
+    "jsx": true,
+    "align": false,
+    "alignContent": false,
+    "alignText": false,
+    "anchor": true,
+    "className": true,
+    "multiple": true,
+    "html": false,
+    "inserter": true,
+    "fullHeight": false,
+    "color": {
+      "text": false,
+      "background": true,
+      "link": false,
+      "gradients": true,
+      "linkColor": true
+    },
+    "typography": {
+      "fontSize": true
+    }
+  },
+  "styles": [
+    { "name": "default", "label": "Default", "isDefault": true },
+    { "name": "other", "label": "Other" }
+  ],
+  "editorScript": "./index.js",
+  "script": "./script.js",
+  "editorStyle": "./index.css",
+  "style": "./style.css",
+  "acf": {
+    "mode": "preview",
+    "renderCallback": "dream_block_render",
+    "parent": "acf/section",
+    "postTypes": true,
+    "reusable": true
+  }
+}

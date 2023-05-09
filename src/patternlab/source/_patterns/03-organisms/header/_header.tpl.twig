@@ -1,0 +1,207 @@
+{#
+/**
+ * @file
+ * header
+ *
+ * Available variables for header:
+ *  - header_other_classes [array]: Additional component classes.
+ *  - navbar_breakpoint [string: 'sm', 'md', 'lg', 'xl']: Breakpoint for Bootstrap navbar-toggler.
+ *  - navbar_toggler_classes [string]: Additional navbar-toggler classes.
+ */
+#}
+
+{% set header_classes = header_classes|default([])|merge([
+  'site-header',
+  'navbar',
+  navbar_breakpoint ? 'navbar-expand-' ~ navbar_breakpoint,
+  header_other_classes,
+]) | sort | join(' ') | trim %}
+
+<header class="{{ header_classes }}" role="banner" id="{{ header_id|default('siteHeader') }}" {{ background ? 'style="background-image: url(' ~ background ~ ')"' }}>
+  {% block header %}
+    <div class="site-header--wrapper">
+      {% block alert %}
+        <div class="site-header--alert">
+          <div class="site-header--container">
+            <div class="site-header--row">
+              <div class="site-header--column">{% block alert_content %}{% endblock alert_content %}</div>
+            </div>
+          </div>
+        </div>
+      {% endblock alert %}
+      <div class="site-header--content">
+        <div class="site-header--container">
+          <div class="site-header--row">
+            <div class="site-header--branding">
+              {% block header_branding %}
+                {% include "@atoms/branding/_branding.tpl.twig" with {
+                  url: brand.url,
+                  logo_svg_inline: brand.logo_svg_inline,
+                  colorOriginal: brand.colorOriginal,
+                  site_name: brand.site_name,
+                  site_slogan: brand.site_slogan,
+                  branding_classes: brand.branding_classes,
+                  branding_other_classes: brand.branding_other_classes
+                } %}
+              {% endblock header_branding %}
+            </div>
+            <div class="site-header--navigation">
+              {% block site_navigation %}
+                {% block nav_toggle %}
+                  {% embed '@atoms/button/_button.tpl.twig' with {
+                    button_id: 'navToggle',
+                    button_classes: [
+                      'navbar-toggler',
+                      'collapsed',
+                      'hamburger',
+                      'hamburger--collapse',
+                      navbar_toggler_classes
+                    ],
+                    button_toggle: 'collapse',
+                    button_attributes: [
+                      'type="button"',
+                      'data-bs-target="#siteNav"',
+                      'aria-controls="siteNav"',
+                      'aria-expanded="false"',
+                      'aria-label="Toggle navigation"'
+                    ]
+                  } %}
+                    {% block button_content %}
+                      <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                      </span>
+                    {% endblock button_content %}
+                  {% endembed %}
+                {% endblock nav_toggle %}
+                <div class="site-header--row">
+                  {% block pre_nav %}{% endblock pre_nav %}
+                  <div class="collapse navbar-collapse" id="siteNav">
+                    <div class="site-header--navbar-wrapper">
+                      <div class="site-header--row">
+                        <div class="site-header--secondary-nav">
+                          {% block secondary_navigation %}
+                            {% include '@molecules/nav/_nav.tpl.twig' with {
+                              nav_element: secondary_nav.nav_element,
+                              nav_id: secondary_nav.nav_id,
+                              nav_classes: secondary_nav.nav_classes,
+                              nav_other_classes: secondary_nav.nav_other_classes,
+                              navbar_breakpoint: secondary_nav.navbar_breakpoint,
+                              breakpoints: secondary_nav.breakpoints,
+                              hover_dropdown: secondary_nav.hover_dropdown,
+                              items: secondary_nav.items
+                            } %}
+                          {% endblock secondary_navigation %}
+                          <div class="site-header--social-nav">
+                            {% block social_nav %}
+                              {% include '@molecules/social-nav/_social-nav.tpl.twig' with {
+                                nav_id: social_nav.nav_id,
+                                bullet_icon_position: social_nav.bullet_icon_position,
+                                bullet_icon_size: social_nav.bullet_icon_size,
+                                hide_labels: social_nav.hide_labels,
+                                hide_icons: social_nav.hide_icons,
+                                nav_direction: social_nav.nav_direction,
+                                social_nav_items: social_nav.social_nav_items,
+                                social_nav_classes: social_nav.social_nav_classes,
+                                social_nav_other_classes: social_nav.social_nav_other_classes
+                              } %}
+                            {% endblock social_nav %}
+                          </div>
+                        </div>
+                        <div class="site-header--primary-nav">
+                          {% block primary_navigation %}
+                            {% include '@molecules/nav/_nav.tpl.twig' with {
+                              nav_element: primary_nav.nav_element,
+                              nav_id: primary_nav.nav_id,
+                              nav_classes: primary_nav.nav_classes,
+                              nav_other_classes: primary_nav.nav_other_classes,
+                              navbar_breakpoint: primary_nav.navbar_breakpoint ? primary_nav.navbar_breakpoint : navbar_breakpoint,
+                              hover_dropdown: primary_nav.hover_dropdown,
+                              items: primary_nav.items,
+                              breakpoints: primary_nav.breakpoints
+                            } %}
+                            {% include '@atoms/button/_button.tpl.twig' with {
+                              button_element: primary_nav_cta.button_element,
+                              button_link: primary_nav_cta.button_link,
+                              button_color: primary_nav_cta.button_color,
+                              button_text: primary_nav_cta.button_text,
+                              button_classes: primary_nav_cta.button_classes,
+                              button_other_classes: primary_nav_cta.button_other_classes,
+                              button_size: primary_nav_cta.button_size,
+                              button_type: primary_nav_cta.button_type,
+                              button_value: primary_nav_cta.button_value,
+                              button_active: primary_nav_cta.button_active,
+                              button_disabled: primary_nav_cta.button_disabled,
+                              button_outline: primary_nav_cta.button_outline,
+                              buttonless_dropdown: primary_nav_cta.buttonless_dropdown,
+                              button_block: primary_nav_cta.button_block,
+                              button_toggle: primary_nav_cta.button_toggle,
+                              button_id: primary_nav_cta.button_id,
+                              button_attributes: primary_nav_cta.button_attributes,
+                              button_other_attributes: primary_nav_cta.button_other_attributes,
+                              button_target: primary_nav_cta.button_target,
+                              button_expanded: primary_nav_cta.button_expanded,
+                              button_controls: primary_nav_cta.button_controls,
+                              nowrap: primary_nav_cta.nowrap,
+                              contextual_content: primary_nav_cta.contextual_content,
+                              title: primary_nav_cta.title,
+                              popover_content: primary_nav_cta.popover_content,
+                              context_placement: primary_nav_cta.context_placement,
+                              context_container: primary_nav_cta.context_container
+                            } %}
+                          {% endblock primary_navigation %}
+                        </div>
+                        <div class="site-header--search">
+                          {% block search %}
+                            {% embed '@atoms/form/_form.tpl.twig' with {
+                              attributes: '',
+                              name: 'header-search',
+                              id: 'headerSearch',
+                              charset: '',
+                              action: '',
+                              autocomplete: '',
+                              method: '',
+                              enctype: '',
+                              novalidate: '',
+                              target: '',
+                              heading: 'Search',
+                              form_other_classes: 'header-search'
+                            } %}
+                              {% block form_content %}
+                                <input type="text" placeholder="Search">
+                                {% embed '@atoms/button/_button.tpl.twig' with {
+                                  button_other_classes: 'search-submit'
+                                } %}
+                                  {% block button_content %}
+                                    {% include '@atoms/svg/_svg~icon.tpl.twig' with {
+                                      width: '30px',
+                                      height: '30px',
+                                      name: 'search',
+                                      fill: 'royal-blue',
+                                      svg_other_classes: 'icon',
+                                    } %}
+                                  {% endblock button_content %}
+                                {% endembed %}
+                              {% endblock form_content %}
+                            {% endembed %}
+                          {% endblock search %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {% block post_nav %}{% endblock post_nav %}
+                </div>
+              {% endblock site_navigation %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="site-header--container">
+        <div class="site-header--row">
+          <div class="site-header--column">
+            {% block additional_content %}{% endblock additional_content %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endblock header %}
+</header>

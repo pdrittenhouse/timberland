@@ -1,0 +1,44 @@
+{% include '@molecules/carousel/_carousel.tpl.twig' with {
+  carousel_id: 'carouselExample',
+  carousel_classes: [],
+  carousel_other_classes: '',
+  carousel_attributes: [],
+  carousel_other_attributes: '',
+  arrows: true,
+  indicators: true,
+  crossfade: true,
+  diable_touch: false,
+  dark: true,
+  slides: [
+    {
+      image: {
+      variant: 'primary',
+      src: 'https://via.placeholder.com/786x400',
+      alt: 'Slide 1',
+    },
+      active: true,
+      label: 'Slide 1 Label',
+      caption: 'Some representative placeholder content for the second slide.',
+      delay: 5000
+    },
+    {
+      image: {
+      variant: 'primary',
+      src: 'https://via.placeholder.com/786x400',
+      alt: 'Slide 2',
+    },
+      label: 'Slide 2 Label',
+      caption: 'Some representative placeholder content for the second slide.',
+      delay: 3000
+    },
+    {
+      image: {
+      variant: 'primary',
+      src: 'https://via.placeholder.com/786x400',
+      alt: 'Slide 3'
+    },
+      label: 'Slide 3 Label',
+      caption: 'Some representative placeholder content for the second slide.'
+    }
+  ]
+} %}

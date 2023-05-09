@@ -1,0 +1,24 @@
+.modal-backdrop {
+    @include remove;
+}
+
+.modal {
+    display: block;
+    position: relative;
+
+    &.fade {
+        opacity: 1;
+
+        .modal-dialog {
+            transform: none;
+        }
+    }
+}
+
+.accordion-header {
+  margin-top: 0;
+}
+
+.collapse:not(.show) {
+  display: block;
+}

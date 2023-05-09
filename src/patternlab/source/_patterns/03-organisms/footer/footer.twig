@@ -1,0 +1,141 @@
+{% include '@organisms/footer/_footer.tpl.twig' with {
+  footer_nav: {
+    nav_element: 'ul',
+    navbar_breakpoint:  'sm',
+    hover_dropdown: false,
+    nav_classes: [],
+    nav_other_classes: 'footer-nav',
+    items: [
+      {
+        title: 'Raise More Money',
+        url: '#'
+      },
+      {
+        title: 'Find New Audiences',
+        url: '#'
+      },
+      {
+        title: 'Tell Your Story',
+        url: '#'
+      },
+      {
+        title: 'Enhance Your Technology',
+        url: '#'
+      }
+    ]
+  },
+  brand: {
+    url: '/',
+    logo_svg_inline: paths.images ~ '/logo.svg',
+    colorOriginal: false,
+    site_name: 'beaconfire RED',
+    site_slogan: 'Site Slogan that Describes the Logo Above with Inline SVG',
+    branding_classes: [],
+    branding_other_classes: 'footer-brand'
+  },
+  contact_info: {
+    parent_element: 'ul',
+    parent_classes: [],
+    parent_other_classes: 'site-footer--contact-info',
+    items: {
+      item1: {
+        item_text: '<strong>Main</strong> <a href="tel:+1800-858-7654">800.858.7654</a>'
+      },
+      item2: {
+        item_text: '<strong>Sales</strong> <a href="tel:+1800-858-7654">800.858.7654</a>'
+      },
+      item3: {
+        item_text: '<strong>Support</strong> <a href="tel:+1800-858-7654">800.858.7654</a>'
+      }
+    }
+  },
+  contact_button: {
+    button_element: 'a',
+    button_link: '#',
+    button_color: 'primary',
+    button_text: 'Contact Us',
+    button_classes: [],
+    button_other_classes: ''
+  },
+  copyright: '<p>&copy; 2020 Allegiance Group</p>',
+  social_nav: {
+    nav_id: 'socialNavHorizontal',
+    bullet_icon_position: 'before',
+    bullet_icon_size: '28px',
+    hide_labels: true,
+    hide_icons: false,
+    nav_direction: 'horizontal',
+    social_nav_items: {
+      item1: {
+        item_classes: ['linked-in'],
+        label: 'LinkedIn',
+        url: 'http://www.linkedin.com',
+        icon: 'fab fa-linkedin-in',
+        icon_color: 'deep-cerulean',
+        icon_position: 'before',
+        icon_width: '20px',
+        icon_height: '20px'
+      },
+      item2: {
+        item_classes: ['twitter'],
+        label: 'Twitter',
+        url: 'http://www.twitter.com',
+        icon: 'fab fa-twitter',
+        icon_color: 'dodger-blue',
+        icon_position: 'before',
+        icon_width: '20px',
+        icon_height: '20px'
+      },
+      item3: {
+        item_classes: ['facebook'],
+        label: 'Facebook',
+        url: 'http://www.facebook.com',
+        icon: 'fab fa-facebook-f',
+        icon_color: 'chambray',
+        icon_position: 'before',
+        icon_width: '20px',
+        icon_height: '20px'
+      }
+    },
+    social_nav_classes: [],
+    social_nav_other_classes: ''
+  },
+  user_nav: {
+    nav_element: 'ul',
+    hover_dropdown: false,
+    nav_classes: [],
+    nav_other_classes: 'footer-user-nav',
+    items: [
+      {
+        title: 'Privacy Policy',
+        url: '#'
+      },
+      {
+        title: 'Site Map',
+        url: '#'
+      },
+      {
+        title: 'Employee Portal',
+        url: '#'
+      }
+    ]
+  },
+  utility_nav: {
+    nav_element: 'ul',
+    hover_dropdown: false,
+    nav_other_classes: 'footer-user-nav',
+    items: [
+      {
+        title: 'Client Login',
+        url: '#',
+        item_other_classes: 'login'
+      },
+      {
+        title: 'Support',
+        url: '#',
+        item_other_classes: 'support'
+      }
+    ]
+  },
+  footer_other_classes: ''
+} %}

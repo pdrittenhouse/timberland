@@ -1,0 +1,60 @@
+{% embed '@organisms/card-grid/_card-grid.tpl.twig' with {
+  card_grid_other_classes: ''
+} %}
+  {% block card_grid_cards %}
+    {% include '@molecules/card/_card.tpl.twig' with {
+      card_title: "Card Title",
+      card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+      card_subtitle: "Card subtitle"
+    } %}
+    {% include '@molecules/card/_card.tpl.twig' with {
+      text_alignment: center,
+      card_title: "Card Title",
+      card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+      card_subtitle: 'Card subtitle',
+      card_link: 'https://github.com/phase2/particle',
+      card_link_text: 'Card link'
+    } %}
+    {% include '@molecules/card/_card.tpl.twig' with {
+      card_title: "Card Title",
+      card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+      text_color: 'royal-blue'
+    } %}
+    {% include '@molecules/card/_card.tpl.twig' with {
+      card_title: "Card Title",
+      card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+      card_subtitle: "Card subtitle"
+    } %}
+    {% include '@molecules/card/_card.tpl.twig' with {
+      text_alignment: center,
+      card_title: "Card Title",
+      card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+      card_subtitle: 'Card subtitle',
+      card_link: 'https://github.com/phase2/particle',
+      card_link_text: 'Card link'
+    } %}
+    {% include '@molecules/card/_card.tpl.twig' with {
+      card_title: "Card Title",
+      card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+      text_color: 'royal-blue'
+    } %}
+    {% include '@molecules/card/_card.tpl.twig' with {
+      card_title: "Card Title",
+      card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+      card_subtitle: "Card subtitle"
+    } %}
+    {% include '@molecules/card/_card.tpl.twig' with {
+      text_alignment: center,
+      card_title: "Card Title",
+      card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+      card_subtitle: 'Card subtitle',
+      card_link: 'https://github.com/phase2/particle',
+      card_link_text: 'Card link'
+    } %}
+    {% include '@molecules/card/_card.tpl.twig' with {
+      card_title: "Card Title",
+      card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+      text_color: 'royal-blue'
+    } %}
+  {% endblock %}
+{% endembed %}

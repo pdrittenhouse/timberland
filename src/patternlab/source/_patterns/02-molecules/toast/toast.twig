@@ -1,0 +1,77 @@
+{% include '@molecules/toast/_toast.tpl.twig' with {
+  toast_wrapper_id: 'toastWrapper',
+  vertical_position: 'middle',
+  horizontal_position: 'center',
+  button_group_display: 'block',
+  button_group_size: 'lg',
+  button_group_display_grid: false,
+  button_group_label: 'A toasts button group',
+  button_group_gap: 0,
+  button_group_breakpoints: [],
+  button_group_vertical: false,
+  button_group_classes: [],
+  button_group_other_classes: '',
+  toasts: [
+    {
+      toast_id: 'testToast1',
+      autohide: false,
+      animation: false,
+      delay: 5000,
+      button: {
+      button_id: 'liveToastBtn1',
+      button_other_classes: '',
+      button_element: 'a',
+      button_color: 'primary',
+      button_text: 'Show Toast 1'
+    },
+      toast_display: 'hide',
+      toast_other_classes: '',
+      background_color: 'primary',
+      text_color: 'white',
+      header_background_color: 'secondary',
+      header_text_color: 'white',
+      icon: {
+      svg_other_classes: '',
+      width: '18px',
+      height: '18px',
+      name: 'bfred-logo-alt',
+      fill: 'white'
+    },
+      title: 'Example Toast 1',
+      meta: '11 minutes ago',
+      toast_close_button: 'white',
+      toast_content: 'Hello, world! This is toast message 1.'
+    },
+    {
+      toast_id: 'testToast2',
+      autohide: true,
+      animation: true,
+      delay: 3000,
+      button: {
+      button_id: 'liveToastBtn2',
+      button_other_classes: '',
+      button_element: 'button',
+      button_color: 'secondary',
+      button_text: 'Show Toast 2'
+    },
+      toast_display: 'hide',
+      toast_other_classes: '',
+      background_color: 'primary',
+      text_color: 'white',
+      header_background_color: 'secondary',
+      header_text_color: 'white',
+      image: {
+      variant: 'primary',
+      src: 'https://via.placeholder.com/500',
+      width: '20',
+      height: '20',
+      alt: 'A toast image',
+      placeholder: false,
+      image_other_classes: 'rounded',
+    },
+      title: 'Example Toast 2',
+      meta: 'April 20, 2022',
+      toast_content: 'Hello, world! This is toast message 2.'
+    },
+  ]
+} %}

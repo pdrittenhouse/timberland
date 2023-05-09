@@ -1,0 +1,106 @@
+{#
+/**
+ * @file
+ * accordion
+ *
+ * Available variables for accordion:
+ *  - accordion_classes [array]: Additional component classes.
+ *  - accordion_other_classes [string]: Additional component classes.
+ *  - accordion_attributes [array]: Additional component attributes.
+ *  - accordion_other_attributes [string]: Additional component attributes.
+ *  - accordion_id [string]: Unique identifier for accordion.
+ *  - accordion_flush [bool]: remove the default background-color, some borders, and some rounded corners to render accordions edge-to-edge with their parent container.
+ *  - accordion_items [array]: Array of accordion item objects.
+ *  - item.accordion_header_element [string]: Element for accordion header.
+ *  - item.button [object]: Item button object.
+ *  - item.item_active [bool]: Set item to oactive.
+ *  - item.always_open [bool]: Set item to active.
+ *  - item.content [string]: Item content.
+ */
+#}
+
+{% set accordionId = [] %}
+{% set alpha = 'abcdefghijklmnopqrstuvwxyz' %}
+{% set num = '0123456789' %}
+{% for i in 1..10 %}
+  {% set char = random(alpha ~ alpha|upper ~ num ~ '-_') %}
+  {% set accordionId = accordionId|merge([char]) %}
+{% endfor %}
+{% set accordionId = 'accordion_' ~ accordionId|join %}
+
+{% set accordion_classes = accordion_classes|default([])|merge([
+  'accordion',
+  accordion_flush == true ? 'accordion-flush',
+  accordion_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set accordion_attributes = accordion_attributes|default([])|merge([
+  accordion_id ? 'id="' ~ accordion_id ~ '"' : 'id="' ~ accordionId ~ '"',
+  accordion_other_attributes,
+]) | sort | join(' ') | trim %}
+
+<div class="{{ accordion_classes }}" {{ accordion_attributes }}>
+  {% block items %}
+    {% for item in accordion_items %}
+      {% set itemId = [] %}
+      {% set alpha = 'abcdefghijklmnopqrstuvwxyz' %}
+      {% set num = '0123456789' %}
+      {% for i in 1..10 %}
+        {% set char = random(alpha ~ alpha|upper ~ num ~ '-_') %}
+        {% set itemId = itemId|merge([char]) %}
+      {% endfor %}
+      {% set itemId = itemId|join %}
+
+      {% set accordion_item_classes = item.accordion_item_classes|default([])|merge([
+        'accordion-item',
+        item.accordion_item_other_classes,
+      ]) | sort | join(' ') | trim %}
+
+      {% set accordion_item_attributes = item.accordion_item_attributes|default([])|merge([
+        item.accordion_item_id ? 'id="' ~ item.accordion_item_id ~ '"',
+        item.accordion_item_other_attributes,
+      ]) | sort | join(' ') | trim %}
+
+      <div class="{{ accordion_item_classes }}" {{ accordion_item_attributes }}>
+        <{{ item.accordion_header_element | default('h2') }} class="accordion-header" id="accordionHeader_{{ itemId }}">
+          {% include "@atoms/button/_button.tpl.twig" with {
+            button_classes: [
+              'accordion-button'
+            ],
+            button_other_classes: item.button.button_other_classes,
+            button_element: item.button.button_element,
+            button_type: item.button.button_type,
+            button_outline: item.button.button_outline,
+            buttonless_dropdown: item.button.buttonless_dropdown,
+            button_color: item.button.button_color,
+            button_size: item.button.button_size,
+            button_block: item.button.button_block,
+            button_active: item.item_active == true ? 'true',
+            button_toggle: 'collapse',
+            button_link: item.button.button_link,
+            button_value: item.button.button_value,
+            button_id: item.button.button_id,
+            button_disabled: item.button.button_disabled,
+            button_attributes: item.button.button_attributes,
+            button_other_attributes: item.button.button_other_attributes,
+            button_text: item.button.button_text,
+            button_target: '#collapse_' ~ itemId,
+            button_expanded: item.item_active == true ? 'true',
+            button_controls: 'collapse_' ~ itemId,
+            nowrap: item.button.nowrap,
+            contextual_content: item.button.contextual_content,
+            title: item.button.title,
+            popover_content: item.button.popover_content,
+            context_placement: item.button.context_placement,
+            context_container: item.button.context_container
+          } %}
+        </{{ item.accordion_header_element | default('h2') }}>
+        <div id="collapse_{{ itemId }}" class="accordion-collapse collapse {{ item.item_active == true ? 'show' }}" aria-labelledby="accordionHeader_{{ itemId }}" {{ always_open != true and accordion_id is not empty ? 'data-bs-parent="#' ~ accordion_id ~ '"' : always_open != true and accordion_id is empty ? 'data-bs-parent="#' ~ accordionId ~ '"' }}>
+          <div class="accordion-body">
+            {{ item.content }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% endblock %}
+</div>

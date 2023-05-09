@@ -1,0 +1,131 @@
+{#
+/**
+ * Block Name: Row
+ *
+ * This is the template that displays the row block.
+ */
+#}
+
+{% if is_preview %}
+{# <p>Some editor instructions here.</p> #}
+{% endif %}
+
+{# Vertical Gutters #}
+{% if fields.vert_gutters['gutters'] %}
+  {% set vertical_gutters = [] %}
+  {% for gutter in fields.vert_gutters['gutters'] %}
+    {% if gutter.breakpoint %}
+      {% set bp = '-' ~ gutter.breakpoint %}
+    {% else %}
+      {% set bp = '' %}
+    {% endif %}
+    {% if gutter.value %}
+      {% set gap = '-' ~ gutter.value %}
+    {% else %}
+      {% set gap = '' %}
+    {% endif %}
+    {% if gap %}
+      {% set vertical_gutters = vertical_gutters|default([])|merge([
+        'gy' ~ bp ~ gap
+      ]) %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{# Horizontal Gutters #}
+{% if fields.hor_gutters['gutters'] %}
+  {% set horizontal_gutters = [] %}
+  {% for gutter in fields.hor_gutters['gutters'] %}
+    {% if gutter.breakpoint %}
+      {% set bp = '-' ~ gutter.breakpoint %}
+    {% else %}
+      {% set bp = '' %}
+    {% endif %}
+    {% if gutter.value %}
+      {% set gap = '-' ~ gutter.value %}
+    {% else %}
+      {% set gap = '' %}
+    {% endif %}
+    {% if gap %}
+      {% set horizontal_gutters = horizontal_gutters|default([])|merge([
+        'gx' ~ bp ~ gap
+      ]) %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{# Vertical Alignment #}
+{% if fields.vertical_alignment['vert_align'] %}
+	{% set vertical_alignment = [] %}
+	{% for alignment in fields.vertical_alignment['vert_align'] %}
+        {% if alignment.breakpoint %}
+            {% set bp = '-' ~ alignment.breakpoint %}
+        {% else %}
+          {% set bp = '' %}
+        {% endif %}
+        {% if alignment.alignment %}
+            {% set valign = '-' ~ alignment.alignment %}
+        {% else %}
+          {% set valign = '' %}
+        {% endif %}
+        {% if valign %}
+            {% set vertical_alignment = vertical_alignment|default([])|merge([
+                'align-items' ~ bp ~ valign
+            ]) %}
+        {% endif %}
+	{% endfor %}
+{% endif %}
+
+{# Horizontal Alignment #}
+{% if fields.horizontal_alignment['hor_align'] %}
+	{% set horizontal_alignment = [] %}
+	{% for alignment in fields.horizontal_alignment['hor_align'] %}
+		{% if alignment.breakpoint %}
+			{% set bp = '-' ~ alignment.breakpoint %}
+    {% else %}
+      {% set bp = '' %}
+		{% endif %}
+        {% if alignment.alignment %}
+            {% set halign = '-' ~ alignment.alignment %}
+        {% else %}
+          {% set halign = '' %}
+        {% endif %}
+        {% if halign %}
+            {% set horizontal_alignment = horizontal_alignment|default([])|merge([
+                'justify-content' ~ bp ~ halign
+            ]) %}
+        {% endif %}
+	{% endfor %}
+{% endif %}
+
+{# Container Classes #}
+{% set container_classes = container_classes|default([])|merge([
+    fields.container and fields.full_width ? 'container-fluid' : fields.container ? 'container',
+    block['className']
+])|sort|join(' ')|trim %}
+
+{# Row Classes #}
+{% set row_classes = row_classes|default([])|merge([
+  'row',
+  fields.container != true ? block['className'],
+  fields.no_gutters ? 'g-0',
+  vertical_gutters|length > 0 ? vertical_gutters|sort|join(' ')|trim,
+  horizontal_gutters|length > 0 ? horizontal_gutters|sort|join(' ')|trim,
+  vertical_alignment|length > 0 ? vertical_alignment|sort|join(' ')|trim,
+  horizontal_alignment|length > 0 ? horizontal_alignment|sort|join(' ')|trim,
+  options.remove_content_containers == true and block_context['acf/fields']['container'] != true and fields.container != true ? 'mx-0'
+])|sort|join(' ')|trim %}
+
+{% if fields.container and block_context['acf/fields']['container'] != true and (options.remove_content_containers == true or block_post.custom['remove_content_container'] == true) %}
+	<div class="{{ container_classes }}">
+{% endif %}
+
+    <div class="{{ row_classes }}">
+
+        <InnerBlocks allowedBlocks="{{ ['acf/column'] | json_encode() | escape('html_attr') }}" />
+
+    </div>
+
+{% if fields.container and block_context['acf/fields']['container'] != true and (options.remove_content_containers == true or block_post.custom['remove_content_container'] == true) %}
+    </div>
+{% endif %}

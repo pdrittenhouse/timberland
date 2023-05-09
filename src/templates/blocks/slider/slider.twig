@@ -1,0 +1,221 @@
+{#
+/**
+ * Block Name:
+ *
+ * This is the template that displays the  block.
+ */
+#}
+
+{#{% if is_preview %}#}
+{#<p>Some editor instructions here.</p>#}
+{#{% endif %}#}
+
+{#{{ block['className'] }}#}
+{#{{ block['align'] ? 'align-' ~ block['align'] }}#}
+{#{{ block['align_text']}}#}
+{#{{ block['align_content'] }}#}
+{#{{ block['full_height'] }}#}
+
+{# Parent Block Data - ACF <= v.5.9 #}
+{#{% set parent = function('get_parent_block', block['id'], block['name']) %}#}
+{# Parent Block Data - ACF >= v.6.0 #}
+{#{{ parent_block_data['data'] }}#}
+{# Block Context #}
+{#{{ block_context['acf/fields'] }}#}
+{# ACF Options Fields #}
+{#{{ options }}#}
+{# ACF Fields #}
+{#{{ fields }}#}
+{# Site Data #}
+{#{{ site }}#}
+{# SASS Data #}
+{#{{ sass_data }}#}
+{# Post Data #}
+{#{{ block_post }}#}
+{# Query #}
+{#{{ query }}#}
+{# Query Posts #}
+{#{{ query_posts }}#}
+
+{% set block_classes = block_classes|default([])|merge([
+  block['className'],
+  'block-slider',
+  fields.equal_height_slides == true ? 'equal-height-slides'
+]) | sort | join(' ') | trim %}
+
+{# Slider Styles #}
+{% set width = fields.width.width['width']['value'] >= 0 ? 'width: ' ~ fields.width.width['width']['value']  ~ fields.width.width['width']['unit'] ~  ';' %}
+{% set min_width = fields.width.width['min_width'] >= 0 ? 'min-width: ' ~ fields.width.width['min_width']  ~ 'px;' %}
+{% set max_width = fields.width.width['max_width'] >= 0 ? 'max-width: ' ~ fields.width.width['max_width']  ~ 'px;' %}
+{% set margin_top = fields.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['top']['top'] >= 0 ? 'margin-top: ' ~ fields.margin['margin']['top']['top'] ~ 'px;' %}
+{% set margin_bottom = fields.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.margin['margin']['bottom']['bottom'] ~ 'px;' %}
+{% set margin_left = fields.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.margin['margin']['left']['left'] ~ 'px;' %}
+{% set margin_right = fields.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.margin['margin']['right']['right'] ~ 'px;' %}
+
+{% set block_attributes = block_attributes|default([])|merge([
+  width or min_width or max_width or margin_top or margin_bottom or margin_left or margin_right ? 'style="' ~ width ~ min_width ~ max_width ~ margin_top ~ margin_bottom ~ margin_left ~ margin_right ~ '"'
+]) | sort | join(' ') | trim %}
+
+{# TODO: Retrieve innerBlock count and replace slideCount #}
+{% set slideCount = [] %}
+{% for i in 1..(fields.slide_count) %}
+  {% set slideCount = slideCount|merge([{
+    slide: i,
+    active: loop.first ? true
+  }]) %}
+{% endfor %}
+
+{% if fields.slider == 'bootstrap' %}
+  {% embed '@molecules/carousel/_carousel.tpl.twig' with {
+    carousel_id: block['anchor'],
+    carousel_classes: [
+      block_classes
+    ],
+    carousel_attributes: [
+      block_attributes
+    ],
+    arrows: fields.arrows,
+    indicators: fields.dots,
+    crossfade: fields.fade,
+    dark: fields.dark,
+    touch: fields.swipe == true ? 'true',
+    keyboard: fields.keyboard == true ? 'true' : 'false',
+    wrap: fields.loop == true ? 'true' : 'false',
+    pause: fields.pause_on_hover == true ? 'hover' : 'false',
+    interval: fields.autoplay == true and fields.autoplay_speed ? fields.autoplay_speed,
+    ride: fields.autoplay == true and fields.auto_start == true ? 'carousel' : fields.autoplay == true ? 'true' : 'false',
+    slides: slideCount
+  } %}
+    {% block carousel_slides %}
+      <InnerBlocks allowedBlocks="{{ ['acf/slide'] | json_encode() | escape('html_attr') }}" template="{{ [
+        ['acf/slide', {
+          'data': {
+            'field_64096f7b685d0': 'true',
+            'field_640e28a9951fa': 'default',
+          }
+        }],
+        ['acf/slide', {
+          'data': {
+            'field_640e28a9951fa': 'default',
+          }
+        }],
+        ['acf/slide', {
+          'data': {
+            'field_640e28a9951fa': 'default',
+          }
+        }]] | json_encode() | escape('html_attr') }}" />
+    {% endblock carousel_slides %}
+  {% endembed %}
+{% elseif fields.slider == 'flickity' %}
+  {% embed '@molecules/flickity-carousel/_flickity-carousel.tpl.twig' with {
+    draggable: fields.draggable,
+    freeScroll: fields.free_scroll,
+    wrapAround: fields.loop,
+    autoPlay: fields.autoplay == true and fields.autoplay_speed ? fields.autoplay_speed : fields.autoplay == true ? 'true' : 'false',
+    pauseAutoPlayOnHover: fields.pause_on_hover,
+    prevNextButtons: fields.arrows,
+    pageDots: fields.dots,
+    fade: fields.fade,
+    groupCells: fields.group_cells,
+    fullscreen: fields.full_screen,
+    adaptiveHeight: fields.adaptive_height,
+    asNavFor: fields.as_nav_for,
+    cellSelector: fields.cell_selector,
+    initialIndex: fields.initial_slide,
+    setGallerySize: fields.set_gallery_size,
+    cellAlign: fields.cell_align,
+    contain: fields.contain,
+    rightToLeft: fields.right_to_left,
+    arrowShape: fields.arrow_shape,
+    columns: fields.columns,
+    drag_threshold: fields.drag_threshold,
+    selected_attraction: fields.selected_attraction,
+    friction: fields.friction,
+    free_scroll_friction: fields.free_scroll_friction,
+    percent_position: fields.percent_position,
+    show_controls: fields.show_custom_controls == true ? 'true' : 'false',
+    slides: slideCount,
+    flickity_wrapper_classes: [block_classes],
+    flickity_carousel_attributes: block_attributes
+  } %}
+    {% block slides %}
+      <InnerBlocks allowedBlocks="{{ ['acf/slide'] | json_encode() | escape('html_attr') }}" template="{{ [
+        ['acf/slide', {
+          'data': {
+            'field_64096f7b685d0': 'true',
+            'field_640e28a9951fa': 'default',
+          }
+        }],
+        ['acf/slide', {
+          'data': {
+            'field_640e28a9951fa': 'default',
+          }
+        }],
+        ['acf/slide', {
+          'data': {
+            'field_640e28a9951fa': 'default',
+          }
+        }]] | json_encode() | escape('html_attr') }}" />
+    {% endblock slides %}
+  {% endembed %}
+{% elseif fields.slider == 'slick' %}
+  {% embed '@molecules/slick-carousel/_slick-carousel.tpl.twig' with {
+    dots: fields.dots,
+    arrows: fields.arrows,
+    fade: fields.fade,
+    swipe: fields.swipe,
+    infinite: fields.loop,
+    pause_on_hover: fields.pause_on_hover,
+    autoplay: fields.autoplay,
+    autoplaySpeed: fields.autoplay == true and fields.autoplay_speed ? fields.autoplay_speed,
+    slidesToShow: fields.slides_to_show,
+    slidesToScroll: fields.slides_to_scroll,
+    rows: fields.rows,
+    slidesPerRow: fields.slides_per_row,
+    customControls: fields.show_custom_controls,
+    adaptiveHeight: fields.adaptive_height,
+    centerMode: fields.center_mode,
+    centerPadding: fields.center_padding.value ? fields.center_padding.value ~ fields.center_padding.unit,
+    initialSlide: fields.initial_slide,
+    draggable: fields.draggable,
+    vertical: fields.vertical,
+    verticalSwiping: fields.vertical_swiping,
+    focus_on_select: fields.focus_on_select,
+    pause_on_focus: fields.pause_on_focus,
+    pause_on_dots_hover: fields.pause_on_dots_hover,
+    swipe_to_slide: fields.swiipe_to_slide,
+    touch_move: fields.touch_move,
+    speed: fields.speed,
+    variableWidth: fields.variable_width,
+    rtl: fields.right_to_left,
+    edge_friction: fields.edge_friction,
+    touch_threshold: fields.drag_threshold,
+    easing: fields.easing,
+    css_ease: fields.css_ease,
+    asNavFor: fields.as_nav_for,
+    responsive: fields.responsive,
+    slides: slideCount,
+    slick_wrapper_classes: [block_classes],
+    slick_carousel_attributes: block_attributes
+  } %}
+    {% block slides %}
+      <InnerBlocks allowedBlocks="{{ ['acf/slide'] | json_encode() | escape('html_attr') }}" template="{{ [
+        ['acf/slide', {
+          'data': {
+            'field_64096f7b685d0': 'true',
+            'field_640e28a9951fa': 'default',
+          }
+        }],
+        ['acf/slide', {
+          'data': {
+            'field_640e28a9951fa': 'default',
+          }
+        }],
+        ['acf/slide', {
+          'data': {
+            'field_640e28a9951fa': 'default',
+          }
+        }]] | json_encode() | escape('html_attr') }}" />
+    {% endblock slides %}
+  {% endembed %}
+{% endif %}

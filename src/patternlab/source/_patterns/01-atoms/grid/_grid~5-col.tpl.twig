@@ -1,0 +1,59 @@
+{#
+/**
+ * @file
+ * grid
+ *
+ * Available variables:
+ *  - Inherit variables from @atoms/image/_image.tpl.twig
+ *  - span_col [string: 'first', 'middle', 'last']: Specifies which column, if any, should span full-width on responsive displays.
+ *  - grid_classes [array]: Additional component classes.
+ *  - grid_other_classes [string]: Additional component classes.
+ *
+ */
+#}
+
+{#
+NOTE: If this row is the very outer wrapper of a page, it *must* be wrapped
+in a .container div. We leave this up to the implementor manually for flexibility.
+#}
+
+{% set grid_classes = grid_classes|default([])|merge([
+  'grid',
+  'grid-5-col',
+  container ? 'container' : (container_fluid ? 'container-fluid'),
+  grid_other_classes,
+]) | sort | join(' ') | trim %}
+
+<div class="{{ grid_classes }}">
+  <div class="row">
+    <div class="{{ span_col and span_col != 'first' ? 'col-sm-6' }} col-lg-bs5 col-first">
+      {% block column_1 %}
+        <span>Column 1/5</span>
+      {% endblock column_1 %}
+    </div>
+
+    <div class="{{ span_col ? 'col-sm-6' }} col-lg-bs5 col-second">
+      {% block column_2 %}
+        <span>Column 2/5</span>
+      {% endblock column_2 %}
+    </div>
+
+    <div class="{{ span_col and span_col != 'middle' ? 'col-sm-6' }} col-lg-bs5 col-third">
+      {% block column_3 %}
+        <span>Column 3/5</span>
+      {% endblock column_3 %}
+    </div>
+
+    <div class="{{ span_col ? 'col-sm-6' }} col-lg-bs5 col-fourth">
+      {% block column_4 %}
+        <span>Column 4/5</span>
+      {% endblock column_4 %}
+    </div>
+
+    <div class="{{ span_col and span_col != 'last' ? 'col-sm-6' }} col-lg-bs5 col-fifth">
+      {% block column_5 %}
+        <span>Column 5/5</span>
+      {% endblock column_5 %}
+    </div>
+  </div>
+</div>

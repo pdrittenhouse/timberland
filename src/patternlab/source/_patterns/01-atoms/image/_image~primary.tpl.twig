@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * image~primary
+ *   Implements images src and alt.
+ *
+ * Available variables for image:
+ *  - Inherit variables from @atoms/image/_image.tpl.twig
+ */
+#}
+
+<img src="{{ src }}" alt="{{ alt }}" class="{{ image_classes }}" {{ width ? "width='" ~ width ~ "'" }} {{ height ? "height='" ~ height ~ "'" }}/>

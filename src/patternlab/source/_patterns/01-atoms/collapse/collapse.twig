@@ -1,0 +1,63 @@
+{% include '@atoms/collapse/_collapse.tpl.twig' with {
+  collapse_other_classes: '',
+  button_group_display: 'block',
+  button_group_size: 'lg',
+  button_group_display_grid: false,
+  button_group_label: 'A collapse button group',
+  button_group_gap: 0,
+  button_group_breakpoints: [],
+  button_group_vertical: false,
+  button_group_classes: [],
+  button_group_other_classes: '',
+  buttons: [
+    {
+      button_id: 'aButtonId1',
+      button_classes: '',
+      button_other_classes: '',
+      button_element: 'a',
+      button_link: '#multiCollapseExample1',
+      button_text: 'Toggle 1',
+      button_toggle: 'collapse',
+      button_expanded: false,
+      button_controls: 'multiCollapseExample1'
+    },
+    {
+      button_id: 'aButtonId2',
+      button_classes: '',
+      button_other_classes: '',
+      button_target: '#multiCollapseExample2',
+      button_text: 'Toggle 2',
+      button_toggle: 'collapse',
+      button_expanded: false,
+      button_controls: 'multiCollapseExample2'
+    },
+    {
+      button_id: 'aButtonId3',
+      button_classes: '',
+      button_other_classes: '',
+      button_target: '.multi-collapse',
+      button_text: 'Toggle 1 & 2',
+      button_toggle: 'collapse',
+      button_expanded: false,
+      button_controls: 'multiCollapseExample1 multiCollapseExample2'
+    }
+  ],
+  content: [
+    {
+      collapse_id: 'multiCollapseExample1',
+      collapse_classes: [],
+      collapse_other_classes: 'multi-collapse',
+      collapse_content: '<p>Some placeholder content for the first collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.</p>',
+      background_color: 'primary',
+      text_color: 'white',
+    },
+    {
+      collapse_id: 'multiCollapseExample2',
+      collapse_classes: [],
+      collapse_other_classes: 'multi-collapse',
+      collapse_content: '<p>Some placeholder content for the second collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.</p>',
+      background_color: 'secondary',
+      text_color: 'white',
+    }
+  ]
+} %}

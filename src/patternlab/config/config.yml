@@ -1,0 +1,64 @@
+v: 2.6.0
+overrideConfig: q
+ie:
+    - DS_Store
+    - less
+    - scss
+id:
+    - scss
+    - .svn
+    - .sass-cache
+cleanPublic: 'true'
+patternStates:
+    - inprogress
+    - inreview
+    - complete
+styleGuideExcludes: ''
+cacheBusterOn: 'true'
+exportDir: export
+publicDir: ../../dist/pl
+sourceDir: source
+defaultPattern: all
+defaultShowPatternInfo: false
+ishMinimum: '240'
+ishMaximum: '2600'
+ishControlsHide:
+    - 00-protons
+styleguideKit: pattern-lab/styleguidekit-twig-default
+styleguideKitPath: vendor/pattern-lab/styleguidekit-twig-default
+lineageMatch: '{%([ ]+)?(?:include|extends|embed)( |\()[&quot;\&#039;]([\/.@A-Za-z0-9-_]+)[&quot;\&#039;]([\s\S+]*?)%}'
+lineageMatchKey: 3
+patternExtension: twig
+twigDebug: true
+#twigAutoescape: html
+twigAutoescape: false
+twigDefaultDateFormat: ''
+twigDefaultIntervalFormat: ''
+twigMacroExt: macro.twig
+twigFilterExt: filter.php
+twigFunctionExt: function.php
+twigTagExt: tag.php
+twigTestExt: test.php
+plugins:
+    twigNamespaces:
+        enabled: true
+        namespaces:
+            protons:
+                paths:
+                    - _patterns/00-protons
+            atoms:
+                paths:
+                    - _patterns/01-atoms
+            molecules:
+                paths:
+                    - _patterns/02-molecules
+            organisms:
+                paths:
+                    - _patterns/03-organisms
+            templates:
+                paths:
+                    - _patterns/04-templates
+            pages:
+                paths:
+                    - _patterns/05-pages
+

@@ -1,0 +1,29 @@
+{#
+/**
+ * @file
+ * figure
+ *
+ * Available variables for figure:
+ *  - caption [string]: Figure caption.
+ *  - caption_position [string: 'before', 'after']: Figure caption position.
+ *  - figure_classes [array]: Additional component classes.
+ *  - figure_other_classes [string]: Additional component classes.
+ */
+#}
+
+{% set figure_classes = figure_classes|default([])|merge([
+  'figure',
+  figure_other_classes,
+]) | sort | join(' ') | trim %}
+
+<figure class="{{ figure_classes }}">
+  {% if caption and caption_position == 'before' %}
+    <figcaption>{{ caption }}</figcaption>
+  {% endif %}
+  {% block content %}
+    Figure content
+  {% endblock content %}
+  {% if caption and caption_position == 'after' %}
+    <figcaption>{{ caption }}</figcaption>
+  {% endif %}
+</figure>

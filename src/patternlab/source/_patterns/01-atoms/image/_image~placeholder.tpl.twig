@@ -1,0 +1,54 @@
+{#
+/**
+ * @file
+ * image~placeholder
+ *   Implements placeholder.com for placeholder images.
+ *   @link https://placeholder.com/
+ *
+ * Available variables for image:
+ *  - Inherit variables from @atoms/image/_image.tpl.twig
+ *  - background_color [string]: Hex value (no #) for background color. If no text color
+ *  - text_color [string]: Hex value (no #) for text color. Text color is only set if background color is set.
+ *  - text [string]: Text for placeholder image
+ *  - format [string: 'png', 'gif', 'jpg', 'webp']: Image format
+ */
+#}
+
+{# if there's no width, let's randomly get one somewhere between 100px and 600px in increments of 10 #}
+{% if not width %}
+  {% set width = random(range(100, 600, 10)) %}
+{% endif %}
+
+{% if height %}
+  {% set height_attr = 'x' ~ height|round %}
+{% endif %}
+
+{% if background_color %}
+  {% set background_color_attr = '/' ~ background_color %}
+{% endif %}
+
+{% if text_color %}
+  {% set text_color_attr = '/' ~ text_color %}
+{% endif %}
+
+{% if format %}
+  {% set format_attr = '.' ~ format %}
+{% endif %}
+
+{% if text %}
+  {% set text_attr = '?text=' ~ text|replace({' ': '+'}) %}
+{% else %}
+  {% if not height %}
+    {% set text_attr = '?text=' ~ width ~ width %}
+  {% else %}
+    {% set text_attr = '?text=' ~ width ~ height %}
+  {% endif %}
+{% endif %}
+
+{% set imgSrc = 'https://via.placeholder.com/' ~ width ~ height_attr ~ background_color_attr ~ text_color_attr ~ format_attr ~ text_attr %}
+
+{% if variant == 'primary'%}
+  <img src="{{ imgSrc }}"{% if image_classes %} class="{{ image_classes }}"{% endif %} alt="A placeholder image">
+{% elseif variant == 'bg' %}
+  <div style="background-image: url('{{ imgSrc }}'); width: {{ width }}px; height: {{ height }}px;" class="bg-img {{ image_classes }}"></div>
+{% endif %}

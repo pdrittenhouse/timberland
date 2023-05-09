@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * image~picture
+ *   Implements images with picture properties.
+ *
+ * Available variables for image:
+ *  - Inherit variables from @atoms/image/_image.tpl.twig
+ *  - srcset [array]: An array of image src to pull from (falls back to src)
+ *  - breakpoints [array]: Avaiable sass breakpoints. Genereated automatically by webpack as sass data.
+ *      @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/picture
+ */
+#}
+
+{% set bp = breakpoints|keys %}
+
+<picture>
+  {% for item in srcset %}
+    {% set key = bp[loop.index]|default('xl') %}
+    <source srcset="{{ item }}" media="(max-width: {{ breakpoints[key] }})">
+  {% endfor %}
+  {% include '@atoms/image/_image~primary.tpl.twig' with {
+    variant: variant,
+    src: src,
+    alt: alt,
+    placeholder: placeholder,
+    image_classes: image_classes,
+    image_other_classes: image_other_classes,
+    width: width,
+    height: height
+  } %}
+</picture>

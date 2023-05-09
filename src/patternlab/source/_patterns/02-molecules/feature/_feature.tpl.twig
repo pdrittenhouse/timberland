@@ -1,0 +1,152 @@
+{#
+/**
+ * @file
+ * feature
+ *
+ * Available variables for feature:
+ *  - id [string]: Feature ID
+ *  - include_container [bool]: Include container
+ *  - full_width [bool]: Full width container
+ *  - vertical_center [bool]: Center horizontal layout content vertically
+ *  - vertical [bool]: Lays the feature out vertically
+ *  - image [object]: Feature image object
+ *  - image_right [bool]: Position image on right of horizontal feature
+ *  - caption [string]: Feature image caption
+ *  - caption_position [string: 'before', 'after']: Feature image caption position
+ *  - heading [string]: Feature heading
+ *  - label [string]: Feature label
+ *  - title [string]: Feature title
+ *  - subtitle [string]: Feature subtitle
+ *  - link [string]: URL for a linked feature
+ *  - target [string]: Target for feature link
+ *  - linked [bool]: Links the entire feature
+ *  - description [string]: Feature text
+ *  - button [object]: Feature button object
+ *  - feature_classes [array]: Additional component classes.
+ *  - feature_other_classes [array]: Additional component classes.
+ */
+#}
+
+{% set feature_classes = feature_classes|default([])|merge([
+  'feature',
+  image.src ? 'has-image',
+  vertical_center == true ? 'vertical-center',
+  vertical == true ? 'feature-vertical',
+  image_right == true ? 'feature-image-right',
+  feature_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set feature_attributes = feature_attributes|default([])|merge([
+  feature_other_attributes,
+]) | sort | join(' ') | trim %}
+
+{% set feature_link_classes = feature_link_classes|default([])|merge([
+  'feature-wrapper',
+  'feature-link',
+  feature_link_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set feature_link_attributes = feature_link_attributes|default([])|merge([
+  feature_link_other_attributes,
+]) | sort | join(' ') | trim %}
+
+{% if include_container == true %}
+<div class="{{ full_width == true ? 'container-fluid' : 'container'}}">
+  <div class="row">
+    <div class="col">
+{% endif %}
+
+      <div class="{{ feature_classes }}" {{ id ? 'id="' ~ id ~ '"' }} {{ feature_attributes }} >
+        {% block header %}
+          {% if heading %}
+            <header>
+              <h1 class="feature-heading">{{ heading }}</h1>
+            </header>
+          {% endif %}
+        {% endblock %}
+        {% if link and linked == true %}
+        <a href="{{ link }}" class="{{ feature_link_classes }}"  target="{{ target ? target : '_self' }}" {{ feature_link_attributes }} >
+          {% else %}
+          <div class="feature-wrapper">
+            {% endif %}
+            {% block image %}
+              {% if image.src %}
+                <figure class="feature-image" role="figure"  aria-labelledby="{{ id ~ 'image-caption' }}" id="{{ id ~ 'image' }}">
+                  {% if caption_position == 'before' %}
+                    <figcaption id="{{ id ~ 'image-caption' }}">{{ caption }}</figcaption>
+                  {% endif %}
+                  {% include '@atoms/image/_image.tpl.twig' with image %}
+                  {% if caption_position == 'after' %}
+                    <figcaption id="{{ id ~ 'image-caption' }}">{{ caption }}</figcaption>
+                  {% endif %}
+                </figure>
+              {% endif %}
+            {% endblock %}
+
+            <div class="feature-body">
+              <div class="feature-content">
+                {% block body %}
+                  {% if label %}
+                    <span class="feature-label">{{ label }}</span>
+                  {% endif %}
+                  {% if title %}
+                    <h2 class="feature-title">{{ title }}</h2>
+                  {% endif %}
+                  {% if subtitle %}
+                    <h3 class="feature-subtitle">{{ subtitle }}</h3>
+                  {% endif %}
+                  {% if description %}
+                    <div class="feature-description">
+                      {{ description }}
+                    </div>
+                  {% endif %}
+                {% endblock body %}
+                {% block footer %}
+                  <footer class="feature-footer">
+                    {% if button.button_text %}
+                      {% include "@atoms/button/_button.tpl.twig" with {
+                        button_element: linked == false ? 'a' : 'button',
+                        button_color: button.button_color,
+                        button_text: button.button_text,
+                        button_link: link,
+                        button_target: target,
+                        button_outline: button.button_outline,
+                        button_size: button.button_size,
+                        button_block: button.button_block,
+                        button_active: button.button_active,
+                        button_classes: button.button_classes,
+                        button_other_classes: button.button_other_classes,
+                        button_type: button.button_type,
+                        button_value: button.button_value,
+                        button_disabled: button.button_disabled,
+                        buttonless_dropdown: button.buttonless_dropdown,
+                        button_toggle: button.button_toggle,
+                        button_id: button.button_id,
+                        button_attributes: button.button_attributes,
+                        button_other_attributes: button.button_other_attributes,
+                        button_expanded: button.button_expanded,
+                        button_controls: button.button_controls,
+                        nowrap: button.nowrap,
+                        contextual_content: button.contextual_content,
+                        title: button.title,
+                        popover_content: button.popover_content,
+                        context_placement: button.context_placement,
+                        context_container: button.context_container
+                      } %}
+                    {% endif %}
+                  </footer>
+                {% endblock %}
+              </div>
+            </div>
+            {% if link and linked == true %}
+        </a>
+        {% else %}
+      </div>
+      {% endif %}
+    </div>
+
+{% if include_container == true %}
+    </div>
+  </div>
+</div>
+{% endif %}

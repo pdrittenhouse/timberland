@@ -1,0 +1,454 @@
+{
+    "key": "group_636871db82c48",
+    "title": "Module: Background Image",
+    "fields": [
+        {
+            "key": "field_636871dbef597",
+            "label": "Image Type",
+            "name": "bg_image_type",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "choices": {
+                "file": "File",
+                "url": "URL"
+            },
+            "default_value": "file",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_63687352ef598",
+            "label": "Background Image",
+            "name": "bg_image",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_636871dbef597",
+                        "operator": "==",
+                        "value": "file"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "return_format": "array",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": "",
+            "preview_size": "medium"
+        },
+        {
+            "key": "field_63687441ef599",
+            "label": "Background Image URL",
+            "name": "bg_image_url",
+            "aria-label": "",
+            "type": "url",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_636871dbef597",
+                        "operator": "==",
+                        "value": "url"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "default_value": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_63687ceae8934",
+            "label": "Background Size",
+            "name": "bg_size",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_63687352ef598",
+                        "operator": "!=empty"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_63687441ef599",
+                        "operator": "!=empty"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "choices": {
+                "cover": "Cover",
+                "contain": "Contain",
+                "custom": "Custom"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_63688301e8935",
+            "label": "Custom Background Size",
+            "name": "custom_bg_size",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_63687ceae8934",
+                        "operator": "==",
+                        "value": "custom"
+                    },
+                    {
+                        "field": "field_63687352ef598",
+                        "operator": "!=empty"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_63687ceae8934",
+                        "operator": "==",
+                        "value": "custom"
+                    },
+                    {
+                        "field": "field_63687441ef599",
+                        "operator": "!=empty"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_636883b1f84a8",
+            "label": "Background Horizontal Position",
+            "name": "bg_horizontal_position",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_63687352ef598",
+                        "operator": "!=empty"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_63687441ef599",
+                        "operator": "!=empty"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "choices": {
+                "left": "Left",
+                "right": "Right",
+                "center": "Center",
+                "custom": "Custom"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_636883f1f84a9",
+            "label": "Custom Background Horizontal Position",
+            "name": "custom_bg_horizontal_position",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_636883b1f84a8",
+                        "operator": "==",
+                        "value": "custom"
+                    },
+                    {
+                        "field": "field_63687352ef598",
+                        "operator": "!=empty"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_636883b1f84a8",
+                        "operator": "==",
+                        "value": "custom"
+                    },
+                    {
+                        "field": "field_63687441ef599",
+                        "operator": "!=empty"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_63688451f84aa",
+            "label": "Background Vertical Position",
+            "name": "bg_vertical_position",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_63687352ef598",
+                        "operator": "!=empty"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_63687441ef599",
+                        "operator": "!=empty"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "choices": {
+                "top": "Top",
+                "bottom": "Bottom",
+                "center": "Center",
+                "custom": "Custom"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_636884cff84ab",
+            "label": "Custom Background Vertical Position",
+            "name": "custom_bg_vertical_position",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_63688451f84aa",
+                        "operator": "==",
+                        "value": "custom"
+                    },
+                    {
+                        "field": "field_63687352ef598",
+                        "operator": "!=empty"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_63688451f84aa",
+                        "operator": "==",
+                        "value": "custom"
+                    },
+                    {
+                        "field": "field_63687441ef599",
+                        "operator": "!=empty"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_63688bdc24f9f",
+            "label": "Background Repeat",
+            "name": "bg_repeat",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_63687352ef598",
+                        "operator": "!=empty"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_63687441ef599",
+                        "operator": "!=empty"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "choices": {
+                "repeat": "Repeat",
+                "repeat-x": "Repeat X",
+                "repeat-y": "Repeat Y",
+                "no-repeat": "No Repeat",
+                "space": "Space",
+                "round": "Round"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_6378825d72959",
+            "label": "Background Attachment",
+            "name": "bg_attachment",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_63687352ef598",
+                        "operator": "!=empty"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_63687441ef599",
+                        "operator": "!=empty"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "choices": {
+                "fixed": "Fixed",
+                "scroll": "Scroll",
+                "local": "Local"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "block-modules"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1671746584
+}

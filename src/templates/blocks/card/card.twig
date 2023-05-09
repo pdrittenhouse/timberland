@@ -1,0 +1,283 @@
+{#
+/**
+ * Block Name: Card
+ *
+ * This is the template that displays the card block.
+ */
+#}
+
+{% if is_preview %}
+{#<p>Some editor instructions here.</p>#}
+{% endif %}
+
+{# Set custom card styles #}
+{% set bg_color = fields.card_bg_color['bg_color'] == 'custom' and fields.card_bg_color['bg_custom_color'] ? 'background-color: ' ~ fields.card_bg_color['bg_custom_color'] ~ ';' %}
+{% set border_color = fields.card_border_color['color'] == 'custom' and fields.card_border_color['custom_color'] ? 'border-color: ' ~ fields.card_border_color['custom_color'] ~ ';' %}
+{% set text_color = fields.card_text_color['color'] == 'custom' and fields.card_text_color['custom_color'] ? 'color: ' ~ fields.card_text_color['custom_color'] ~ ';' %}
+{% set card_back_bg_color = fields.back_bg_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.back_bg_color['bg_custom_color'] ~ ';' %}
+{% set card_back_border_color = fields.back_border_color['color'] == 'custom' ? 'border-color: ' ~ fields.back_border_color['custom_color'] ~ ';' %}
+{% set card_back_text_color = fields.back_text_color['color'] == 'custom' ? 'color: ' ~ fields.back_text_color['custom_color'] ~ ';' %}
+{% set width = fields.width.width['width']['value'] is not empty ? 'width: ' ~ fields.width.width['width']['value']  ~ fields.width.width['width']['unit'] ~  ';' %}
+{% set min_width = fields.width.width['min_width'] is not empty ? 'min-width: ' ~ fields.width.width['min_width']  ~ 'px;' %}
+{% set max_width = fields.width.width['max_width'] is not empty ? 'max-width: ' ~ fields.width.width['max_width']  ~ 'px;' %}
+{% set margin_top = parent_block_data['name'] != 'acf/card-grid' and fields.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.margin['margin']['top']['top'] is not empty ? 'margin-top: ' ~ fields.margin['margin']['top']['top'] ~ 'px;' %}
+{% set margin_bottom = parent_block_data['name'] != 'acf/card-grid' and fields.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.margin['margin']['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ fields.margin['margin']['bottom']['bottom'] ~ 'px;' %}
+{% set margin_left = parent_block_data['name'] != 'acf/card-grid' and fields.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.margin['margin']['left']['left'] is not empty ? 'margin-left: ' ~ fields.margin['margin']['left']['left'] ~ 'px;' %}
+{% set margin_right = parent_block_data['name'] != 'acf/card-grid' and fields.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.margin['margin']['right']['right'] is not empty ? 'margin-right: ' ~ fields.margin['margin']['right']['right'] ~ 'px;' %}
+{% set padding_top  = fields.card_padding['padding']['top'] is not empty ? 'padding-top: ' ~ fields.card_padding['padding']['top'] ~ 'px;' %}
+{% set padding_bottom = fields.card_padding['padding']['bottom'] is not empty ? 'padding-bottom: ' ~ fields.card_padding['padding']['bottom'] ~ 'px;' %}
+{% set padding_left = fields.card_padding['padding']['left'] is not empty ? 'padding-left: ' ~ fields.card_padding['padding']['left'] ~ 'px;' %}
+{% set padding_right = fields.card_padding['padding']['right'] is not empty ? 'padding-right: ' ~ fields.card_padding['padding']['right'] ~ 'px;' %}
+{% set border_top_left_radius = fields.card_border_radius['top_left'] is not empty ? 'border-top-left-radius: ' ~ fields.card_border_radius['top_left'] ~ 'px;' %}
+{% set border_top_right_radius = fields.card_border_radius['top_right'] is not empty ? 'border-top-right-radius: ' ~ fields.card_border_radius['top_right'] ~ 'px;' %}
+{% set border_bottom_left_radius = fields.card_border_radius['bottom_left'] is not empty ? 'border-bottom-left-radius: ' ~ fields.card_border_radius['bottom_left'] ~ 'px;' %}
+{% set border_bottom_right_radius = fields.card_border_radius['bottom_right'] is not empty ? 'border-bottom-right-radius: ' ~ fields.card_border_radius['bottom_right'] ~ 'px;' %}
+{% set box_shadow_color = fields.card_box_shadow['color']['color'] == 'palette' and fields.card_box_shadow['color']['theme_color'] ? 'var(--' ~ fields.card_box_shadow['color']['theme_color'] ~ ')' : fields.card_box_shadow['color']['color'] == 'custom' and fields.card_box_shadow['color']['custom_color'] ? fields.card_box_shadow['color']['custom_color'] %}
+{% set box_shadow_inset = fields.card_box_shadow['inset'] == true ? 'inset' %}
+{% set box_shadow = fields.card_box_shadow['horizontal_offset'] is not empty or fields.card_box_shadow['vertical_offset'] is not empty or fields.card_box_shadow['blur'] is not empty or fields.card_box_shadow['spread'] is not empty or box_shadow_color or box_shadow_inset == true ? 'box-shadow: ' ~ fields.card_box_shadow['horizontal_offset'] ~ 'px ' ~ fields.card_box_shadow['vertical_offset'] ~ 'px ' ~ fields.card_box_shadow['blur'] ~ 'px ' ~ fields.card_box_shadow['spread'] ~ 'px ' ~ box_shadow_color ~ ' ' ~ box_shadow_inset ~ ';' %}
+{% set back_border_top_left_radius = fields.back_border_radius['top_left'] is not empty ? 'border-top-left-radius: ' ~ fields.back_border_radius['top_left'] ~ 'px;' %}
+{% set back_border_top_right_radius = fields.back_border_radius['top_right'] is not empty ? 'border-top-right-radius: ' ~ fields.back_border_radius['top_right'] ~ 'px;' %}
+{% set back_border_bottom_left_radius = fields.back_border_radius['bottom_left'] is not empty ? 'border-bottom-left-radius: ' ~ fields.back_border_radius['bottom_left'] ~ 'px;' %}
+{% set back_border_bottom_right_radius = fields.back_border_radius['bottom_right'] is not empty ? 'border-bottom-right-radius: ' ~ fields.back_border_radius['bottom_right'] ~ 'px;' %}
+
+{# Background image styles #}
+{% set card_bg_image = fields.card_bg_image['bg_image_type'] == 'file' and fields.card_bg_image['bg_image']['url'] ? fields.card_bg_image['bg_image']['url'] : fields.card_bg_image['bg_image_type'] == 'url' and fields.card_bg_image['bg_image_url'] ? fields.card_bg_image['bg_image_url'] %}
+{% set card_bg_image_size = fields.card_bg_image['bg_size'] == 'custom' and fields.card_bg_image['custom_bg_size'] ? 'background-size: ' ~ fields.card_bg_image['custom_bg_size'] ~ ';' : fields.card_bg_image['bg_size'] ? 'background-size: ' ~ fields.card_bg_image['bg_size'] ~ ';' %}
+{% set card_bg_hor_pos = fields.card_bg_image['bg_horizontal_position'] == 'custom' ? fields.card_bg_image['custom_bg_horizontal_position'] : fields.card_bg_image['bg_horizontal_position'] ? fields.card_bg_image['bg_horizontal_position'] %}
+{% set card_bg_ver_pos = fields.card_bg_image['bg_vertical_position'] == 'custom' ? fields.card_bg_image['custom_bg_vertical_position'] : fields.card_bg_image['bg_vertical_position'] ? fields.card_bg_image['bg_vertical_position'] %}
+{% set card_bg_position = card_bg_hor_pos or card_bg_ver_pos ? 'background-position: ' ~ card_bg_hor_pos ~ ' ' ~ card_bg_ver_pos ~ ';' %}
+{% set card_bg_repeat = fields.card_bg_image['bg_repeat'] ? 'background-repeat: ' ~ fields.card_bg_image['bg_repeat'] ~ ';' %}
+{% set card_bg_attachment = fields.card_bg_image['bg_attachment'] ? 'background-attachment: ' ~ fields.card_bg_image['bg_attachment'] ~ ';' %}
+
+{# Back background image styles #}
+{% set back_bg_image = fields.back_bg_image['bg_image_type'] == 'file' and fields.back_bg_image['bg_image']['url'] ? fields.back_bg_image['bg_image']['url'] : fields.back_bg_image['bg_image_type'] == 'url' and fields.back_bg_image['bg_image_url'] ? fields.back_bg_image['bg_image_url'] %}
+{% set back_bg_image_size = fields.back_bg_image['bg_size'] == 'custom' and fields.back_bg_image['custom_bg_size'] ? 'background-size: ' ~ fields.back_bg_image['custom_bg_size'] ~ ';' : fields.back_bg_image['bg_size'] ? 'background-size: ' ~ fields.back_bg_image['bg_size'] ~ ';' %}
+{% set back_bg_hor_pos = fields.back_bg_image['bg_horizontal_position'] == 'custom' ? fields.back_bg_image['custom_bg_horizontal_position'] : fields.back_bg_image['bg_horizontal_position'] ? fields.back_bg_image['bg_horizontal_position'] %}
+{% set back_bg_ver_pos = fields.back_bg_image['bg_vertical_position'] == 'custom' ? fields.back_bg_image['custom_bg_vertical_position'] : fields.back_bg_image['bg_vertical_position'] ? fields.back_bg_image['bg_vertical_position'] %}
+{% set back_bg_position = back_bg_hor_pos or back_bg_ver_pos ? 'background-position: ' ~ back_bg_hor_pos ~ ' ' ~ back_bg_ver_pos ~ ';' %}
+{% set back_bg_repeat = fields.back_bg_image['bg_repeat'] ? 'background-repeat: ' ~ fields.back_bg_image['bg_repeat'] ~ ';' %}
+{% set back_bg_attachment = fields.back_bg_image['bg_attachment'] ? 'background-attachment: ' ~ fields.back_bg_image['bg_attachment'] ~ ';' %}
+
+{# Set custom button styles #}
+{% if fields.footer_button.close != 'black' and fields.footer_button.close != 'white' and fields.button.style == 'custom' %}
+  {% set btn_bg_color = fields.button.background_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.button.background_color['bg_custom_color'] ~ ';' %}
+  {% set btn_text_color = fields.button.text_color['color'] == 'custom' ? 'color: ' ~ fields.button.text_color['custom_color'] ~ ';' %}
+  {% set btn_transform = fields.button['text_transform']['text_transform'] ? 'text-transform: ' ~ fields.button['text_transform']['text_transform'] ~ ';' %}
+  {% set btn_padding_top  = fields.button['padding']['padding']['top'] is not empty ? 'padding-top: ' ~ fields.button['padding']['padding']['top'] ~ 'px;' %}
+  {% set btn_padding_bottom = fields.button['padding']['padding']['bottom'] is not empty ? 'padding-bottom: ' ~ fields.button['padding']['padding']['bottom'] ~ 'px;' %}
+  {% set btn_padding_left = fields.button['padding']['padding']['left'] is not empty ? 'padding-left: ' ~ fields.button['padding']['padding']['left'] ~ 'px;' %}
+  {% set btn_padding_right = fields.button['padding']['padding']['right'] is not empty ? 'padding-right: ' ~ fields.button['padding']['padding']['right'] ~ 'px;' %}
+  {% set btn_border_top_width = fields.button['border']['top']['width'] is not empty ? 'border-top-width: ' ~ fields.button['border']['top']['width'] ~ 'px;' %}
+  {% set btn_border_top_style = fields.button['border']['top']['style'] ? 'border-top-style: ' ~ fields.button['border']['top']['style'] ~ ';' %}
+  {% set btn_border_top_color = fields.button['border']['top']['color'] == 'custom' and fields.button['border']['top']['custom_color'] ? 'border-top-color: ' ~ fields.button['border']['top']['custom_color'] ~ ';' : fields.button['border']['top']['color'] == 'palette' and fields.button['border']['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.button['border']['top']['theme_color'] ~ ');' %}
+  {% set btn_border_bottom_width = fields.button['border']['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ fields.button['border']['bottom']['width'] ~ 'px;' %}
+  {% set btn_border_bottom_style = fields.button['border']['bottom']['style'] ? 'border-bottom-style: ' ~ fields.button['border']['bottom']['style'] ~ ';' %}
+  {% set btn_border_bottom_color = fields.button['border']['bottom']['color'] == 'custom' and fields.button['border']['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.button['border']['bottom']['custom_color'] ~ ';' : fields.button['border']['bottom']['color'] == 'palette' and fields.button['border']['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.button['border']['bottom']['theme_color'] ~ ');' %}
+  {% set btn_border_left_width = fields.button['border']['left']['width'] is not empty ? 'border-left-width: ' ~ fields.button['border']['left']['width'] ~ 'px;' %}
+  {% set btn_border_left_style = fields.button['border']['left']['style'] ? 'border-left-style: ' ~ fields.button['border']['left']['style'] ~ ';' %}
+  {% set btn_border_left_color = fields.button['border']['left']['color'] == 'custom' and fields.button['border']['left']['custom_color'] ? 'border-left-color: ' ~ fields.button['border']['left']['custom_color'] ~ ';' : fields.button['border']['left']['color'] == 'palette' and fields.button['border']['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.button['border']['left']['theme_color'] ~ ');' %}
+  {% set btn_border_right_width = fields.button['border']['right']['width'] is not empty ? 'border-right-width: ' ~ fields.button['border']['right']['width'] ~ 'px;' %}
+  {% set btn_border_right_style = fields.button['border']['right']['style'] ? 'border-right-style: ' ~ fields.button['border']['right']['style'] ~ ';' %}
+  {% set btn_border_right_color = fields.button['border']['right']['color'] == 'custom' and fields.button['border']['right']['custom_color'] ? 'border-right-color: ' ~ fields.button['border']['right']['custom_color'] ~ ';' : fields.button['border']['right']['color'] == 'palette' and fields.button['border']['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.button['border']['right']['theme_color'] ~ ');' %}
+  {% set btn_border_top_left_radius = fields.button['border_radius']['top_left'] is not empty ? 'border-top-left-radius: ' ~ fields.button['border_radius']['top_left'] ~ 'px;' %}
+  {% set btn_border_top_right_radius = fields.button['border_radius']['top_right'] is not empty ? 'border-top-right-radius: ' ~ fields.button['border_radius']['top_right'] ~ 'px;' %}
+  {% set btn_border_bottom_left_radius = fields.button['border_radius']['bottom_left'] is not empty ? 'border-bottom-left-radius: ' ~ fields.button['border_radius']['bottom_left'] ~ 'px;' %}
+  {% set btn_border_bottom_right_radius = fields.button['border_radius']['bottom_right'] is not empty ? 'border-bottom-right-radius: ' ~ fields.button['border_radius']['bottom_right'] ~ 'px;' %}
+  {% set btn_box_shadow_color = fields.button['box_shadow']['color']['color'] == 'palette' and fields.button['box_shadow']['color']['theme_color'] ? 'var(--' ~ fields.button['box_shadow']['color']['theme_color'] ~ ')' : fields.button['box_shadow']['color']['color'] == 'custom' and fields.button['box_shadow']['color']['custom_color'] ? fields.button['box_shadow']['color']['custom_color'] %}
+  {% set btn_box_shadow_inset = fields.button['box_shadow']['inset'] == true ? 'inset' %}
+  {% set btn_box_shadow = fields.button['box_shadow']['horizontal_offset'] is not empty or fields.button['box_shadow']['vertical_offset'] is not empty or fields.button['box_shadow']['blur'] is not empty or fields.button['box_shadow']['spread'] is not empty or btn_box_shadow_color or btn_box_shadow_inset ? 'box-shadow: ' ~ fields.button['box_shadow']['horizontal_offset'] ~ 'px ' ~ fields.button['box_shadow']['vertical_offset'] ~ 'px ' ~ fields.button['box_shadow']['blur'] ~ 'px ' ~ fields.button['box_shadow']['spread'] ~ 'px ' ~ btn_box_shadow_color ~ ' ' ~ btn_box_shadow_inset ~ ';' %}
+  {% set btn_text_shadow_color = fields.button['text_shadow']['color']['color'] == 'palette' and fields.button['text_shadow']['color']['theme_color'] ? 'var(--' ~ fields.button['text_shadow']['color']['theme_color'] ~ ')' : fields.button['text_shadow']['color']['color'] == 'custom' and fields.button['text_shadow']['color']['custom_color'] ? fields.button['text_shadow']['color']['custom_color'] %}
+  {% set btn_text_shadow = fields.button['text_shadow']['horizontal_offset'] is not empty or fields.button['text_shadow']['vertical_offset'] is not empty or fields.button['text_shadow']['blur'] is not empty or btn_text_shadow_color ? 'text-shadow: ' ~ fields.button['text_shadow']['horizontal_offset'] ~ 'px ' ~ fields.button['text_shadow']['vertical_offset'] ~ 'px ' ~ fields.button['text_shadow']['blur'] ~ 'px ' ~ btn_text_shadow_color ~ ';' %}
+{% endif %}
+{% set btn_fontsize = fields.button['font_size']['font_size']['value'] is not empty ? 'font-size: ' ~ fields.button['font_size']['font_size']['value'] ~ fields.button['font_size']['font_size']['unit'] ~ ';' %}
+{% set btn_width = fields.button.button_width.width['width']['value'] is not empty ? 'width: ' ~ fields.button.button_width.width['width']['value']  ~ fields.button.button_width.width['width']['unit'] ~  ';' %}
+{% set btn_min_width = fields.button.button_width.width['min_width'] is not empty ? 'min-width: ' ~ fields.button.button_width.width['min_width']  ~ 'px;' %}
+{% set btn_max_width = fields.button.button_width.width['max_width'] is not empty ? 'max-width: ' ~ fields.button.button_width.width['max_width']  ~ 'px;' %}
+{% set btn_margin_top = fields.button.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : fields.button.margin['margin']['top']['top'] is not empty ? 'margin-top: ' ~ fields.button.margin['margin']['top']['top'] ~ 'px;' %}
+{% set btn_margin_bottom = fields.button.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.button.margin['margin']['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ fields.button.margin['margin']['bottom']['bottom'] ~ 'px;' %}
+{% set btn_margin_left = fields.button.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : fields.button.margin['margin']['left']['left'] is not empty ? 'margin-left: ' ~ fields.button.margin['margin']['left']['left'] ~ 'px;' %}
+{% set btn_margin_right = fields.button.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : fields.button.margin['margin']['right']['right'] is not empty ? 'margin-right: ' ~ fields.button.margin['margin']['right']['right'] ~ 'px;' %}
+
+{% set template = fields.horizontal == true ? '_card~horizontal.tpl.twig' : '_card.tpl.twig'  %}
+
+{% if parent_block_data['name'] == 'acf/card-grid' and block_context['acf/fields']['type'] == 'row' %}
+<div class="col">
+{% endif %}
+
+{% embed '@molecules/card/' ~ template with {
+  text_color: fields.card_text_color['color'] == 'palette' and fields.card_text_color['theme_color'] and fields.flip_card != true ? fields.card_text_color['theme_color'],
+  card_background: fields.card_bg_color['bg_color'] == 'palette' and fields.card_bg_color['bg_theme_color'] and fields.flip_card != true ? fields.card_bg_color['bg_theme_color'],
+  card_border: fields.card_border_color['color'] == 'palette' and fields.card_border_color['theme_color'] and fields.flip_card != true ? fields.card_border_color['theme_color'],
+  no_border: fields.remove_card_border,
+  no_header_padding: fields.remove_card_header_padding,
+  no_body_padding: fields.remove_card_body_padding,
+  no_footer_padding: fields.remove_card_footer_padding,
+  card_icon: {
+    svg_other_classes: 'icon',
+    name: fields.card_icon['icon'] ? fields.card_icon['icon'],
+    fill: fields.card_icon['icon_color']['color'] == 'palette' and fields.card_icon['icon_color']['theme_color'] ? fields.card_icon['icon_color']['theme_color'],
+    width: fields.card_icon['size'] ? fields.card_icon['size'] ~ 'px',
+    height: fields.card_icon['size'] ? fields.card_icon['size'] ~ 'px',
+    svg_styles: [
+      fields.card_icon['icon_color']['color']  == 'custom' and fields.card_icon['icon_color']['custom_color'] ? 'color: ' ~ fields.card_icon['icon_color']['custom_color'] ~ ';',
+    ]
+  },
+  card_label: fields.label,
+  card_title: fields.card_title ? fields.card_title,
+  card_subtitle: fields.subtitle ? fields.subtitle,
+  card_linked: fields.link_card == true,
+  card_link: fields.trigger_modal == true ? 'javascript:void(0);' : fields.link['url'] ? fields.link['url'],
+  card_link_text: 'Card link',
+  flip_card: fields.flip_card,
+  inherit_color: (fields.card_text_color['color'] == 'palette' and fields.card_text_color['theme_color']) or (fields.card_text_color['color'] == 'custom' and fields.card_text_color['custom_color']) and fields.inherit_text_color ? fields.inherit_text_color,
+  card_image_location: ((fields.image['image_type'] == 'file' and fields.image['image']['url']) or (fields.image['image_type'] == 'url' and fields.image['image_url'])) and fields.image_position ? fields.image_position,
+  card_image_overlay: ((fields.image['image_type'] == 'file' and fields.image['image']['url']) or (fields.image['image_type'] == 'url' and fields.image['image_url'])) and fields.image_overlay ? fields.image_overlay,
+  card_image_overlay_text: ((fields.image['image_type'] == 'file' and fields.image['image']['url']) or (fields.image['image_type'] == 'url' and fields.image['image_url'])) and fields.image_overlay_text ? fields.image_overlay_text,
+  card_image: {
+    variant: 'primary',
+    src: fields.image['image_type'] == 'file' and fields.image['image']['url'] ? fields.image['image']['url'] : fields.image['image_type'] == 'url' and fields.image['image_url'] ? fields.image['image_url'],
+    alt: fields.image['image_type'] == 'file' and fields.image['image']['alt'] ? fields.image['image']['alt']
+  },
+  card_footer: fields.card_footer,
+  card_classes: [
+    'block-card',
+    fields.horizontal != true and fields.layout.card_layout != 'default' ? 'card-' ~ fields.layout.card_layout : fields.horizontal == true and fields.horizontal_layout.horizontal_card_layout != 'default' ? 'card-' ~ fields.horizontal_layout.horizontal_card_layout,
+    fields.text_align is not empty and fields.text_align != 'null' ? 'text-' ~ fields.text_align,
+    block_context['acf/fields']['type'] == 'grid' and fields.featured == true ? 'featured',
+    block['className'],
+    block['align'] ? 'align-' ~ block['align'],
+  ],
+  card_styles: [
+    fields.flip_card != true ? card_bg_image_size,
+    fields.flip_card != true ? card_bg_position,
+    fields.flip_card != true ? card_bg_repeat,
+    fields.flip_card != true ? card_bg_attachment,
+    fields.flip_card != true or fields.image_overlay_text is empty ? border_top_left_radius,
+    fields.flip_card != true or fields.image_overlay_text is empty ? border_top_right_radius,
+    fields.flip_card != true or fields.image_overlay_text is empty ? border_bottom_left_radius,
+    fields.flip_card != true or fields.image_overlay_text is empty ? border_bottom_right_radius,
+    fields.flip_card != true or fields.image_overlay_text is empty ? border_color,
+    fields.flip_card != true ? bg_color,
+    fields.flip_card != true ? text_color,
+    fields.flip_card != true ? padding_top,
+    fields.flip_card != true ? padding_bottom,
+    fields.flip_card != true ? padding_left,
+    fields.flip_card != true ? padding_right,
+    width,
+    min_width,
+    max_width,
+    margin_top,
+    margin_bottom,
+    margin_left,
+    margin_right,
+    box_shadow
+  ],
+  card_attributes: [
+    fields.link_card == true and fields.trigger_modal == true ? 'data-toggle="modal"',
+    fields.link_card == true and fields.trigger_modal == true ? 'data-target="#' ~ fields.modal_id ~ '"'
+  ],
+  background_image: card_bg_image,
+  card_front_classes: [
+    fields.card_text_color['color'] == 'palette' and fields.card_text_color['theme_color'] and fields.flip_card == true ? 'text-' ~ fields.card_text_color['theme_color'],
+    fields.card_bg_color['bg_color'] == 'palette' and fields.card_bg_color['bg_theme_color'] and fields.flip_card == true ? 'bg-' ~ fields.card_bg_color['bg_theme_color'],
+    fields.card_border_color['color'] == 'palette' and fields.card_border_color['theme_color'] and fields.flip_card == true ? 'border border-' ~ fields.card_border_color['theme_color'],
+    fields.flip_card == true and border_color ? 'has-border'
+  ],
+  card_front_styles: [
+    fields.flip_card == true ? card_bg_image_size,
+    fields.flip_card == true ? card_bg_position,
+    fields.flip_card == true ? card_bg_repeat,
+    fields.flip_card == true ? card_bg_attachment,
+    fields.flip_card == true or fields.image_overlay_text ? border_top_left_radius,
+    fields.flip_card == true or fields.image_overlay_text ? border_top_right_radius,
+    fields.flip_card == true or fields.image_overlay_text ? border_bottom_left_radius,
+    fields.flip_card == true or fields.image_overlay_text ? border_bottom_right_radius,
+    fields.flip_card == true ? border_color,
+    fields.flip_card == true ? bg_color,
+    fields.flip_card == true ? text_color,
+    fields.flip_card == true ? padding_top,
+    fields.flip_card == true ? padding_bottom,
+    fields.flip_card == true ? padding_left,
+    fields.flip_card == true ? padding_right,
+  ],
+  back_background_image: back_bg_image,
+  card_back_classes: [
+    fields.back_text_color['color'] == 'palette' and fields.back_text_color['theme_color'] and fields.flip_card == true ? 'text-' ~ fields.back_text_color['theme_color'],
+    fields.back_bg_color['bg_color'] == 'palette' and fields.back_bg_color['bg_theme_color'] and fields.flip_card == true ? 'bg-' ~ fields.back_bg_color['bg_theme_color'],
+    fields.back_border_color['color'] == 'palette' and fields.back_border_color['theme_color'] and fields.flip_card == true ? 'border border-' ~ fields.back_border_color['theme_color'],
+    fields.flip_card == true and card_back_border_color ? 'has-border'
+  ],
+  card_back_styles: [
+    fields.flip_card == true ? back_bg_image_size,
+    fields.flip_card == true ? back_bg_position,
+    fields.flip_card == true ? back_bg_repeat,
+    fields.flip_card == true ? back_bg_attachment,
+    fields.flip_card == true ? back_border_top_left_radius,
+    fields.flip_card == true ? back_border_top_right_radius,
+    fields.flip_card == true ? back_border_bottom_left_radius,
+    fields.flip_card == true ? back_border_bottom_right_radius,
+    fields.flip_card == true ? card_back_border_color,
+    fields.flip_card == true ? card_back_bg_color,
+    fields.flip_card == true ? card_back_text_color,
+    fields.flip_card == true ? padding_top,
+    fields.flip_card == true ? padding_bottom,
+    fields.flip_card == true ? padding_left,
+    fields.flip_card == true ? padding_right,
+  ]
+} %}
+    {% block card_body %}
+        <div class="card-body {{ no_body_padding == true ? 'p-0' }}">
+            {% block card_text %}
+                <div class="card-text">{{ fields.body }}</div>
+            {% endblock %}
+            <div class="inner-blocks-wrapper">
+                <InnerBlocks allowedBlocks="{{ ['core/image', 'core/paragraph', 'core/heading', 'core/list', 'core/quote', 'core/code', 'core/preformatted', 'core/pullquote', 'core/table', 'core/verse', 'core/gallery', 'core/audio', 'core/cover', 'core/media-text', 'core/video', 'core/buttons', 'core/columns', 'core/group', 'core/row', 'core/separator', 'core/spacer', 'core/calendar', 'core/html', 'core/search', 'core/shortcode', 'core/social-icons', 'core/tag-cloud', 'acf/quote', 'acf/modal', 'acf/buttons', 'acf/button', 'acf/row', 'acf/price', 'acf/icons', 'acf/button-group', 'acf/accordion', 'acf/pattern', 'gravityforms/form'] | json_encode() | escape('html_attr') }}" />
+            </div>
+            {% if fields.link and fields.link_card != true and fields.show_button != true %}
+                <a href="{{ fields.link['url'] }}" class="card-link" target="{{ fields.link['target'] ? fields.link['target'] : '_self' }}">{{ fields.link['title'] }}</a>
+            {% endif %}
+            {% if fields.show_button == true %}
+                {% include "@atoms/button/_button.tpl.twig" with {
+                  button_element: fields.link_card == true ? 'button' : fields.button.element,
+                  button_text: fields.link['title'],
+                  button_link: fields.link_card != true and fields.trigger_modal != true ? fields.link['url'] : fields.link_card != true and fields.trigger_modal == true ? 'javascript:void(0);',
+                  button_target: fields.trigger_modal == true ? '#' ~ fields.modal_id : fields.link['target'],
+                  button_color: fields.button.close != 'black' and fields.button.close != 'white' and fields.button.style != 'custom' ? fields.button.style,
+                  button_size: fields.button.size,
+                  button_outline: fields.button.outline,
+                  button_block: fields.button.full_width,
+                  button_toggle: fields.trigger_modal == true ? 'modal' : fields.button.toggle ? fields.button.toggle,
+                  button_controls: fields.trigger_modal == true ? fields.modal_id,
+                  button_disabled: fields.button.disabled,
+                  button_value: fields.button.value,
+                  nowrap: fields.button.nowrap,
+                  contextual_content: fields.button.toggle == 'tooltip' or fields.button.toggle == 'popover' ? fields.button.toggle,
+                  title: fields.button.context['title'],
+                  popover_content: fields.button.context['content'],
+                  context_placement: fields.button.context['placement'],
+                  context_container: fields.button.context['container'],
+                  close_button: fields.button.close,
+                  hide_label: fields.button.hide_label,
+                  button_classes: [
+                    fields.button.close != 'black' and fields.button.close != 'white' and fields.button.background_color['bg_color'] == 'palette' and fields.button.background_color['bg_theme_color'] ? 'bg-' ~ fields.button.background_color['bg_theme_color'],
+                    fields.button.close != 'black' and fields.button.close != 'white' and fields.button.text_color['color'] == 'palette' and fields.button.text_color['theme_color'] ? 'text-' ~ fields.button.text_color['theme_color'],
+                    fields.button.full_width != true and fields.button.display['display'] is not null ? fields.button.display['display']
+                  ],
+                  button_other_classes: fields.button.classes,
+                  button_attributes: [
+                    fields.trigger_modal == true ? 'data-bs-target="#' ~ fields.modal_id ~ '"',
+                    btn_bg_color or btn_text_color or btn_transform or btn_padding_top or btn_padding_bottom or btn_padding_left or btn_padding_right or btn_border_top_width or btn_border_top_style or btn_border_top_color or btn_border_bottom_width or btn_border_bottom_style or btn_border_bottom_color or btn_border_left_width or btn_border_left_style or btn_border_left_color or btn_border_right_width or btn_border_right_style or btn_border_right_color or btn_border_top_left_radius or btn_border_top_right_radius or btn_border_bottom_left_radius or btn_border_bottom_right_radius or btn_box_shadow or btn_text_shadow or btn_fontsize or btn_width or btn_min_width or btn_max_width or btn_margin_top or btn_margin_bottom or btn_margin_left or btn_margin_right ? 'style="' ~ btn_bg_color ~ btn_text_color ~ btn_fontsize ~ btn_transform ~ btn_padding_top ~ btn_padding_bottom ~ btn_padding_left ~ btn_padding_right ~ btn_border_top_width ~ btn_border_top_style ~ btn_border_top_color ~ btn_border_bottom_width ~ btn_border_bottom_style ~ btn_border_bottom_color ~ btn_border_left_width ~ btn_border_left_style ~ btn_border_left_color ~ btn_border_right_width ~ btn_border_right_style ~ btn_border_right_color ~ btn_border_top_left_radius ~ btn_border_top_right_radius ~ btn_border_bottom_left_radius ~ btn_border_bottom_right_radius ~ btn_box_shadow ~ btn_text_shadow ~ btn_width ~ btn_min_width ~ btn_max_width ~ btn_margin_top ~ btn_margin_bottom ~ btn_margin_left ~ btn_margin_right ~ '"'
+                  ]
+                } %}
+            {% endif %}
+        </div>
+    {% endblock %}
+
+    {% block back %}
+      <div class="card-back-content">{{ fields.card_back_content }}</div>
+    {% endblock back %}
+{% endembed %}
+
+{% if parent_block_data['name'] == 'acf/card-grid' and block_context['acf/fields']['type'] == 'row' %}
+</div>
+{% endif %}

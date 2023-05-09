@@ -1,0 +1,92 @@
+{#
+/**
+ * Block Name: Icons
+ *
+ * This is the template that displays the icons block.
+ */
+#}
+
+{% if is_preview %}
+{# <p>Some editor instructions here.</p> #}
+{% endif %}
+
+{# Icon Group Classes #}
+{% set icon_group_classes = [
+  'icon-group',
+  fields.display['display'] ? fields.display['display'],
+  block['className']
+]|sort|join(' ')|trim %}
+
+{# Icon Group Styles #}
+{% set icon_group_styles = [
+  fields.text_align ? 'text-align: ' ~ fields.text_align ~ ';',
+  fields.width.width['width']['value'] >= 0 ? 'width: ' ~ fields.width.width['width']['value']  ~ fields.width.width['width']['unit'] ~  ';',
+  fields.width.width['min_width'] >= 0 ? 'min-width: ' ~ fields.width.width['min_width']  ~ 'px;',
+  fields.width.width['max_width'] >= 0 ? 'max-width: ' ~ fields.width.width['max_width']  ~ 'px;',
+  fields.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : fields.margin['margin']['top']['top'] >= 0 ? 'margin-top: ' ~ fields.margin['margin']['top']['top'] ~ 'px;',
+  fields.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.margin['margin']['bottom']['bottom'] ~ 'px;',
+  fields.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : fields.margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.margin['margin']['left']['left'] ~ 'px;',
+  fields.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : fields.margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.margin['margin']['right']['right'] ~ 'px;'
+] | sort | join(' ') | trim %}
+
+<div class="{{ icon_group_classes }}" {{ icon_group_styles ? 'style="' ~ icon_group_styles ~ '"'}}>
+  {% for icon in fields.icon_list %}
+    {% set v_offset = icon.icon.icon.vertical_offset ? icon.icon.icon.vertical_offset ~ 'px' : '0px' %}
+    {% set h_offset = icon.icon.icon.horizontal_offset ? icon.icon.icon.horizontal_offset ~ 'px' : '0px' %}
+    {% set offset = h_offset or v_offset ? 'transform: translate(' ~ h_offset ~ ' , ' ~ v_offset ~ ');'  %}
+    {% if icon.icon.icon.type == 'custom' %}
+      {% if icon.icon.icon.link %}
+        {% include '@atoms/svg/_svg~link.tpl.twig' with {
+          url: icon.icon.icon.link['url'],
+          target: icon.icon.icon.link['target'],
+          text: icon.icon.icon.link['title'],
+          position: 'before',
+          width: icon.icon.icon.size ? icon.icon.icon.size ~ 'px',
+          height: icon.icon.icon.size ? icon.icon.icon.size ~ 'px',
+          icon: icon.icon.icon.icon,
+          fill: icon.icon.icon.color == 'palette' ? icon.icon.icon.theme_color,
+          svg_other_classes: 'icon',
+          svg_styles: [
+            icon.icon.icon.color == 'custom' ? 'color: ' ~ icon.icon.icon.custom_color ~ ';',
+            offset
+          ]
+        } %}
+      {% else %}
+        {% include '@atoms/svg/_svg~icon.tpl.twig' with {
+          svg_other_classes: 'icon',
+          width: icon.size ? icon.icon.icon.size ~ 'px',
+          height: icon.icon.icon.size ? icon.icon.icon.size ~ 'px',
+          name: icon.icon.icon.icon,
+          fill: icon.icon.icon.color == 'palette' ? icon.icon.icon.theme_color,
+          svg_styles: [
+            icon.icon.icon.color == 'custom' ? 'color: ' ~ icon.icon.icon.custom_color ~ ';',
+            offset
+
+          ]
+        } %}
+      {% endif %}
+    {% elseif icon.icon.icon.type == "font-awesome"%}
+      {% if icon.icon.icon.link  %}
+        {% set color = icon.icon.icon.color == 'custom' ? 'color: ' ~ icon.icon.icon.custom_color ~ ';'  %}
+        {% include '@atoms/svg/_svg~link.tpl.twig' with {
+          url: icon.icon.icon.link['url'],
+          target: icon.icon.icon.link['target'],
+          text: icon.icon.icon.link['title'],
+          position: 'before',
+          width: icon.icon.icon.size ? icon.icon.icon.size ~ 'px',
+          height: icon.icon.icon.size ? icon.icon.icon.size ~ 'px',
+          icon: icon.icon.icon.fa_icon_style ~ ' fa-' ~ icon.icon.icon.fa_icon,
+          fill: icon.icon.icon.color == 'palette' ? icon.icon.icon.theme_color,
+          svg_link_other_classes: 'icon',
+          svg_link_other_attributes: color or offset ? 'style="' ~ color ~ '; ' ~ offset ~ '"'
+        } %}
+      {% else %}
+        {% set color = icon.icon.icon.color == 'palette' ? 'color: var(--' ~ icon.icon.icon.theme_color ~ ');' : icon.icon.icon.color == 'custom' ? 'color: ' ~ icon.icon.icon.custom_color ~ ';' %}
+        {% set fontsize = icon.icon.icon.size ? 'font-size: ' ~ icon.icon.icon.size ~ 'px;' %}
+        <span class="icon">
+          <i class="{{ icon.icon.icon.fa_icon_style }} fa-{{ icon.icon.icon.fa_icon }}" {{ color or fontsize or offset ? 'style="' ~ color ~ fontsize ~ offset ~ '"' }}></i>
+        </span>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+</div>

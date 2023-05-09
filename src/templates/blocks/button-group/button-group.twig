@@ -1,0 +1,51 @@
+{#
+/**
+ * Block Name: Button Group
+ *
+ * This is the template that displays the button group block.
+ */
+#}
+
+{% if is_preview %}
+{# <p>Some editor instructions here.</p> #}
+{% endif %}
+
+{# Button Group Wrapper Styles #}
+{% set button_group_wrapper_styles = [
+  fields.button_group_wrapper_width['width']['width']['value'] >= 0 ? 'width: ' ~ fields.button_group_wrapper_width['width']['width']['value'] ~ fields.button_group_wrapper_width['width']['width']['unit'] ~ ';',
+  fields.button_group_wrapper_width['width']['min_width'] >= 0 ? 'min-width: ' ~ fields.button_group_wrapper_width['width']['min_width'] ~ 'px;',
+  fields.button_group_wrapper_width['width']['max_width'] >= 0 ? 'max-width: ' ~ fields.button_group_wrapper_width['width']['max_width'] ~ 'px;',
+  fields.alignment['text_align'] ? 'text-align: ' ~ fields.alignment['text_align'] ~ ';',
+  fields.button_group_wrapper_margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : fields.button_group_wrapper_margin['margin']['top']['top'] >= 0 ? 'margin-top: ' ~ fields.button_group_wrapper_margin['margin']['top']['top'] ~ 'px;',
+  fields.button_group_wrapper_margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.button_group_wrapper_margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.button_group_wrapper_margin['margin']['bottom']['bottom'] ~ 'px;',
+  fields.button_group_wrapper_margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : fields.button_group_wrapper_margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.button_group_wrapper_margin['margin']['left']['left'] ~ 'px;',
+  fields.button_group_wrapper_margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : fields.button_group_wrapper_margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.button_group_wrapper_margin['margin']['right']['right'] ~ 'px;'
+] | sort | join(' ') | trim %}
+
+{% embed '@molecules/button-group/_button-group.tpl.twig' with {
+  button_group_title: fields.title,
+  button_group_description: fields.description,
+  button_group_size: fields.size,
+  button_group_vertical: fields.vertical,
+  button_group_toolbar: fields.toolbar,
+  button_group_toolbar_label: fields.toolbar_label,
+  button_group_toolbar_other_classes: fields.toolbar_classes,
+  button_group_wrapper_display: fields.btn_grp_display['display'],
+  button_group_wrapper_other_classes: block['className'],
+  button_group_wrapper_other_attributes: 'style="' ~ button_group_wrapper_styles ~ '"',
+  button_groups: btn_groups
+} %}
+  {% block button_groups %}
+    <InnerBlocks allowedBlocks="{{ ['acf/group'] | json_encode() | escape('html_attr') }}" template="{{ [['acf/group']] | json_encode() | escape('html_attr') }}" />
+  {% endblock button_groups %}
+{% endembed %}
+
+{#{% if is_preview %}#}
+{#  {% if button.id or button.id_gen %}#}
+{#    <p>#}
+{#      <small>#}
+{#        <strong>Button ID:</strong>#}
+{#        {{ button.id ? button.id}}{{ button.id_gen ? 'button' ~ button.id_gen }}</small>#}
+{#    </p>#}
+{#  {% endif %}#}
+{#{% endif %}#}

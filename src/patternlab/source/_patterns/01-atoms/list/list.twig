@@ -1,0 +1,271 @@
+<h2>Ordered and Unordered Lists</h2>
+{% include '@atoms/list/_list.tpl.twig' with {
+  parent_element: 'ul',
+  list_id: 'demoList',
+  parent_classes: ['test-parent-class'],
+  items: {
+    item1: {
+      item_text: 'Cras justo odio',
+      parent_element: 'ol',
+      list_id: 'demoSubList',
+      items: {
+        item1: {
+          item_text: 'Haero jus pala patria',
+          item_classes: ['test-item-class']
+        },
+        item2: {
+          item_text: 'Proprius turpis valde wisi'
+        },
+        item3: {
+          item_text: 'Eu feugiat laoreet si usitas'
+        },
+        item4: {
+          item_text: 'Font Awesome Icon Before'
+        },
+        item5: {
+          item_text: 'Font Awesome Icon After'
+        }
+      },
+    },
+    item2: {
+      item_text: 'Dapibus ac facilisis in'
+    },
+    item3: {
+      item_text: 'Morbi leo risus'
+    },
+    item4: {
+      item_text: 'Porta ac consectetur ac'
+    },
+    item5: {
+      item_text: 'Vestibulum at eros'
+    }
+  }
+} %}
+<div class="mb-3 p-3 bg-light border rounded">
+  <p>Custom ordered and unordered lists are styled with the custom-list-style and custom-list-icon mixins in /non-printing/utility-mixins/_content-utilities.scss. Styling is scoped to the .list-type--* class in _list.scss.</p>
+  <pre><code>{% verbatim %}@include custom-list-style (
+$first-level-list-style-type:decimal,
+$second-level-list-style-type:lower-roman,
+$third-level-list-style-type:lower-alpha,
+$color: 'inherit',
+$font-family: 'inherit',
+$font-weight: 'inherit'
+){% endverbatim %}</code></pre>
+  <pre><code>{% verbatim %}@include custom-list-icon (
+$before-content:'',
+$color: 'inherit',
+$font-size: 1em,
+$width:5px,
+$height:5px,
+$top-position:10px,
+$left-position:-15px,
+$background-color:#000,
+$border-radius:50%,
+$margin-bottom:0,
+$margin-right:0,
+$margin-left:0
+){% endverbatim %}</code></pre>
+</div>
+
+<h2 class="mt-5">List with Font Awesome Bullet Icons</h2>
+{% include '@atoms/list/_list.tpl.twig' with {
+  parent_element: 'ul',
+  list_id: 'fontAwesomeList',
+  parent_other_classes: 'fontawesome-icon-list',
+  items: {
+    item1: {
+      item_text: 'Cras justo odio',
+      parent_element: 'ol',
+      list_id: 'fontawesomeSubList',
+      items: {
+        item1: {
+          item_text: 'Haero jus pala patria'
+        },
+        item2: {
+          item_text: 'Proprius turpis valde wisi'
+        },
+        item3: {
+          item_text: 'Eu feugiat laoreet si usitas'
+        },
+        item4: {
+          item_text: 'Abdo decet dolor ea erat'
+        },
+        item5: {
+          item_text: 'Blandit diam duis ex ratis'
+        }
+      }
+    },
+    item2: {
+      item_text: 'Dapibus ac facilisis in'
+    },
+    item3: {
+      item_text: 'Morbi leo risus'
+    },
+    item4: {
+      item_text: 'Porta ac consectetur ac'
+    },
+    item5: {
+      item_text: 'Vestibulum at eros'
+    }
+  }
+} %}
+<div class="mb-3 p-3 bg-light border rounded">
+      <p>Font Awesome icons can be passed in with the $before-content variable in the SASS mixin. You'll need to pass in the unicode escape sequence instead of the icon name. Set the $icon-font-family variable to "Font Awesome 5 Free" (default) or "Font Awesome 5 Pro" and set the $icon-weight to the numeric value for the weight of the Font Awesome icons you are using (light: 300, regular: 400 [default], solid: 900). NOTE: The weight for Font Awesome brand icons is 400 and the weight for Font Awesome duotone icons is 900.</p>
+      <pre><code>{% verbatim %}@include custom-list-icon (
+$before-content:'\f0e7',
+$icon-font-family: 'Font Awesome 5 Pro',
+$icon-weight: 400,
+$color: 'inherit',
+$icon-size: 20px,
+$width:auto,
+$height:auto,
+$top-position:0,
+$left-position:-15px,
+$background-color:transparent,
+$border-radius:0,
+$margin-bottom:0,
+$margin-right:0,
+$margin-left:0
+);{% endverbatim %}</code></pre>
+      <pre><code>{% verbatim %}li:before {
+font-family: "Font Awesome 5 Pro";
+}{% endverbatim %}</code></pre>
+    </div>
+
+<h2 class="mt-5">List with Icons</h2>
+{% include '@atoms/list/_list.tpl.twig' with {
+  parent_element: 'ul',
+  list_id: 'iconList',
+  items: {
+    item1: {
+      item_icon: 'afg-logo-mark-circled',
+      icon_position: 'before',
+      icon_color: 'royal-blue',
+      item_text: 'Icons can be custom svgs or font awesome icons'
+    },
+    item2: {
+      item_icon: 'bfred-logo-alt',
+      icon_position: 'before',
+      icon_color: 'crimson',
+      icon_width: '20px',
+      icon_height: '20px',
+      item_text: 'Width, height and color can be passed in'
+    },
+    item3: {
+      item_icon: 'bfred-logo',
+      icon_position: 'after',
+      icon_color: 'crimson',
+      item_text: 'Icons can be place before or after content'
+    },
+    item4: {
+      item_icon: 'fas fa-bolt',
+      icon_position: 'before',
+      icon_color: 'pink',
+      icon_width: '26px',
+      item_text: 'Font Awesome icons can be used'
+    },
+    item5: {
+      item_icon: 'fas fa-bomb',
+      icon_position: 'after',
+      icon_color: 'royal-blue-dark',
+      item_text: 'Only icon_width value is used to set Font Awesome icon font-size'
+    }
+  }
+} %}
+<div class="mb-3 p-3 bg-light border rounded">
+  <p>Font Awesome and custom SVG icons can also be included in lists by passing in the icon name or Font Awesome classes and size/position options.</p>
+</div>
+
+<h2 class="mt-5">Bulleted Icon List: Before</h2>
+{% include '@atoms/list/_list.tpl.twig' with {
+  parent_element: 'ul',
+  list_id: 'BulletIconListBefore',
+  bullet_icons: true,
+  bullet_icon_position: 'before',
+  bullet_icon_size: '28px',
+  items: {
+    item1: {
+      item_icon: 'chevron-up',
+      icon_position: 'before',
+      icon_color: 'silver',
+      item_text: 'Haero jus pala patria'
+    },
+    item2: {
+      item_icon: 'bfred-logo-alt',
+      icon_position: 'before',
+      icon_color: 'danger',
+      icon_width: '20px',
+      icon_height: '20px',
+      item_text: 'Proprius turpis valde wisi'
+    },
+    item3: {
+      item_icon: 'bfred-logo',
+      icon_position: 'after',
+      icon_color: 'goldenrod',
+      item_text: 'Eu feugiat laoreet si usitas'
+    },
+    item4: {
+      item_icon: 'fas fa-bolt',
+      icon_position: 'before',
+      icon_color: 'pink',
+      icon_width: '24px',
+      item_text: 'Font Awesome Icon Before'
+    },
+    item5: {
+      item_icon: 'fas fa-bomb',
+      icon_position: 'after',
+      icon_color: 'silver',
+      item_text: 'Font Awesome Icon After'
+    }
+  }
+} %}
+<div class="mb-3 p-3 bg-light border rounded">
+  <p>Icons can be used in place of bullets by passing in the bulleted_icon options. These options will override icon options set on list-items.</p>
+</div>
+
+<h2 class="mt-5">Bulleted Icon List: After</h2>
+{% include '@atoms/list/_list.tpl.twig' with {
+  parent_element: 'ol',
+  list_id: 'BulletIconListAfter',
+  bullet_icons: true,
+  bullet_icon_position: 'after',
+  bullet_icon_size: '28px',
+  items: {
+    item1: {
+      item_icon: 'chevron-up',
+      icon_position: 'before',
+      icon_color: 'silver',
+      item_text: 'Haero jus pala patria'
+    },
+    item2: {
+      item_icon: 'bfred-logo-alt',
+      icon_position: 'before',
+      icon_color: 'danger',
+      icon_width: '20px',
+      icon_height: '20px',
+      item_text: 'Proprius turpis valde wisi'
+    },
+    item3: {
+      item_icon: 'bfred-logo',
+      icon_position: 'after',
+      icon_color: 'goldenrod',
+      item_text: 'Eu feugiat laoreet si usitas'
+    },
+    item4: {
+      item_icon: 'fas fa-bolt',
+      icon_position: 'before',
+      icon_color: 'pink',
+      icon_width: '24px',
+      item_text: 'Font Awesome Icon Before'
+    },
+    item5: {
+      item_icon: 'fas fa-bomb',
+      icon_position: 'after',
+      icon_color: 'silver',
+      item_text: 'Font Awesome Icon After'
+    }
+  }
+} %}
+<div class="mb-3 p-3 bg-light border rounded">
+  <p>Bullet icons can also be placed after the text with the bullet_icon_position option and sized with the bullet_icon_size option. As the bulleted icon options are changed you may need to adjust the styling to account for position and size changes.</p>
+</div>

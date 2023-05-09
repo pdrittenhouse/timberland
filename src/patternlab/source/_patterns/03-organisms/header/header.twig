@@ -1,0 +1,92 @@
+{% include '@organisms/header/_header.tpl.twig' with {
+  brand: {
+    url: '/',
+    logo_svg_inline: paths.images ~ '/logo.svg',
+    colorOriginal: true,
+    site_name: 'beaconfire RED',
+    site_slogan: 'Site Slogan that Describes the Logo Above with Inline SVG',
+    branding_other_classes: 'navbar-brand'
+  },
+  primary_nav: {
+    nav_element: 'ul',
+    nav_id: 'primaryNav',
+    hover_dropdown: true,
+    breakpoints: scssBreakpoints,
+    nav_classes: [],
+    nav_other_classes: 'primary-nav',
+    items: [
+      {
+        title: 'Services',
+        url: '#',
+        parent_element: 'ul',
+        nav_id: 'navServices',
+        items: [
+          {
+            title: 'Service 1',
+            url: '#'
+          }
+        ]
+      },
+      {
+        title: 'Products',
+        url: '#',
+        parent_element: 'ul',
+        nav_id: 'navProducts',
+        items: [
+          {
+            title: 'Haero jus pala patria',
+            url: '#'
+          }
+        ]
+      },
+      {
+        title: 'Case Studies',
+        url: '#'
+      },
+      {
+        title: 'Company',
+        url: '#',
+        parent_element: 'ul',
+        nav_id: 'navCompany',
+        items: [
+          {
+            title: 'Haero jus pala patria',
+            url: '#'
+          }
+        ]
+      },
+      {
+        title: 'Resources',
+        url: '#'
+      }
+    ]
+  },
+  primary_nav_cta: {
+    button_element: 'a',
+    button_link: '#',
+    button_color: 'primary',
+    button_text: 'Contact Us',
+    button_other_classes: 'contact-cta'
+  },
+  secondary_nav: {
+    nav_element: 'ul',
+    nav_id: 'userNav',
+    hover_dropdown: false,
+    nav_classes: [],
+    nav_other_classes: 'user-nav',
+    items: [
+      {
+        title: 'Client Login',
+        url: '#',
+        item_other_classes: 'login'
+      },
+      {
+        title: 'Support',
+        url: '#',
+        item_other_classes: 'support'
+      }
+    ]
+  },
+  navbar_breakpoint: 'xl',
+  header_other_classes: ''
+} %}

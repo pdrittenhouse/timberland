@@ -1,0 +1,152 @@
+{#
+/**
+ * @file
+ * carousel
+ *
+ * Available variables for carousel:
+ *  - carousel_id: The id of the carousel.
+ *  - carousel_classes [array]: Additional component classes.
+ *  - carousel_other_classes [string]: Additional component classes.
+ *  - carousel_attributes [array]: Additional component attributes.
+ *  - carousel_other_attributes [string]: Additional component attributes.
+ *  - arrows [boolean]: Display arrows.
+ *  - indicators [boolean]: Display indicators.
+ *  - crossfade [boolean]: Animate slides with a fade transition instead of a slide.
+ *  - touch [boolean]: Disable touch swiping on touchscreen devices.
+ *  - dark [bool]: Use darker controls, indicators, and captions.
+ *  - slides [array]: Array of carousel slides objects.
+ *  - slide.image [object]: Image object for carousel slide.
+ *  - slide.label [object]: Label for carousel slide.
+ *  - slide.caption [object]: Caption for carousel slide.
+ *  - interval [int | 'false']: The amount of time to delay between automatically cycling an item.
+ *  - keyboard [bool]: Whether the carousel should react to keyboard events.
+ *  - pause [string | 'hover', 'false']: If set to "hover", pauses the cycling of the carousel on mouseenter and resumes the cycling of the carousel on mouseleave. If set to false, hovering over the carousel won't pause it.
+ *  - ride [bool | 'carousel']: Autoplays the carousel after the user manually cycles the first item. If "carousel", autoplays the carousel on load.
+ *  - wrap [bool]: Whether the carousel should cycle continuously or have hard stops.
+ */
+#}
+
+{% set carouselId = [] %}
+{% set alpha = 'abcdefghijklmnopqrstuvwxyz' %}
+{% set num = '0123456789' %}
+{% for i in 1..10 %}
+  {% set char = random(alpha ~ alpha|upper ~ num ~ '-_') %}
+  {% set carouselId = carouselId|merge([char]) %}
+{% endfor %}
+{% set carouselId = 'carousel_' ~ carouselId|join %}
+
+{% set carousel_classes = carousel_classes|default([])|merge([
+  'carousel',
+  'slide',
+  crossfade == true ? 'carousel-fade',
+  dark == true ? 'carousel-dark',
+  carousel_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set carousel_attributes = carousel_attributes|default([])|merge([
+  carousel_id ? 'id="' ~ carousel_id ~ '"' : 'id="' ~ carouselId ~ '"',
+  touch == true ? 'data-bs-touch="' ~ touch ~ '"',
+  ride ? 'data-bs-ride="' ~ ride ~ '"',
+  interval ? 'data-bs-interval="' ~ interval ~ '"',
+  keyboard ? 'data-bs-keyboard="' ~ keyboard ~ '"',
+  pause ? 'data-bs-pause="' ~ pause ~ '"',
+  wrap ? 'data-bs-wrap="' ~ wrap ~ '"',
+  carousel_other_attributes,
+]) | sort | join(' ') | trim %}
+
+<div class="{{ carousel_classes }}" {{ carousel_attributes }}>
+  {% block slider %}
+    {% block carousel_indicators %}
+      {% if indicators == true %}
+        <div class="carousel-indicators">
+          {% for slide in slides %}
+            {% include '@atoms/button/_button.tpl.twig' with {
+              button_classes: [
+                'carousel--indicator',
+                slide.active == true ? 'active'
+              ],
+              button_target: carousel_id ? '#' ~ carousel_id : '#' ~ carouselId,
+              button_attributes: [
+                slide.active == true ? 'aria-current="true"',
+                'data-bs-slide-to="' ~ loop.index0 ~ '"',
+                slide.label ? 'aria-label="' ~ slide.label ~ '"' : 'aria-label="Slide ' ~ loop.index ~ '"'
+              ]
+            } %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endblock carousel_indicators %}
+    <div class="carousel-inner">
+      {% block carousel_slides %}
+        {% for slide in slides %}
+          <div class="carousel-item {{ slide.active == true ? 'active' }}" {{ slide.delay ? 'data-bs-interval="' ~ slide.delay ~ '"' }}>
+            {% block carousel_image %}
+              {% if slide.image %}
+                {% include "@atoms/image/_image.tpl.twig" with {
+                  variant: slide.image.variant,
+                  src: slide.image.src,
+                  alt: slide.image.alt,
+                  placeholder: slide.image.placeholder,
+                  width: slide.image.width,
+                  height: slide.image.height,
+                  background_color: slide.image.background_color,
+                  text_color: slide.image.text_color,
+                  format: slide.image.format,
+                  text: slide.image.text,
+                  image_classes: [
+                    'carousel--image',
+                    'd-block',
+                    'w-100'
+                  ],
+                  image_other_classes: slide.image.image_other_classes,
+                } %}
+              {% endif %}
+            {% endblock carousel_image %}
+            {% block carousel_content %}
+              <div class="carousel-caption d-none d-md-block">
+                {% block carousel_label %}
+                  {% if slide.label %}
+                    <h5 class="carousel--label">{{ slide.label }}</h5>
+                  {% endif %}
+                {% endblock carousel_label %}
+                {% block carousel_caption %}
+                  {% if slide.caption %}
+                    <p class="carousel--caption">{{ slide.caption }}</p>
+                  {% endif %}
+                {% endblock carousel_caption %}
+              </div>
+            {% endblock carousel_content %}
+          </div>
+        {% endfor %}
+      {% endblock carousel_slides %}
+    </div>
+    {% block carousel_arrows %}
+      {% if arrows == true %}
+        {% embed '@atoms/button/_button.tpl.twig' with {
+          button_other_classes: 'carousel-control-prev',
+          button_target: carousel_id ? '#' ~ carousel_id : '#' ~ carouselId,
+          button_attributes: [
+            'data-bs-slide="prev"'
+          ]
+        } %}
+          {% block button_content %}
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          {% endblock button_content %}
+        {% endembed %}
+        {% embed '@atoms/button/_button.tpl.twig' with {
+          button_other_classes: 'carousel-control-next',
+          button_target: carousel_id ? '#' ~ carousel_id : '#' ~ carouselId,
+          button_attributes: [
+            'data-bs-slide="next"'
+          ]
+        } %}
+          {% block button_content %}
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          {% endblock button_content %}
+        {% endembed %}
+      {% endif %}
+    {% endblock carousel_arrows %}
+  {% endblock slider %}
+</div>

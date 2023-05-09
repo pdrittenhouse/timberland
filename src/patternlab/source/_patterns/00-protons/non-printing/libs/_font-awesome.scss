@@ -1,0 +1,21 @@
+////////////////////////////////////////////////////////////////////
+// Use either the free or pro versions of Font Awesome
+// Loading both versions will cause a conflict error during compile
+// DO NOT LOAD BOTH VERSIONS AT THE SAME TIME
+////////////////////////////////////////////////////////////////////
+
+$fa-font-path:        "../webfonts";
+
+// Import Font Awesome Free
+@import '~@fortawesome/fontawesome-free/scss/functions';
+@import '~@fortawesome/fontawesome-free/scss/variables';
+@import '~@fortawesome/fontawesome-free/scss/mixins';
+// Core files included in non-printing so placeholders & mixins will be available globally
+@import '~@fortawesome/fontawesome-free/scss/core';
+
+// Import Font Awesome Pro
+//@import '~@fortawesome/fontawesome-pro/scss/functions';
+//@import '~@fortawesome/fontawesome-pro/scss/variables';
+//@import '~@fortawesome/fontawesome-pro/scss/mixins';
+// Core files included in non-printing so placeholders & mixins will be available globally
+//@import '~@fortawesome/fontawesome-pro/scss/core';

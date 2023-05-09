@@ -1,0 +1,60 @@
+<article {{ fn('post_class', ['entry'] ) }} >
+
+  {{ fn('timber_set_product', post) }}
+
+  {% embed '@molecules/feature/_feature.tpl.twig' with {
+    vertical: false,
+    linked: false,
+    title: 'Feature Title',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    image_right: false,
+    feature_other_classes: 'product',
+    feature_attributes: [
+      'data-toggle="modal"',
+      'data-target="#productModal-' ~ count ~ '"'
+    ]
+  } %}
+    {% block image %}
+      <figure class="feature-image" role="figure"  aria-labelledby="{{ id ~ 'image-caption' }}" id="{{ id ~ 'image' }}">
+        <span class="label">{% do action('woocommerce_before_shop_loop_item_title') %}</span>
+        {% include '@atoms/image/_image.tpl.twig' with {
+          variant: 'primary',
+          src: post.thumbnail.src|resize(post_thumb_size[0], post_thumb_size[1]),
+          alt: post.thumbnail.alt,
+          style: '',
+          placeholder: false,
+        } %}
+      </figure>
+    {% endblock %}
+    {% block body %}
+      {% if post.title %}
+        <h2 class="feature-title">{{ post.title }}</h2>
+      {% else %}
+        <h2 class="feature-title">{{ fn('the_title') }}</h2>
+      {% endif %}
+      <div class="feature-description">
+        <div class="product-meta">
+          <div class="label">{% do action('woocommerce_before_shop_loop_item_title') %}</div>
+          <div class="price">{% do action( 'woocommerce_after_shop_loop_item_title' ) %}</div>
+          <div class="options">{% do action( 'woocommerce_after_shop_loop_item' ) %}</div>
+        </div>
+        <p class="feature-excerpt">{{ post.post_excerpt }}</p>
+      </div>
+    {% endblock body %}
+    {% block footer %}
+      <footer class="feature-footer">
+        {% include "@atoms/button/_button.tpl.twig" with {
+          button_element: 'a',
+          button_color: 'secondary',
+          button_text: 'Learn More',
+          button_link: 'javascript:void(0);',
+          button_toggle: 'modal',
+          button_size: 'small',
+          button_other_attributes: 'data-target="#productModal-' ~ count ~ '"'
+        } %}
+      </footer>
+    {% endblock %}
+  {% endembed %}
+
+
+</article>

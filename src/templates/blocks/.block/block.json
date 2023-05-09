@@ -1,0 +1,65 @@
+{
+  "name": "acf/blockname",
+  "title": "Block Name",
+  "description": "A block description.",
+  "category": "dream",
+  "icon": "block-default",
+  "keywords": ["block", "keywords"],
+  "attributes": {},
+  "providesContext": {
+    "acf/fields": "data"
+  },
+  "usesContext": [ "acf/fields" ],
+  "supports": {
+    "jsx": true,
+    "align": true,
+    "alignContent": true,
+    "alignText": true,
+    "anchor": true,
+    "className": true,
+    "multiple": true,
+    "html": false,
+    "inserter": true,
+    "fullHeight": false,
+    "color": {
+      "text": false,
+      "background": true,
+      "link": false,
+      "gradients": true,
+      "linkColor": true
+    },
+    "typography": {
+      "fontSize": true
+    }
+  },
+  "styles": [
+    { "name": "default", "label": "Default", "isDefault": true },
+    { "name": "other", "label": "Other" }
+  ],
+  "example": {
+    "attributes": {
+      "message": "This is a notice!"
+    }
+  },
+  "variations": [
+    {
+      "name": "example",
+      "title": "Example",
+      "attributes": {
+        "message": "This is an example!"
+      }
+    }
+  ],
+  "editorScript": "./index.js",
+  "script": "./script.js",
+  "editorStyle": "./index.css",
+  "style": "./style.css",
+  "viewScript": [ "file:./view.js", "example-shared-view-script" ],
+  "acf": {
+    "mode": "auto",
+    "renderCallback": "dream_block_render",
+    "postTypes": true,
+    "parent": "acf/blockname",
+    "reusable": true
+  }
+}

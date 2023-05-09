@@ -1,0 +1,23 @@
+{#
+/**
+ * @file
+ * skip nav
+ *
+ * Available variables for skip nav:
+ *  - skip_nav_classes [array]: Additional component classes.
+ *  - skip_nav_other_classes [string]: Additional component classes.
+ *  - text [string]: Text for skip nav link.
+ */
+#}
+
+{% set skip_nav_classes = skip_nav_classes|default([])|merge([
+  'skip-nav',
+  'screen-reader-text',
+  skip_nav_other_classes,
+]) | sort | join(' ') | trim %}
+
+<a class="{{ skip_nav_classes }}" href="#content">
+  {% block skip_nav_content %}
+    {{ text }}
+  {% endblock skip_nav_content %}
+</a>

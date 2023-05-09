@@ -1,0 +1,99 @@
+{#
+/**
+ * Block Name: Video
+ *
+ * This is the template that displays the  block.
+ */
+#}
+
+{#{% if is_preview %}#}
+{#<p>Some editor instructions here.</p>#}
+{#{% endif %}#}
+
+{#{{ block['className'] }}#}
+{#{{ block['align'] ? 'align-' ~ block['align'] }}#}
+{#{{ block['align_text']}}#}
+{#{{ block['align_content'] }}#}
+{#{{ block['full_height'] }}#}
+
+{# Parent Block Data - ACF <= v.5.9 #}
+{#{% set parent = function('get_parent_block', block['id'], block['name']) %}#}
+{# Parent Block Data - ACF >= v.6.0 #}
+{#{{ parent_block_data['data'] }}#}
+{# Block Context #}
+{#{{ block_context['acf/fields'] }}#}
+{# ACF Options Fields #}
+{#{{ options }}#}
+{# ACF Fields #}
+{#{{ fields }}#}
+
+{% if is_preview and (fields.video_id['id'] or fields.video_id['id_gen']) and fields.video_id['show_ids'] == true %}
+  <small><strong>Video ID:</strong> {{ fields.video_id['id'] ? fields.video_id['id']}}{{ fields.video_id['id_gen'] ? 'video' ~ fields.video_id['id_gen'] }}</small>
+{% endif %}
+
+{% set block_classes = block_classes|default([])|merge([
+  block['className']
+]) | sort | join(' ') | trim %}
+
+{% set block_attributes = block_attributes|default([])|merge([
+]) | sort | join(' ') | trim %}
+
+{% set block_styles = block_styles|default([])|merge([
+  fields.video_width['width']['min_width'] ? 'min-width: ' ~ fields.video_width['width']['min_width'] ~ 'px;',
+  fields.video_width['width']['max_width'] ? 'max-width: ' ~ fields.video_width['width']['max_width'] ~ 'px;',
+  fields.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : fields.margin['margin']['top']['top'] >= 0 ? 'margin-top: ' ~ fields.margin['margin']['top']['top'] ~ 'px;',
+  fields.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.margin['margin']['bottom']['bottom'] ~ 'px;',
+  fields.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : fields.margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.margin['margin']['left']['left'] ~ 'px;',
+  fields.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : fields.margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.margin['margin']['right']['right'] ~ 'px;'
+]) | sort | join(' ') | trim %}
+
+{% include '@atoms/video/_video.tpl.twig' with {
+  id: fields.video_id['id_type'] == 'generated' ? 'video' ~ fields.video_id['id_gen'] : fields.video_id['id_type'] == 'custom' ? fields.video_id['id'],
+  title: fields.title,
+  format: fields.format,
+  source: fields.source,
+  ogg_source: fields.ogg_source,
+  webm_source: fields.webm_source,
+  flv_src: fields.flv_src,
+  threegp_src: fields.threegp_src,
+  start: fields.start,
+  end: fields.end,
+  autoplay: fields.autoplay,
+  loop: fields.loop,
+  muted: fields.muted,
+  playsinline: fields.playsinline,
+  fullscreen: fields.fullscreen,
+  controls: fields.controls,
+  aspect_ratio: fields.aspect_ratio,
+  preload: fields.preload,
+  closed_captions: fields.captions,
+  cc_src: fields.cc_source,
+  cc_label: fields.cc_label,
+  cc_lang: fields.cc_lang,
+  cc_default: fields.cc_default,
+  width: fields.video_width['width']['width']['value'] ~ fields.video_width['width']['width']['unit'],
+  poster: fields.poster['image_type'] == 'file' and fields.poster['image']['url'] ? fields.poster['image']['url'] : fields.poster['image_type'] == 'url' and fields.poster['image_url'] ? fields.poster['image_url'],
+  color: fields.color['color_type'] == 'red' or fields.color['color_type'] == 'white' ? fields.color['color_type'] : fields.color['color_type'] == 'custom' ? fields.color['hex_color'],
+  info: fields.info,
+  related: fields.related,
+  suggested: fields.suggested,
+  disable_keyboard: fields.disable_keyboard,
+  modestbranding: fields.modest_branding,
+  annotations: fields.annotations,
+  playlist: fields.playlist,
+  list: fields.list,
+  list_type: fields.list_type,
+  origin: fields.origin,
+  background: fields.background,
+  disable_keyboard: false,
+  quality: fields.quality,
+  byline: fields.byline,
+  dnt: fields.dnt,
+  portrait: fields.portrait,
+  speed: fields.speed,
+  video_title: fields.video_title,
+  transparent: fields.transparent,
+  video_other_classes: block_classes,
+  video_other_styles: block_styles,
+  video_other_attributes: block_attributes
+} %}

@@ -1,0 +1,71 @@
+<div class="mb-5">
+  <h2>1 Up Promo</h2>
+  {% include '@molecules/promo/_promo.tpl.twig' with {
+    container: true,
+    promo_1: {
+      container: true,
+      title: 'This is a promo title',
+      text: 'This is the promo text',
+      image: {
+        variant: 'primary',
+        src: 'https://via.placeholder.com/2100x900',
+        alt: 'An image description'
+      },
+      button_group: [
+        {
+          button_element: 'a',
+          button_link: 'http://getbootstrap.com/docs/4.0/components/buttons/',
+          button_text: 'Promo button',
+          button_color: 'primary',
+          button_size: 'lg'
+        }
+      ]
+    },
+    promo_other_classes: ''
+  } %}
+  <hr>
+</div>
+
+<div class="mb-5">
+  <h2>2 Up Promo</h2>
+  {% include '@molecules/promo/_promo.tpl.twig' with {
+    container_fluid: true,
+    promo_1: {
+      title: 'This is a promo title',
+      text: 'This is the promo text',
+      image: {
+        variant: 'primary',
+        src: 'https://via.placeholder.com/300x200',
+        alt: 'An image description'
+      },
+      button_group: [
+        {
+          button_element: 'a',
+          button_link: 'http://getbootstrap.com/docs/4.0/components/buttons/',
+          button_text: 'Promo button',
+          button_color: 'royal-blue-dark',
+          button_size: 'lg'
+        }
+      ]
+    },
+    promo_2: {
+      title: 'This is a promo title',
+      text: 'This is the promo text',
+      image: {
+        variant: 'primary',
+        src: 'https://via.placeholder.com/300x200',
+        alt: 'An image description'
+      },
+      button_group: [
+        {
+          button_element: 'a',
+          button_link: 'http://getbootstrap.com/docs/4.0/components/buttons/',
+          button_text: 'Promo button',
+          button_color: 'royal-blue-dark',
+          button_size: 'lg'
+        }
+      ]
+    }
+  } %}
+  <hr>
+</div>

@@ -1,0 +1,9 @@
+.block-slider {
+
+  &.equal-height-slides {
+
+    .slide {
+      min-height: 100%;
+    }
+  }
+}

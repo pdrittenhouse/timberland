@@ -1,0 +1,45 @@
+{% extends "layouts/base.twig" %}
+
+{% block content %}
+  <div class="content-wrapper">
+    <article class="post-type-{{post.post_type}}" id="post-{{post.ID}}">
+      {% if post.title or post.thumbnail.src %}
+        {% include "partials/content/page-header.twig" with {
+          title: post.title,
+          thumbnail: post.thumbnail
+        } %}
+      {% endif %}
+      {% if post.content %}
+        <section class="article-content">
+          <div class="article-content--container">
+            <div class="article-content--row">
+              <div class="article-content--column">
+                <div class="article-body">
+                  {{ function('get_breadcrumb') }}
+                  {{post.content}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      {% endif %}
+      {% if post.link %}
+        <footer class="article-footer">
+          <div class="{{ options.remove_content_containers != true and post.meta('remove_content_container') != true and options.fluid_content_containers != true and post.meta('fluid_content_container') != true ? 'container' : options.remove_content_containers != true and post.meta('remove_content_container') != true ? 'container-fluid' }}">
+            <div class="{{ options.remove_content_containers != true and post.meta('remove_content_container') != true ? 'row' }}">
+              <div class="{{ options.remove_content_containers != true and post.meta('remove_content_container') != true ? 'col' }}">
+                {% if user and post.link %}
+                  <p class="article-edit">
+                    <a href="{{ post.link }}">{{ _e('edit') }}</a>
+                  </p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </footer>
+      {% endif %}
+    </article>
+  </div><!-- /content-wrapper -->
+{% endblock %}
+
+{% block foot %}{% endblock foot %}

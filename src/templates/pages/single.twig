@@ -1,0 +1,105 @@
+{% extends "layouts/base.twig" %}
+
+{% block content %}
+  <div class="content-wrapper">
+    <article class="post-type-{{ post.post_type }}" id="post-{{ post.ID }}">
+      {% if post.title or post.thumbnail.src %}
+        {% include "partials/content/page-header.twig" with {
+          title: post.title,
+          thumbnail: post.thumbnail
+        } %}
+      {% endif %}
+      {% if post.content %}
+        <section class="article-content">
+          <div class="article-content--container">
+            <div class="article-content--row">
+              <div class="article-content--column">
+                <div class="article-body">
+                  {% if post.content %}
+                    {{post.content}}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      {% endif %}
+      <div class="post-pager">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <a href="/news" class="back">Back to Listing</a>
+            </div>
+            {% if prevtitle %}
+              <div class="post-pager-item prev-post col">
+                <div class="post-pager-item-content">
+                  <span class="label">Previous Post</span>
+                  <span class="date">{{ prevdate }}</span>
+                  <span class="title">{{ prevtitle }}</span>
+                  <span class="pagination-link prev">{{ function('previous_post_link') }}</span>
+                </div>
+              </div>
+            {% endif %}
+            {% if nexttitle %}
+              <div class="post-pager-item next-post col">
+                <div class="post-pager-item-content">
+                  <span class="label">Next Post</span>
+                  <span class="date">{{ nextdate }}</span>
+                  <span class="title">{{ nexttitle }}</span>
+                  <span class="pagination-link next">{{ function('next_post_link') }}</span>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% if post.author.name or post.date or post.link %}
+        <footer class="article-footer">
+          <div class="{{ options.remove_content_containers != true and post.meta('remove_content_container') != true and options.fluid_content_containers != true and post.meta('fluid_content_container') != true ? 'container' : options.remove_content_containers != true and post.meta('remove_content_container') != true ? 'container-fluid' }}">
+            <div class="{{ options.remove_content_containers != true and post.meta('remove_content_container') != true ? 'row' }}">
+              <div class="{{ options.remove_content_containers != true and post.meta('remove_content_container') != true ? 'col-12' }}">
+                {% if post.author.name %}
+                  <p class="article-author">
+                    <span>By</span><a href="{{post.author.path}}"> {{ post.author.name }} </a><span>&bull;</span> {{ post.date }}
+                  </p>
+                {% endif %}
+                {% if user and post.link %}
+                  <p class="article-edit">
+                    <a href="{{ post.link }}">{{ _e('edit') }}</a>
+                  </p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </footer>
+      {% endif %}
+
+      <!-- comment box -->
+      {% if post.comment_status != "closed" %}
+        <section class="comment-box">
+          <div class="container">
+            <div class="row">
+              <div class="col">
+                <!-- comments -->
+                <div class="comments">
+                  {% if post.comments %}
+                    <h3> comments </h3>
+                    {% for cmt in post.comments %}
+                      {% include "partials/content/comment.twig" with {comment:cmt} %}
+                    {% endfor %}
+                  {% endif %}
+                </div>
+                <!-- comment form -->
+                {% include "partials/content/comment-form.twig" %}
+              </div>
+            </div>
+          </div>
+        </section>
+      {% endif %}
+
+    </article>
+  </div><!-- /content-wrapper -->
+
+{% endblock %}
+
+{% block foot %}{% endblock foot %}

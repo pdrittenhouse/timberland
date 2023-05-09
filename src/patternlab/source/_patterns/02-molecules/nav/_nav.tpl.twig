@@ -1,0 +1,221 @@
+{#
+/**
+ * @file
+ * nav
+ *
+ * Available variables for nav: - navbar_id [string]: ID for nav wrapper.
+ *  - navbar_id [string]: ID for nav wrapper.
+ *  - navbar_classes [array]: Classes for nav wrapper.
+ *  - navbar_other_classes [string]: Classes for nav wrapper.
+ *  - hover_dropdown [boolean]: Applies a javascript solution for hoverable, multilevel bootstrap menus.  Defaults to false.
+ *  - nav_tabs [boolean]: Option to display nav as tabs.
+ *  - nav_pills [boolean]: Option to display nav links as buttons.
+ *  - nav_fill [boolean]: Force nav contents to extend the full available width.
+ *  - nav_justified [boolean]: .
+ *  - navbar_breakpoint [string]: Breakpoint for Bootstrap navbar-toggler.
+ *  - breakpoints [array]: Avaiable sass breakpoints. Genereated automatically by webpack as sass data.
+ *  - nav_element [string]: Choose the html element of the nav.
+ *  - nav_id [string]: Choose the html id of the nav.
+ *  - nav_role [string]: Choose the html role of the nav.
+ *  - nav_classes [array]: Choose other classes, like bootstrap sizing, for the nav.
+ *  - nav_other_classes [string]: Choose other classes, like bootstrap sizing, for the nav.
+ *  - nav_attributes [array]: A list of attributes and values to be applied to the nav parent.
+ *  - nav_other_attributes [string]: A list of attributes and values to be applied to the nav parent.
+ *  - nav_items [array]: A list of items to be in the nav.
+ *  - item.item_attributes [array]: A list of attributes and values to be applied to the nav item.
+ *  - item.item_other_attributes [string]: A list of attributes and values to be applied to the nav item.
+ *  - item.item_classes [array]: Choose other classes, like bootstrap sizing, for the nav item.
+ *  - item.item_other_classes [string]: Choose other classes, like bootstrap sizing, for the nav item.
+ *  - item.link_id [string]: HTML id of the nav item link.
+ *  - item.link_classes [array]: Choose other classes, like active, for the nav links.
+ *  - item.link_other_classes [string]: Choose other classes, like active, for the nav links.
+ *  - item.link_target [string]: Target for nav item link.
+ *  - item.link_attributes [array]: A list of attributes and values to be applied to the nav links.
+ *  - item.link_other_attributes [string]: A list of attributes and values to be applied to the nav links.
+ */
+#}
+
+{% set navId = [] %}
+{% set alpha = 'abcdefghijklmnopqrstuvwxyz' %}
+{% set num = '0123456789' %}
+{% for i in 1..10 %}
+	{% set char = random(alpha ~ alpha|upper ~ num ~ '-_') %}
+	{% set navId = navId|merge([char]) %}
+{% endfor %}
+{% set navId = navId|join %}
+
+{% if hover_dropdown == true %}
+  {% set key = navbar_breakpoint %}
+  <style type="text/css">
+    @media only screen and (max-width: {{ breakpoints ? breakpoints[key] : scssBreakpoints[key] }}) {
+
+      .navbar-nav.navbar-{{ navId }}.dropdown-hover .dropdown > .dropdown-menu {
+        position: relative;
+        /* inset: unset !important;
+        transform: none !important; */
+      }
+
+      .navbar-nav.navbar-{{ navId }}.dropdown-hover .dropdown > .dropdown-menu.show {
+        max-height: 2000px;
+        opacity: 1;
+        display: block;
+      }
+    }
+
+    @media only screen and (min-width: {{ breakpoints ? breakpoints[key] : scssBreakpoints[key] }}) {
+
+      .navbar-nav.navbar-{{ navId }}.dropdown-hover .dropdown > .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        display: none;
+        /* inset: unset !important;
+        transform: none !important; */
+      }
+
+      .navbar-nav.navbar-{{ navId }}.dropdown-hover .dropdown:hover > .dropdown-menu {
+        max-height: 2000px;
+        opacity: 1;
+        display: block;
+      }
+
+      /* Multilevel Menu Support */
+      .navbar-nav.navbar-{{ navId }}.dropdown-hover .dropdown > .dropdown-menu .dropdown-toggle:after,
+      .navbar-nav.navbar-{{ navId }}.dropdown-hover .dropdown > .dropdown-menu .dropdown-toggle .caret {
+        transform: rotate(-90deg);
+      }
+
+      .navbar-nav.navbar-{{ navId }}.dropdown-hover .dropdown .dropdown-item:hover > .dropdown-submenu {
+        max-height: 2000px;
+        opacity: 1;
+        display: block;
+      }
+
+      .navbar-nav.navbar-{{ navId }}.dropdown-hover .dropdown .dropdown-item .dropdown-submenu {
+        position: absolute;
+        top: 0;
+        left: 100%;
+      }
+    }
+  </style>
+{% endif %}
+
+{% set navbar_classes = navbar_classes|default([])|merge([
+  'navbar-nav',
+  'navbar-' ~ navId,
+  hover_dropdown == true ? 'dropdown-hover',
+  navbar_other_classes,
+]) | sort | join(' ') | trim %}
+
+<nav class="{{ navbar_classes }}" id="{{ navbar_id|default('navbarNav') }}">
+
+  {% import _self as navs %}
+
+  {{ navs.site_nav(hover_dropdown, navbar_breakpoint, nav_classes, nav_other_classes, nav_attributes, nav_other_attributes, nav_element, nav_id, items, item_classes, item_other_classes, item_attributes, item_other_attributes, link_classes, link_other_classes, link_attributes, link_other_attributes, dropdown_menu, dropdown_menu_toggle_target, menu_count, item_count) }}
+
+  {% macro site_nav(hover_dropdown, navbar_breakpoint, nav_classes, nav_other_classes, nav_attributes, nav_other_attributes, nav_element, nav_id, items, item_classes, item_other_classes, item_attributes, item_other_attributes,  link_classes, link_other_classes, link_attributes, link_other_attributes, dropdown_menu, dropdown_menu_toggle_target, menu_count, item_count) %}
+
+    {% import _self as navs %}
+
+    {% if items %}
+
+      {% set nav_count = 0 %}
+
+      {% set nav_element = nav_element | default('ul') %}
+
+      {% set nav_classes = nav_classes|default([])|merge([
+        'flex-column',
+        navbar_breakpoint ? 'flex-' ~ navbar_breakpoint ~ '-row',
+        nav_tabs ? 'nav-tabs',
+        nav_pills ? 'nav-pills',
+        nav_fill ? 'nav-fill',
+        nav_justified ? 'nav-justified',
+        dropdown_menu ? 'dropdown-menu' : 'nav',
+        item_count > 1 ? 'dropdown-submenu',
+        nav_other_classes,
+      ]) | sort | join(' ') | trim %}
+
+      {% set nav_attributes = nav_attributes|default([])|merge([
+        nav_other_attributes
+      ]) | sort | join(' ') | trim %}
+
+      {# Need to use data-target instead of aria-labelledby: #}
+      {# @link https://stackoverflow.com/questions/53921939/bootstrap-4-2-1-failed-to-execute-queryselector-on-document-javascriptv #}
+      {% if dropdown_menu == true %}
+        {% set dropdown_id = 'id="' ~ dropdown_menu_toggle_target ~ '"' %}
+      {% endif %}
+
+      <{{ nav_element }} {{ nav_id ? 'id="' ~ nav_id ~ '"' }} class="{{ nav_classes }}" {{ dropdown_id }} {{ nav_attributes }}>
+      {% for item in items %}
+        {% set nav_count = nav_count + 1 %}
+
+        {% if dropdown_menu != true %}
+          {% set menu_count = nav_count %}
+        {% endif %}
+
+        {% set element = item.item_element | default('li') %}
+
+        {% set item_classes = item.item_classes|default([])|merge([
+          'nav-item',
+          item.items ? 'dropdown',
+          dropdown_menu ? 'dropdown-item',
+          'nav-item--item-' ~ nav_count,
+          item.item_other_classes
+        ]) | sort | join(' ') | trim %}
+
+        {% set item_attributes = item.item_attributes|default([])|merge([
+          item.item_other_attributes
+        ]) | sort | join(' ') | trim %}
+
+        {% if item.link_id %}
+          {% set dropdown_menu_toggle_target_display = 'id=' ~ item.link_id %}
+        {% elseif item.items %}
+          {% if item.nav_id %}
+            {% set item_id = item.nav_id %}
+          {% else %}
+            {% set item_id = 'navItem' %}
+          {% endif %}
+
+          {% if item_id %}
+            {% set item_id_display = item_id ~ '_' %}
+          {% endif %}
+
+          {% if item_count %}
+            {% set item_count_display = '-' ~ item_count %}
+          {% endif %}
+
+          {% set dropdown_menu_toggle_target = item_id_display ~ 'toggle--' ~ menu_count ~ item_count_display %}
+
+          {# Need to use data-target instead of aria-labelledby: #}
+          {# @link https://stackoverflow.com/questions/53921939/bootstrap-4-2-1-failed-to-execute-queryselector-on-document-javascriptv #}
+          {% set dropdown_menu_toggle_target_display = 'data-bs-target="' ~ dropdown_menu_toggle_target ~ '"' %}
+        {% else %}
+          {% set dropdown_menu_toggle_target_display = '' %}
+        {% endif %}
+
+        {% set link_classes = item.link_classes|default([])|merge([
+          'nav-link',
+          item.items ? 'dropdown-toggle',
+          item.link_other_classes
+        ]) | sort | join(' ') | trim %}
+
+        {% set link_attributes = item.link_attributes|default([])|merge([
+          item.link_target ? 'target="' ~ item.link_target ~ '"',
+          item.link_other_attributes
+        ]) | sort | join(' ') | trim %}
+
+        <{{ element }} class="{{ item_classes }}" {{ item.item_attributes }}>
+          <a class="{{ link_classes }}" {{ dropdown_menu_toggle_target_display }} href="{{ item.url }}" {{ item.items ? 'role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"' }} {{ link_attributes }}>
+            <span class="item-label">{{ item.title }}</span> {% if item.description %}<span class="item-description">{{ item.description }}</span>{% endif %} {% if item.items and hover_dropdown == true %}<span class="caret"></span>{% endif %}
+          </a>
+        {% if item.items %}
+          {{ navs.site_nav(hover_dropdown, item.navbar_breakpoint, item.nav_classes, item.nav_other_classes, item.nav_attributes, item.nav_other_attributes, item.nav_element, item.nav_id, item.items, item.item_classes, item.item_other_classes, item.item_attributes, item.item_other_attributes, item.link_classes, item.link_other_classes, item.link_attributes, item.link_other_attributes, true, dropdown_menu_toggle_target, menu_count, item_count ? item_count + 1 : 1) }}
+        {% endif %}
+        </{{ element }}>
+
+      {% endfor %}
+      </{{ nav_element }}>
+
+    {% endif %}
+  {% endmacro %}
+
+</nav>

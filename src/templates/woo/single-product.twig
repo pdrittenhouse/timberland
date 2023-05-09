@@ -1,0 +1,81 @@
+{% extends "layouts/base.twig" %}
+
+{% block content %}
+
+  {% do action('woocommerce_before_single_product') %}
+
+  <article itemscope itemtype="http://schema.org/Product" class="single-product-details {{ post.class }}">
+
+    <header class="woocommerce--single-product-header">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            {% if post.title %}
+              <h2 class="article-title">{{post.title}}</h2>
+            {% endif %}
+            {% if product.description %}
+              <p class="article-intro">{{ product.description }}</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="woocommerce--product-details">
+      <div class="container">
+        <div class="row">
+          <div class="col entry-images">
+            {% do action('woocommerce_before_single_product_summary') %}
+
+            {% include "@atoms/image/_image.tpl.twig" with {
+              variant: 'primary',
+              src: post.thumbnail.src('shop_single'),
+              alt: post.thumbnail.alt
+            } %}
+          </div>
+          <div class="col summary entry-summary">
+            {% do action('woocommerce_single_product_summary') %}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="woocommerce--product-info">
+      <div class="container">
+        <div class="row">
+          <div class="col detailed-info">
+            {% do action('woocommerce_after_single_product_summary') %}
+            <meta itemprop="url" content="{{ post.link }}" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+  </article>
+
+  {# Product Grid #}
+  <section class="woocommerce--related-products post-grid">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <h2 class="related-products-title">Related Products</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col grid-cols-4 related-products">
+          {% for post in related_products %}
+            {% include ["woo/tease-product.twig"] %}
+          {% endfor %}
+          <span class="placecard"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col after-product-content">
+          {% do action('woocommerce_after_single_product') %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock  %}

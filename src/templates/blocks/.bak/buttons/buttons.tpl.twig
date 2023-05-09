@@ -1,0 +1,112 @@
+{#
+/**
+ * Block Name: Button
+ *
+ * This is the template that displays the button block.
+ */
+#}
+
+{% if is_preview %}
+{# <p>Some editor instructions here.</p> #}
+{% endif %}
+
+{# Buttons Wrapper Classes #}
+{% set buttons_wrapper_classes = [
+  'buttons-wrapper',
+  block['className'],
+  fields.wrapper_display['display'] | default('d-inline')
+]|sort|join(' ')|trim %}
+
+{# Buttons Wrapper Styles #}
+{% set buttons_wrapper_styles = [
+  fields.buttons_wrapper_width['width']['width']['value'] >= 0 ? 'width: ' ~ fields.buttons_wrapper_width['width']['width']['value']  ~ fields.buttons_wrapper_width['width']['width']['unit'] ~  ';',
+  fields.buttons_wrapper_width['width']['min_width'] >= 0 ? 'min-width: ' ~ fields.buttons_wrapper_width['width']['min_width']  ~ 'px;',
+  fields.buttons_wrapper_width['width']['max_width'] >= 0 ? 'max-width: ' ~ fields.buttons_wrapper_width['width']['max_width']  ~ 'px;',
+  fields.align['text_align'] ? 'text-align: ' ~ fields.align['text_align'] ~ ';',
+] | sort | join(' ') | trim %}
+
+<div class="{{ buttons_wrapper_classes }}" {{ buttons_wrapper_styles ? 'style="' ~ buttons_wrapper_styles ~ '"' }}>
+  {% for button in fields.button_list %}
+
+    {% if button.dropdown == true %}
+      {% set template = '_button~dropdown.tpl.twig' %}
+    {% else %}
+      {% set template = '_button.tpl.twig' %}
+    {% endif %}
+
+    {# Set custom button styles #}
+    {% if button.close != 'black' and button.close != 'white' and button.style == 'custom' %}
+      {% set bg_color = button.background_color['bg_color'] == 'custom' ? 'background-color: ' ~ button.background_color['bg_custom_color'] ~ ';' %}
+      {% set text_color = button.text_color['color'] == 'custom' ? 'color: ' ~ button.text_color['custom_color'] ~ ';' %}
+      {% set transform = button['text_transform']['text_transform'] ? 'text-transform: ' ~ button['text_transform']['text_transform'] ~ ';' %}
+      {% set btn_padding_top  = button['padding']['padding']['top'] >= 0 ? 'padding-top: ' ~ button['padding']['padding']['top'] ~ 'px;' %}
+      {% set btn_padding_bottom = button['padding']['padding']['bottom'] >= 0 ? 'padding-bottom: ' ~ button['padding']['padding']['bottom'] ~ 'px;' %}
+      {% set btn_padding_left = button['padding']['padding']['left'] >= 0 ? 'padding-left: ' ~ button['padding']['padding']['left'] ~ 'px;' %}
+      {% set btn_padding_right = button['padding']['padding']['right'] >= 0 ? 'padding-right: ' ~ button['padding']['padding']['right'] ~ 'px;' %}
+      {% set btn_border_top_width = button['border']['top']['width'] >= 0 ? 'border-top-width: ' ~ button['border']['top']['width'] ~ 'px;' %}
+      {% set btn_border_top_style = button['border']['top']['style'] ? 'border-top-style: ' ~ button['border']['top']['style'] ~ ';' %}
+      {% set btn_border_top_color = button['border']['top']['color'] == 'custom' and button['border']['top']['custom_color'] ? 'border-top-color: ' ~ button['border']['top']['custom_color'] ~ ';' : button['border']['top']['color'] == 'palette' and button['border']['top']['theme_color'] ? 'border-top-color: var(--' ~ button['border']['top']['theme_color'] ~ ');' %}
+      {% set btn_border_bottom_width = button['border']['bottom']['width'] >= 0 ? 'border-bottom-width: ' ~ button['border']['bottom']['width'] ~ 'px;' %}
+      {% set btn_border_bottom_style = button['border']['bottom']['style'] ? 'border-bottom-style: ' ~ button['border']['bottom']['style'] ~ ';' %}
+      {% set btn_border_bottom_color = button['border']['bottom']['color'] == 'custom' and button['border']['bottom']['custom_color'] ? 'border-bottom-color: ' ~ button['border']['bottom']['custom_color'] ~ ';' : button['border']['bottom']['color'] == 'palette' and button['border']['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ button['border']['bottom']['theme_color'] ~ ');' %}
+      {% set btn_border_left_width = button['border']['left']['width'] >= 0 ? 'border-left-width: ' ~ button['border']['left']['width'] ~ 'px;' %}
+      {% set btn_border_left_style = button['border']['left']['style'] ? 'border-left-style: ' ~ button['border']['left']['style'] ~ ';' %}
+      {% set btn_border_left_color = button['border']['left']['color'] == 'custom' and button['border']['left']['custom_color'] ? 'border-left-color: ' ~ button['border']['left']['custom_color'] ~ ';' : button['border']['left']['color'] == 'palette' and button['border']['left']['theme_color'] ? 'border-left-color: var(--' ~ button['border']['left']['theme_color'] ~ ');' %}
+      {% set btn_border_right_width = button['border']['right']['width'] >= 0 ? 'border-right-width: ' ~ button['border']['right']['width'] ~ 'px;' %}
+      {% set btn_border_right_style = button['border']['right']['style'] ? 'border-right-style: ' ~ button['border']['right']['style'] ~ ';' %}
+      {% set btn_border_right_color = button['border']['right']['color'] == 'custom' and button['border']['right']['custom_color'] ? 'border-right-color: ' ~ button['border']['right']['custom_color'] ~ ';' : button['border']['right']['color'] == 'palette' and button['border']['right']['theme_color'] ? 'border-right-color: var(--' ~ button['border']['right']['theme_color'] ~ ');' %}
+      {% set btn_border_top_left_radius = button['border_radius']['top_left'] >= 0 ? 'border-top-left-radius: ' ~ button['border_radius']['top_left'] ~ 'px;' %}
+      {% set btn_border_top_right_radius = button['border_radius']['top_right'] >= 0 ? 'border-top-right-radius: ' ~ button['border_radius']['top_right'] ~ 'px;' %}
+      {% set btn_border_bottom_left_radius = button['border_radius']['bottom_left'] >= 0 ? 'border-bottom-left-radius: ' ~ button['border_radius']['bottom_left'] ~ 'px;' %}
+      {% set btn_border_bottom_right_radius = button['border_radius']['bottom_right'] >= 0 ? 'border-bottom-right-radius: ' ~ button['border_radius']['bottom_right'] ~ 'px;' %}
+      {% set box_shadow_color = button['box_shadow']['color']['color'] == 'palette' and button['box_shadow']['color']['theme_color'] ? 'var(--' ~ button['box_shadow']['color']['theme_color'] ~ ')' : button['box_shadow']['color']['color'] == 'custom' and button['box_shadow']['color']['custom_color'] ? button['box_shadow']['color']['custom_color'] %}
+      {% set box_shadow_inset = button['box_shadow']['inset'] == true ? 'inset' %}
+      {% set btn_box_shadow = button['box_shadow']['horizontal_offset'] >= 0 or button['box_shadow']['vertical_offset'] >= 0 or button['box_shadow']['blur'] >= 0 or button['box_shadow']['spread'] >= 0 or box_shadow_color or box_shadow_inset == true ? 'box-shadow: ' ~ button['box_shadow']['horizontal_offset'] ~ 'px ' ~ button['box_shadow']['vertical_offset'] ~ 'px ' ~ button['box_shadow']['blur'] ~ 'px ' ~ button['box_shadow']['spread'] ~ 'px ' ~ box_shadow_color ~ ' ' ~ box_shadow_inset ~ ';' %}
+      {% set text_shadow_color = button['text_shadow']['color']['color'] == 'palette' and button['text_shadow']['color']['theme_color'] ? 'var(--' ~ button['text_shadow']['color']['theme_color'] ~ ')' : button['text_shadow']['color']['color'] == 'custom' and button['text_shadow']['color']['custom_color'] ? button['text_shadow']['color']['custom_color'] %}
+      {% set btn_text_shadow = button['text_shadow']['horizontal_offset'] >= 0 or button['text_shadow']['vertical_offset'] >= 0 or button['text_shadow']['blur'] >= 0 or text_shadow_color ? 'text-shadow: ' ~ button['text_shadow']['horizontal_offset'] ~ 'px ' ~ button['text_shadow']['vertical_offset'] ~ 'px ' ~ button['text_shadow']['blur'] ~ 'px ' ~ text_shadow_color ~ ';' %}
+    {% endif %}
+    {% set fontsize = button['font_size']['font_size']['value'] >= 0 ? 'font-size: ' ~ button['font_size']['font_size']['value'] ~ button['font_size']['font_size']['unit'] ~ ';' %}
+    {% set width = button.width['width']['value'] >= 0 ? 'width: ' ~ button.width['width']['value']  ~ button.width['width']['unit'] ~  ';' %}
+    {% set min_width = button.width['min_width'] >= 0 ? 'min-width: ' ~ button.width['min_width']  ~ 'px;' %}
+    {% set max_width = button.width['max_width'] >= 0 ? 'max-width: ' ~ button.width['max_width']  ~ 'px;' %}
+
+    {# Button #}
+    {% include '@atoms/button/' ~ template with {
+      button_element: button.element,
+      button_text: button.link['title'],
+      button_link: button.link['url'],
+      button_target: button.toggle == true ? button.link['url'] : button.link['target'],
+      button_color: button.close != 'black' and button.close != 'white' and button.style != 'custom' ? button.style,
+      button_size: button.size,
+      button_outline: button.outline,
+      button_block: button.full_width,
+      button_toggle: button.toggle,
+      button_id: button.id ? button.id : button.id_gen ? 'button' ~ button.id_gen,
+      button_active: button.active,
+      button_disabled: button.disabled,
+      button_expanded: button.active,
+      button_value: button.value,
+      button_controls: button.toggle == true ? button.link['url'] | trim('#'),
+      nowrap: button.nowrap,
+      contextual_content: button.toggle == 'tooltip' or button.toggle == 'popover' ? button.toggle,
+      title: button.context['title'],
+      popover_content: button.context['content'],
+      context_placement: button.context['placement'],
+      context_container: button.context['container'],
+      close_button: button.close,
+      hide_label: button.hide_label,
+      button_classes: [
+        button.close != 'black' and button.close != 'white' and button.background_color['bg_color'] == 'palette' and button.background_color['bg_theme_color'] ? 'bg-' ~ button.background_color['bg_theme_color'],
+        button.close != 'black' and button.close != 'white' and button.text_color['color'] == 'palette' and button.text_color['theme_color'] ? 'text-' ~ button.text_color['theme_color']
+      ],
+      button_other_classes: button.classes,
+      button_attributes: [
+        bg_color or text_color or transform or btn_padding_top or btn_padding_bottom or btn_padding_left or btn_padding_right or btn_border_top_width or btn_border_top_style or btn_border_top_color or btn_border_bottom_width or btn_border_bottom_style or btn_border_bottom_color or btn_border_left_width or btn_border_left_style or btn_border_left_color or btn_border_right_width or btn_border_right_style or btn_border_right_color or btn_border_top_left_radius or btn_border_top_right_radius or btn_border_bottom_left_radius or btn_border_bottom_right_radius or btn_box_shadow or btn_text_shadow or fontsize or width or min_width or max_width ? 'style="' ~ bg_color ~ text_color ~ fontsize ~ transform ~ btn_padding_top ~ btn_padding_bottom ~ btn_padding_left ~ btn_padding_right ~ btn_border_top_width ~ btn_border_top_style ~ btn_border_top_color ~ btn_border_bottom_width ~ btn_border_bottom_style ~ btn_border_bottom_color ~ btn_border_left_width ~ btn_border_left_style ~ btn_border_left_color ~ btn_border_right_width ~ btn_border_right_style ~ btn_border_right_color ~ btn_border_top_left_radius ~ btn_border_top_right_radius ~ btn_border_bottom_left_radius ~ btn_border_bottom_right_radius ~ btn_box_shadow ~ btn_text_shadow ~ width ~ min_width ~ max_width ~ '"'
+      ]
+    } %}
+
+    {% if is_preview and (button.id or button.id_gen) and button.show_ids == true %}
+      <small><strong>Button {{ button.link['title'] ? '"' ~ button.link['title'] ~ '"' : loop.index }} ID:</strong> {{ button.id ? button.id}}{{ button.id_gen ? 'button' ~ button.id_gen }}</small>
+    {% endif %}
+  {% endfor %}
+</div>

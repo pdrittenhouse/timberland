@@ -1,0 +1,121 @@
+{#
+/**
+ * Block Name: Accordion Item
+ *
+ * This is the template that displays the accordion item block.
+ *
+ * Blocks are restricted to parent in admin.js
+ *
+ */
+#}
+
+{#{% if is_preview %}#}
+{#<p>Some editor instructions here.</p>#}
+{#{% endif %}#}
+
+{#{{ block['align'] ? 'align-' ~ block['align'] }}#}
+
+{#{% set parent = function('get_parent_block', block['id'], block['name']) %}#}
+{#{% set parent_id = parent['id_type'] == 'generated' ? 'accordion' ~ parent['id_gen'] : parent['id'] %}#}
+{#{% set parent_id = block_context['acf/fields']['id_id_type'] == 'generated' ? 'accordion' ~ block_context['acf/fields']['id_id_gen'] : block_context['acf/fields']['id_id_type'] == 'custom' ? block_context['acf/fields']['id_id'] %}#}
+
+{% set parent_id = block_context['acf/fields']['id']['id_type'] == 'custom' ? block_context['acf/fields']['id']['id'] : block_context['acf/fields']['id_id_type'] == 'generated' ? 'accordion' ~ block_context['acf/fields']['id_id_gen'] : block_context['acf/fields']['id_id_type'] == 'custom' ? block_context['acf/fields']['id_id'] %}
+
+{% set itemId = [] %}
+{% set alpha = 'abcdefghijklmnopqrstuvwxyz' %}
+{% set num = '0123456789' %}
+{% for i in 1..10 %}
+  {% set char = random(alpha ~ alpha|upper ~ num ~ '-_') %}
+  {% set itemId = itemId|merge([char]) %}
+{% endfor %}
+{% set itemId = itemId|join %}
+
+{% set accordion_item_classes = fields.accordion_item_classes|default([])|merge([
+  'accordion-item',
+  block['className'],
+  fields.item_classes,
+]) | sort | join(' ') | trim %}
+
+{% set accordion_item_id = fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'accordion-item' ~ fields.id['id_gen'] %}
+
+{% if is_preview and accordion_item_id and fields.id['show_ids'] == true %}
+  <p><small><strong>Accordion Item ID:</strong> {{ accordion_item_id }}</small></p>
+{% endif %}
+
+{% set accordion_item_attributes = fields.accordion_item_attributes|default([])|merge([
+  accordion_item_id ? 'id="' ~ accordion_item_id ~ '"'
+]) | sort | join(' ') | trim %}
+
+<div class="{{ accordion_item_classes }}" {{ accordion_item_attributes }}>
+  <{{ fields.header_element | default('h2') }} class="accordion-header" id="accordionHeader_{{ itemId }}">
+  {# Set custom button styles #}
+  {% if fields.button.style == 'custom' %}
+    {% set bg_color = fields.button.background_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.button.background_color['bg_custom_color'] ~ ';' %}
+    {% set text_color = fields.button.text_color['color'] == 'custom' ? 'color: ' ~ fields.button.text_color['custom_color'] ~ ';' %}
+    {% set transform = fields.button['text_transform']['text_transform'] ? 'text-transform: ' ~ fields.button['text_transform']['text_transform'] ~ ';' %}
+    {% set btn_padding_top  = fields.button['padding']['padding']['top'] >= 0 ? 'padding-top: ' ~ fields.button['padding']['padding']['top'] ~ 'px;' %}
+    {% set btn_padding_bottom = fields.button['padding']['padding']['bottom'] >= 0 ? 'padding-bottom: ' ~ fields.button['padding']['padding']['bottom'] ~ 'px;' %}
+    {% set btn_padding_left = fields.button['padding']['padding']['left'] >= 0 ? 'padding-left: ' ~ fields.button['padding']['padding']['left'] ~ 'px;' %}
+    {% set btn_padding_right = fields.button['padding']['padding']['right'] >= 0 ? 'padding-right: ' ~ fields.button['padding']['padding']['right'] ~ 'px;' %}
+    {% set btn_border_top_width = fields.button['border']['top']['width'] >= 0 ? 'border-top-width: ' ~ fields.button['border']['top']['width'] ~ 'px;' %}
+    {% set btn_border_top_style = fields.button['border']['top']['style'] ? 'border-top-style: ' ~ fields.button['border']['top']['style'] ~ ';' %}
+    {% set btn_border_top_color = fields.button['border']['top']['color'] == 'custom' and fields.button['border']['top']['custom_color'] ? 'border-top-color: ' ~ fields.button['border']['top']['custom_color'] ~ ';' : fields.button['border']['top']['color'] == 'palette' and fields.button['border']['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.button['border']['top']['theme_color'] ~ ');' %}
+    {% set btn_border_bottom_width = fields.button['border']['bottom']['width'] >= 0 ? 'border-bottom-width: ' ~ fields.button['border']['bottom']['width'] ~ 'px;' %}
+    {% set btn_border_bottom_style = fields.button['border']['bottom']['style'] ? 'border-bottom-style: ' ~ fields.button['border']['bottom']['style'] ~ ';' %}
+    {% set btn_border_bottom_color = fields.button['border']['bottom']['color'] == 'custom' and fields.button['border']['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.button['border']['bottom']['custom_color'] ~ ';' : fields.button['border']['bottom']['color'] == 'palette' and fields.button['border']['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.button['border']['bottom']['theme_color'] ~ ');' %}
+    {% set btn_border_left_width = fields.button['border']['left']['width'] >= 0 ? 'border-left-width: ' ~ fields.button['border']['left']['width'] ~ 'px;' %}
+    {% set btn_border_left_style = fields.button['border']['left']['style'] ? 'border-left-style: ' ~ fields.button['border']['left']['style'] ~ ';' %}
+    {% set btn_border_left_color = fields.button['border']['left']['color'] == 'custom' and fields.button['border']['left']['custom_color'] ? 'border-left-color: ' ~ fields.button['border']['left']['custom_color'] ~ ';' : fields.button['border']['left']['color'] == 'palette' and fields.button['border']['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.button['border']['left']['theme_color'] ~ ');' %}
+    {% set btn_border_right_width = fields.button['border']['right']['width'] >= 0 ? 'border-right-width: ' ~ fields.button['border']['right']['width'] ~ 'px;' %}
+    {% set btn_border_right_style = fields.button['border']['right']['style'] ? 'border-right-style: ' ~ fields.button['border']['right']['style'] ~ ';' %}
+    {% set btn_border_right_color = fields.button['border']['right']['color'] == 'custom' and fields.button['border']['right']['custom_color'] ? 'border-right-color: ' ~ fields.button['border']['right']['custom_color'] ~ ';' : fields.button['border']['right']['color'] == 'palette' and fields.button['border']['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.button['border']['right']['theme_color'] ~ ');' %}
+    {% set btn_border_top_left_radius = fields.button['border_radius']['top_left'] >= 0 ? 'border-top-left-radius: ' ~ fields.button['border_radius']['top_left'] ~ 'px;' %}
+    {% set btn_border_top_right_radius = fields.button['border_radius']['top_right'] >= 0 ? 'border-top-right-radius: ' ~ fields.button['border_radius']['top_right'] ~ 'px;' %}
+    {% set btn_border_bottom_left_radius = fields.button['border_radius']['bottom_left'] >= 0 ? 'border-bottom-left-radius: ' ~ fields.button['border_radius']['bottom_left'] ~ 'px;' %}
+    {% set btn_border_bottom_right_radius = fields.button['border_radius']['bottom_right'] >= 0 ? 'border-bottom-right-radius: ' ~ fields.button['border_radius']['bottom_right'] ~ 'px;' %}
+    {% set box_shadow_color = fields.button['box_shadow']['color']['color'] == 'palette' and fields.button['box_shadow']['color']['theme_color'] ? 'var(--' ~ fields.button['box_shadow']['color']['theme_color'] ~ ')' : fields.button['box_shadow']['color']['color'] == 'custom' and fields.button['box_shadow']['color']['custom_color'] ? fields.button['box_shadow']['color']['custom_color'] %}
+    {% set box_shadow_inset = fields.button['box_shadow']['inset'] == true ? 'inset' %}
+    {% set btn_box_shadow = fields.button['box_shadow']['horizontal_offset'] >= 0 or fields.button['box_shadow']['vertical_offset'] >= 0 or fields.button['box_shadow']['blur'] >= 0 or fields.button['box_shadow']['spread'] >= 0 or box_shadow_color or box_shadow_inset == true ? 'box-shadow: ' ~ fields.button['box_shadow']['horizontal_offset'] ~ 'px ' ~ fields.button['box_shadow']['vertical_offset'] ~ 'px ' ~ fields.button['box_shadow']['blur'] ~ 'px ' ~ fields.button['box_shadow']['spread'] ~ 'px ' ~ box_shadow_color ~ ' ' ~ box_shadow_inset ~ ';' %}
+    {% set text_shadow_color = fields.button['text_shadow']['color']['color'] == 'palette' and fields.button['text_shadow']['color']['theme_color'] ? 'var(--' ~ fields.button['text_shadow']['color']['theme_color'] ~ ')' : fields.button['text_shadow']['color']['color'] == 'custom' and fields.button['text_shadow']['color']['custom_color'] ? fields.button['text_shadow']['color']['custom_color'] %}
+    {% set btn_text_shadow = fields.button['text_shadow']['horizontal_offset'] >= 0 or fields.button['text_shadow']['vertical_offset'] >= 0 or fields.button['text_shadow']['blur'] >= 0 or text_shadow_color ? 'text-shadow: ' ~ fields.button['text_shadow']['horizontal_offset'] ~ 'px ' ~ fields.button['text_shadow']['vertical_offset'] ~ 'px ' ~ fields.button['text_shadow']['blur'] ~ 'px ' ~ text_shadow_color ~ ';' %}
+  {% endif %}
+  {% set fontsize = fields.button['font_size']['font_size']['value'] >= 0 ? 'font-size: ' ~ fields.button['font_size']['font_size']['value'] ~ fields.button['font_size']['font_size']['unit'] ~ ';' %}
+  {% set width = fields.button.width['width']['value'] >= 0 ? 'width: ' ~ fields.button.width['width']['value']  ~ fields.button.width['width']['unit'] ~  ';' %}
+  {% set min_width = fields.button.width['min_width'] >= 0 ? 'min-width: ' ~ fields.button.width['min_width']  ~ 'px;' %}
+  {% set max_width = fields.button.width['max_width'] >= 0 ? 'max-width: ' ~ fields.button.width['max_width']  ~ 'px;' %}
+
+  {% include "@atoms/button/_button.tpl.twig" with {
+      button_active: fields.active,
+      button_toggle: 'collapse',
+      button_target: '#collapse_' ~ itemId,
+      button_expanded: fields.active,
+      button_controls: 'collapse_' ~ itemId,
+      button_element: fields.button.element,
+      button_text: fields.header,
+      button_color: fields.button.style != 'custom' ? fields.button.style,
+      button_size: fields.button.size,
+      button_outline: fields.button.outline,
+      button_block: true,
+      button_disabled: fields.button.disabled,
+      button_value: fields.button.value,
+      nowrap: fields.button.nowrap,
+      button_classes: [
+        'accordion-button',
+        fields.button.background_color['bg_color'] == 'palette' and fields.button.background_color['bg_theme_color'] ? 'bg-' ~ fields.button.background_color['bg_theme_color'],
+        fields.button.text_color['color'] == 'palette' and fields.button.text_color['theme_color'] ? 'text-' ~ fields.button.text_color['theme_color']
+      ],
+      button_other_classes: fields.button.classes,
+      button_attributes: [
+      bg_color or text_color or transform or btn_padding_top or btn_padding_bottom or btn_padding_left or btn_padding_right or btn_border_top_width or btn_border_top_style or btn_border_top_color or btn_border_bottom_width or btn_border_bottom_style or btn_border_bottom_color or btn_border_left_width or btn_border_left_style or btn_border_left_color or btn_border_right_width or btn_border_right_style or btn_border_right_color or btn_border_top_left_radius or btn_border_top_right_radius or btn_border_bottom_left_radius or btn_border_bottom_right_radius or btn_box_shadow or btn_text_shadow or fontsize or width or min_width or max_width ? 'style="' ~ bg_color ~ text_color ~ fontsize ~ transform ~ btn_padding_top ~ btn_padding_bottom ~ btn_padding_left ~ btn_padding_right ~ btn_border_top_width ~ btn_border_top_style ~ btn_border_top_color ~ btn_border_bottom_width ~ btn_border_bottom_style ~ btn_border_bottom_color ~ btn_border_left_width ~ btn_border_left_style ~ btn_border_left_color ~ btn_border_right_width ~ btn_border_right_style ~ btn_border_right_color ~ btn_border_top_left_radius ~ btn_border_top_right_radius ~ btn_border_bottom_left_radius ~ btn_border_bottom_right_radius ~ btn_box_shadow ~ btn_text_shadow ~ width ~ min_width ~ max_width ~ '"'
+      ]
+    } %}
+  </{{ fields.header_element | default('h2') }}>
+  <div id="collapse_{{ itemId }}" class="accordion-collapse collapse {{ fields.active == true ? 'show' }}" aria-labelledby="accordionHeader_{{ itemId }}" {{ block_context['acf/fields']['always_open'] != true ? 'data-bs-parent="#' ~ parent_id ~ '"' }}>
+    <div class="accordion-body">
+      <div class="inner-blocks-wrapper">
+        <InnerBlocks allowedBlocks="{{ ['core/image', 'core/paragraph', 'core/heading', 'core/list', 'core/quote', 'core/code', 'core/preformatted', 'core/pullquote', 'core/table', 'core/verse', 'core/gallery', 'core/audio', 'core/cover', 'core/media-text', 'core/video', 'core/buttons', 'core/columns', 'core/group', 'core/row', 'core/separator', 'core/spacer', 'core/calendar', 'core/html', 'core/search', 'core/shortcode', 'core/social-icons', 'core/tag-cloud', 'acf/quote', 'acf/modal', 'acf/button', 'acf/buttons', 'acf/row', 'acf/price', 'acf/icons', 'acf/accordion', 'acf/button-group'] | json_encode() | escape('html_attr') }}" template="{{ [['core/paragraph', {'content': 'Add accordion item content here.'}]] | json_encode() | escape('html_attr') }}" />
+      </div>
+    </div>
+  </div>
+</div>
+

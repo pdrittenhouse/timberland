@@ -1,0 +1,258 @@
+{#
+/**
+ * @file
+ * modal
+ *
+ * Available variables for modal:
+ *  - modal_classes [array]: Additional component classes.
+ *  - modal_other_classes [string]: Additional component classes.
+ *  - modal_attributes [array]: Additional component attributes.
+ *  - modal_other_attributes [string]: Additional component attributes.
+ *  - animate [bool]: Show modal animation.
+ *  - backdrop_color [string]: Modal backdrop color.
+ *  - modal_dialog_classes [array]: Additional component classes.
+ *  - modal_dialog_other_classes [string]: Additional component classes.
+ *  - modal_dialog_attributes [array]: Additional component attributes.
+ *  - modal_dialog_other_attributes [string]: Additional component attributes.
+ *  - modal_content_classes [array]: Additional component classes.
+ *  - modal_content_other_classes [string]: Additional component classes.
+ *  - modal_content_attributes [array]: Additional component attributes.
+ *  - modal_content_other_attributes [string]: Additional component attributes.
+ *  - modal_title_classes [array]: Additional component classes.
+ *  - modal_title_other_classes [string]: Additional component classes.
+ *  - modal_title_attributes [array]: Additional component attributes.
+ *  - modal_title_other_attributes [string]: Additional component attributes.
+ *  - modal_body_classes [array]: Additional component classes.
+ *  - modal_body_other_classes [string]: Additional component classes.
+ *  - modal_body_attributes [array]: Additional component attributes.
+ *  - modal_body_other_attributes [string]: Additional component attributes.
+ *  - background_color [string]: Modal background color.
+ *  - text_color [string]: Modal text color.
+ *  - show_modal_button [bool]: Include modal trigger button.
+ *  - modal_button [obj]: Modal trigger button options object.
+ *  - modal_id [string]: A unique modal identifier.
+ *  - modal_title [string]: Modal window title.
+ *  - modal_center [bool]: Vertically center modal window.
+ *  - modal_size [string: sm, lg | null]: Modal window size.Î
+ *  - modal_fullscreen [bool]: Fullscreen modal window.
+ *  - modal_fullscreen_breakpoint [string: 'sm', 'md', 'lg', 'xl', 'xxl']: Fullscreen modal window breakpoint.
+ *  - modal_close_header [bool]: Include modal close button in header.
+ *  - modal_close_header_color [string]: Color name for modal close icon.
+ *  - modal_content: Modal window content.
+ *  - modal_footer: Modal footer content,.
+ *  - show_modal_footer_close [bool]: Include modal close button in footer.
+ *  - modal_close_footer [obj]: Include modal close button in footer.
+ */
+#}
+
+{% set modalId = [] %}
+{% set alpha = 'abcdefghijklmnopqrstuvwxyz' %}
+{% set num = '0123456789' %}
+{% for i in 1..10 %}
+  {% set char = random(alpha ~ alpha|upper ~ num ~ '-_') %}
+  {% set modalId = modalId|merge([char]) %}
+{% endfor %}
+{% set modalId = 'modal_' ~ modalId|join %}
+
+{% set modal_classes = modal_classes|default([])|merge([
+  'modal',
+  backdrop_color ? 'bg-' ~ backdrop_color,
+  animate is defined and animate != true ? '' : 'fade',
+  modal_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set modal_attributes = modal_attributes|default([])|merge([
+  modal_id ? 'id="' ~ modal_id ~ '"' : 'id="' ~ modalId ~ '"',
+  'tabindex="-1"',
+  'role="dialog"',
+  modal_id ? 'aria-labelledby="' ~ modal_id ~ 'Label"' : 'aria-labelledby="' ~ modalId ~ 'Label"',
+  'aria-hidden="true"',
+  modal_other_attributes,
+]) | sort | join(' ') | trim %}
+
+{% set modal_dialog_classes = modal_dialog_classes|default([])|merge([
+  'modal-dialog',
+  modal_center == true ? 'modal-dialog-centered',
+  modal_size is not empty ? 'modal-' ~ modal_size,
+  modal_fullscreen_breakpoint and modal_fullscreen == true ? 'modal-fullscreen-' ~ modal_fullscreen_breakpoint ~ '-down' : modal_fullscreen == true ? 'modal-fullscreen',
+  modal_dialog_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set modal_dialog_attributes = modal_dialog_attributes|default([])|merge([
+  'role="document"',
+  modal_dialog_other_attributes,
+]) | sort | join(' ') | trim %}
+
+{% set modal_content_classes = modal_content_classes|default([])|merge([
+  'modal-content',
+  background_color ? 'bg-' ~ background_color,
+  text_color ? 'text-' ~ text_color,
+  modal_content_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set modal_content_attributes = modal_content_attributes|default([])|merge([
+  modal_content_other_attributes,
+]) | sort | join(' ') | trim %}
+
+{% set modal_title_classes = modal_title_classes|default([])|merge([
+  'modal-title',
+  text_color ? 'text-' ~ text_color,
+  modal_title_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set modal_title_attributes = modal_title_attributes|default([])|merge([
+  modal_id ? 'id="' ~ modal_id ~ 'Label"' : 'id="' ~ modalId ~ 'Label"',
+  modal_title_other_attributes,
+]) | sort | join(' ') | trim %}
+
+{% set modal_body_classes = modal_body_classes|default([])|merge([
+  'modal-body',
+  text_color ? 'text-' ~ text_color,
+  modal_body_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set modal_body_attributes = modal_body_attributes|default([])|merge([
+  modal_body_other_attributes,
+]) | sort | join(' ') | trim %}
+
+<!-- Modal Trigger Button -->
+{% if show_modal_button == true %}
+  {% set trigger_classes = modal_button.button_classes|default([])|merge([
+    'modal--trigger',
+    trigger_other_classes
+  ]) | sort %}
+
+  {% set trigger_attributes = modal_button.button_attributes|default([])|merge([
+    trigger_other_attributes
+  ]) | sort %}
+
+  {% include "@atoms/button/_button.tpl.twig" with {
+    button_element: modal_button.button_element,
+    button_size: modal_button.button_size,
+    button_block: modal_button.button_block,
+    button_link: 'javascript:void(0);',
+    button_text: modal_button.button_text,
+    button_color: modal_button.button_color,
+    button_toggle: 'modal',
+    button_attributes: trigger_attributes,
+    button_other_attributes: modal_button.button_other_attributes,
+    button_classes: trigger_classes,
+    button_other_classes: modal_button.button_other_classes,
+    button_type: modal_button.button_type,
+    button_value: modal_button.button_value,
+    button_active: modal_button.button_active,
+    button_disabled: modal_button.button_disabled,
+    button_outline: modal_button.button_outline,
+    buttonless_dropdown: modal_button.buttonless_dropdown,
+    button_block: modal_button.button_block,
+    button_id: modal_button.button_id,
+    button_target: modal_id ? '#' ~ modal_id : '#' ~ modalId,
+    button_expanded: modal_button.button_expanded,
+    button_controls: modal_id ? modal_id : modalId,
+    nowrap: modal_button.nowrap,
+    contextual_content: modal_button.contextual_content,
+    title: modal_button.title,
+    popover_title: modal_button.popover_title,
+    popover_content: modal_button.popover_content,
+    context_placement: modal_button.context_placement,
+    context_container: modal_button.context_container
+  } %}
+{% endif %}
+
+<!-- Modal -->
+<div class="{{ modal_classes }}" {{ modal_attributes }}>
+  <div class="{{ modal_dialog_classes }}" {{ modal_dialog_attributes }}>
+    <div class="{{ modal_content_classes }}" {{ modal_content_attributes }}>
+      {% block modal_header %}
+        {% if modal_title or modal_close_header  == true %}
+          <div class="modal-header">
+            {% block modal_title %}
+              {% if modal_title %}
+                <h5 class="{{ modal_title_classes }}" {{ modal_title_attributes }}>{{ modal_title }}</h5>
+              {% endif %}
+            {% endblock %}
+            {% if modal_close_header == true %}
+              {% set header_close_classes = modal_close_header_button.button_classes|default([])|merge([
+                'modal--close',
+                header_close_other_classes
+              ]) | sort %}
+
+              {% set header_close_attributes = modal_close_header_button.button_attributes|default([])|merge([
+                'data-bs-dismiss="modal"',
+                'aria-label="Close"',
+                header_close_other_attributes
+              ]) | sort %}
+
+              {% include "@atoms/button/_button.tpl.twig" with {
+                button_element: modal_close_header_button.button_element,
+                button_size: modal_close_header_button.button_size,
+                button_block: modal_close_header_button.button_block,
+                button_text: modal_close_header_button.button_text | default('&times;'),
+                button_color: modal_close_header_button.button_color,
+                close_button: modal_close_header_button | default('black'),
+                button_toggle: 'modal',
+                button_disabled: modal_close_header_button.button_disabled,
+                button_outline: modal_close_header_button.button_outline,
+                close_button: modal_close_header_button.close_button,
+                nowrap: modal_close_header_button.nowrap,
+                button_classes: header_close_classes,
+                button_other_classes: modal_close_header_button.button_other_classes,
+                button_attributes: header_close_attributes,
+                button_other_attributes: modal_close_header_button.button_other_attributes
+              } %}
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endblock %}
+      <div class="{{ modal_body_classes }}" {{ modal_body_attributes }}>
+        {% block modal_body %}
+          {{ modal_content }}
+        {% endblock %}
+      </div>
+      {% if modal_footer or show_modal_footer_close == true %}
+        <div class="modal-footer">
+          {% block modal_footer %}
+            {% if modal_footer %}
+              <div class="modal-footer-content">
+                {{ modal_footer }}
+              </div>
+            {% endif %}
+          {% endblock %}
+
+          {% if show_modal_footer_close == true %}
+            {% set footer_close_classes = modal_close_footer.button_classes|default([])|merge([
+              'modal--close',
+              footer_close_other_classes
+            ]) | sort %}
+
+            {% set footer_close_attributes = modal_close_footer.button_attributes|default([])|merge([
+              'data-bs-dismiss="modal"',
+              'aria-label="Close"',
+              footer_close_other_attributes
+            ]) | sort %}
+
+            {% block modal_actions %}
+              <div class="modal-actions">
+                {% include "@atoms/button/_button.tpl.twig" with {
+                  button_element: modal_close_footer.button_element,
+                  button_size: modal_close_footer.button_size,
+                  button_block: modal_close_footer.button_block,
+                  button_text: modal_close_footer.button_text | default('Close'),
+                  button_color: modal_close_footer.button_color,
+                  button_toggle: 'modal',
+                  button_classes: footer_close_classes,
+                  button_other_classes: modal_close_footer.button_other_classes,
+                  button_other_attributes: modal_close_footer.button_other_attributes,
+                  button_attributes: footer_close_attributes,
+                  button_disabled: modal_close_footer.button_disabled,
+                  button_outline: modal_close_footer.button_outline,
+                  close_button: modal_close_footer.close_button
+                } %}
+              </div>
+            {% endblock %}
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>

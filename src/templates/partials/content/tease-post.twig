@@ -1,0 +1,20 @@
+{% extends "partials/content/tease.twig" %}
+
+{% block content %}
+  {% include '@molecules/card/_card.tpl.twig' with {
+    card_title: post.title,
+    card_text: post.preview.read_more(false),
+    card_image_location: post.thumbnail.src ? "top",
+    card_image: {
+      variant: 'aspect-ratio',
+      src: post.thumbnail.src,
+      alt: post.thumbnail.alt,
+      style: '',
+      placeholder: false,
+      width: '3',
+      height: '2',
+    },
+    card_linked: true,
+    card_link: post.link
+  } %}
+{% endblock %}

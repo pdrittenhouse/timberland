@@ -1,0 +1,134 @@
+{% embed '@molecules/dropdown/_dropdown.tpl.twig' with {
+  button_group: false,
+  button_group_size: 'lg',
+  button_group_display: 'block',
+  dark: false,
+  background_color: 'primary',
+  text_color: 'white',
+  direction: 'down',
+  dropdown_menu_align: 'right',
+  offset_x: 10,
+  offset_y: 10,
+  auto_close: 'outside',
+  button: {
+    button_type: 'split',
+    button_classes: '',
+    button_other_classes: '',
+    button_element: 'a',
+    button_link: '#',
+    button_text: 'Button',
+  },
+  dropdown_items: [
+    {
+      dropdown_item_id: 'aDropdownHeadingId',
+      dropdown_item_classes: [
+      'dropdown-heading'
+    ],
+      dropdown_item_other_classes: '',
+      dropdown_item_element: 'h6',
+      dropdown_item_text: 'Dropdown Heading',
+    },
+    {
+      dropdown_item_other_classes: '',
+      dropdown_item_element: 'hr',
+    },
+    {
+      dropdown_item_id: 'aDropdownItemId1',
+      dropdown_item_classes: [
+      'dropdown-item-1'
+    ],
+      dropdown_item_attributes: [
+      'role="button"'
+    ],
+      dropdown_item_other_classes: 'active disabled',
+      dropdown_item_element: 'a',
+      dropdown_item_link: '#',
+      dropdown_item_text: 'Dropdown Item 1',
+    },
+    {
+      dropdown_item_id: 'aDropdownItemId2',
+      dropdown_item_classes: [
+      'dropdown-item-2'
+    ],
+      dropdown_item_other_classes: '',
+      dropdown_item_element: 'button',
+      dropdown_item_text: 'Dropdown Item 2',
+    },
+  ],
+  dropdown_other_classes: ''
+} %}
+  {% block before_menu_content %}
+    <p>Some example text that's free-flowing within the dropdown menu.</p>
+  {% endblock before_menu_content %}
+  {% block after_menu_content %}
+    <p class="mb-0">And this is more example text.</p>
+  {% endblock after_menu_content %}
+{% endembed %}
+
+
+  {% include '@molecules/dropdown/_dropdown.tpl.twig' with {
+    button_group: true,
+    button_group_size: 'sm',
+    button_group_display: 'block',
+    dark: true,
+    direction: 'down',
+    dropdown_menu_align: 'right',
+    offset_x: 10,
+    offset_y: 10,
+    auto_close: 'outside',
+    button: {
+      button_dropdown: true,
+      button_id: 'aDropdownButtonId',
+      button_classes: '',
+      button_other_classes: 'test1',
+      button_element: 'button',
+    },
+    buttons: [
+      {
+        button_id: 'aButtonId',
+        button_classes: '',
+        button_other_classes: '',
+        button_element: 'a',
+        button_link: '#',
+        button_text: 'Button',
+      }
+    ],
+    dropdown_items: [
+      {
+        dropdown_item_id: 'aDropdownHeadingId',
+        dropdown_item_classes: [
+        'dropdown-heading'
+      ],
+        dropdown_item_other_classes: '',
+        dropdown_item_element: 'h6',
+        dropdown_item_text: 'Dropdown Heading',
+      },
+      {
+        dropdown_item_other_classes: '',
+        dropdown_item_element: 'hr',
+      },
+      {
+        dropdown_item_id: 'aDropdownItemId1',
+        dropdown_item_classes: [
+        'dropdown-item-1'
+      ],
+        dropdown_item_attributes: [
+        'role="button"'
+      ],
+        dropdown_item_other_classes: 'active disabled',
+        dropdown_item_element: 'a',
+        dropdown_item_link: '#',
+        dropdown_item_text: 'Dropdown Item 1',
+      },
+      {
+        dropdown_item_id: 'aDropdownItemId2',
+        dropdown_item_classes: [
+        'dropdown-item-2'
+      ],
+        dropdown_item_other_classes: '',
+        dropdown_item_element: 'button',
+        dropdown_item_text: 'Dropdown Item 2',
+      },
+    ],
+    dropdown_other_classes: ''
+  } %}

@@ -1,0 +1,49 @@
+.block-section {
+  position: relative;
+  z-index: z('site-content');
+
+  &--wrapper {
+
+      > .container,
+      > .container-fluid {
+        overflow: hidden;
+      }
+
+      *:last-child {
+        margin-bottom: 0;
+      }
+  }
+
+  &.overflow-visible {
+
+    .block-section--wrapper {
+
+      > .container,
+      > .container-fluid {
+        overflow: visible;
+      }
+    }
+  }
+
+  &.overflow-x-auto {
+
+    .block-section--wrapper {
+
+      > .container,
+      > .container-fluid {
+        overflow: auto;
+      }
+    }
+  }
+
+  &.overflow-x-scroll {
+
+    .block-section--wrapper {
+
+      > .container,
+      > .container-fluid {
+        overflow: scroll;
+      }
+    }
+  }
+}

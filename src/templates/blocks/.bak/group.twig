@@ -1,0 +1,131 @@
+{#
+/**
+ * Block Name:
+ *
+ * This is the template that displays the  block.
+ */
+#}
+
+{# Set block data object for block registration: src/funcions/blocks.php #}
+{% set block_data = {
+  name: 'Group',
+  description: 'A group block.',
+  category: 'dream',
+  icon: 'button',
+  keywords: '',
+  mode: 'preview',
+  post_types: true,
+  align: '',
+  align_text: '',
+  align_content: '',
+  enqueue_style: '',
+  enqueue_script: '',
+  supports_align: true,
+  supports_align_text: true,
+  supports_align_content: true,
+  supports_mode: true,
+  supports_multiple: true,
+  supports_anchor: true,
+  supports_className: true,
+  supports_full_height: true,
+  supports_jsx: true
+} %}
+
+{#{% if is_preview %}#}
+{#<p>Some editor instructions here.</p>#}
+{#{% endif %}#}
+
+{#{{ block['className'] }}#}
+{#{{ block['align'] ? 'align-' ~ block['align'] }}#}
+{#{{ block['align_text']}}#}
+{#{{ block['align_content'] }}#}
+{#{{ block['full_height'] }}#}
+
+{#{% set parent = function('get_parent_block', block['id'], block['name']) %}#}
+
+{#{% if is_preview and fields.show_ids == true and fields.label %}#}
+{#  <p class="text-uppercase"><strong>Group {{ fields.label ? '"' ~ fields.label ~ '"' : loop.index }}</strong></p>#}
+{#{% endif %}#}
+
+{#{{ function('print_r', '<pre>') }}#}
+{#{{ function('print_r', parent_block_data) }}#}
+{#{{ function('print_r', '</pre>') }}#}
+
+{# Button Group Styles #}
+{% set button_group_styles = [
+  fields.button_group_width.width.value >= 0 ? 'width: ' ~ fields.button_group_width.width.value ~ fields.button_group_width.width.unit ~ ';',
+  fields.button_group_width.min_width >= 0 ? 'min-width: ' ~ fields.button_group_width.min_width ~ 'px;',
+  fields.button_group_width.max_width >= 0 ? 'max-width: ' ~ fields.button_group_width.max_width ~ 'px;'
+] | sort | join(' ') | trim %}
+
+{% if parent_block_data['data']['toolbar'] == true %}
+  {% set button_group_display_grid = false %}
+{% elseif fields.display_grid is null %}
+  {% set button_group_display_grid = true %}
+{% else %}
+  {% set button_group_display_grid = fields.display_grid %}
+{% endif %}
+
+{# Breakpoints #}
+{% set breakpoints_array = {} %}
+{% for bp in fields.breakpoints %}
+  {% if bp.breakpoint == 'sm' %}
+    {% set breakpoints_array = breakpoints_array | merge({
+      sm: bp.display
+    }) %}
+  {% elseif bp.breakpoint == 'md' %}
+    {% set breakpoints_array = breakpoints_array | merge({
+      md: bp.display
+    }) %}
+  {% elseif bp.breakpoint == 'lg' %}
+    {% set breakpoints_array = breakpoints_array | merge({
+      lg: bp.display
+    }) %}
+  {% elseif bp.breakpoint == 'xl' %}
+    {% set breakpoints_array = breakpoints_array | merge({
+      xl: bp.display
+    }) %}
+  {% elseif bp.breakpoint == 'xxl' %}
+    {% set breakpoints_array = breakpoints_array | merge({
+      xxl: bp.display
+    }) %}
+  {% elseif bp.breakpoint == 'xxxl' %}
+    {% set breakpoints_array = breakpoints_array | merge({
+      xxxl: bp.display
+    }) %}
+  {% elseif bp.breakpoint == 'xxxxl' %}
+    {% set breakpoints_array = breakpoints_array | merge({
+      xxxxl: bp.display
+    }) %}
+  {% endif %}
+{% endfor %}
+{% set breakpoints = [] %}
+{% for breakpoint, display in breakpoints_array %}
+  {% set breakpoints = breakpoints|merge([
+    'd-' ~ breakpoint ~ '-' ~ display
+  ]) %}
+{% endfor %}
+
+{% set button_group_classes = button_group_classes|default([])|merge([
+  button_group_vertical == true ? 'btn-group-vertical' : 'button-group',
+  button_group_display_grid == true ? 'display-grid' : 'display-group',
+  button_group_display_grid == true ? 'd-grid' : 'btn-group',
+  fields.gap ? 'gap-' ~ fields.gap,
+  button_group_display_grid == true and breakpoints ? breakpoints | sort | join(' ') | trim,
+  button_group_size ? 'btn-group-' ~ button_group_size,
+  fields.button_group_classes,
+  block['className']
+]) | sort | join(' ') | trim %}
+
+{% set button_group_attributes = button_group_attributes|default([])|merge([
+  'role="group"',
+  fields.label ? 'aria-label="' ~ fields.label ~ '"',
+  button_group_styles ? 'style="' ~ button_group_styles ~ '"'
+]) | sort | join(' ') | trim %}
+
+<div class="{{ button_group_classes }}" {{ button_group_attributes }}>
+
+  <InnerBlocks allowedBlocks="{{ ['acf/button'] | json_encode() | escape('html_attr') }}" template="{{ [['acf/button']] | json_encode() | escape('html_attr') }}" />
+
+  {% block nested_content %}{% endblock nested_content %}
+</div>

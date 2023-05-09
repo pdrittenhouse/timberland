@@ -1,0 +1,196 @@
+{#
+/**
+ * @file
+ * dropdown
+ *
+ * Available variables for dropdown:
+*  - dropdown_classes [array]: Additional component classes.
+ *  - dropdown_other_classes [string]: Additional component classes.
+ *  - button_group [bool]: Use a button group for dropdown.
+ *  - button_group_display [string ('inline-block', 'grid', 'inline', 'block', 'flex', 'inline-flex')]: Button group wrapper display property. Default: 'inline-block'.
+ *  - button [object]: Button object for dropdown.
+ *  - dropdown_menu_classes [array]: Additional dropdown menu classes.
+ *  - dropdown_menu_other_classes [string]: Additional dropdown menu classes.
+ *  - dark [bool]: Use a dark dropdown.
+ *  - background_color [string]: Background color of offcanvas panel.
+ *  - text_color [string]: Text color of offcanvas panel.
+ *  - direction [string ('up', 'down', 'left', 'right')]: Direction of dropdown menu.
+ *  - dropdown_menu_align [string ('left', 'right')]: Alignment of dropdown menu.
+ *  - offset_x [int]: Horizontal offset of dropdown menu.
+ *  - offset_y [int]: Vertical offset of dropdown menu.
+ *  - reference [bool]: Add a reference to the dropdown.
+ *  - auto_close [ string ('true', 'false', 'inside', 'outside')]: Add a reference to the dropdown.
+ *  - dropdown_item_classes [array]: Additional dropdown item classes.
+ *  - dropdown_item_other_classes [string]: Additional dropdown item classes.
+ *  - dropdown_item_id [string]: A custom ID for the dropdown item.
+ *  - dropdown_item_element [string]: Element to use for dropdown item. Default: 'a'.
+ *  - dropdown_item_link [string]: Link for dropdown item.
+ *  - dropdown_item_text [string]: Text for dropdown item.
+ */
+#}
+
+{% set dropdownId = [] %}
+{% set alpha = 'abcdefghijklmnopqrstuvwxyz' %}
+{% set num = '0123456789' %}
+{% for i in 1..10 %}
+  {% set char = random(alpha ~ alpha|upper ~ num ~ '-_') %}
+  {% set dropdownId = dropdownId|merge([char]) %}
+{% endfor %}
+{% set dropdownId = 'dropdown_' ~ dropdownId|join %}
+
+{% set dropdown_classes = dropdown_classes|default([])|merge([
+  'dropdown',
+  direction == 'up' ? 'dropup',
+  direction == 'left' ? 'dropstart',
+  direction == 'right' ? 'dropend',
+  dropdown_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set dropdown_attributes = dropdown_attributes|default([])|merge([
+  dropdown_other_attributes,
+]) | sort | join(' ') | trim %}
+
+{% set dropdown_menu_classes = dropdown_menu_classes|default([])|merge([
+  'dropdown-menu',
+  dark == true ? 'dropdown-menu-dark',
+  background_color ? 'bg-' ~ background_color,
+  text_color ? 'text-' ~ text_color,
+  dropdown_menu_align == 'right' ? 'dropdown-menu-end',
+  button.button_active == true ? 'shows',
+  dropdown_menu_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set dropdown_menu_attributes = dropdown_menu_attributes|default([])|merge([
+  button.button_id ? 'aria-labelledby="' ~ button.button_id ~ '"' : 'aria-labelledby="' ~ dropdownId ~ '"',
+  button_group != true and button_group_size ? 'btn-group' ~ button_group_size,
+  dropdown_menu_other_attributes,
+]) | sort | join(' ') | trim %}
+
+
+
+{% if button_group == true %}
+  {% embed '@molecules/button-group/_button-group.tpl.twig' with {
+    button_group_wrapper_display: button_group_display,
+    button_group_size: button_group_size,
+    button_groups: [
+      {
+        button_group_display_grid: false,
+        buttons: button ? buttons|default([])|merge([
+          {
+            button_dropdown: button.button_dropdown,
+            button_classes: button.button_classes,
+            button_other_classes: button.button_other_classes,
+            button_element: button.button_element,
+            button_type: button.button_type,
+            button_outline: button.button_outline,
+            buttonless_dropdown: button.buttonless_dropdown,
+            button_color: button.button_color,
+            button_size: button.button_size,
+            button_block: button.button_block,
+            button_active: button.button_active,
+            button_other_classes: button.button_other_classes,
+            button_toggle: 'dropdown',
+            button_link: button.button_link,
+            button_value: button.button_value,
+            button_id: button.button_id ? button.button_id : dropdownId,
+            button_disabled: button.button_disabled,
+            button_attributes: [
+              'data-bs-offset="' ~ offset_x ~ ',' ~ offset_y ~ '"',
+              reference == true ? 'data-bs-reference="parent"',
+              auto_close == 'true' or auto_close == 'false' or auto_close == 'inside' or auto_close == 'outside' ? 'data-bs-auto-close="' ~ auto_close ~ '"',
+              button.button_active ? 'aria-expanded="true"' : 'aria-expanded="false"',
+            ],
+            button_other_attributes: button.button_other_attributes,
+            button_text: button.button_text,
+            button_target: button.button_target
+          }
+        ]) : buttons,
+        button_group_other_classes: dropdown_classes,
+        button_group_other_attributes: dropdown_attributes,
+      }
+    ],
+  } %}
+    {% block nested_content %}
+      <ul class="{{ dropdown_menu_classes }}" {{ dropdown_menu_attributes }}>
+        {% for item in dropdown_items %}
+          {% set dropdown_item_element = item.dropdown_item_element | default('a') %}
+
+          {% set dropdown_item_classes = item.dropdown_item_classes|default([])|merge([
+            dropdown_item_element == 'h1' or dropdown_item_element == 'h2' or dropdown_item_element == 'h3' or dropdown_item_element == 'h4' or dropdown_item_element == 'h5' or dropdown_item_element == 'h6' ? 'dropdown-header',
+            dropdown_item_element != 'h1' and dropdown_item_element != 'h2' and dropdown_item_element != 'h3' and dropdown_item_element != 'h4' and dropdown_item_element != 'h5' and dropdown_item_element != 'h6' and dropdown_item_element != 'hr' ?'dropdown-item',
+            dropdown_item_element == 'hr' ? 'dropdown-divider',
+            item.dropdown_item_other_classes,
+          ]) | sort | join(' ') | trim %}
+
+          {% set dropdown_item_attributes = item.dropdown_item_attributes|default([])|merge([
+            dropdown_item_element == 'button' ? 'type="button"',
+            item.dropdown_item_other_attributes
+          ]) | sort | join(' ') | trim %}
+
+          <li><{{ dropdown_item_element }} class="{{ dropdown_item_classes }}" {{ dropdown_item_element == 'a' ? 'href="' ~ item.dropdown_item_link ~ '"' }} {{ dropdown_item_attributes }} {{ item.dropdown_item_id ? 'id="' ~ item.dropdown_item_id ~ '"'}}>{{ item.dropdown_item_text }}</{{ dropdown_item_element }}></li>
+        {% endfor %}
+      </ul>
+    {% endblock nested_content %}
+  {% endembed %}
+{% else %}
+  <div class="{{ dropdown_classes }}" {{ dropdown_attributes }}>
+    {% include "@atoms/button/_button~dropdown.tpl.twig" with {
+      button_classes: button.button_classes,
+      button_other_classes: button.button_other_classes,
+      button_element: button.button_element,
+      button_type: button.button_type,
+      button_outline: button.button_outline,
+      buttonless_dropdown: button.buttonless_dropdown,
+      button_color: button.button_color,
+      button_size: button.button_size,
+      button_block: button.button_block,
+      button_active: button.button_active,
+      button_toggle: 'dropdown',
+      button_link: button.button_link,
+      button_value: button.button_value,
+      button_id: button.button_id ? button.button_id : dropdownId,
+      button_disabled: button.button_disabled,
+      button_attributes: [
+        'data-bs-offset="' ~ offset_x ~ ',' ~ offset_y ~ '"',
+        reference == true ? 'data-bs-reference="parent"',
+        auto_close == 'true' or auto_close == 'false' or auto_close == 'inside' or auto_close == 'outside' ? 'data-bs-auto-close="' ~ auto_close ~ '"',
+        button.button_active ? 'aria-expanded="true"' : 'aria-expanded="false"',
+      ],
+      button_other_attributes: button.button_other_attributes,
+      button_text: button.button_text,
+      button_target: button.button_target,
+      button_expanded: button.button_expanded,
+      button_controls: button.button_controls,
+      nowrap: button.nowrap,
+      contextual_content: button.contextual_content,
+      title: button.title,
+      popover_content: button.popover_content,
+      context_placement: button.context_placement,
+      context_container: button.context_container
+    } %}
+
+    <ul class="{{ dropdown_menu_classes }}" {{ dropdown_menu_attributes }}>
+      {% block before_menu_content %}{% endblock before_menu_content %}
+      {% block items %}
+        {% for item in dropdown_items %}
+          {% set dropdown_item_element = item.dropdown_item_element | default('a') %}
+
+          {% set dropdown_item_classes = item.dropdown_item_classes|default([])|merge([
+            dropdown_item_element == 'h1' or dropdown_item_element == 'h2' or dropdown_item_element == 'h3' or dropdown_item_element == 'h4' or dropdown_item_element == 'h5' or dropdown_item_element == 'h6' ? 'dropdown-header',
+            dropdown_item_element != 'h1' and dropdown_item_element != 'h2' and dropdown_item_element != 'h3' and dropdown_item_element != 'h4' and dropdown_item_element != 'h5' and dropdown_item_element != 'h6' and dropdown_item_element != 'hr' ?'dropdown-item',
+            dropdown_item_element == 'hr' ? 'dropdown-divider',
+            item.dropdown_item_other_classes,
+          ]) | sort | join(' ') | trim %}
+
+          {% set dropdown_item_attributes = item.dropdown_item_attributes|default([])|merge([
+            dropdown_item_element == 'button' ? 'type="button"',
+            item.dropdown_item_other_attributes
+          ]) | sort | join(' ') | trim %}
+
+          <li><{{ dropdown_item_element }} class="{{ dropdown_item_classes }}" {{ dropdown_item_element == 'a' ? 'href="' ~ item.dropdown_item_link ~ '"' }} {{ dropdown_item_attributes }} {{ item.dropdown_item_id ? 'id="' ~ item.dropdown_item_id ~ '"'}}>{{ item.dropdown_item_text }}</{{ dropdown_item_element }}></li>
+        {% endfor %}
+      {% endblock items %}
+      {% block after_menu_content %}{% endblock after_menu_content %}
+    </ul>
+  </div>
+{% endif %}

@@ -1,0 +1,12 @@
+// Patternlab styles overrides for list pattern
+
+// The non-printing variables, functions, and mixins of 00-protons/variables
+// are provided to this file via:
+//   webpack.config.js: sass-loader.data|includePaths
+
+.list {
+
+  &.fontawesome-icon-list {
+    @include custom-list-icon ($before-content: '\f0e7', $icon-font-family: 'Font Awesome 5 Pro', $width: auto, $height: auto, $top-position: rem-calc(2px), $left-position: rem-calc(-15px), $background-color: transparent, $border-radius: 0,);
+  }
+}

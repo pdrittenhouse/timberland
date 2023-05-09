@@ -1,0 +1,48 @@
+# Ignore IDE config
+.idea
+.vscode/
+
+# Ignore packages
+composer.lock
+vendor/
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore composer dependency directories
+vendor/
+
+# Ignore log files and databases
+*.log
+*.sql
+*.sqlite
+
+# Ignore build directories
+dist/
+build/
+
+# Ignore Libraries
+src/libs/
+
+# Ignore application files
+.env
+min-manifest.json
+/uploads/*
+!/uploads/.gitkeep
+/plugins/*
+!/plugins/.gitkeep
+
+# Ignore everything in the "patternlab" directory, except patterns:
+#**/patternlab/**
+#!**/patternlab/source
+
+# Ignore patternlab vendor directory
+**/patternlab/vendor/**
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore tests
+.eslintcache

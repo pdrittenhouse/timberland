@@ -1,0 +1,46 @@
+{% include '@molecules/accordion/_accordion.tpl.twig' with {
+  accordion_other_classes: '',
+  accordion_flush: true,
+  always_open: true,
+  accordion_items: [
+    {
+      accordion_item_classes: [],
+      accordion_item_other_classes: '',
+      accordion_item_attributes: [],
+      accordion_item_other_attributes: '',
+      accordion_header_element: 'h3',
+      item_active: true,
+      button: {
+      button_text: 'Accordion Item #1',
+      button_other_classes: '',
+    },
+      content: "<p><strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.<p>"
+    },
+    {
+      accordion_item_classes: [],
+      accordion_item_other_classes: '',
+      accordion_item_attributes: [],
+      accordion_item_other_attributes: '',
+      accordion_header_element: 'h3',
+      item_active: false,
+      button: {
+      button_text: 'Accordion Item #2',
+      button_other_classes: '',
+    },
+      content: "<p><strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.<p>"
+    },
+    {
+      accordion_item_classes: [],
+      accordion_item_other_classes: '',
+      accordion_item_attributes: [],
+      accordion_item_other_attributes: '',
+      accordion_header_element: 'h3',
+      item_active: false,
+      button: {
+      button_text: 'Accordion Item #3',
+      button_other_classes: '',
+    },
+      content: "<p><strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.<p>"
+    }
+  ]
+} %}

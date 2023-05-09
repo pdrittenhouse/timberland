@@ -1,0 +1,64 @@
+{#
+/**
+ * @file
+ * branding
+ *
+ * Available variables for branding:
+ *  - url: [string] The url the block directs to.
+ *  - logo_svg_inline: [string] The SVG path.
+ *  - logo_img_src: [string] The IMG path.
+ *  - logo_bg_img_src: [string] The IMG path.
+ *  - site_name: [string] The site name provided by the app.
+ *  - site_slogan: [string] The site slogan provided by the app.
+ *  - branding_other_classes [array]: Additional component classes.
+ */
+#}
+
+{% set branding_classes = branding_classes|default([])|merge([
+  'branding',
+  logo_svg_inline ? 'logo-type--svg' : logo_bg_img_src ? 'logo-type--bg',
+  branding_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set alt_text = site_name ~ ': ' ~ site_slogan %}
+
+<div class="{{ branding_classes }}">
+  <div class="branding--site-logo">
+    <a href="{{ url }}" title="{{ site_name }}" rel="home">
+      {% if logo_svg_inline %}
+        {% include '@atoms/svg/_svg.tpl.twig' with {
+          path: logo_svg_inline,
+          colorOriginal: colorOriginal,
+          alt: alt_text,
+          svg_other_classes: 'branding--logo-img',
+        } %}
+      {% elseif logo_bg_img_src %}
+        {% include "@atoms/image/_image.tpl.twig" with {
+          variant: 'bg',
+          src: logo_bg_img_src,
+          alt: alt_text,
+          placeholder: false,
+          image_other_classes: 'branding--logo-img',
+        } %}
+      {% elseif logo_img_src %}
+        {% include "@atoms/image/_image.tpl.twig" with {
+          variant: 'primary',
+          src: logo_img_src,
+          alt: alt_text,
+          placeholder: false,
+          image_other_classes: 'branding--logo-img',
+        } %}
+      {% endif %}
+    </a>
+  </div>
+
+  {% if site_name %}
+  <{{ name_element ? name_element : 'h1' }} class="branding--site-name">
+    <a href="{{ url }}" title="{{ 'Home' }}" rel="home">{{ site_name }}</a>
+  </{{ name_element ? name_element : 'h1' }}>
+  {% endif %}
+
+  {% if site_slogan %}
+    <p class="lead branding--site-slogan">{{ site_slogan }}</p>
+  {% endif %}
+</div>

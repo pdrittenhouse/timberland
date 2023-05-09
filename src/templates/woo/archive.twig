@@ -1,0 +1,111 @@
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
+
+  <header class="woocommerce--archive-header">
+    <section class="woocommerce--breadcrumb">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            {% do action('woocommerce_before_main_content') %}
+          </div>
+        </div>
+      </div>
+    </section>
+  </header>
+
+  <section class="woocommerce--sort">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="before-shop-loop">
+            {% do action('woocommerce_before_shop_loop') %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# Product Grid #}
+  {% if products %}
+    <section class="woocommerce--shop-list post-grid">
+      <div class="container">
+        <div class="row">
+          <div class="col loop grid-cols-4">
+            {% set count = 0 %}
+            {% for post in products %}
+              {% set count = count + 1 %}
+              {% include ["woo/tease-product.twig"] %}
+            {% endfor %}
+            <span class="placecard"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  <footer class="woocommerce--archive-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-10 offset-xl-1 col-xxl-8 offset-xxl-2 col-xxxl-6 offset-xxxl-3">
+          <div class="after-shop-loop">
+            {% do action('woocommerce_after_shop_loop') %}
+          </div>
+          <div class="after-main-content">
+            {% do action('woocommerce_after_main_content') %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+{% endblock  %}
+
+{% block foot %}
+  {# Products #}
+  {% if products %}
+    {% set count = 0 %}
+    {% for item in products %}
+      {% set count = count + 1 %}
+      <div class="modal fade product" id="productModal-{{ count }}" tabindex="-1" role="dialog" aria-labelledby="productModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header" {{ item.thumbnail.src ? 'style="background-image: url(\'' ~ item.thumbnail.src ~ '\');"' }}>
+              <h5 class="modal-title" id="productModalTitle">{{ item.title }}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                {% include '@atoms/svg/_svg~icon.tpl.twig' with {
+                  svg_other_classes: '',
+                  width: '30px',
+                  height: '30px',
+                  name: 'close',
+                  fill: '#ff000'
+                } %}
+              </button>
+            </div>
+            <div class="modal-body">
+              {{ function('do_shortcode', '[product_page id="' ~ post.id ~ '"]') }}
+            </div>
+            <div class="modal-footer">
+              {% include '@atoms/button/_button.tpl.twig' with {
+                button_color: 'secondary',
+                button_text: __('Close'),
+                button_other_attributes: 'data-dismiss="modal"',
+                button_other_classes: 'close-btn'
+              } %}
+              {% if user and item.link %}
+                {% include '@atoms/button/_button.tpl.twig' with {
+                  button_element: 'a',
+                  button_link: item.link,
+                  button_color: 'secondary',
+                  button_text: __('Edit'),
+                  button_other_classes: 'article-edit'
+                } %}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endblock %}
+

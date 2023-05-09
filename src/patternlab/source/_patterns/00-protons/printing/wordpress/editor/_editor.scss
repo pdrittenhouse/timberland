@@ -1,0 +1,26 @@
+// Wordpress block editor styles
+
+@import '../../../printing/css-variables';
+@import '../../../../../../../../node_modules/bootstrap/scss/root';
+
+// Bootstrap Styles
+@import '../../libs/bootstrap';
+
+// Custom CSS-generating output
+@import '../../type';
+@import '../../forms';
+@import '../../tables';
+@import '../../animations';
+@import '../../elements';
+
+// Wordpress specific style overrides
+@import '../../wordpress/all';
+
+// Plugin specific style overrides
+@import '../../wordpress/plugins/all';
+
+// Component Styles [For components without a corresponding pattern]
+@import '../../components/all';
+
+// Editor Overrides
+@import 'overrides';

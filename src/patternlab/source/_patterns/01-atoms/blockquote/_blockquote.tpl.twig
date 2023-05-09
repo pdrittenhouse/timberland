@@ -1,0 +1,33 @@
+{#
+/**
+ * @file
+ * blockquote
+ *
+ * Available variables for blockquote:
+ *  - quote [string]: Blockquote text
+ *  - citation [string]: Blockquote citation
+ *  - citation_position [string: 'before', 'after']: Blockquote citation position
+ *  - citation_link [string]: Blockquote citation link
+ *  - blockquote_classes [array]: Additional component classes.
+ *  - blockquote_other_classes [string]: Additional component classes.
+ */
+#}
+
+{% set blockquote_classes = blockquote_classes|default([])|merge([
+  'blockquote',
+  blockquote_other_classes,
+]) | sort | join(' ') | trim %}
+
+<blockquote class="{{ blockquote_classes }}" {{ citation_link ? 'cite="' ~ citation_link ~ '"' }}>
+  {% if citation and citation_position == 'before' %}
+    <cite>{{ citation }}</cite>
+  {% endif %}
+  {% block quote %}
+    {% if quote %}
+      <q>{{ quote }}</q>
+    {% endif %}
+  {% endblock quote %}
+  {% if citation and citation_position == 'after' %}
+    <cite>{{ citation }}</cite>
+  {% endif %}
+</blockquote>

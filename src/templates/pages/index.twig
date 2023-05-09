@@ -1,0 +1,32 @@
+{% extends "layouts/base.twig" %}
+
+{% block content %}
+  <section class="content-wrapper">
+
+    <div class="{{ options.post_display }}">
+      <div class="container">
+        <div class="row">
+          <div class="col {{ options.grid_columns }}">
+            {% for post in posts %}
+              <article class="{{ options.post_display }}--item">
+                {% include ['partials/content/tease-'~post.post_type~'.twig', 'partials/content/tease.twig'] %}
+              </article>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pagination-wrapper">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            {% include 'partials/menus/pagination.twig' with { pagination: posts.pagination({show_all: false, mid_size: 3, end_size: 2}) } %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section><!-- /content-wrapper -->
+
+{% endblock %}

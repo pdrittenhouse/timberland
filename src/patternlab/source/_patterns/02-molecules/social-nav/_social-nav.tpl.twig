@@ -1,0 +1,58 @@
+{#
+/**
+ * @file
+ * social-nav
+ *
+ * Available variables for social-nav:
+ *  - social_nav_classes [array]: Choose other classes, like bootstrap sizing, for the nav.
+ *  - social_nav_other_classes [string]: Choose other classes, like bootstrap sizing, for the nav.
+ *  - social_nav_items [array]: A list of items to be in the nav.
+ *  - nav_direction [string: 'horizontal', 'vertical']: direction for social nav layout.
+ *  - item.item_classes [array]: Choose other classes, like bootstrap sizing, for the nav item.
+ *  - item.item_other_classes [string]: Choose other classes, like bootstrap sizing, for the nav item.
+ */
+#}
+
+{% set social_nav_classes = social_nav_classes|default([])|merge([
+  'social-nav',
+  hide_labels == true ? 'hide-labels' : '',
+  hide_icons == true ? 'hide-icons' : '',
+  'nav-direction-' ~ nav_direction,
+  social_nav_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set nav_items = {} %}
+
+{% for item in social_nav_items %}
+  {# TODO: Fix conflict with inline style in list pattern #}
+  {% if hide_icons == true %}
+    {%  set nav_item_text = '<a href="' ~ item.url ~ '" class="social-nav-link" title="' ~ item.label ~ '"><span class="label">' ~ item.label ~'</span></a>' %}
+  {% else %}
+    {%  set nav_item_text = '<a href="' ~ item.url ~ '" class="social-nav-link" style="padding-top:' ~ bullet_icon_size ~ '; min-width:' ~ bullet_icon_size ~ ';" title="' ~ item.label ~ '"><span class="label">' ~ item.label ~'</span></a>' %}
+  {% endif %}
+  {% set item_classes = item.item_classes|default([])|merge([
+    'social-nav-item',
+    item_other_classes,
+  ]) | sort | join(' ') | trim %}
+  {% set nav_item = {
+    item_classes: [item_classes],
+    item_icon: item.icon,
+    icon_color: item.icon_color,
+    item_text: nav_item_text,
+    icon_position: item.icon_position,
+    icon_width: item.icon_width,
+    icon_height: item.icon_height
+  } %}
+  {% set nav_items = nav_items|merge([nav_item]) %}
+{% endfor %}
+
+{% include '@atoms/list/_list.tpl.twig' with {
+  parent_element: 'ul',
+  parent_classes: [social_nav_classes],
+  list_id: nav_id,
+  bullet_icons: true,
+  bullet_icon_position: bullet_icon_position,
+  bullet_icon_size: bullet_icon_size,
+  items: nav_items
+} %}
+

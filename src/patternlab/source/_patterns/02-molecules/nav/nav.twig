@@ -1,0 +1,128 @@
+{% include '@molecules/nav/_nav.tpl.twig' with {
+  nav_element: 'ul',
+  nav_id: 'demoNav',
+  hover_dropdown: true,
+  nav_classes: ['test-class'],
+  nav_other_classes: 'test-other-class-here',
+  navbar_breakpoint: 'md',
+  breakpoints: sass_data['scssBreakpoints'],
+  items: [
+    {
+      title: 'Cras justo odio',
+      url: '#',
+      parent_element: 'ul',
+      nav_id: 'demoSubNav',
+      nav_other_classes: 'test-sub-class',
+      link_other_classes: 'active',
+      items: [
+        {
+          title: 'Haero jus pala patria',
+          url: '#',
+          parent_element: 'ul',
+          nav_id: 'demoSubNav',
+          nav_other_classes: 'test-sub-class-level-2',
+          items: [
+              {
+                title: 'Haero jus pala patria',
+                url: '#',
+                items: [
+                {
+                  title: 'Haero jus pala patria',
+                  url: '#'
+                },
+                {
+                  title: 'Proprius turpis valde wisi',
+                  url: '#',
+                  item_classes: ['test-sub-item-class-level-2']
+                },
+                {
+                  title: 'Eu feugiat laoreet si usitas',
+                  url: '#',
+                  link_other_classes: 'test-sub-link-class-level-2'
+                }
+              ]
+            },
+            {
+              title: 'Proprius turpis valde wisi',
+              url: '#',
+              item_classes: ['test-sub-item-class-level-2']
+            },
+            {
+              title: 'Eu feugiat laoreet si usitas',
+              url: '#',
+              link_other_classes: 'test-sub-link-class-level-2'
+            }
+          ]
+        },
+        {
+          title: 'Proprius turpis valde wisi',
+          url: '#',
+          item_other_classes: 'test-sub-item-class'
+        },
+        {
+          title: 'Eu feugiat laoreet si usitas',
+          url: '#',
+          link_classes:['test-sub-link-class'],
+          items: [
+            {
+              title: 'Haero jus pala patria',
+              url: '#'
+            },
+            {
+              title: 'Proprius turpis valde wisi',
+              url: '#',
+              item_classes: ['test-sub-item-class-level-2']
+            },
+            {
+              title: 'Eu feugiat laoreet si usitas',
+              url: '#',
+              link_other_classes: 'test-sub-link-class-level-2'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      title: 'Dapibus ac facilisis in',
+      url: '#',
+      item_other_classes: 'test-item-class',
+      items: [
+        {
+          title: 'Haero jus pala patria',
+          url: '#'
+        },
+        {
+          title: 'Proprius turpis valde wisi',
+          url: '#',
+          item_classes: ['test-sub-item-class-level-2']
+        },
+        {
+          title: 'Eu feugiat laoreet si usitas',
+          url: '#',
+          link_other_classes: 'test-sub-link-class-level-2'
+        }
+      ]
+    },
+    {
+      title: 'Morbi leo risus',
+      url: '#',
+      link_other_classes: 'test-link-class',
+      items: [
+        {
+          title: 'Haero jus pala patria',
+          url: '#'
+        },
+        {
+          title: 'Proprius turpis valde wisi',
+          url: '#',
+          item_classes: ['test-sub-item-class-level-2']
+        },
+        {
+          title: 'Eu feugiat laoreet si usitas',
+          url: '#',
+          link_other_classes: 'test-sub-link-class-level-2'
+        }
+      ]
+    }
+  ]
+} %}

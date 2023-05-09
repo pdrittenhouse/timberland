@@ -1,0 +1,78 @@
+{% include '@atoms/button/_button.tpl.twig' with {
+  button_color: 'primary',
+  button_text: 'Button',
+  button_other_classes: '',
+} %}
+
+{% include '@atoms/button/_button.tpl.twig' with {
+  button_color: 'secondary',
+  button_text: 'Secondary',
+  button_other_classes: '',
+} %}
+
+{% include '@atoms/button/_button.tpl.twig' with {
+  button_color: 'success',
+  button_text: 'Success',
+  button_other_classes: '',
+} %}
+
+{% include '@atoms/button/_button.tpl.twig' with {
+  button_color: 'danger',
+  button_text: 'Danger',
+  button_other_classes: '',
+} %}
+
+{% include '@atoms/button/_button.tpl.twig' with {
+  button_color: 'warning',
+  button_text: 'Warning',
+  button_other_classes: '',
+} %}
+
+{% include '@atoms/button/_button.tpl.twig' with {
+  button_color: 'info',
+  button_text: 'Info',
+  button_other_classes: '',
+} %}
+
+{% include '@atoms/button/_button.tpl.twig' with {
+  button_color: 'lignt',
+  button_text: 'Light',
+  button_other_classes: '',
+} %}
+
+{% include '@atoms/button/_button.tpl.twig' with {
+  button_color: 'dark',
+  button_text: 'Dark',
+  button_other_classes: '',
+} %}
+
+{% include '@atoms/button/_button.tpl.twig' with {
+  button_element: 'a',
+  button_color: 'link',
+  button_text: 'Link',
+  button_other_classes: '',
+} %}
+
+{% include '@atoms/button/_button.tpl.twig' with {
+  button_color: 'primary',
+  button_text: 'Tooltip',
+  nowrap: true,
+  button_other_classes: '',
+  nowrap: true,
+  contextual_content: 'tooltip',
+  title: '<em>Tooltip</em> <u>with</u> <b>HTML</b>',
+  context_placement: 'right'
+} %}
+
+  {% include '@atoms/button/_button.tpl.twig' with {
+    button_color: 'primary',
+    button_text: 'Popover',
+    nowrap: true,
+    button_other_classes: '',
+    nowrap: true,
+    contextual_content: 'popover',
+    title: 'Popover title',
+    popover_content: 'And here\'s some amazing content. It\'s very engaging. Right?',
+    context_placement: 'bottom',
+    context_container: 'body'
+  } %}

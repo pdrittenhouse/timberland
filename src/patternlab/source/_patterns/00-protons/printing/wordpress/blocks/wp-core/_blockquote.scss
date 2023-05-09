@@ -1,0 +1,71 @@
+.wp-block-quote {
+  background-color: var(--octonary);
+  padding: rem-calc(30px 40px 30px 20px);
+  margin: rem-calc(40px 0);
+  clear: both;
+
+  @include media-breakpoint-up(xl) {
+    padding: rem-calc(60px 100px);
+  }
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  > p {
+    color: var(--primary);
+    border-left: rem-calc(11px) solid var(--secondary);
+    padding-left: rem-calc(10px);
+
+
+
+    .post-type-post .article-body &,
+    .post-type-page .article-body &,
+    .post-type-issue .article-body & {
+      @include font($font-stack-alternate, bold);
+      @include fontSize(24px, 32px);
+
+      @include media-breakpoint-between(md, xl) {
+        @include fontSize(32px, 40px);
+      }
+
+      @include media-breakpoint-up(xxl) {
+        @include fontSize(46px, 54px);
+      }
+    }
+
+    &:before {
+      content: "\0201C";
+    }
+
+    &:after {
+      content: "\0201D";
+    }
+  }
+
+  cite {
+    @include font($font-stack-alternate, 500, normal);
+    @include fontSize(18px, 18px);
+    color: var(--primary);
+    text-align: right;
+    display: block;
+
+    @include media-breakpoint-between(md, xl) {
+      @include fontSize(24px, 24px);
+    }
+
+    @include media-breakpoint-up(xxl) {
+      @include fontSize(28px, 28px);
+    }
+
+    &:before {
+      content: "\02010";
+      margin-right: rem-calc(4px);
+    }
+  }
+
+}

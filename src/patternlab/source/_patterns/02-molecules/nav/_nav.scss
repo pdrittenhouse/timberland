@@ -1,0 +1,115 @@
+// Custom styles for nav
+
+// The non-printing variables, functions, and mixins of 00-protons/variables
+// are provided to this file via:
+//   webpack.config.js: sass-loader.data|includePaths
+
+.navbar-nav {
+
+  // Hoverable Dropdown Menus
+  &.dropdown-hover {
+
+    .dropdown {
+
+      > .dropdown-toggle {
+        position: relative;
+
+        &:after {
+          content: none;
+        }
+      }
+
+      .item-label {
+        vertical-align: middle;
+      }
+
+      .caret {
+        min-width: rem-calc(15px);
+        min-height: rem-calc(7px);
+        z-index: z(site-nav);
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        text-align: center;
+
+        &:after {
+          @include absolute-center(true, true, true);
+          display: inline-block;
+          content: "";
+          border-top: rem-calc(5px) solid;
+          border-right: rem-calc(5px) solid transparent;
+          border-bottom: 0;
+          border-left: rem-calc(5px) solid transparent;
+        }
+      }
+
+      > .dropdown-menu {
+        //display: none;
+        opacity: 0;
+        max-height: 0;
+        transition-property: max-height, opacity;
+        transition-duration: $transition-duration;
+        transition-timing-function: $transition-timing-function;
+        transform: none;
+        top: auto;
+        left: auto;
+        will-change: max-height, opacity;
+        overflow: visible;
+        margin: 0;
+        padding: 0;
+        border: none;
+      }
+
+      //MULTILEVEL MENU SUPPORT
+      .dropdown-item {
+
+        &:active {
+          color: inherit;
+          background-color: inherit;
+        }
+
+        .dropdown-submenu {
+          padding: 0;
+          min-width: 10rem;
+          display: none;
+          position: relative;
+          top: auto;
+          left: auto;
+        }
+      }
+    }
+  }
+
+}
+
+.nav {
+  width: 100%;
+
+  &-item {}
+
+  &-link {
+    @include font($font-stack-navs, bold);
+
+    &:hover {}
+  }
+
+  .item-label {}
+
+  .dropdown-toggle {
+
+    &:after {}
+  }
+
+  .dropdown-menu {}
+
+  .dropdown-item {
+
+    .nav-link {
+
+      &:hover {}
+    }
+
+    .item-label {}
+  }
+
+}

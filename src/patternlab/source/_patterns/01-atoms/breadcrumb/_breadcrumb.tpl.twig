@@ -1,0 +1,34 @@
+{#
+/**
+ * @file Breadcumb!
+ * Documenting Breadcrumb Examples from Bootstrap.
+ *
+ * Available variables:
+ * - breadcrumb_items: [array] A list of breadcrumbs to render
+ * - breadcrumb_divider: [string] A divider to separate each item
+ * - breadcrumb_title: [string] The title of the breadcrumb
+ * - breadcrumb_link: [string] The URL of the breadcrumb
+ *
+ * @see https://www.w3.org/TR/wai-aria-practices/#breadcrumb
+ * @see https://getbootstrap.com/docs/4.0/components/breadcrumb/
+ */
+#}
+
+{% set breadcrumb_classes = breadcrumb_classes|default([])|merge([
+  'breadcrumb',
+  breadcrumb_other_classes,
+]) | sort | join(' ') | trim %}
+
+
+<nav {{ breadcrumb_divider ? 'style="--bs-breadcrumb-divider: \'' ~ breadcrumb_divider ~ '\';"' }} aria-label="breadcrumb" role="navigation">
+  <ol class="{{ breadcrumb_classes }}">
+    {% for item in breadcrumb %}
+      {% if loop.last %}
+        <li class="breadcrumb-item active is-active" aria-current="page">{{ item.text }}</li>
+      {% else %}
+        <li class="breadcrumb-item"><a href="{{ (pl) ? '#' : item.url }}">{{ item.text }}</a></li>
+      {% endif %}
+    {% endfor %}
+  </ol>
+</nav>
+

@@ -1,0 +1,63 @@
+{#
+/**
+ * @file
+ * form
+ *
+ * Available variables for form:
+ *  - name [string]: Specifies the name of a form
+ *  - charset [string]: Specifies the character encodings that are to be used for the form submission
+ *  - action [string]: Specifies where to send the form-data when a form is submitted
+ *  - autocomplete [bool]: Specifies whether a form should have autocomplete on or off
+ *  - method [string: get | post]: Specifies the HTTP method to use when sending form-data
+ *  - enctype [string: application/x-www-form-urlencoded | multipart/form-data | text/plain]: Specifies how the form-data should be encoded when submitting it to the server (only for method="post")
+ *  - novalidate [bool]: Specifies that the form should not be validated when submitted
+ *  - target [string: _blank | _self | _parent | _top]: Specifies where to display the response that is received after submitting the form
+ *  - heading [string]: A heading for the form
+ *
+ */
+#}
+
+{% set form_classes = form_classes|default([])|merge([
+  'form',
+  form_other_classes
+]) | sort | join(' ') | trim %}
+
+<form class="{{ form_classes }}"
+  {{ name ? 'name="' ~ name ~ '"' : '' }}
+  {{ id ? 'name="' ~ id ~ '"' : '' }}
+  {{ charset ? 'accept-charset="' ~ charset ~ '"' : '' }}
+  {{ action ? 'action="' ~ action ~ '"' : '' }}
+  {{ autocomplete == true ? 'autocomplete="on"' : 'autocomplete="off"' }}
+  {{ method ? 'method="' ~ method ~ '"' : '' }}
+  {{ enctype and method == 'post' ? 'enctype="' ~ enctype ~ '"' : '' }}
+  {{ novalidate == true ? 'novalidate="novalidate"' : '' }}
+  {{ target ? 'target="' ~ target ~ '"' : '' }}
+  {{ attributes }}
+>
+
+  {% block form_header %}
+    {% if heading or intro %}
+      <header>
+        {% if heading %}
+          <h1 class="form-title">{{ heading }}</h1>
+        {% endif %}
+        {% if intro %}
+          <div class="form-intro">{{ intro }}</div>
+        {% endif %}
+      </header>
+    {% endif %}
+  {% endblock %}
+
+  {% block form_content %}
+    {{ content }}
+  {% endblock %}
+
+  {% block form_footer %}
+    {% if footer %}
+      <footer>
+        {{ footer }}
+      </footer>
+    {% endif %}
+  {% endblock %}
+
+</form>

@@ -1,0 +1,380 @@
+{#
+/**
+ * @file
+ * video
+ *
+ * Available variables for video:
+ * - id [string]: Video ID
+ * - title [string]: Video title
+ * - format [string]: format of video ('youtube', 'vimeo' or null)
+ * - source [string]: URL for video
+ * - ogg_source [string]: URL for OGG video
+ * - webm_source [string]: URL for WEBM video
+ * - flv_src [string]: URL for FLV
+ * - 3gp_src: URL for 3gp video
+ * - autoplay [bool]: Autoplay video (YouTube)
+ * - loop [bool]: Loop video (YouTube)
+ * - muted [bool]: mute video ('youtube' or null)
+ * - playsinline [bool]: Play video inline.
+ * - fullscreen [bool]: Allow fullscreen
+ * - controls [bool]: Show controls
+ * - info [bool]: Show video info (YouTube)
+ * - aspect_ratio [string]: Set to 'wide' for 16:9 aspect ratio, otherwise defaults to 4:3
+ * - width: Set width of video container
+ * - poster: Poster image
+ * - related [bool]: Only show channels related videos
+ * - suggested [bool]: Show/hide suggested videos
+ * - color [string]: Color of player controls. Valid YouTube parameter values are 'red' and 'white'. Vimeo allow hex values, ex: '00adef'.
+ * - closed_captions [bool]: Show/hide closed captions
+ * - cc_src [string]: Soruce of captions file
+ * - cc_label [string | default: 'English' ]: Captions label
+ * - cc_lang [string | default: 'en-us' ]: Captions label
+ * - cc_default [bool]: Enable captions by default
+ * - background [bool]: Background video
+ * - disable_keyboard [bool]: Disable keyboard controls
+ * - preload [string: 'none', 'auto', 'meta']: Preload video
+ * - modestbranding [bool]: Disable YouTube branding
+ * - annotations [bool]: Show video annotations
+ * - playlist [string]: Comma-separated list of video IDs to play
+ * - list [string]: YouTube playlist ID
+ * - list_type [string: 'playlist', 'user_uploads']: Playlist type
+ * - origin [string]: Site domain
+ * - quality [string: 'auto', '240p', '360p', '540p', '720p', '1080p', '2k', '4k']: Vimeo video quality
+ * - byline [bool]: Show the author of the video
+ * - dnt [bool]: Disable tracking
+ * - portrait [bool]: Show the author’s profile image
+ * - speed [bool]: Show speed controls in the preference menu of the player
+ * - title [bool]: Show the video’s title
+ * - transparent [bool]: Enable/disable player transparencies
+ *
+ */
+#}
+
+{# TODO: Add custom html video controls #}
+{# @link: https://blog.teamtreehouse.com/building-custom-controls-for-html5-videos #}
+
+{% set video_classes = video_classes|default([])|merge([
+  'video',
+  format ? 'video-format--' ~ format : '',
+  aspect_ratio == 'wide' ? aspect_ratio : aspect_ratio ? 'aspect-ratio--' ~ aspect_ratio,
+  controls ? 'has-controls' : '',
+  format == 'youtube' and suggested != true ? 'hide-suggested',
+  video_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% if width is not empty %}
+  {% set width = width %}
+{% else %}
+  {% set width = 'auto' %}
+{% endif %}
+
+{% set video_styles = video_styles|default([])|merge([
+  width ? 'width:' ~ width ~ ';',
+  video_other_styles,
+]) | sort | join(' ') | trim %}
+
+{% set video_attributes = video_attributes|default([])|merge([
+  id ? 'id="' ~ id ~ '"',
+  video_classes ? 'class="' ~ video_classes ~ '"',
+  video_styles ? 'style="' ~ video_styles ~ '"',
+  format == 'youtube' and source ? 'data-yt-id="' ~ source | split('/') | last | trim('watch?v=') ~ '"',
+  video_other_attributes,
+]) | sort | join(' ') | trim %}
+
+{% if format == 'youtube' %}
+  {% set yt_id = source | split('?v=') %}
+  {% if yt_id[1] == true %}
+    {% set source = 'https://www.youtube.com/embed/' ~ yt_id[1] %}
+  {% endif %}
+{% endif %}
+
+<div {{ video_attributes }}>
+  {% block video_title %}
+    {% if title %}
+      <h2 class="video-title">{{ title }}</h2>
+    {% endif %}
+  {% endblock video_title %}
+  <div class="video-responsive">
+
+    {% if format == 'youtube' or format == 'vimeo' or format == 'iframe' %}
+
+      {% if autoplay == true %}
+        {% set autoplay = '&autoplay=1' %}
+        {% set allow_autoplay = 'autoplay;' %}
+      {% endif %}
+
+      {% if loop == true %}
+        {% set loop = '&loop=1' %}
+      {% else %}
+        {% set loop = '&loop=0' %}
+      {% endif %}
+
+      {% if fullscreen == true %}
+        {% set fullscreen = 'webkitallowfullscreen mozallowfullscreen allowfullscreen' %}
+        {% set allow_fullscreen = 'fullscreen;' %}
+        {% set fs = '&fs=1' %}
+      {% else %}
+        {% set fullscreen = '0' %}
+        {% set fs = '&fs=0' %}
+      {% endif %}
+
+      {% if controls == true %}
+        {% set controls = '&controls=1' %}
+      {% else %}
+        {% set controls = '&controls=0' %}
+      {% endif %}
+
+      {% if muted == true %}
+        {% set muted = '&mute=1' %}
+      {% else %}
+        {% set muted = '&mute=0' %}
+      {% endif %}
+
+      {% if playsinline == true %}
+        {% set playsinline = '&playsinline=1' %}
+      {% else %}
+        {% set playsinline = '&playsinline=0' %}
+      {% endif %}
+
+      {% if ((color == 'red' or color == 'white') and format == 'youtube') or (color and format == 'vimeo') %}
+        {% set color = '&color=' ~ color %}
+      {% else %}
+        {% set color = '' %}
+      {% endif %}
+
+      {% if closed_captions == true %}
+        {% if format == 'youtube' %}
+          {% set cc = '&cc_load_policy=1' %}
+          {% if cc_lang %}
+            {% set cc_lang = '&cc_lang_pref=' ~ cc_lang %}
+            {% set hl = '&hl=' ~ cc_lang %}
+          {% endif %}
+        {% endif %}
+        {% if format == 'vimeo' %}
+          {% if cc_lang %}
+            {% set cc = '&texttrack=' ~ cc_lang %}
+          {% else %}
+            {% set cc = '&texttrack=en-x-autogen' %}
+          {% endif %}
+        {% endif %}
+      {% else %}
+        {% set cc = '' %}
+        {% set cc_lang = '' %}
+      {% endif %}
+
+      {% if disable_keyboard == true %}
+        {% set disablekb = '&disablekb=1' %}
+        {% set keyboard = '&keyboard=0' %}
+      {% else %}
+        {% set disablekb = '&disablekb=0' %}
+        {% set keyboard = '&keyboard=1' %}
+      {% endif %}
+
+      {% if start %}
+        {% if format == 'youtube' %}
+          {% set start = '&start=' ~ start %}
+          {% set time = '&#t=' ~ start ~ 's' %}
+        {% endif %}
+        {% if format == 'vimeo' %}
+          {% set time = '&#t=' ~ start ~ 's' %}
+        {% endif %}
+      {% else %}
+        {% set start = '' %}
+      {% endif %}
+
+      {% if end and format == 'youtube' %}
+        {% set end = '&end=' ~ end %}
+      {% else %}
+        {% set end = '' %}
+      {% endif %}
+
+      {% if info == true and format == 'youtube' %}
+        {% set info = '&showinfo=1' %}
+      {% elseif format == 'youtube' %}
+        {% set info = '&showinfo=0' %}
+      {% else %}
+        {% set info = '' %}
+      {% endif %}
+
+      {% if related == true and format == 'youtube' %}
+        {% set related = '&rel=1' %}
+      {% elseif format == 'youtube' %}
+        {% set related = '&rel=0' %}
+      {% else %}
+        {% set related = '' %}
+      {% endif %}
+
+      {% if modestbranding == true %}
+        {% set modestbranding = '&modestbranding=1' %}
+      {% elseif format == 'youtube' %}
+        {% set modestbranding = '&modestbranding=0' %}
+      {% else %}
+        {% set modestbranding = '' %}
+      {% endif %}
+
+      {% if iv_load_policy == true %}
+        {% set iv_load_policy = '&iv_load_policy=1' %}
+      {% elseif format == 'youtube' %}
+        {% set iv_load_policy = '&iv_load_policy=0' %}
+      {% else %}
+        {% set iv_load_policy = '' %}
+      {% endif %}
+
+      {% if playlist and format == 'youtube' %}
+        {% set playlist = '&playlist=' ~ playlist %}
+      {% else %}
+        {% set playlist = '' %}
+      {% endif %}
+
+      {% if list and format == 'youtube' %}
+        {% set list = '&list=' ~ list %}
+      {% else %}
+        {% set list = '' %}
+      {% endif %}
+
+      {% if (list_type == 'playlist' or list_type == 'user_uploads') and format == 'youtube' %}
+        {% set list_type = '&listType=' ~ list_type %}
+      {% else %}
+        {% set list_type = '' %}
+      {% endif %}
+
+      {% if origin and format == 'youtube' %}
+        {% set origin = '&origin=' ~ origin %}
+      {% else %}
+        {% set origin = '' %}
+      {% endif %}
+
+      {% if format == 'vimeo' %}
+        {% set autopause = '&autopause=1' %}
+      {% else %}
+        {% set autopause = '' %}
+      {% endif %}
+
+      {% if background == true %}
+        {% set background = '&background=1' %}
+      {% elseif format == 'vimeo' %}
+        {% set background = '&background=0' %}
+      {% else %}
+        {% set background = '' %}
+      {% endif %}
+
+      {% if quality == '240p' or quality == '360p' or quality == '540p' or quality == '720p' or quality == '1080p' or quality == '2k' or quality == '4k' %}
+        {% set quality = '&quality=' ~ quality %}
+      {% elseif format == 'vimeo' %}
+        {% set quality = '&quality=auto' %}
+      {% else %}
+        {% set quality = '' %}
+      {% endif %}
+
+      {% if byline == true %}
+        {% set byline = '&byline=1' %}
+      {% elseif format == 'vimeo' %}
+        {% set byline = '&byline=0' %}
+      {% else %}
+        {% set byline = '' %}
+      {% endif %}
+
+      {% if dnt == true %}
+        {% set dnt = '&dnt=1' %}
+      {% elseif format == 'vimeo' %}
+        {% set dnt = '&dnt=0' %}
+      {% else %}
+        {% set dnt = '' %}
+      {% endif %}
+
+      {% if portrait == true %}
+        {% set portrait = '&portrait=1' %}
+      {% elseif format == 'vimeo' %}
+        {% set portrait = '&portrait=0' %}
+      {% else %}
+        {% set portrait = '' %}
+      {% endif %}
+
+      {% if speed == true %}
+        {% set speed = '&speed=1' %}
+      {% elseif format == 'vimeo' %}
+        {% set speed = '&speed=0' %}
+      {% else %}
+        {% set speed = '' %}
+      {% endif %}
+
+      {% if video_title == true %}
+        {% set video_title = '&title=1' %}
+      {% elseif format == 'vimeo' %}
+        {% set video_title = '&title=0' %}
+      {% else %}
+        {% set video_title = '' %}
+      {% endif %}
+
+      {% if transparent == true %}
+        {% set transparent = '&transparent=1' %}
+      {% elseif format == 'vimeo' %}
+        {% set transparent = '&transparent=0' %}
+      {% else %}
+        {% set transparent = '' %}
+      {% endif %}
+
+      <iframe width="100%" height="100%" src="{{ source }}?enablejsapi=1&version=3{{ related }}{{ autoplay }}{{ controls }}{{ info }}{{ loop }}{{ muted }}{{ fs }}{{ cc }}{{ cc_lang }}{{ hl }}{{ modestbranding }}{{ iv_load_policy }}{{ playlist }}{{ list }}{{ list_type }}{{ origin }}{{ background }}{{ autopause }}{{ color }}{{ quality }}{{ byline }}{{ dnt }}{{ portrait }}{{ speed }}{{ video_title }}{{ transparent }}{{ start }}{{ end }}{{ time }}" frameborder="0" allow="accelerometer; {{ allow_autoplay }} encrypted-media; gyroscope; picture-in-picture; {{ allow_fullscreen }}" {{ fullscreen }}></iframe>
+
+    {% else %}
+
+      {% if controls == true %}
+        {% set controls = 'controls="controls"' %}
+      {% endif %}
+
+      {% if autoplay == true %}
+        {% set autoplay = 'autoplay="autoplay"' %}
+      {% endif %}
+
+      {% if loop == true %}
+        {% set loop = 'loop="loop"' %}
+      {% endif %}
+
+      {% if muted == true %}
+        {% set muted = 'muted="muted"' %}
+      {% endif %}
+
+      {% if playsinline == true %}
+        {% set playsinline = 'playsinline="playsinline"' %}
+      {% endif %}
+
+      {% if poster %}
+        {% set poster = 'poster="' ~ poster ~ '"' %}
+      {% endif %}
+
+      {% if preload == 'auto' or preload == 'none' or preload == 'meta' %}
+        {% set preload = 'preload="' ~ preload ~ '"' %}
+      {% endif %}
+
+      {% if start or end %}
+        {% set time = '#t=' ~ start ~ ',' ~ end %}
+      {% endif %}
+
+      <video width="100%" height="100%" {{ controls }} {{ autoplay }} {{ loop }} {{ muted }} {{ playsinline }} {{ poster }} {{ preload }}>
+        <source src="{{ source }}{{ time }}" type="video/mp4" />
+        {% if ogg_source is not empty%}
+          <source src="{{ ogg_source }}{{ time }}" type="video/ogg" />
+        {% endif %}
+        {% if webm_source is not empty%}
+          <source src="{{ webm_source }}{{ time }}" type="video/webm" />
+        {% endif %}
+        {% if threegp_source is not empty%}
+          <source src="{{ threegp_source }}{{ time }}" type="video/3gp">
+        {% endif %}
+        <object data="{{ source }}{{ time }}" width="100%" height="100%">
+          {% if flv_source is not empty%}
+            <embed src="{{ flv_source }}{{ time }}" width="100%" height="100%">
+            Your browser does not support video
+            </embed>
+          {% endif %}
+        </object>
+        {% if closed_captions == true %}
+          <track src="{{ cc_src }}" {{ cc_label ? 'label="' ~ cc_label | default('English') ~ '"' }} kind="captions" {{ cc_lang ? 'srclang="' ~ cc_lang | default('en-us') ~ '"' }} {{ cc_default ? 'default' }} >
+        {% endif %}
+      </video>
+
+    {% endif %}
+
+  </div>
+</div>
+

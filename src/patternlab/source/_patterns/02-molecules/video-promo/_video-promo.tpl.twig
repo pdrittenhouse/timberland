@@ -1,0 +1,150 @@
+{#
+/**
+ * @file
+ * video promo
+ *
+ * Available variables for video promo:
+ *  - video_promo_classes [array]: Additional component classes.
+ *  - video_promo_other_classes [string]: Additional component classes.
+ *  - video_promo_attributes [array]: Additional component attributes.
+ *  - video_promo_other_attributes [string]: Additional component attributes.
+ *  - video_promo_bg_color
+ *  - video_promo_title
+ *  - video_promo_title_color
+ *  - video_promo_subtitle
+ *  - video_promo_subtitle_color
+ *  - video_promo_intro
+ *  - video_promo_intro_color
+ *  - video_promo_video
+ *  - video_promo_video_format
+ *  - video_promo_poster
+ *  - video_promo_ctas
+ *  -
+ *  -
+ *  -
+ *  -
+ *  -
+ *  -
+ *  -
+ */
+#}
+
+{% set video_promo_classes = video_promo_classes|default([])|merge([
+  'video-promo',
+  video_promo_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set video_promo_attributes = video_promo_attributes|default([])|merge([
+  video_promo_other_attributes,
+]) | sort | join(' ') | trim %}
+
+<div class="{{ video_promo_classes }}" {{ video_promo_attributes }}>
+  {% if video_promo_title or video_promo_subtitle or video_promo_intro %}
+    <div class="video-promo--header {{ video_promo_bg_color ? 'bg-' ~ video_promo_bg_color }}">
+      <div class="video-promo--container">
+        <div class="video-promo--row">
+          <div class="video-promo--content">
+            {% if video_promo_title %}
+              <h2 class="video-promo--title {{ video_promo_title_color ? 'text-' ~ video_promo_title_color }}">{{ video_promo_title }}</h2>
+            {% endif %}
+            {% if video_promo_subtitle %}
+              <h3 class="video-promo--subtitle {{ video_promo_subtitle_color ? 'text-' ~ video_promo_subtitle_color }}">{{ video_promo_subtitle }}</h3>
+            {% endif %}
+            {% if video_promo_intro %}
+              <div class="video-promo--intro {{ video_promo_intro_color ? 'text-' ~ video_promo_intro_color }}">
+                {{ video_promo_intro }}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if video_promo_video or video_promo_ctas %}
+    <div class="video-promo--body {{ video_promo_bg_color ? 'bg-' ~ video_promo_bg_color }}">
+      {% if video_promo_video  %}
+        <div class="video-promo--content">
+          <div class="video-promo--video">
+            {% if video_promo_video_format == false %}
+              {% embed '@atoms/button/_button.tpl.twig' with {
+                button_color: 'link',
+                button_text: '',
+                button_other_classes: 'video-promo--play'
+              } %}
+                {% block right %}
+                  {% include '@atoms/svg/_svg~icon.tpl.twig' with {
+                    width: '30px',
+                    height: '30px',
+                    name: 'play',
+                    fill: '#fff'
+                  } %}
+                {% endblock right %}
+              {% endembed %}
+            {% endif %}
+            {% include '@atoms/video/_video.tpl.twig' with {
+              format: video_promo_video_format,
+              source: video_promo_video,
+              autoplay: video_promo_autoplay,
+              loop: video_promo_loop,
+              fullscreen: video_promo_fullscreen,
+              controls: video_promo_controls,
+              info: video_promo_info,
+              muted: video_promo_muted,
+              playsinline: video_promo_playsinline,
+              aspect_ratio: 'wide',
+              width: '',
+              poster: video_promo_poster
+            } %}
+          </div>
+        </div>
+      {% endif %}
+      {% if video_promo_ctas  %}
+        <div class="video-promo--content">
+          <div class="video-promo--promos">
+            {% for cta in video_promo_ctas %}
+              {% embed '@atoms/button/_button.tpl.twig' with {
+                button_classes: cta.button_classes,
+                button_other_classes: cta.button_other_classes,
+                button_element: cta.button_element,
+                button_type: cta.button_type,
+                button_outline: cta.button_outline,
+                buttonless_dropdown: cta.buttonless_dropdown,
+                button_color: cta.button_color,
+                button_size: cta.button_size,
+                button_block: cta.button_block,
+                button_active: cta.button_active,
+                button_toggle: cta.button_toggle,
+                button_link: cta.button_link,
+                button_value: cta.button_value,
+                button_id: cta.button_id,
+                button_disabled: cta.button_disabled,
+                button_attributes: cta.button_attributes,
+                button_other_attributes: cta.button_other_attributes,
+                button_text: cta.button_text,
+                button_target: cta.button_target,
+                button_expanded: cta.button_expanded,
+                button_controls: cta.button_controls,
+                nowrap: cta.nowrap,
+                contextual_content: cta.contextual_content,
+                title: cta.title,
+                popover_content: cta.popover_content,
+                context_placement: cta.context_placement,
+                context_container: cta.context_container
+              } %}
+                {% block right %}
+                  {% include '@atoms/svg/_svg~icon.tpl.twig' with {
+                    width: '30px',
+                    height: '30px',
+                    name: 'arrow-right',
+                    fill: '#fff'
+                  } %}
+                {% endblock right %}
+              {% endembed %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+

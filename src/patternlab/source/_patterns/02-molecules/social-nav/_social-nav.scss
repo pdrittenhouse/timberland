@@ -1,0 +1,157 @@
+// Custom styles for social nav
+
+// The non-printing variables, functions, and mixins of 00-protons/variables
+// are provided to this file via:
+//   webpack.config.js: sass-loader.data|includePaths
+
+.social-nav {
+  padding: var(--social-nav-padding-top) var(--social-nav-padding-right) var(--social-nav-padding-bottom) var(--social-nav-padding-left);
+  margin-top: var(--social-nav-margin-top);
+  margin-bottom: var(--social-nav-margin-bottom);
+  text-align: var(--social-nav-text-align);
+  background-color: var(--social-nav-bg);
+  overflow: visible;
+
+  &-item {
+    text-align: center;
+    transition-property: background-color $transition-duration $transition-timing-function;
+    will-change: background-color;
+    background-color: var(--social-nav-item-bg);
+    width: var(--social-nav-item-width);
+    height: var(--social-nav-item-height);
+    border-radius: var(--social-nav-item-border-radius);
+    border: var(--social-nav-item-border-color) var(--social-nav-item-border-width) var(--social-nav-item-border-style);
+
+    &:hover,
+    &:focus {
+      background-color: var(--social-nav-item-bg-hover);
+      border: var(--social-nav-item-hover-border-color) var(--social-nav-item-hover-border-width) var(--social-nav-item-hover-border-style);
+
+      .icon,
+      .svg--icon,
+      svg {
+        transition-property: color $transition-duration $transition-timing-function;
+        color: var(--social-nav-item-hover);
+      }
+    }
+
+    .icon,
+    .svg--icon,
+    svg {
+      color: var(--social-nav-item);
+      transition: color $transition-duration $transition-timing-function;
+      will-change: color;
+    }
+
+    &.facebook {}
+
+    &.twitter {}
+
+    &.linked-in {}
+
+    &.youtube {}
+
+    &.instagram {}
+  }
+
+  &.bullet-icons--before,
+  &.bullet-icons--after {
+    display: block;
+    text-align: left;
+    padding: 0;
+    width: 100%;
+
+    > .social-nav-item {
+      >.icon,
+      >.svg--icon {
+        @include absolute-center(true, false, true);
+        right: auto;
+      }
+    }
+  }
+
+  .icon,
+  .svg--icon {
+    pointer-events: none;
+  }
+
+  &-link {
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: rem-calc(.625px);
+    font-weight: bold;
+    position: relative;
+    color: var(--social-nav-item);
+    min-height: 100%;
+
+    &:hover {
+      text-decoration: none;
+      color: var(--social-nav-item-hover);
+    }
+  }
+
+  .label {}
+
+  &.hide-labels {
+
+    .social-nav-item {
+      position: relative;
+    }
+
+    .label {
+      @include remove;
+    }
+
+    &.bullet-icons--before,
+    &.bullet-icons--after {
+
+      > .social-nav-item {
+        >.icon,
+        >.svg--icon {
+          @include absolute-center(true, true, true);
+        }
+      }
+    }
+  }
+
+  &.hide-icons {
+
+    >.social-nav-item {
+
+      > .icon,
+      .icon,
+      > .svg,
+      .svg,
+      > .svg--icon,
+      .svg--icon {
+        @include remove;
+      }
+    }
+
+    .social-nav-link {
+      padding-top: 0;
+    }
+  }
+
+  &.nav-direction-horizontal {
+    @include flexbox;
+    @include flex-flow(row nowrap);
+    @include justify-content(var(--social-nav-flex-align));
+
+    .social-nav-item {
+      @include flex(0 0 auto);
+      display: inline-block;
+      margin: 0 calc(var(--social-nav-item-spacing) * .5);
+      vertical-align: middle;
+    }
+  }
+
+  &.nav-direction-vertical {
+
+    .social-nav-item {
+      margin-bottom: var(--social-nav-item-spacing);
+    }
+  }
+
+}
+

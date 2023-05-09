@@ -1,0 +1,44 @@
+{% include '@atoms/svg/_svg.tpl.twig' with {
+  svg_other_classes: 'test-svg-class',
+  path: paths.assets ~ '/img/logo.svg',
+  colorOriginal: true
+} %}
+
+{% include '@atoms/svg/_svg~link.tpl.twig' with {
+  url: '#',
+  target: '_self',
+  text: 'Some link text here',
+  type: 'picture',
+  path: paths.assets ~ '/img/logo.svg',
+  position: 'after',
+  colorOriginal: true,
+  fallback: paths.assets ~ '/img/logo.png',
+  alt: 'Some alt text',
+  svg_other_classes: 'test-svg-class',
+} %}
+
+{% include '@atoms/svg/_svg~link.tpl.twig' with {
+  url: '#',
+  target: '_blank',
+  text: 'Some link text here',
+  position: 'before',
+  width: '30px',
+  height: '30px',
+  icon: 'fas fa-bars',
+  fill: '#ff000',
+  svg_other_classes: 'test-svg-class',
+} %}
+
+{% include '@atoms/svg/_svg~icon.tpl.twig' with {
+  svg_other_classes: 'test-svg-class',
+  width: '30px',
+  height: '30px',
+  name: 'close',
+  fill: '#ff000'
+} %}
+
+<span class="test-icon"></span>
+
+<i class="far fa-grin-beam"></i>
+
+<i class="fal fa-acorn"></i>

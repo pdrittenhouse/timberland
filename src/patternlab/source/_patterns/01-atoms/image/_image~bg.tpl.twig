@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * image~bg
+ *   Implements background images.
+ *
+ * Available variables for image:
+ *  - Inherit variables from @atoms/image/_image.tpl.twig
+ */
+#}
+
+{% if width %}
+  {% set width = 'width: ' ~ width ~ ';' %}
+{% endif %}
+
+{% if height %}
+  {% set height = 'height: ' ~ height ~ ';' %}
+{% endif %}
+
+<div style="background-image: url('{{ src }}'); {{ width }} {{ height }}" class="{{ image_classes }}" aria-label="[{{ alt }}]"></div>

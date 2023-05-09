@@ -1,0 +1,72 @@
+.wp-block-query {
+
+  &.is-layout-flow {}
+}
+
+.wp-block-post-template {
+
+  &.is-layout-flow {}
+
+  // Grid
+  &.is-flex-container {}
+
+  &.columns-3 {}
+
+  // Card
+  &.card-query {
+
+    .card {
+      margin-bottom: rem-calc(30px);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    // Card Grid
+    &.is-flex-container {
+      gap: 0;
+
+      &.is-layout-flow  {
+        @include align-items(stretch);
+      }
+
+      .post {
+        @include flexbox;
+        @include flex-flow(column nowrap);
+      }
+
+      .card {
+        @include flex(1 1 100%);
+        margin-bottom: 0;
+      }
+    }
+
+    &.columns-2 {
+      @include flex-grid ($columns: 2, $gutter: 30px, $card:'.post');
+    }
+
+    &.columns-3 {
+      @include flex-grid ($columns: 3, $gutter: 30px, $card:'.post');
+    }
+
+    &.columns-4 {
+      @include flex-grid ($columns: 4, $gutter: 30px, $card:'.post');
+    }
+
+    &.columns-5 {
+      @include flex-grid ($columns: 5, $gutter: 30px, $card:'.post');
+    }
+
+    &.columns-6 {
+      @include flex-grid ($columns: 6, $gutter: 30px, $card:'.post');
+    }
+  }
+
+  .post {}
+}
+
+.wp-block-query-pagination {
+
+  &.is-layout-flex {}
+}

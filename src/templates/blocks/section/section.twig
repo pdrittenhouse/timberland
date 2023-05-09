@@ -1,0 +1,111 @@
+{#
+/**
+ * Block Name: Section
+ *
+ * This is the template that displays the section block.
+ */
+#}
+
+{% if is_preview %}
+  {# <p>Some editor instructions here.</p> #}
+{% endif %}
+
+{# Vertical Alignment #}
+{% if fields.vertical_alignment['vert_align'] %}
+  {% set vertical_alignment = [] %}
+  {% for alignment in fields.vertical_alignment['vert_align'] %}
+    {% if alignment['breakpoint'] %}
+      {% set bp = '-' ~ alignment.breakpoint %}
+    {% else %}
+      {% set bp = '' %}
+    {% endif %}
+    {% if alignment['alignment'] %}
+      {% set valign = '-' ~ alignment.alignment %}
+    {% endif %}
+    {% if valign %}
+      {% set vertical_alignment = vertical_alignment|default([])|merge([
+        'align-items' ~ bp  ~ valign
+      ]) %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% set section_classes = [
+  'block-section',
+  block['className'],
+  fields.section_bg_color['bg_color'] == 'palette' and fields.section_bg_color['bg_theme_color'] ? 'bg-' ~ fields.section_bg_color['bg_theme_color']
+] | sort | join(' ') | trim %}
+
+{# Section Box Shadow#}
+{% set section_box_shadow_color = fields['section_box_shadow']['color']['color'] == 'palette' and fields['section_box_shadow']['color']['theme_color'] ? 'var(--' ~ fields['section_box_shadow']['color']['theme_color'] ~ ')' : fields['section_box_shadow']['color']['color'] == 'custom' and fields['section_box_shadow']['color']['custom_color'] ? fields['section_box_shadow']['color']['custom_color'] %}
+{% set section_box_shadow_inset = fields['section_box_shadow']['inset'] == true ? 'inset' %}
+
+{% set section_styles = [
+  fields.section_bg_color['bg_color'] == 'custom' ? 'background-color:' ~ fields.section_bg_color['bg_custom_color'] ~ ';',
+  fields.margin['top']['auto'] == true ? 'margin-top: auto;' : fields.margin['top']['top'] is not empty ? 'margin-top: ' ~ fields.margin['top']['top'] ~ 'px;',
+  fields.margin['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.margin['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ fields.margin['bottom']['bottom'] ~ 'px;',
+  fields['section_border']['top']['width'] is not empty ? 'border-top-width: ' ~ fields['section_border']['top']['width'] ~ 'px;',
+  fields['section_border']['top']['style'] ? 'border-top-style: ' ~ fields['section_border']['top']['style'] ~ ';',
+  fields['section_border']['top']['color'] == 'custom' and fields['section_border']['top']['custom_color'] ? 'border-top-color: ' ~ fields['section_border']['top']['custom_color'] ~ ';' : fields['section_border']['top']['color'] == 'palette' and fields['section_border']['top']['theme_color'] ? 'border-top-color: var(--' ~ fields['section_border']['top']['theme_color'] ~ ');',
+  fields['section_border']['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ fields['section_border']['bottom']['width'] ~ 'px;',
+  fields['section_border']['bottom']['style'] ? 'border-bottom-style: ' ~ fields['section_border']['bottom']['style'] ~ ';',
+  fields['section_border']['bottom']['color'] == 'custom' and fields['section_border']['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields['section_border']['bottom']['custom_color'] ~ ';' : fields['section_border']['bottom']['color'] == 'palette' and fields['section_border']['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields['section_border']['bottom']['theme_color'] ~ ');',
+  fields['section_border']['left']['width'] is not empty ? 'border-left-width: ' ~ fields['section_border']['left']['width'] ~ 'px;',
+  fields['section_border']['left']['style'] ? 'border-left-style: ' ~ fields['section_border']['left']['style'] ~ ';',
+  fields['section_border']['left']['color'] == 'custom' and fields['section_border']['left']['custom_color'] ? 'border-left-color: ' ~ fields['section_border']['left']['custom_color'] ~ ';' : fields['section_border']['left']['color'] == 'palette' and fields['section_border']['left']['theme_color'] ? 'border-left-color: var(--' ~ fields['section_border']['left']['theme_color'] ~ ');',
+  fields['section_border']['right']['width'] is not empty ? 'border-right-width: ' ~ fields['section_border']['right']['width'] ~ 'px;',
+  fields['section_border']['right']['style'] ? 'border-right-style: ' ~ fields['section_border']['right']['style'] ~ ';',
+  fields['section_border']['right']['color'] == 'custom' and fields['section_border']['right']['custom_color'] ? 'border-right-color: ' ~ fields['section_border']['right']['custom_color'] ~ ';' : fields['section_border']['right']['color'] == 'palette' and fields['section_border']['right']['theme_color'] ? 'border-right-color: var(--' ~ fields['section_border']['right']['theme_color'] ~ ');',
+  fields['section_border_radius']['top_left'] is not empty ? 'border-top-left-radius: ' ~ fields['section_border_radius']['top_left'] ~ 'px;',
+  fields['section_border_radius']['top_right'] is not empty ? 'border-top-right-radius: ' ~ fields['section_border_radius']['top_right'] ~ 'px;',
+  fields['section_border_radius']['bottom_left'] is not empty ? 'border-bottom-left-radius: ' ~ fields['section_border_radius']['bottom_left'] ~ 'px;',
+  fields['section_border_radius']['bottom_right'] is not empty ? 'border-bottom-right-radius: ' ~ fields['section_border_radius']['bottom_right'] ~ 'px;',
+  fields['section_box_shadow']['horizontal_offset'] is not empty or fields['section_box_shadow']['vertical_offset'] is not empty or fields['section_box_shadow']['blur'] is not empty or fields['section_box_shadow']['spread'] is not empty or section_box_shadow_color or section_box_shadow_inset == true ? 'box-shadow: ' ~ fields['section_box_shadow']['horizontal_offset'] ~ 'px ' ~ fields['section_box_shadow']['vertical_offset'] ~ 'px ' ~ fields['section_box_shadow']['blur'] ~ 'px ' ~ fields['section_box_shadow']['spread'] ~ 'px ' ~ section_box_shadow_color ~ ' ' ~ section_box_shadow_inset ~ ';'
+] | sort | join(' ') | trim %}
+
+{% set section_wrapper_classes = [
+  'block-section--wrapper',
+  vertical_alignment|length > 0 ? vertical_alignment|sort|join(' ')|trim
+] | sort | join(' ') | trim %}
+
+{% if options.remove_content_containers != true %}
+  {% set default_padding = 'var(--grid-column-padding)' %}
+{% endif %}
+
+{% set wrapper_styles = [
+  fields.height.height['height']['value'] is not empty ? 'height: ' ~ fields.height.height['height']['value'] ~ fields.height.height['height']['unit'] ~ ';',
+  fields.height.height['min_height'] is not empty ? 'min-height: ' ~ fields.height.height['min_height'] ~ 'px;',
+  fields.height.height['max_height'] is not empty ? 'max-height: ' ~ fields.height.height['max_height'] ~ 'px;',
+  fields.container != true and options.remove_content_containers != true and block_post.custom['remove_content_container'] != true and block_context['acf/fields']['container'] == true and fields.padding['padding']['top'] is not empty ? 'padding-top: ' ~ fields.padding['padding']['top'] ~ 'px;',
+  fields.container != true and options.remove_content_containers != true and block_post.custom['remove_content_container'] != true and block_context['acf/fields']['container'] == true and fields.padding['padding']['bottom'] is not empty ? 'padding-bottom: ' ~ fields.padding['padding']['bottom'] ~ 'px;',
+  fields.container != true and options.remove_content_containers != true and block_post.custom['remove_content_container'] != true and block_context['acf/fields']['container'] == true and fields.padding['padding']['left'] is not empty ? 'padding-left: ' ~ fields.padding['padding']['left'] | default(default_padding) ~ 'px;',
+  fields.container != true and options.remove_content_containers != true and block_post.custom['remove_content_container'] != true and block_context['acf/fields']['container'] == true and fields.padding['padding']['right'] is not empty ? 'padding-right: ' ~ fields.padding['padding']['right'] | default(default_padding) ~ 'px;',
+  fields.col_gap['value'] ? 'column-gap: ' ~ fields.col_gap['value'] ~ fields.col_gap['unit'] ~ ';',
+] | sort | join(' ') | trim %}
+
+{% set container_classes = [
+  fields.full_width == true ? 'container-fluid' : 'container',
+  fields.container_bg_color['bg_color'] == 'palette' and fields.container_bg_color['bg_theme_color'] ? 'bg-' ~ fields.container_bg_color['bg_theme_color']
+] | sort | join(' ') | trim %}
+
+{% set container_styles = [
+  fields.container_bg_color['bg_color'] == 'custom' ? 'background-color:' ~ fields.container_bg_color['bg_custom_color'] ~ ';',
+  fields.container == true and block_context['acf/fields']['container'] != true and (options.remove_content_containers == true or block_post.custom['remove_content_container'] == true) and fields.padding['padding']['top'] is not empty ? 'padding-top: ' ~ fields.padding['padding']['top'] ~ 'px;',
+  fields.container == true and block_context['acf/fields']['container'] != true and (options.remove_content_containers == true or block_post.custom['remove_content_container'] == true) and fields.padding['padding']['bottom'] is not empty ? 'padding-bottom: ' ~ fields.padding['padding']['bottom'] ~ 'px;',
+  fields.container == true and block_context['acf/fields']['container'] != true and (options.remove_content_containers == true or block_post.custom['remove_content_container'] == true) and fields.padding['padding']['left'] is not empty ? 'padding-left: ' ~ fields.padding['padding']['left'] ~ 'px;',
+  fields.container == true and block_context['acf/fields']['container'] != true and (options.remove_content_containers == true or block_post.custom['remove_content_container'] == true) and fields.padding['padding']['right'] is not empty ? 'padding-right: ' ~ fields.padding['padding']['right'] ~ 'px;'
+] | sort | join(' ') | trim %}
+
+<section class="{{ section_classes }}" {{ section_styles ? 'style="' ~ section_styles ~ '"'}} {{ block['anchor'] ? 'id="' ~ block['anchor'] ~ '"' }}>
+  <div class="{{ section_wrapper_classes }}" {{ wrapper_styles ? 'style="' ~ wrapper_styles ~ '"' }}>
+    {% if fields.container == true and block_context['acf/fields']['container'] != true and (options.remove_content_containers == true or block_post.custom['remove_content_container'] == true) %}
+    <div class="{{ container_classes }}" {{ container_styles ? 'style="' ~ container_styles ~ '"' }}>
+      {% endif %}
+
+      <InnerBlocks />
+
+      {% if fields.container == true and block_context['acf/fields']['container'] != true and (options.remove_content_containers == true or block_post.custom['remove_content_container'] == true) %}
+    </div>
+    {% endif %}
+  </div>
+</section>

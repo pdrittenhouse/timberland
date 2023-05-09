@@ -1,0 +1,85 @@
+wp-block-image {
+  @include media-breakpoint-down(md) {
+    text-align: center;
+  }
+  &:not(.is-style-rounded) {
+    img {
+      //height: auto;
+    }
+  }
+  &.is-style-full-width {
+    img {
+      @include cover-image-max();
+    }
+  }
+  &.is-style-full-height {
+    height: 100%;
+    img {
+      @include cover-image-max();
+    }
+  }
+  &.is-style-circle {
+    @include aspect-ratio(1, 1, 'img');
+    border-radius: 50%;
+    overflow: hidden;
+    img {
+      @include cover-image-max();
+    }
+  }
+  &.is-style-ar-1-1 {
+    @include aspect-ratio(1, 1, 'img');
+    overflow: hidden;
+    img {
+      @include cover-image-max();
+    }
+  }
+  &.is-style-ar-2-3 {
+    @include aspect-ratio(2, 3, 'img');
+    overflow: hidden;
+    img {
+      @include cover-image-max();
+    }
+  }
+  &.is-style-ar-3-2 {
+    @include aspect-ratio(3, 2, 'img');
+    overflow: hidden;
+    img {
+      @include cover-image-max();
+    }
+  }
+  &.is-style-ar-3-4 {
+    @include aspect-ratio(3, 4, 'img');
+    overflow: hidden;
+    img {
+      @include cover-image-max();
+    }
+  }
+  &.is-style-ar-4-3 {
+    @include aspect-ratio(4, 3, 'img');
+    overflow: hidden;
+    img {
+      @include cover-image-max();
+    }
+  }
+  &.is-style-ar-5-7 {
+    @include aspect-ratio(5, 7, 'img');
+    overflow: hidden;
+    img {
+      @include cover-image-max();
+    }
+  }
+  &.is-style-ar-16-9 {
+    @include aspect-ratio(16, 9, 'img');
+    overflow: hidden;
+    img {
+      @include cover-image-max();
+    }
+  }
+  &.is-style-ar-21-9 {
+    @include aspect-ratio(21, 9, 'img');
+    overflow: hidden;
+    img {
+      @include cover-image-max();
+    }
+  }
+}

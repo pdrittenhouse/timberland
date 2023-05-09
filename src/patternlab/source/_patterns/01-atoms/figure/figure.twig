@@ -1,0 +1,13 @@
+{% embed '@atoms/figure/_figure.tpl.twig' with {
+  caption: 'A figure caption',
+  caption_position: 'after',
+  figure_other_classes: ''
+} %}
+  {% block content %}
+    {% include '@atoms/image/_image.tpl.twig' with {
+      variant: 'primary',
+      src: 'https://via.placeholder.com/500',
+      placeholder: false
+    } %}
+  {% endblock content %}
+{% endembed %}

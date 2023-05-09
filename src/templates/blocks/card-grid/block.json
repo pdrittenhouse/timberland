@@ -1,0 +1,48 @@
+{
+  "name": "acf/card-grid",
+  "title": "Card Grid",
+  "description": "A card grid block.",
+  "category": "dream",
+  "icon": "grid-view",
+  "keywords": ["card", "grid", "cards"],
+  "attributes": {},
+  "providesContext": {
+    "acf/fields": "data"
+  },
+  "supports": {
+    "jsx": true,
+    "align": true,
+    "alignContent": true,
+    "alignText": true,
+    "anchor": true,
+    "className": true,
+    "multiple": true,
+    "html": false,
+    "inserter": true,
+    "fullHeight": false,
+    "color": {
+      "text": false,
+      "background": true,
+      "link": false,
+      "gradients": true,
+      "linkColor": true
+    },
+    "typography": {
+      "fontSize": true
+    }
+  },
+  "styles": [
+    { "name": "default", "label": "Default", "isDefault": true },
+    { "name": "other", "label": "Other" }
+  ],
+  "editorScript": "./index.js",
+  "script": "./script.js",
+  "editorStyle": "./index.css",
+  "style": "./style.css",
+  "acf": {
+    "mode": "preview",
+    "renderCallback": "dream_block_render",
+    "postTypes": true,
+    "reusable": true
+  }
+}

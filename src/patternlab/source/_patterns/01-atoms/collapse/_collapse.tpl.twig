@@ -1,0 +1,101 @@
+{#
+/**
+ * @file
+ * collapse
+ *
+ * Available variables for collapse:
+ *  - button_group_display [string ('inline-block', 'grid', 'inline', 'block', 'flex', 'inline-flex')]: Button group wrapper display property. Default: 'inline-block'.
+ *  - button_group_size [string: 'sm', 'lg']: Size of the button group.
+ *  - button_group_display_grid [bool]: Display button group as a group (@link https://getbootstrap.com/docs/5.0/components/button-group/) or grid (@link https://getbootstrap.com/docs/5.0/components/buttons/#block-buttons). Default: true (grid).
+ *  - button_group_label [string]: Label for button group.
+ *  - button_group_gap [string]: Label for button group.
+ *  - button_group_breakpoints [object]: Array of breakpoints and display properties for button group. Must correspond to breakpoints defined in the bootstrap SASS variables and default bootstrap display properties (@link https://getbootstrap.com/docs/5.0/utilities/display/)
+ *  - buttons [array]: Array of buttons.
+ *  - button_group_classes [array]: Additional button group classes.
+ *  - button_group_other_classes [string]: Additional button group classes.
+ *  - content [array]: Arroy of collapse elements.
+ *  - collapse_id [string]: Collapse ID.
+ *  - collapse_classes [array]: Additional component classes.
+ *  - collapse_other_classes [string]: Additional component classes.
+ *  - collapse_attributes [array]: Additional component attributes.
+ *  - collapse_other_attributes [string]: Additional component attributes.
+ *  - collapse_content [string]: Collapse content.
+ *  - background_color [string]: Collapse background color.
+ *  - text_color [string]: Collapse text color.
+ */
+#}
+
+{% set collapseId = [] %}
+{% set alpha = 'abcdefghijklmnopqrstuvwxyz' %}
+{% set num = '0123456789' %}
+{% for i in 1..10 %}
+  {% set char = random(alpha ~ alpha|upper ~ num ~ '-_') %}
+  {% set collapseId = collapseId|merge([char]) %}
+{% endfor %}
+{% set collapseId = 'collapse_' ~ collapseId|join %}
+
+{% set collapseButtons = [] %}
+
+{% for button in buttons %}
+  {% set collapseButtons = collapseButtons | merge([button | merge({
+    button_target: button.button_target ? button.button_target : '#' ~ collapseId,
+    button_link: button.button_link ? button.button_link : '#' ~ collapseId,
+  })]) %}
+{% endfor %}
+
+{% set collapse_container_classes = collapse_container_classes|default([])|merge([
+  'collapse--container',
+  collapse_container_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set collapse_container_attributes = collapse_container_attibutes|default([])|merge([
+  collapse_container_other_attributes,
+]) | sort | join(' ') | trim %}
+
+<div class="{{ collapse_container_classes }}" {{ collapse_container_attributes }}>
+  {% block controls %}
+    {% include '@molecules/button-group/_button-group.tpl.twig' with {
+      button_group_wrapper_display: button_group_display,
+      button_group_size: button_group_size,
+      button_group_wrapper_other_classes: 'collapse--controls',
+      button_groups: [
+        {
+          button_group_display_grid: button_group_display_grid,
+          button_group_label: button_group_label,
+          button_group_gap: button_group_gap,
+          button_group_breakpoints: button_group_breakpoints,
+          button_group_vertical: button_group_vertical,
+          buttons: collapseButtons,
+          button_group_classes: button_group_classes,
+          button_group_other_classes: button_group_other_classes
+        }
+      ],
+    } %}
+  {% endblock controls %}
+  <div class="collapse--content">
+    {% block items %}
+      {% for item in content %}
+        {% set collapse_classes = item.collapse_classes|default([])|merge([
+          'collapse',
+          'p-3',
+          item.background_color ? 'bg-' ~ item.background_color,
+          item.text_color ? 'text-' ~ item.text_color,
+          item.collapse_other_classes,
+        ]) | sort | join(' ') | trim %}
+
+        {% set collapse_attributes = item.collapse_attibutes|default([])|merge([
+          item.collapse_id ? 'id="' ~ item.collapse_id ~ '"' : 'id="' ~ collapseId ~ '"',
+          item.collapse_other_attributes,
+        ]) | sort | join(' ') | trim %}
+        <div class="collapse--wrapper">
+          <div class="{{ collapse_classes }}" {{ collapse_attributes }}>
+            <div class="collapse--inner">
+              {{ item.collapse_content }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% endblock items %}
+  </div>
+</div>
+

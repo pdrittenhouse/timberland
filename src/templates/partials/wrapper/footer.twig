@@ -1,0 +1,465 @@
+{% if options.hide_traveling_cta != 'both' and post.meta('hide_traveling_cta') != 'both' %}
+  {% set tcta_bg_color =  options.tcta_bg_color['bg_color'] == 'custom' and options.tcta_bg_color['bg_custom_color'] ? 'background-color: ' ~  options.tcta_bg_color['bg_custom_color'] ~ ';' %}
+  {% set tcta_padding_top  = options.tcta_padding['padding']['top'] is not empty ? 'padding-top: ' ~ options.tcta_padding['padding']['top'] ~ 'px;' %}
+  {% set tcta_padding_bottom = options.tcta_padding['padding']['bottom'] is not empty ? 'padding-bottom: ' ~ options.tcta_padding['padding']['bottom'] ~ 'px;' %}
+  {% set tcta_padding_left = options.tcta_padding['padding']['left'] is not empty ? 'padding-left: ' ~ options.tcta_padding['padding']['left'] ~ 'px;' %}
+  {% set tcta_padding_right = options.tcta_padding['padding']['right'] is not empty ? 'padding-right: ' ~ options.tcta_padding['padding']['right'] ~ 'px;' %}
+  {% set tcta_border_top_width = options.tcta_border['top']['width'] is not empty ? 'border-top-width: ' ~ options.tcta_border['top']['width'] ~ 'px;' %}
+  {% set tcta_border_top_style = options.tcta_border['top']['style'] ? 'border-top-style: ' ~ options.tcta_border['top']['style'] ~ ';' %}
+  {% set tcta_border_top_color = options.tcta_border['top']['color'] == 'custom' and options.tcta_border['top']['custom_color'] ? 'border-top-color: ' ~ options.tcta_border['top']['custom_color'] ~ ';' : options.tcta_border['top']['color'] == 'palette' and options.tcta_border['top']['theme_color'] ? 'border-top-color: var(--' ~ options.tcta_border['top']['theme_color'] ~ ');' %}
+  {% set tcta_border_top_left_radius = options.tcta_border_radius['top_left'] is not empty ? 'border-top-left-radius: ' ~ options.tcta_border_radius['top_left'] ~ 'px;' %}
+  {% set tcta_border_top_right_radius = options.tcta_border_radius['top_right'] is not empty ? 'border-top-right-radius: ' ~ options.tcta_border_radius['top_right'] ~ 'px;' %}
+
+  {# Horizontal Alignment #}
+  {% if options.tcta_alignment['hor_align'] %}
+    {% set tcta_horizontal_alignment = [] %}
+    {% for alignment in options.tcta_alignment['hor_align'] %}
+      {% if alignment.breakpoint %}
+        {% set bp = '-' ~ alignment.breakpoint %}
+      {% else %}
+        {% set bp = '' %}
+      {% endif %}
+      {% if alignment.alignment %}
+        {% set halign = '-' ~ alignment.alignment %}
+      {% else %}
+        {% set halign = '' %}
+      {% endif %}
+      {% if halign %}
+        {% set tcta_horizontal_alignment = tcta_horizontal_alignment|default([])|merge([
+          'justify-content' ~ bp ~ halign
+        ]) %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  {% set tcta_classes = tcta_classes|default([])|merge([
+    'traveling-cta',
+    options.tcta_bg_color['bg_color'] == 'palette' and options.tcta_bg_color['bg_theme_color'] ? 'bg-' ~ options.tcta_bg_color['bg_theme_color'],
+    options.tcta_auto_width != true ? 'stretch-ctas',
+    options.hide_traveling_cta == 'mobile' or post.meta('hide_traveling_cta') == 'mobile' ? 'd-none',
+    options.hide_traveling_cta == 'mobile' or post.meta('hide_traveling_cta') == 'mobile' and (options.hide_traveling_cta != 'desktop' and post.meta('hide_traveling_cta') != 'desktop') ? 'd-lg-block',
+    options.hide_traveling_cta == 'desktop' or post.meta('hide_traveling_cta') == 'desktop' ? 'd-lg-none'
+  ]) | sort | join(' ') | trim %}
+
+  {% set tcta_attributes = tcta_attributes|default([])|merge([
+    tcta_bg_color or tcta_border_top_width or tcta_border_top_style or tcta_border_top_color or tcta_border_top_left_radius or tcta_border_top_right_radius ? 'style="' ~ tcta_bg_color ~ tcta_border_top_width ~ tcta_border_top_style ~ tcta_border_top_color ~ tcta_border_top_left_radius ~ tcta_border_top_right_radius ~ '"'
+  ]) | sort | join(' ') | trim %}
+
+  {% set tcta_wrapper_classes = tcta_wrapper_classes|default([])|merge([
+    'traveling-cta--ctas-wrapper',
+    options.include_tcta_container == true ? 'col'
+  ]) | sort | join(' ') | trim %}
+
+  {% set tcta_wrapper_attributes = tcta_wrapper_attributes|default([])|merge([
+    tcta_padding_top or tcta_padding_bottom or tcta_padding_left or tcta_padding_right ? 'style="' ~ tcta_padding_top ~ tcta_padding_bottom ~ tcta_padding_left ~ tcta_padding_right ~ '"'
+  ]) | sort | join(' ') | trim %}
+
+  <section class="{{ tcta_classes }}" {{ tcta_attributes }}>
+    <div class="traveling-cta--border">
+      <span class="bg bg1"></span>
+      <span class="bg bg2"></span>
+      <span class="bg bg3"></span>
+      <span class="bg bg4"></span>
+    </div>
+
+    {% if options.include_tcta_container == true %}
+      <div class="{{ options.tcta_full_width == true ? 'container-fluid' : 'container' }}">
+        <div class="row">
+    {% endif %}
+
+    {% if options.traveling_ctas %}
+      <div class="{{ tcta_wrapper_classes }}" {{ tcta_wrapper_attributes }}>
+        <div class="traveling-cta--ctas {{ tcta_horizontal_alignment|length > 0 ? tcta_horizontal_alignment|sort|join(' ')|trim }}">
+          {% for cta in options.traveling_ctas %}
+{#            {{ function('print_r', '<pre>') }}#}
+{#            {{ function('print_r', cta) }}#}
+{#            {{ function('print_r', '</pre>') }}#}
+
+            {# CTA Template #}
+            {% if fields.dropdown == true %}
+              {% set tcta_template = '_button~dropdown.tpl.twig' %}
+            {% else %}
+              {% set tcta_template = '_button.tpl.twig' %}
+            {% endif %}
+
+            {# CTA Styles #}
+            {% set button_bg_color = cta['background_color']['bg_color'] == 'custom' ? 'background-color: ' ~ cta['background_color']['bg_custom_color'] ~ ';' %}
+            {% set button_text_color = cta['text_color']['color'] == 'custom' ? 'color: ' ~ cta['text_color']['custom_color'] ~ ';' %}
+            {% set button_transform = cta['text_transform']['text_transform'] ? 'text-transform: ' ~ cta['text_transform']['text_transform'] ~ ';' %}
+            {% set button_padding_top  = cta['padding']['padding']['top'] is not empty ? 'padding-top: ' ~ cta['padding']['padding']['top'] ~ 'px;' %}
+            {% set button_padding_bottom = cta['padding']['padding']['bottom'] is not empty ? 'padding-bottom: ' ~ cta['padding']['padding']['bottom'] ~ 'px;' %}
+            {% set button_padding_left = cta['padding']['padding']['left'] is not empty ? 'padding-left: ' ~ cta['padding']['padding']['left'] ~ 'px;' %}
+            {% set button_padding_right = cta['padding']['padding']['right'] is not empty ? 'padding-right: ' ~ cta['padding']['padding']['right'] ~ 'px;' %}
+            {% set button_border_top_width = cta['border']['top']['width'] is not empty ? 'border-top-width: ' ~ cta['border']['top']['width'] ~ 'px;' %}
+            {% set button_border_top_style = cta['border']['top']['style'] ? 'border-top-style: ' ~ cta['border']['top']['style'] ~ ';' %}
+            {% set button_border_top_color = cta['border']['top']['color'] == 'custom' and cta['border']['top']['custom_color'] ? 'border-top-color: ' ~ cta['border']['top']['custom_color'] ~ ';' : cta['border']['top']['color'] == 'palette' and cta['border']['top']['theme_color'] ? 'border-top-color: var(--' ~ cta['border']['top']['theme_color'] ~ ');' %}
+            {% set button_border_bottom_width = cta['border']['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ cta['border']['bottom']['width'] ~ 'px;' %}
+            {% set button_border_bottom_style = cta['border']['bottom']['style'] ? 'border-bottom-style: ' ~ cta['border']['bottom']['style'] ~ ';' %}
+            {% set button_border_bottom_color = cta['border']['bottom']['color'] == 'custom' and cta['border']['bottom']['custom_color'] ? 'border-bottom-color: ' ~ cta['border']['bottom']['custom_color'] ~ ';' : cta['border']['bottom']['color'] == 'palette' and cta['border']['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ cta['border']['bottom']['theme_color'] ~ ');' %}
+            {% set button_border_left_width = cta['border']['left']['width'] is not empty ? 'border-left-width: ' ~ cta['border']['left']['width'] ~ 'px;' %}
+            {% set button_border_left_style = cta['border']['left']['style'] ? 'border-left-style: ' ~ cta['border']['left']['style'] ~ ';' %}
+            {% set button_border_left_color = cta['border']['left']['color'] == 'custom' and cta['border']['left']['custom_color'] ? 'border-left-color: ' ~ cta['border']['left']['custom_color'] ~ ';' : cta['border']['left']['color'] == 'palette' and cta['border']['left']['theme_color'] ? 'border-left-color: var(--' ~ cta['border']['left']['theme_color'] ~ ');' %}
+            {% set button_border_right_width = cta['border']['right']['width'] is not empty ? 'border-right-width: ' ~ cta['border']['right']['width'] ~ 'px;' %}
+            {% set button_border_right_style = cta['border']['right']['style'] ? 'border-right-style: ' ~ cta['border']['right']['style'] ~ ';' %}
+            {% set button_border_right_color = cta['border']['right']['color'] == 'custom' and cta['border']['right']['custom_color'] ? 'border-right-color: ' ~ cta['border']['right']['custom_color'] ~ ';' : cta['border']['right']['color'] == 'palette' and cta['border']['right']['theme_color'] ? 'border-right-color: var(--' ~ cta['border']['right']['theme_color'] ~ ');' %}
+            {% set button_border_top_left_radius = cta['border_radius']['top_left'] is not empty ? 'border-top-left-radius: ' ~ cta['border_radius']['top_left'] ~ 'px;' %}
+            {% set button_border_top_right_radius = cta['border_radius']['top_right'] is not empty ? 'border-top-right-radius: ' ~ cta['border_radius']['top_right'] ~ 'px;' %}
+            {% set button_border_bottom_left_radius = cta['border_radius']['bottom_left'] is not empty ? 'border-bottom-left-radius: ' ~ cta['border_radius']['bottom_left'] ~ 'px;' %}
+            {% set button_border_bottom_right_radius = cta['border_radius']['bottom_right'] is not empty ? 'border-bottom-right-radius: ' ~ cta['border_radius']['bottom_right'] ~ 'px;' %}
+            {% set button_box_shadow_color = cta['box_shadow']['color']['color'] == 'palette' and cta['box_shadow']['color']['theme_color'] ? 'var(--' ~ cta['box_shadow']['color']['theme_color'] ~ ')' : cta['box_shadow']['color']['color'] == 'custom' and cta['box_shadow']['color']['custom_color'] ? cta['box_shadow']['color']['custom_color'] %}
+            {% set button_box_shadow_inset = cta['box_shadow']['inset'] == true ? 'inset' %}
+            {% set button_box_shadow = cta['box_shadow']['horizontal_offset'] is not empty or cta['box_shadow']['vertical_offset'] is not empty or cta['box_shadow']['blur'] is not empty or cta['box_shadow']['spread'] is not empty or box_shadow_color or box_shadow_inset == true ? 'box-shadow: ' ~ cta['box_shadow']['horizontal_offset'] ~ 'px ' ~ cta['box_shadow']['vertical_offset'] ~ 'px ' ~ cta['box_shadow']['blur'] ~ 'px ' ~ cta['box_shadow']['spread'] ~ 'px ' ~ box_shadow_color ~ ' ' ~ box_shadow_inset ~ ';' %}
+            {% set button_text_shadow_color = cta['text_shadow']['color']['color'] == 'palette' and cta['text_shadow']['color']['theme_color'] ? 'var(--' ~ cta['text_shadow']['color']['theme_color'] ~ ')' : cta['text_shadow']['color']['color'] == 'custom' and cta['text_shadow']['color']['custom_color'] ? cta['text_shadow']['color']['custom_color'] %}
+            {% set button_text_shadow = cta['text_shadow']['horizontal_offset'] is not empty or cta['text_shadow']['vertical_offset'] is not empty or cta['text_shadow']['blur'] is not empty or text_shadow_color ? 'text-shadow: ' ~ cta['text_shadow']['horizontal_offset'] ~ 'px ' ~ cta['text_shadow']['vertical_offset'] ~ 'px ' ~ cta['text_shadow']['blur'] ~ 'px ' ~ text_shadow_color ~ ';' %}
+            {% set button_fontsize = cta['font_size']['font_size']['value'] is not empty ? 'font-size: ' ~ cta['font_size']['font_size']['value'] ~ fields['font_size']['font_size']['unit'] ~ ';' %}
+            {% set button_width = cta['width']['width']['value'] is not empty ? 'width: ' ~ cta['width']['width']['value']  ~ cta['width']['width']['unit'] ~  ';' %}
+            {% set button_min_width = cta['width']['min_width'] is not empty ? 'min-width: ' ~ cta['width']['min_width']  ~ 'px;' %}
+            {% set button_max_width = cta['width']['max_width'] is not empty ? 'max-width: ' ~ cta['width']['max_width']  ~ 'px;' %}
+            {% set button_margin_top = cta['margin']['margin']['top']['auto'] == true ? 'margin-top: auto;' : parent_block_data['name'] != 'acf/group' and cta['margin']['margin']['top']['top'] is not empty ? 'margin-top: ' ~ cta['margin']['margin']['top']['top'] ~ 'px;' %}
+            {% set button_margin_bottom = cta['margin']['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : parent_block_data['name'] != 'acf/group' and cta['margin']['margin']['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ cta['margin']['margin']['bottom']['bottom'] ~ 'px;' %}
+            {% set button_margin_left = cta['margin']['margin']['left']['auto'] == true ? 'margin-left: auto;' : parent_block_data['name'] != 'acf/group' and cta['margin']['margin']['left']['left'] is not empty ? 'margin-left: ' ~ cta['margin']['margin']['left']['left'] ~ 'px;' %}
+            {% set button_margin_right = cta['margin']['margin']['right']['auto'] == true ? 'margin-right: auto;' : parent_block_data['name'] != 'acf/group' and cta['margin']['margin']['right']['right'] is not empty ? 'margin-right: ' ~ cta['margin']['margin']['right']['right'] ~ 'px;' %}
+
+            {% include '@atoms/button/' ~ tcta_template with {
+              button_element: cta['element'],
+              button_text: cta['link']['title'],
+              button_link: cta['link']['url'],
+              button_target: cta['toggle'] == true ? cta['link']['url'] : cta['link']['target'],
+              button_color: cta['style'] != 'custom' ? cta['style'] | default('default'),
+              button_size: cta['size'],
+              button_outline: cta['outline'],
+              button_block: cta['full_width'],
+              button_toggle: cta['toggle'],
+              button_active: cta['active'],
+              button_disabled: cta['disabled'],
+              button_expanded: cta['active'],
+              button_value: cta['value'],
+              button_controls: cta['toggle'] == true ? cta['link']['url'] | trim('#'),
+              nowrap: cta['nowrap'],
+              contextual_content: cta['toggle'] == 'tooltip' or cta['toggle'] == 'popover' ? cta['toggle'],
+              title: cta['context']['title'],
+              popover_content: cta['context']['content'],
+              context_placement: cta['context']['placement'],
+              context_container: cta['context']['container'],
+              hide_label: cta['hide_label'],
+              button_classes: [
+                'traveling-cta--button',
+                cta['background_color']['bg_color'] == 'palette' and cta['background_color']['bg_theme_color'] ? 'bg-' ~ cta['background_color']['bg_theme_color'],
+                cta['text_color']['color'] == 'palette' and cta['text_color']['theme_color'] ? 'text-' ~ cta['text_color']['theme_color'],
+                cta['full_width'] != true and cta['display']['display'] is not null ? cta['display']['display']
+              ],
+              button_other_classes: cta['classes'],
+              button_attributes: [
+                button_bg_color or button_text_color or button_transform or button_padding_top or button_padding_bottom or button_padding_left or button_padding_right or button_border_top_width or button_border_top_style or button_border_top_color or button_border_bottom_width or button_border_bottom_style or button_border_bottom_color or button_border_left_width or button_border_left_style or button_border_left_color or button_border_right_width or button_border_right_style or button_border_right_color or button_border_top_left_radius or button_border_top_right_radius or button_border_bottom_left_radius or button_border_bottom_right_radius or button_box_shadow or button_text_shadow or button_fontsize or button_width or button_min_width or button_max_width or button_margin_top or button_margin_bottom or button_margin_left or button_margin_right ? 'style="' ~ button_bg_color ~ button_text_color ~ button_fontsize ~ button_transform ~ button_padding_top ~ button_padding_bottom ~ button_padding_left ~ button_padding_right ~ button_border_top_width ~ button_border_top_style ~ button_border_top_color ~ button_border_bottom_width ~ button_border_bottom_style ~ button_border_bottom_color ~ button_border_left_width ~ button_border_left_style ~ button_border_left_color ~ button_border_right_width ~ button_border_right_style ~ button_border_right_color ~ button_border_top_left_radius ~ button_border_top_right_radius ~ button_border_bottom_left_radius ~ button_border_bottom_right_radius ~ button_box_shadow ~ button_text_shadow ~ button_width ~ button_min_width ~ button_max_width ~ button_margin_top ~ button_margin_bottom ~ button_margin_left ~ button_margin_right ~ '"'
+              ]
+            } %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if options.include_tcta_container == true %}
+        </div>
+      </div>
+    {% endif %}
+
+  </section>
+{% endif %}
+
+{% if options.hide_footer_content == true %}
+  {% embed '@organisms/footer/_footer.tpl.twig' with {
+    footer_classes: [
+      footer_two_cols ? 'two-cols',
+      footer_reverse_cols ? 'reverse-cols',
+      footer_reverse_meta ? 'reverse-meta',
+      options.site_footer_layout != 'default' ? 'site-footer-' ~ options.site_footer_layout,
+      'p-0'
+    ],
+    footer_other_classes: ''
+  } %}
+    {% block footer %}
+      {% block additional_content %}
+        {% if footer_widget_area %}
+          {{ footer_widget_area }}
+        {% endif %}
+      {% endblock additional_content %}
+    {% endblock %}
+  {% endembed %}
+{% else %}
+  {# Footer CTA #}
+  {% if options.footer_cta.dropdown == true %}
+    {% set footer_cta_template = '_button~dropdown.tpl.twig' %}
+  {% else %}
+    {% set footer_cta_template = '_button.tpl.twig' %}
+  {% endif %}
+  {% if options.footer_cta.style == 'custom' %}
+    {% set bg_color = options.footer_cta.background_color['bg_color'] == 'custom' ? 'background-color: ' ~ options.footer_cta.background_color['bg_custom_color'] ~ ';' %}
+    {% set footer_cta_text_color = options.footer_cta.text_color['color'] == 'custom' ? 'color: ' ~ options.footer_cta.text_color['custom_color'] ~ ';' %}
+    {% set footer_cta_transform = options.footer_cta['text_transform']['text_transform'] ? 'text-transform: ' ~ options.footer_cta['text_transform']['text_transform'] ~ ';' %}
+    {% set footer_cta_btn_padding_top  = options.footer_cta['padding']['padding']['top'] ? 'padding-top: ' ~ options.footer_cta['padding']['padding']['top'] ~ 'px;' %}
+    {% set footer_cta_btn_padding_bottom = options.footer_cta['padding']['padding']['bottom'] ? 'padding-bottom: ' ~ options.footer_cta['padding']['padding']['bottom'] ~ 'px;' %}
+    {% set footer_cta_btn_padding_left = options.footer_cta['padding']['padding']['left'] ? 'padding-left: ' ~ options.footer_cta['padding']['padding']['left'] ~ 'px;' %}
+    {% set footer_cta_btn_padding_right = options.footer_cta['padding']['padding']['right'] ? 'padding-right: ' ~ options.footer_cta['padding']['padding']['right'] ~ 'px;' %}
+    {% set footer_cta_btn_border_top_width = options.footer_cta['border']['top']['width'] ? 'border-top-width: ' ~ options.footer_cta['border']['top']['width'] ~ 'px;' %}
+    {% set footer_cta_btn_border_top_style = options.footer_cta['border']['top']['style'] ? 'border-top-style: ' ~ options.footer_cta['border']['top']['style'] ~ ';' %}
+    {% set footer_cta_btn_border_top_color = options.footer_cta['border']['top']['color'] == 'custom' and options.footer_cta['border']['top']['custom_color'] ? 'border-top-color: ' ~ options.footer_cta['border']['top']['custom_color'] ~ ';' : options.footer_cta['border']['top']['color'] == 'palette' and options.footer_cta['border']['top']['theme_color'] ? 'border-top-color: var(--' ~ options.footer_cta['border']['top']['theme_color'] ~ ');' %}
+    {% set footer_cta_btn_border_bottom_width = options.footer_cta['border']['bottom']['width'] ? 'border-bottom-width: ' ~ options.footer_cta['border']['bottom']['width'] ~ 'px;' %}
+    {% set footer_cta_btn_border_bottom_style = options.footer_cta['border']['bottom']['style'] ? 'border-bottom-style: ' ~ options.footer_cta['border']['bottom']['style'] ~ ';' %}
+    {% set footer_cta_btn_border_bottom_color = options.footer_cta['border']['bottom']['color'] == 'custom' and options.footer_cta['border']['bottom']['custom_color'] ? 'border-bottom-color: ' ~ options.footer_cta['border']['bottom']['custom_color'] ~ ';' : options.footer_cta['border']['bottom']['color'] == 'palette' and options.footer_cta['border']['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ options.footer_cta['border']['bottom']['theme_color'] ~ ');' %}
+    {% set footer_cta_btn_border_left_width = options.footer_cta['border']['left']['width'] ? 'border-left-width: ' ~ options.footer_cta['border']['left']['width'] ~ 'px;' %}
+    {% set footer_cta_btn_border_left_style = options.footer_cta['border']['left']['style'] ? 'border-left-style: ' ~ options.footer_cta['border']['left']['style'] ~ ';' %}
+    {% set footer_cta_btn_border_left_color = options.footer_cta['border']['left']['color'] == 'custom' and options.footer_cta['border']['left']['custom_color'] ? 'border-left-color: ' ~ options.footer_cta['border']['left']['custom_color'] ~ ';' : options.footer_cta['border']['left']['color'] == 'palette' and options.footer_cta['border']['left']['theme_color'] ? 'border-left-color: var(--' ~ options.footer_cta['border']['left']['theme_color'] ~ ');' %}
+    {% set footer_cta_btn_border_right_width = options.footer_cta['border']['right']['width'] ? 'border-right-width: ' ~ options.footer_cta['border']['right']['width'] ~ 'px;' %}
+    {% set footer_cta_btn_border_right_style = options.footer_cta['border']['right']['style'] ? 'border-right-style: ' ~ options.footer_cta['border']['right']['style'] ~ ';' %}
+    {% set footer_cta_btn_border_right_color = options.footer_cta['border']['right']['color'] == 'custom' and options.footer_cta['border']['right']['custom_color'] ? 'border-right-color: ' ~ options.footer_cta['border']['right']['custom_color'] ~ ';' : options.footer_cta['border']['right']['color'] == 'palette' and options.footer_cta['border']['right']['theme_color'] ? 'border-right-color: var(--' ~ options.footer_cta['border']['right']['theme_color'] ~ ');' %}
+    {% set footer_cta_btn_border_top_left_radius = options.footer_cta['border_radius']['top_left'] ? 'border-top-left-radius: ' ~ options.footer_cta['border_radius']['top_left'] ~ 'px;' %}
+    {% set footer_cta_btn_border_top_right_radius = options.footer_cta['border_radius']['top_right'] ? 'border-top-right-radius: ' ~ options.footer_cta['border_radius']['top_right'] ~ 'px;' %}
+    {% set footer_cta_btn_border_bottom_left_radius = options.footer_cta['border_radius']['bottom_left'] ? 'border-bottom-left-radius: ' ~ options.footer_cta['border_radius']['bottom_left'] ~ 'px;' %}
+    {% set footer_cta_btn_border_bottom_right_radius = options.footer_cta['border_radius']['bottom_right'] ? 'border-bottom-right-radius: ' ~ options.footer_cta['border_radius']['bottom_right'] ~ 'px;' %}
+    {% set footer_cta_box_shadow_color = options.footer_cta['box_shadow']['color']['color'] == 'palette' and options.footer_cta['box_shadow']['color']['theme_color'] ? 'var(--' ~ options.footer_cta['box_shadow']['color']['theme_color'] ~ ')' : options.footer_cta['box_shadow']['color']['color'] == 'custom' and options.footer_cta['box_shadow']['color']['custom_color'] ? options.footer_cta['box_shadow']['color']['custom_color'] %}
+    {% set footer_cta_box_shadow_inset = options.footer_cta['box_shadow']['inset'] == true ? 'inset' %}
+    {% set footer_cta_btn_box_shadow = options.footer_cta['box_shadow']['horizontal_offset'] or options.footer_cta['box_shadow']['vertical_offset'] or options.footer_cta['box_shadow']['blur'] or options.footer_cta['box_shadow']['spread'] or box_shadow_color or box_shadow_inset ? 'box-shadow: ' ~ options.footer_cta['box_shadow']['horizontal_offset'] ~ 'px ' ~ options.footer_cta['box_shadow']['vertical_offset'] ~ 'px ' ~ options.footer_cta['box_shadow']['blur'] ~ 'px ' ~ options.footer_cta['box_shadow']['spread'] ~ 'px ' ~ box_shadow_color ~ ' ' ~ box_shadow_inset ~ ';' %}
+    {% set footer_cta_text_shadow_color = options.footer_cta['text_shadow']['color']['color'] == 'palette' and options.footer_cta['text_shadow']['color']['theme_color'] ? 'var(--' ~ options.footer_cta['text_shadow']['color']['theme_color'] ~ ')' : options.footer_cta['text_shadow']['color']['color'] == 'custom' and options.footer_cta['text_shadow']['color']['custom_color'] ? options.footer_cta['text_shadow']['color']['custom_color'] %}
+    {% set footer_cta_btn_text_shadow = options.footer_cta['text_shadow']['horizontal_offset'] or options.footer_cta['text_shadow']['vertical_offset'] or options.footer_cta['text_shadow']['blur'] or text_shadow_color ? 'text-shadow: ' ~ options.footer_cta['text_shadow']['horizontal_offset'] ~ 'px ' ~ options.footer_cta['text_shadow']['vertical_offset'] ~ 'px ' ~ options.footer_cta['text_shadow']['blur'] ~ 'px ' ~ text_shadow_color ~ ';' %}
+  {% endif %}
+  {% set footer_cta_fontsize = options.footer_cta['font_size']['font_size']['value'] ? 'font-size: ' ~ options.footer_cta['font_size']['font_size']['value'] ~ options.footer_cta['font_size']['font_size']['unit'] ~ ';' %}
+  {% set width = options.footer_cta.width['width']['value'] ? 'width: ' ~ options.footer_cta.width['width']['value']  ~ options.footer_cta.width['width']['unit'] ~  ';' %}
+  {% set min_width = options.footer_cta.width['min_width'] ? 'min-width: ' ~ options.footer_cta.width['min_width']  ~ 'px;' %}
+  {% set max_width = options.footer_cta.width['max_width'] ? 'max-width: ' ~ options.footer_cta.width['max_width']  ~ 'px;' %}
+
+  {# Contact Info #}
+  {% set phone_label = options.footer_contact_phone.phone_label ? '<strong>' ~ options.footer_contact_phone.phone_label ~ '</strong> ' %}
+  {% set phone_number = options.footer_contact_phone.phone_number ? '<a href="tel:' ~ options.footer_contact_phone.phone_number ~ '">' ~ options.footer_contact_phone.phone_number ~ '</a>' %}
+  {% set phone = phone_label or phone_number ? phone_label ~ phone_number %}
+
+  {% set email_label = options.footer_contact_email.email_label ? '<strong>' ~ options.footer_contact_email.email_label ~ '</strong> ' %}
+  {% set email_address = options.footer_contact_email.email_address ? '<a href="tel:' ~ options.footer_contact_email.email_address ~ '">' ~ options.footer_contact_email.email_address ~ '</a>' %}
+  {% set email = email_label or email_address ? email_label ~ email_address %}
+
+  {% set address_label = options.footer_contact_address.address_label ? '<strong>' ~ options.footer_contact_address.address_label ~ '</strong> ' %}
+  {% set address_loc = options.footer_contact_address.address ? '<a href="tel:' ~ options.footer_contact_address.address ~ '">' ~ options.footer_contact_address.address ~ '</a>' %}
+  {% set address = address_label or address_loc ? address_label ~ address_loc %}
+
+  {% set contact_information = [phone, email, address] %}
+  {% set contact_info = {} %}
+  {% for item in contact_information %}
+    {% set info = {
+      item_text: item
+    } %}
+    {% set contact_info = contact_info|merge([info]) %}
+  {% endfor %}
+
+
+  {# Footer #}
+  {% embed '@organisms/footer/_footer.tpl.twig' with {
+    footer_classes: [
+      footer_two_cols ? 'two-cols',
+      footer_reverse_cols ? 'reverse-cols',
+      footer_reverse_meta ? 'reverse-meta',
+      options.site_footer_layout != 'default' ? 'site-footer-' ~ options.site_footer_layout
+    ],
+    footer_other_classes: ''
+  } %}
+
+    {% block footer_brand %}
+      {% if site_logo and (site_logo ends with '.svg') %}
+        {% include "@atoms/branding/_branding.tpl.twig" with {
+          name_element: 'h2',
+          url: site.url,
+          logo_svg_inline: site_logo,
+          colorOriginal: options.footer_logo_use_original_color,
+          site_name: site.name,
+          site_slogan: site.description,
+          branding_classes: [
+            display_header_text == true ? '' : 'hide-text',
+            hide_footer_brand == 'mobile' ? 'd-none d-xxl-flex',
+            hide_footer_brand == 'desktop' ? 'd-xxl-none',
+            hide_footer_brand == 'both' ? 'd-none'
+          ],
+          branding_other_classes: 'footer-brand'
+        } %}
+      {% elseif site_logo %}
+        {% include "@atoms/branding/_branding.tpl.twig" with {
+          url: site.url,
+          logo_bg_img_src: site_logo,
+          site_name: site.name,
+          site_slogan: site.description,
+          height: '125px',
+          branding_classes: [
+            display_header_text == true ? '' : 'hide-text',
+            hide_footer_brand == 'mobile' ? 'd-none d-xxl-flex',
+            hide_footer_brand == 'desktop' ? 'd-xxl-none',
+            hide_footer_brand == 'both' ? 'd-none'
+          ],
+          branding_other_classes: 'footer-brand'
+        } %}
+      {% elseif display_header_text == true %}
+        <div class="site-footer--brand-name {{ hide_footer_brand == 'mobile' ? 'd-none d-xxl-flex' }} {{ hide_footer_brand == 'desktop' ? 'd-xxl-none' }} {{ hide_footer_brand == 'both' ? 'd-none' }}">
+          <a href="{{ site.url }}" class="branding--link">
+            <h1 class="branding--site-name">{{ site.name }}</h1>
+            <h2 class="branding--site-slogan">{{ site.description }}</h2>
+          </a>
+        </div>
+      {% endif %}
+
+      {# Cobrand #}
+      {% if options.co_brand['url'] and (options.co_brand['url'] ends with '.svg') %}
+        {% include "@atoms/branding/_branding.tpl.twig" with {
+          name_element: 'h2',
+          url: site.url,
+          logo_svg_inline: options.co_brand['url'] | trim(site.url),
+          colorOriginal: options.footer_logo_use_original_color,
+          branding_classes: [
+            display_header_text == true ? '' : 'hide-text',
+            hide_footer_brand == 'mobile' ? 'd-none d-xxl-flex',
+            hide_footer_brand == 'desktop' ? 'd-xxl-none',
+            hide_footer_brand == 'both' ? 'd-none'
+          ],
+          branding_other_classes: 'co-brand'
+        } %}
+      {% elseif options.co_brand['url'] %}
+        {% include "@atoms/branding/_branding.tpl.twig" with {
+          url: site.url,
+          logo_bg_img_src: options.co_brand['url'],
+          height: '125px',
+          branding_classes: [
+            display_header_text == true ? '' : 'hide-text',
+            hide_footer_brand == 'mobile' ? 'd-none d-xxl-flex',
+            hide_footer_brand == 'desktop' ? 'd-xxl-none',
+            hide_footer_brand == 'both' ? 'd-none'
+          ],
+          branding_other_classes: 'co-brand'
+        } %}
+      {% endif %}
+    {% endblock footer_brand %}
+
+    {% block footer_cta %}
+      {% include '@atoms/button/' ~ footer_cta_template with {
+        button_element: options.footer_cta.element,
+        button_text: options.footer_cta.link['title'] | default('Add Text'),
+        button_link: options.footer_cta.link['url'],
+        button_target: options.footer_cta.toggle == true ? options.footer_cta.link['url'] : options.footer_cta.link['target'],
+        button_color: options.footer_cta.style != 'custom' ? options.footer_cta.style | default('default'),
+        button_size: options.footer_cta.size,
+        button_outline: options.footer_cta.outline,
+        button_block: options.footer_cta.full_width,
+        button_toggle: options.footer_cta.toggle,
+        button_id: options.footer_cta.id.id ? options.footer_cta.id.id : options.footer_cta.id.id_gen ? 'button' ~ options.footer_cta.id.id_gen,
+        button_active: options.footer_cta.active,
+        button_disabled: options.footer_cta.disabled,
+        button_expanded: options.footer_cta.active,
+        button_value: options.footer_cta.value,
+        button_controls: options.footer_cta.toggle == true ? options.footer_cta.link['url'] | trim('#'),
+        nowrap: options.footer_cta.nowrap,
+        contextual_content: options.footer_cta.toggle == 'tooltip' or options.footer_cta.toggle == 'popover' ? options.footer_cta.toggle,
+        title: options.footer_cta.context['title'],
+        popover_content: options.footer_cta.context['content'],
+        context_placement: options.footer_cta.context['placement'],
+        context_container: options.footer_cta.context['container'],
+        hide_label: options.footer_cta.hide_label,
+        button_classes: [
+          'footer-cta-button',
+          hide_footer_cta == 'mobile' ? 'd-none d-xxl-flex',
+          hide_footer_cta == 'desktop' ? 'd-xxl-none',
+          hide_footer_cta == 'both' ? 'd-none',
+          options.footer_cta.background_color['bg_color'] == 'palette' and options.footer_cta.background_color['bg_theme_color'] ? 'bg-' ~ options.footer_cta.background_color['bg_theme_color'],
+          options.footer_cta.text_color['color'] == 'palette' and options.footer_cta.text_color['theme_color'] ? 'text-' ~ options.footer_cta.text_color['theme_color']
+        ],
+        button_other_classes: options.footer_cta.classes,
+        button_attributes: [
+          footer_cta_bg_color or footer_cta_text_color or footer_cta_transform or footer_cta_btn_padding_top or footer_cta_btn_padding_bottom or footer_cta_btn_padding_left or footer_cta_btn_padding_right or footer_cta_btn_border_top_width or footer_cta_btn_border_top_style or footer_cta_btn_border_top_color or footer_cta_btn_border_bottom_width or footer_cta_btn_border_bottom_style or footer_cta_btn_border_bottom_color or footer_cta_btn_border_left_width or footer_cta_btn_border_left_style or footer_cta_btn_border_left_color or footer_cta_btn_border_right_width or footer_cta_btn_border_right_style or footer_cta_btn_border_right_color or footer_cta_btn_border_top_left_radius or footer_cta_btn_border_top_right_radius or footer_cta_btn_border_bottom_left_radius or footer_cta_btn_border_bottom_right_radius or footer_cta_btn_box_shadow or footer_cta_btn_text_shadow or footer_cta_fontsize or footer_cta_width or footer_cta_min_width or footer_cta_max_width ? 'style="' ~ footer_cta_bg_color ~ footer_cta_text_color ~ footer_cta_fontsize ~ footer_cta_width ~ footer_cta_min_width ~ footer_cta_max_width ~ footer_cta_transform ~ footer_cta_btn_padding_top ~ footer_cta_btn_padding_bottom ~ footer_cta_btn_padding_left ~ footer_cta_btn_padding_right ~ footer_cta_btn_border_top_width ~ footer_cta_btn_border_top_style ~ footer_cta_btn_border_top_color ~ footer_cta_btn_border_bottom_width ~ footer_cta_btn_border_bottom_style ~ footer_cta_btn_border_bottom_color ~ footer_cta_btn_border_left_width ~ footer_cta_btn_border_left_style ~ footer_cta_btn_border_left_color ~ footer_cta_btn_border_right_width ~ footer_cta_btn_border_right_style ~ footer_cta_btn_border_right_color ~ footer_cta_btn_border_top_left_radius ~ footer_cta_btn_border_top_right_radius ~ footer_cta_btn_border_bottom_left_radius ~ footer_cta_btn_border_bottom_right_radius ~ footer_cta_btn_box_shadow ~ footer_cta_btn_text_shadow ~ '"'
+        ]
+      } %}
+    {% endblock footer_cta %}
+
+    {% block footer_nav %}
+      {% include "partials/menus/menu.twig" with {
+        'menu': menu_footer.get_items,
+        'nav_id': 'footerNav',
+        'navbar_breakpoint': 'md',
+        'nav_classes': [
+          hide_footer_nav == 'mobile' ? 'd-none d-xxl-flex',
+          hide_footer_nav == 'desktop' ? 'd-xxl-none',
+          hide_footer_nav == 'both' ? 'd-none'
+        ],
+        'nav_other_classes': 'footer-nav'
+      } %}
+    {% endblock footer_nav %}
+
+    {% block social_nav %}
+      {% include "partials/menus/social-nav.twig" with {
+        'menu': menu_social.get_items,
+        'menu_icon_color': footer_social_icon_color ? footer_social_icon_color : 'primary',
+        'menu_icon_position': 'before',
+        'menu_icon_width': footer_social_icon_width ? footer_social_icon_width ~ 'px' : '18px',
+        'menu_icon_height': footer_social_icon_height ? footer_social_icon_height ~ 'px' : '18px',
+        'menu_nav_id': 'footerSocialNav',
+        'menu_bullet_icon_position': 'before',
+        'menu_bullet_icon_size': footer_social_icon_width ? footer_social_icon_width ~ 'px' : '18px',
+        'menu_hide_labels': true,
+        'menu_hide_icons': false,
+        'menu_icon_nav_direction': 'horizontal',
+        'menu_nav_classes': [
+          hide_footer_social_nav == 'mobile' ? 'd-none d-xxl-flex',
+          hide_footer_social_nav == 'desktop' ? 'd-xxl-none',
+          hide_footer_social_nav == 'both' ? 'd-none'
+        ],
+        'menu_nav_other_classes': 'footer-social-nav'
+      } %}
+    {% endblock social_nav %}
+
+    {% block footer_search %}
+      <div class="{{ hide_footer_search == 'mobile' ? 'd-none d-xxl-flex' }} {{ hide_footer_search == 'desktop' ? 'd-xxl-none' }} {{ hide_footer_search == 'both' ? 'd-none' }}">{{ function('get_search_form') }}</div>
+    {% endblock footer_search %}
+
+    {% block contact_info %}
+      {% include '@atoms/list/_list.tpl.twig' with {
+        parent_element: 'ul',
+        parent_classes: [
+          hide_footer_contact_info == 'mobile' ? 'd-none d-xxl-flex',
+          hide_footer_contact_info == 'desktop' ? 'd-xxl-none',
+          hide_footer_contact_info == 'both' ? 'd-none'
+        ],
+        parent_other_classes: 'site-footer--contact-info',
+        items: contact_info
+      } %}
+    {% endblock contact_info %}
+
+    {% block disclaimer %}
+      {% if options.footer_disclaimer %}
+        <div class="{{ hide_footer_disclaimer == 'mobile' ? 'd-none d-xxl-flex' }} {{ hide_footer_disclaimer == 'desktop' ? 'd-xxl-none' }} {{ hide_footer_disclaimer == 'both' ? 'd-none' }}">{{ options.footer_disclaimer }}</div>
+      {% endif %}
+    {% endblock disclaimer %}
+
+    {% block attribution %}
+      <div class="site-footer--attribution {{ hide_footer_attribution == 'mobile' ? 'd-none d-xxl-flex' }} {{ hide_footer_attribution == 'desktop' ? 'd-xxl-none' }} {{ hide_footer_attribution == 'both' ? 'd-none' }}">{{ options.footer_attribution }}</div>
+    {% endblock attribution %}
+
+    {% block utilities %}
+      {% include "partials/menus/menu.twig" with {
+        'menu': menu_utility.get_items,
+        'nav_id': 'utilityNav',
+        'navbar_breakpoint': 'xs',
+        'nav_classes': [
+          hide_footer_utility_nav == 'mobile' ? 'd-none d-xxl-flex',
+          hide_footer_utility_nav == 'desktop' ? 'd-xxl-none',
+          hide_footer_utility_nav == 'both' ? 'd-none'
+        ],
+        'nav_other_classes': 'utility-nav'
+      } %}
+    {% endblock utilities %}
+
+    {% block copyright %}
+      <div class="copyright {{ hide_footer_copyright == 'mobile' ? 'd-none d-xxl-flex' }} {{ hide_footer_copyright == 'desktop' ? 'd-xxl-none' }} {{ hide_footer_copyright == 'both' ? 'd-none' }} {{ hide_copyright_label ? 'hide-label' }} {{ hide_copyright_icon ? 'hide-icon' }} {{ hide_copyright_year ? 'hide-year' }} {{ hide_copyright_name ? 'hide-name' }}">
+        <span class="label">Copyright</span> <span class="icon">&copy;</span> <span class="year">{{"now"|date('Y')}}</span> <span class="name">{{ site.name }}</span>
+      </div>
+    {% endblock copyright %}
+
+    {% block additional_content %}
+      {% if footer_widget_area %}
+        {{ footer_widget_area }}
+      {% endif %}
+    {% endblock additional_content %}
+
+  {% endembed %}
+{% endif %}

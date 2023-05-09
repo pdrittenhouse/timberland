@@ -1,0 +1,310 @@
+{#
+/**
+ * @file
+ * promo
+ *
+ * Available variables for promo:
+ *  - promo_1 [obj]: The object for promo 1.
+ *  - promo_2 [obj]: The object for promo 2.
+ *  - promo_#.title [string]: The promo title.
+ *  - promo_#.image [obj]: The promo image object.
+ *  - promo_#.text [string | obj]: The image text or content object.
+ *  - promo_#.button [obj]: Description of the variable. Example below.
+ */
+#}
+
+{% set promo_classes = promo_classes|default([])|merge([
+  'promo',
+  promo_1 and promo_2 ? 'promo--2-up' : 'promo--1-up',
+  promo_other_classes,
+]) | sort | join(' ') | trim %}
+
+<div class="{{ promo_classes }}">
+  {% if promo_1 and promo_2 %}
+
+    {% set promo_1_image = {
+      src: promo_1.image.src,
+      alt: promo_1.image.alt,
+      variant: 'aspect-ratio',
+      style: 'promo',
+      placeholder: false,
+      width: '3',
+      height: '2'
+    } %}
+
+    {% set promo_2_image = {
+      src: promo_2.image.src,
+      alt: promo_2.image.alt,
+      variant: 'aspect-ratio',
+      style: 'promo',
+      placeholder: false,
+      width: '3',
+      height: '2'
+    } %}
+
+    {% embed '@atoms/grid/_grid~2-col.tpl.twig' with {
+      container: container,
+      container_fluid: container_fluid
+    } %}
+      {% block column_1 %}
+        <div class="promo-1">
+          {% block promo_1_image %}
+            {% if promo_1.image %}
+              <div class="promo-image">
+                {% include "@atoms/image/_image.tpl.twig" with promo_1.image %}
+              </div>
+            {% endif %}
+          {% endblock promo_1_image %}
+          {% block promo_1_content %}
+            {% if promo_1.title or promo_1.text or promo_1.button %}
+              <div class="promo-content">
+                {% if promo_1.title or promo_1.text %}
+                  {% block promo_1_intro %}
+                    <div class="promo-intro">
+                      {% if promo_1.title %}
+                        <h1 class="promo-title">{{ promo_1.title }}</h1>
+                      {% endif %}
+                      {% if promo_1.text %}
+                        <div class="promo-text">{{ promo_1.text }}</div>
+                      {% endif %}
+                    </div>
+                  {% endblock %}
+                {% endif %}
+                {% if promo_1.button_group %}
+                  {% block promo_1_cta %}
+                    <div class="promo-cta">
+                      <div class="button-group">
+                        {% for btn in promo_1.button_group %}
+                          {% include '@atoms/button/_button.tpl.twig' with {
+                            button_classes: btn.button_classes,
+                            button_attributes: btn.button_attributes,
+                            button_element: btn.button_element,
+                            button_link: btn.button_link,
+                            button_text: btn.button_text,
+                            button_color: btn.button_color,
+                            button_size: btn.button_size,
+                            button_type: btn.button_type,
+                            button_value: btn.button_value,
+                            button_active: btn.button_active,
+                            button_disabled: btn.button_disabled,
+                            button_other_classes: btn.button_other_classes,
+                            button_outline: btn.button_outline,
+                            buttonless_dropdown: btn.buttonless_dropdown,
+                            button_block: btn.button_block,
+                            button_toggle: btn.button_toggle,
+                            button_id: btn.button_id,
+                            button_attributes: btn.button_attributes,
+                            button_other_attributes: btn.button_other_attributes,
+                            button_target: btn.button_target,
+                            button_expanded: btn.button_expanded,
+                            button_controls: btn.button_controls,
+                            nowrap: btn.nowrap,
+                            contextual_content: btn.contextual_content,
+                            title: btn.title,
+                            popover_content: btn.popover_content,
+                            context_placement: btn.context_placement,
+                            context_container: btn.context_container
+                          } %}
+                        {% endfor %}
+                      </div>
+                    </div>
+                  {% endblock %}
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endblock promo_1_content %}
+        </div>
+      {% endblock %}
+      {% block column_2 %}
+        <div class="promo-2">
+          {% block promo_2_image %}
+            {% if promo_2.image %}
+              <div class="promo-image">
+                {% include "@atoms/image/_image.tpl.twig" with promo_2.image %}
+              </div>
+            {% endif %}
+          {% endblock promo_2_image %}
+          {% block promo_2_content %}
+            {% if promo_2.title or promo_2.text or promo_2.button %}
+              <div class="promo-content">
+                {% if promo_2.title or promo_2.text %}
+                  {% block promo_2_intro %}
+                    <div class="promo-intro">
+                      {% if promo_2.title %}
+                        <h1 class="promo-title">{{ promo_2.title }}</h1>
+                      {% endif %}
+                      {% if promo_2.text %}
+                        <div class="promo-text">{{ promo_2.text }}</div>
+                      {% endif %}
+                    </div>
+                  {% endblock %}
+                {% endif %}
+                {% if promo_2.button_group %}
+                  {% block promo_2_cta %}
+                    <div class="promo-cta">
+                      <div class="button-group">
+                        {% for btn in promo_2.button_group %}
+                          {% include '@atoms/button/_button.tpl.twig' with {
+                            button_classes: btn.button_classes,
+                            button_attributes: btn.button_attributes,
+                            button_element: btn.button_element,
+                            button_link: btn.button_link,
+                            button_text: btn.button_text,
+                            button_color: btn.button_color,
+                            button_size: btn.button_size,
+                            button_type: btn.button_type,
+                            button_value: btn.button_value,
+                            button_active: btn.button_active,
+                            button_disabled: btn.button_disabled,
+                            button_other_classes: btn.button_other_classes,
+                            button_outline: btn.button_outline,
+                            buttonless_dropdown: btn.buttonless_dropdown,
+                            button_block: btn.button_block,
+                            button_toggle: btn.button_toggle,
+                            button_id: btn.button_id,
+                            button_attributes: btn.button_attributes,
+                            button_other_attributes: btn.button_other_attributes,
+                            button_target: btn.button_target,
+                            button_expanded: btn.button_expanded,
+                            button_controls: btn.button_controls,
+                            nowrap: btn.nowrap,
+                            contextual_content: btn.contextual_content,
+                            title: btn.title,
+                            popover_content: btn.popover_content,
+                            context_placement: btn.context_placement,
+                            context_container: btn.context_container
+                          } %}
+                        {% endfor %}
+                      </div>
+                    </div>
+                  {% endblock %}
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endblock promo_2_content %}
+        </div>
+      {% endblock %}
+    {% endembed %}
+
+  {% else %}
+
+    {% set promo_image = {
+      src: promo_1.image.src ? promo_1.image.src : promo_2.image.src,
+      alt: promo_1.image.alt ? promo_1.image.alt : promo_2.image.alt,
+      variant: 'aspect-ratio',
+      style: 'promo',
+      placeholder: false,
+      width: '21',
+      height: '9'
+    } %}
+
+    {% embed '@atoms/grid/_grid.tpl.twig' with {
+      container: container,
+      container_fluid: container_fluid
+    } %}
+      {% block column_1 %}
+        {% block promo_image %}
+          {% if promo_1.image or promo_2.image %}
+            <div class="promo-image">
+              {% include "@atoms/image/_image.tpl.twig" with promo_1.image ? promo_1.image : promo_2.image %}
+            </div>
+          {% endif %}
+        {% endblock promo_image %}
+        {% block promo_content %}
+          {% if promo_1.title or promo_2.title or promo_1.text or promo_2.text or promo_1.button or promo_2.button %}
+            <div class="promo-content">
+              {% if promo_1.title or promo_2.title or promo_1.text or promo_2.text %}
+                {% block promo_intro %}
+                  <div class="promo-intro">
+                    {% if promo_1.title or promo_2.title %}
+                      <h1 class="promo-title">{{ promo_1.title ? promo_1.title : promo_2.title }}</h1>
+                    {% endif %}
+                    {% if promo_1.text or promo_2.text %}
+                      <div class="promo-text">{{ promo_1.text ? promo_1.text : promo_2.text }}</div>
+                    {% endif %}
+                  </div>
+                {% endblock %}
+              {% endif %}
+              {% if promo_1.button_group or promo_2.button_group %}
+                {% block promo_cta %}
+                  <div class="promo-cta">
+                    <div class="button-group">
+                      {% if promo_1.button_group %}
+                        {% for btn in promo_1.button_group %}
+                          {% include '@atoms/button/_button.tpl.twig' with {
+                            button_classes: btn.button_classes,
+                            button_attributes: btn.button_attributes,
+                            button_element: btn.button_element,
+                            button_link: btn.button_link,
+                            button_text: btn.button_text,
+                            button_color: btn.button_color,
+                            button_size: btn.button_size,
+                            button_type: btn.button_type,
+                            button_value: btn.button_value,
+                            button_active: btn.button_active,
+                            button_disabled: btn.button_disabled,
+                            button_other_classes: btn.button_other_classes,
+                            button_outline: btn.button_outline,
+                            buttonless_dropdown: btn.buttonless_dropdown,
+                            button_block: btn.button_block,
+                            button_toggle: btn.button_toggle,
+                            button_id: btn.button_id,
+                            button_attributes: btn.button_attributes,
+                            button_other_attributes: btn.button_other_attributes,
+                            button_target: btn.button_target,
+                            button_expanded: btn.button_expanded,
+                            button_controls: btn.button_controls,
+                            nowrap: btn.nowrap,
+                            contextual_content: btn.contextual_content,
+                            title: btn.title,
+                            popover_content: btn.popover_content,
+                            context_placement: btn.context_placement,
+                            context_container: btn.context_container
+                          } %}
+                        {% endfor %}
+                      {% elseif promo_2.button_group %}
+                        {% for btn in promo_2.button_group %}
+                          {% include '@atoms/button/_button.tpl.twig' with {
+                            button_classes: btn.button_classes,
+                            button_attributes: btn.button_attributes,
+                            button_element: btn.button_element,
+                            button_link: btn.button_link,
+                            button_text: btn.button_text,
+                            button_color: btn.button_color,
+                            button_size: btn.button_size,
+                            button_type: btn.button_type,
+                            button_value: btn.button_value,
+                            button_active: btn.button_active,
+                            button_disabled: btn.button_disabled,
+                            button_other_classes: btn.button_other_classes,
+                            button_outline: btn.button_outline,
+                            buttonless_dropdown: btn.buttonless_dropdown,
+                            button_block: btn.button_block,
+                            button_toggle: btn.button_toggle,
+                            button_id: btn.button_id,
+                            button_attributes: btn.button_attributes,
+                            button_other_attributes: btn.button_other_attributes,
+                            button_target: btn.button_target,
+                            button_expanded: btn.button_expanded,
+                            button_controls: btn.button_controls,
+                            nowrap: btn.nowrap,
+                            contextual_content: btn.contextual_content,
+                            title: btn.title,
+                            popover_content: btn.popover_content,
+                            context_placement: btn.context_placement,
+                            context_container: btn.context_container
+                          } %}
+                        {% endfor %}
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endblock %}
+              {% endif %}
+            </div>
+          {% endif %}
+        {% endblock promo_content %}
+      {% endblock %}
+    {% endembed %}
+
+  {% endif %}
+</div>

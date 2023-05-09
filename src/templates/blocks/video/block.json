@@ -1,0 +1,46 @@
+{
+  "name": "acf/video",
+  "title": "Video",
+  "description": "A video block.",
+  "category": "dream",
+  "icon": "video-alt3",
+  "keywords": ["video", "player", "youtube", "vimeo"],
+  "attributes": {},
+  "providesContext": {
+    "acf/fields": "data"
+  },
+  "usesContext": [ "acf/fields" ],
+  "supports": {
+    "jsx": true,
+    "align": true,
+    "alignContent": true,
+    "alignText": true,
+    "anchor": true,
+    "className": true,
+    "multiple": true,
+    "html": false,
+    "inserter": true,
+    "fullHeight": false,
+    "color": {
+      "text": false,
+      "background": true,
+      "link": false,
+      "gradients": true,
+      "linkColor": true
+    },
+    "typography": {
+      "fontSize": true
+    }
+  },
+  "styles": [],
+  "editorScript": "./index.js",
+  "script": "./script.js",
+  "editorStyle": "./index.css",
+  "style": "./style.css",
+  "acf": {
+    "mode": "preview",
+    "renderCallback": "dream_block_render",
+    "postTypes": true,
+    "reusable": true
+  }
+}

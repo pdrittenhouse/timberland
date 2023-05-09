@@ -1,0 +1,55 @@
+{#
+/**
+ * @file
+ * testimonial
+ *
+ * Available variables for testimonial:
+ *  - image [object]: Testimonial image object
+ *  - title [string]: Testimonial title
+ *  - quote [string]: Testimonial quote
+ *  - author [string]: Testimonial author
+ *  - descriptor [string]: Author's organization
+ *
+ */
+#}
+
+{% set testimonial_classes = testimonial_classes|default([])|merge([
+  'testimonial',
+  testimonial_other_classes,
+]) | sort | join(' ') | trim %}
+
+<div class="{{testimonial_classes}}">
+  {% if image %}
+    <figure class="testimonial-image">
+      {% include '@atoms/image/_image.tpl.twig' with {
+        variant: 'aspect-ratio',
+        src: 'https://via.placeholder.com/300x200',
+        alt: 'A 3x2 image',
+        style: '',
+        placeholder: false,
+        width: '3',
+        height: '2',
+      } %}
+    </figure>
+  {% endif %}
+  <div class="testimonial-body">
+    {% if title %}
+      <h1 class="testimonial-title">{{ title }}</h1>
+    {% endif %}
+    {% if quote %}
+      <blockquote class="testimonial-quote">
+        <i class="fas fa-quote-left"></i>{{ quote }}<i class="fas fa-quote-right"></i>
+      </blockquote>
+    {% endif %}
+    {% if author or descriptor %}
+      <div class="testimonial-meta">
+        {% if author %}
+          <span class="testimonial-author">{{ author }}</span>
+        {% endif %}
+        {% if descriptor %}
+          <span class="testimonial-descriptor">{{ descriptor }}</span>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</div>

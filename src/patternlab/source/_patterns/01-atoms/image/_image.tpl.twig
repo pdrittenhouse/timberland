@@ -1,0 +1,90 @@
+{#
+/**
+ * @file
+ * image
+ *
+ * Available variables for image:
+ *  - variant [string]: Indicates which image pattern to use.
+ *  - src [string]: Specifies the URL of an image.
+ *  - alt [string]: Specifies an alternate text for an image.
+ *  - placeholder [bool]: Specifies image as placeholder (see _image~placeholder.twig).
+ *  - width [string]: Specifies image width for aspect ratio.
+ *  - height [string]: Specifies image height for aspect ratio.
+ *  - image_other_classes [array]: Additional component classes.
+ */
+#}
+
+{% set image_classes = image_classes|default([])|merge([
+  'image',
+  'img-fluid',
+  variant ? 'image--' ~ variant : '',
+  image_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% if placeholder and src is empty %}
+  {% include '@atoms/image/_image~placeholder.tpl.twig' with {
+    variant: variant,
+    src: src,
+    alt: alt,
+    placeholder: placeholder,
+    image_classes: image_classes,
+    image_other_classes: image_other_classes,
+    width: width,
+    height: height,
+    background_color: background_color,
+    text_color: text_color,
+    text: text,
+    format: format
+  } %}
+
+{% elseif variant == 'primary' %}
+  {% include '@atoms/image/_image~primary.tpl.twig' with {
+    variant: variant,
+    src: src,
+    alt: alt,
+    placeholder: placeholder,
+    image_classes: image_classes,
+    image_other_classes: image_other_classes,
+    width: width,
+    height: height
+  } %}
+
+{% elseif variant == 'bg' %}
+  {% include '@atoms/image/_image~bg.tpl.twig' with {
+    variant: variant,
+    src: src,
+    alt: alt,
+    placeholder: placeholder,
+    image_classes: image_classes,
+    image_other_classes: image_other_classes,
+    width: width,
+    height: height
+  } %}
+
+{% elseif variant == 'picture' %}
+  {% include '@atoms/image/_image~picture.tpl.twig' with {
+    variant: variant,
+    src: src,
+    alt: alt,
+    placeholder: placeholder,
+    image_classes: image_classes,
+    image_other_classes: image_other_classes,
+    width: width,
+    height: height,
+    srcset: srcset
+  } %}
+
+{% elseif variant == 'aspect-ratio' %}
+  {% include '@atoms/image/_image~aspect-ratio.tpl.twig' with {
+    variant: variant,
+    src: src,
+    alt: alt,
+    placeholder: placeholder,
+    image_classes: image_classes,
+    image_other_classes: image_other_classes,
+    width: width,
+    height: height
+  } %}
+
+
+{% endif %}

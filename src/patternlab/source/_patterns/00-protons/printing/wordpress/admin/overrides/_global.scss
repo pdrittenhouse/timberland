@@ -1,0 +1,26 @@
+// Increase z-index of editor popover to account for modal z-index
+.components-popover.block-editor-block-list__block-popover {
+    z-index: 1042;
+}
+
+body.wp-admin {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+    font-size: rem-calc(13px);
+}
+
+#wp-link-submit {
+
+    &:hover,
+    &:focus,
+    &:active {}
+}
+
+input:not([type="submit"]),
+textarea {
+  border: rem-calc(1px) solid var(--iron);
+
+  &:hover,
+  &:focus {
+    border: rem-calc(1px) solid var(--iron);
+  }
+}

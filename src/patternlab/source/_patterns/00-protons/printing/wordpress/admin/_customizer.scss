@@ -1,0 +1,45 @@
+// Unit Selector
+[id*="customize-control-unit_selector"] {
+
+  .customize-inside-control-row {
+    width: auto;
+    display: inline-block;
+    margin-right: rem-calc(15px);
+  }
+
+  + [id*="customize-control-number"],
+  + [id*="customize-control-range"] {
+
+    &.hide {
+      @include remove;
+    }
+
+    &.show {
+      @include replace(list-item);
+    }
+
+    + [id*="customize-control-number"],
+    + [id*="customize-control-range"] {
+
+      &.hide {
+        @include remove;
+      }
+
+      &.show {
+        @include replace(list-item);
+      }
+    }
+  }
+}
+
+// Range Slider
+.customize-control-range {
+
+  .range-slider {
+
+    + input[type="text"] {
+      display: inline-block;
+      max-width: calc(100% - #{rem-calc(140px)});
+    }
+  }
+}

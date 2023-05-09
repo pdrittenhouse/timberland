@@ -1,0 +1,45 @@
+{#
+/**
+ * Block Name: Accordion
+ *
+ * This is the template that displays the accordion block.
+ */
+#}
+
+{#{% if is_preview %}#}
+{#<p>Some editor instructions here.</p>#}
+{#{% endif %}#}
+
+{% if is_preview and (fields.id['id'] or fields.id['id_gen']) and fields.id['show_ids'] == true %}
+  <p><small><strong>Accordion ID:</strong> {{ fields.id['id'] ? fields.id['id']}}{{ fields.id['id_gen'] ? 'accordion' ~ fields.id['id_gen'] }}</small></p>
+{% endif %}
+
+{#{{ block['align'] ? 'align-' ~ block['align'] }}#}
+
+{#{{ function('print_r', '<pre>') }}#}
+{#{{ function('print_r', 'TEST: ') }}#}
+{#{{ function('print_r', block) }}#}
+{#{{ function('print_r', '</pre>') }}#}
+
+{# Accordion Styles #}
+{% set accordion_styles = [
+  fields.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : fields.margin['margin']['top']['top'] >= 0 ? 'margin-top: ' ~ fields.margin['margin']['top']['top'] ~ 'px;',
+  fields.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.margin['margin']['bottom']['bottom'] ~ 'px;',
+  fields.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : fields.margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.margin['margin']['left']['left'] ~ 'px;',
+  fields.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : fields.margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.margin['margin']['right']['right'] ~ 'px;'
+] | sort | join(' ') | trim %}
+
+{% embed '@molecules/accordion/_accordion.tpl.twig' with {
+  accordion_id: fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'accordion' ~ fields.id['id_gen'],
+  accordion_other_classes: block['className'],
+  accordion_flush: fields.flush,
+  always_open: fields.always_open,
+  accordion_attributes: [
+    accordion_styles ? 'style="' ~ accordion_styles ~ '"'
+  ]
+} %}
+  {% block items %}
+    <InnerBlocks allowedBlocks="{{ ['acf/accordion-item'] | json_encode() | escape('html_attr') }}" template="{{ [['acf/accordion-item']] | json_encode() | escape('html_attr') }}" />
+  {% endblock items %}
+{% endembed %}
+

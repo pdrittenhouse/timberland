@@ -1,0 +1,46 @@
+{
+  "name": "acf/accordion-item",
+  "title": "Accordion Item",
+  "description": "An accordion item block.",
+  "category": "dream",
+  "icon": "admin-collapse",
+  "keywords":  ["accordion", "accordion item"],
+  "usesContext": [ "acf/fields" ],
+  "supports": {
+    "jsx": true,
+    "align": true,
+    "alignContent": true,
+    "alignText": true,
+    "anchor": true,
+    "className": true,
+    "multiple": true,
+    "html": false,
+    "inserter": true,
+    "fullHeight": false,
+    "color": {
+      "text": false,
+      "background": true,
+      "link": false,
+      "gradients": true,
+      "linkColor": true
+    },
+    "typography": {
+      "fontSize": true
+    }
+  },
+  "styles": [
+    { "name": "default", "label": "Default", "isDefault": true },
+    { "name": "other", "label": "Other" }
+  ],
+  "editorScript": "./index.js",
+  "script": "./script.js",
+  "editorStyle": "./index.css",
+  "style": "./style.css",
+  "acf": {
+    "mode": "preview",
+    "renderCallback": "dream_block_render",
+    "postTypes": true,
+    "parent": "acf/accordion",
+    "reusable": true
+  }
+}

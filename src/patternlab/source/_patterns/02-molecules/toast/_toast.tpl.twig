@@ -1,0 +1,232 @@
+{#
+/**
+ * @file
+ * toast
+ *
+ * Available variables for toast:
+ *  - toast_wrapper_id: The id of the toast wrapper.
+ *  - toast_wrapper_classes [array]: Additional component classes.
+ *  - toast_wrapper_other_classes [string]: Additional component classes.
+ *  - toast_wrapper_attributes [array]: Additional component attributes.
+ *  - toast_wrapper_other_attributes [string]: Additional component attributes.
+ *  - toast_container_classes [array]: Additional component classes.
+ *  - toast_container_other_classes [string]: Additional component classes.
+ *  - toast_container_attributes [array]: Additional component attributes.
+ *  - toast_container_other_attributes [string]: Additional component attributes.
+
+ *  - vertical_position [string: 'top', 'bottom', 'middle']: Vertical position of toast container.
+ *  - horizontal_position [string: 'left', 'right', 'center']: Horizontal position of toast container.
+
+ *  - button_group_display [string ('inline-block', 'grid', 'inline', 'block', 'flex', 'inline-flex')]: Button group wrapper display property. Default: 'inline-block'.
+ *  - button_group_size [string: 'sm', 'lg']: Size of the button group.
+ *  - button_group_display_grid [bool]: Display button group as a group (@link https://getbootstrap.com/docs/5.0/components/button-group/) or grid (@link https://getbootstrap.com/docs/5.0/components/buttons/#block-buttons). Default: true (grid).
+ *  - button_group_label [string]: Label for button group.
+ *  - button_group_gap [string]: Label for button group.
+ *  - button_group_breakpoints [object]: Array of breakpoints and display properties for button group. Must correspond to breakpoints defined in the bootstrap SASS variables and default bootstrap display properties (@link https://getbootstrap.com/docs/5.0/utilities/display/)
+ *  - buttons [array]: Array of buttons.
+ *  - button_group_classes [array]: Additional button group classes.
+ *  - button_group_other_classes [string]: Additional button group classes.
+
+ *  - toast.toast_id [string]: Unique identifier for the toast.
+ *  - toast.autohide [boolean]: Auto hide the toast.
+ *  - toast.animation [boolean]: Apply a CSS fade transition to the toast.
+ *  - toast.delay [integer]: Delay hiding the toast (ms).
+ *  - toast.toast_classes [array]: Additional component classes.
+ *  - toast.toast_other_classes [string]: Additional component classes.
+ *  - toast.toast_attributes [array]: Additional component attributes.
+ *  - toast.toast_other_attributes [string]: Additional component attributes.
+
+ *  - toast.toast_display [string: 'show', 'hide']: Set initial display class on toast.
+ *  - toast.background_color [string]: Set toast background color.
+ *  - toast.text_color [string]: Set toast text color.
+ *  - toast.header_background_color [string]: Set toast header background color.
+ *  - toast.header_text_color [string]: Set toast header text color.
+ *  - toast.icon [object]: Display toast icon.
+ *  - toast.image [object]: Display toast image.
+ *  - toast.title [string]: Display toast title.
+ *  - toast.meta [string]: Display toast meta.
+ *  - toast.toast_close_button: [string: 'close', 'white']: Display close button.
+ *  - toast.toast_content [boolean]: Defines content of toast.
+ */
+#}
+
+{% set toast_wrapper_classes = toast_wrapper_classes|default([])|merge([
+  'toast-wrapper',
+  toast_wrapper_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set toast_wrapper_attributes = toast_wrapper_attributes|default([])|merge([
+  toast_wrapper_id ? 'id="' ~ toast_wrapper_id ~ '"',
+  'aria-live="polite"',
+  'aria-atomic="true"',
+  toast_wrapper_other_attributes,
+]) | sort | join(' ') | trim %}
+
+{% set toast_container_classes = toast_container_classes|default([])|merge([
+  'toast-container',
+  'position-fixed',
+  'p-3',
+  vertical_position == 'top' ? 'top-0' : vertical_position == 'bottom' ? 'bottom-0' : vertical_position == 'middle' ? 'top-50',
+  horizontal_position == 'left' ? 'start-0' : horizontal_position == 'right' ? 'end-0' : horizontal_position == 'center' ? 'start-50',
+  vertical_position == 'middle' and horizontal_position != 'center' ? 'translate-middle-y' : vertical_position != 'middle' and horizontal_position == 'center' ? 'translate-middle-x' : vertical_position == 'middle' and horizontal_position == 'center' ? 'translate-middle',
+  toast_container_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set toast_container_attributes = toast_container_attributes|default([])|merge([
+  toast_container_other_attributes,
+]) | sort | join(' ') | trim %}
+
+{% set toastButtons = [] %}
+
+{% set toastContent = [] %}
+
+{% for toast in toasts %}
+  {% set toastId = [] %}
+  {% set alpha = 'abcdefghijklmnopqrstuvwxyz' %}
+  {% set num = '0123456789' %}
+  {% for i in 1..10 %}
+    {% set char = random(alpha ~ alpha|upper ~ num ~ '-_') %}
+    {% set toastId = toastId|merge([char]) %}
+  {% endfor %}
+  {% set toastId = 'toast_' ~ toastId|join %}
+
+  {% set toastButtons = toastButtons | merge([toast.button | merge({
+    button_toggle: 'toast',
+    button_link: toast.toast_id ? '#' ~ toast.toast_id : '#' ~ toastId,
+    button_attributes: [
+      toast.toast_id ? 'aria-controls="' ~ toast.toast_id ~'"' : 'aria-controls="' ~ toastId ~ '"'
+    ],
+    button_target: toast.toast_id ? '#' ~ toast.toast_id : '#' ~ toastId,
+  })]) %}
+
+  {% set toastContent = toastContent | merge([{
+    toastId: toastId,
+    toast_id: toast.toast_id,
+    autohide: toast.autohide,
+    animation: toast.animation,
+    delay: toast.delay,
+    toast_display: toast.toast_display,
+    toast_classes: toast.toast_classes,
+    toast_other_classes: toast.toast_other_classes,
+    toast_attributes: toast.toast_attributes,
+    toast_other_attributes: toast.toast_other_attributes,
+    background_color: toast.background_color,
+    text_color: toast.text_color,
+    header_background_color: toast.header_background_color,
+    header_text_color: toast.header_text_color,
+    icon: toast.icon,
+    image: toast.image,
+    title: toast.title,
+    meta: toast.meta,
+    toast_close_button: toast.toast_close_button,
+    toast_content: toast.toast_content,
+  }]) %}
+{% endfor %}
+
+<div class="{{ toast_wrapper_classes }}" {{ toast_wrapper_attributes }}>
+  {% block controls %}
+    {% include '@molecules/button-group/_button-group.tpl.twig' with {
+      button_group_wrapper_display: button_group_display,
+      button_group_size: button_group_size,
+      button_group_wrapper_other_classes: 'toast--controls',
+      button_groups: [
+        {
+          button_group_display_grid: button_group_display_grid,
+          button_group_label: button_group_label,
+          button_group_gap: button_group_gap,
+          button_group_breakpoints: button_group_breakpoints,
+          button_group_vertical: button_group_vertical,
+          buttons: toastButtons,
+          button_group_classes: button_group_classes,
+          button_group_other_classes: button_group_other_classes
+        }
+      ],
+    } %}
+  {% endblock controls %}
+
+  <div class="{{ toast_container_classes }}" {{ toast_container_attributes }}>
+    {% block toasts %}
+      {% for toast in toastContent %}
+        {% set toast_classes = toast.toast_classes|default([])|merge([
+          'toast',
+          toast.toast_display == 'show' or toast.toast_display == 'hide' ? toast.toast_display,
+          toast.background_color ? 'bg-' ~ toast.background_color,
+          toast.text_color ? 'text-' ~ toast.text_color,
+          toast.toast_other_classes,
+        ]) | sort | join(' ') | trim %}
+
+        {% set toast_attributes = toast.toast_attributes|default([])|merge([
+          toast.toast_id ? 'id="' ~ toast.toast_id ~ '"' : 'id="' ~ toast.toastId ~ '"',
+          toast.autohide != true ? 'data-bs-autohide="false"',
+          toast.animation != true ? 'data-bs-animation="false"',
+          toast.delay ? 'data-bs-delay="' ~ toast.delay ~ '"',
+          'role="alert"',
+          'aria-live="assertive"',
+          'aria-atomic="true"',
+          toast.toast_other_attributes,
+        ]) | sort | join(' ') | trim %}
+
+        <div class="{{ toast_classes }}" {{ toast_attributes }}>
+          {% block toast_header %}
+            <div class="toast-header {{ toast.header_background_color ? 'bg-' ~ toast.header_background_color }} {{ toast.header_text_color ? 'text-' ~ toast.header_text_color }}">
+              {% if toast.icon %}
+                {% include '@atoms/svg/_svg~icon.tpl.twig' with {
+                  svg_classes: [
+                    'toast-icon',
+                    'me-2'
+                  ],
+                  svg_other_classes: toast.icon.svg_other_classes,
+                  width: toast.icon.width,
+                  height: toast.icon.height,
+                  name: toast.icon.name,
+                  fill: toast.icon.fill
+                } %}
+              {% endif %}
+              {% if toast.image %}
+                {% include "@atoms/image/_image.tpl.twig" with {
+                  variant: toast.image.variant,
+                  src: toast.image.src,
+                  alt: toast.image.alt,
+                  placeholder: toast.image.placeholder,
+                  width: toast.image.width,
+                  height: toast.image.height,
+                  background_color: toast.image.background_color,
+                  text_color: toast.image.text_color,
+                  format: toast.image.format,
+                  text: toast.image.text,
+                  image_classes: [
+                    'toast--image',
+                    'me-2'
+                  ],
+                  image_other_classes: toast.image.image_other_classes,
+                } %}
+              {% endif %}
+              {% if toast.title %}
+                <strong class="toast--title me-auto">{{ toast.title }}</strong>
+              {% endif %}
+              {% if toast.meta %}
+                <small class="toast--meta">{{ toast.meta }}</small>
+              {% endif %}
+              {% if toast.toast_close_button %}
+                {% include '@atoms/button/_button.tpl.twig' with {
+                  close_button: toast.toast_close_button,
+                  button_attributes: [
+                    'data-bs-dismiss="toast"'
+                  ]
+                } %}
+              {% endif %}
+            </div>
+          {% endblock toast_header %}
+
+          {% block toast_body %}
+            {% if toast.toast_content %}
+              <div class="toast-body">
+                {{ toast.toast_content }}
+              </div>
+            {% endif %}
+          {% endblock toast_body %}
+        </div>
+      {% endfor %}
+    {% endblock toasts %}
+  </div>
+</div>

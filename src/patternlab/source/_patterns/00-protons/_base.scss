@@ -1,0 +1,51 @@
+//
+// Base PRINTING (generated) CSS styles
+//
+// WARNING: Do NOT include this file in other .scss files. It WILL duplicate
+// output. Instead, import as a dependency in a component's .js file.
+//
+// For instance, DO NOT DO THIS: from @molecules/card/index.js:
+//
+//   import base from '00-protons';
+//   import button from '01-atoms/button';
+//
+// This guarantees both de-duplication and existence of required, generated CSS.
+//
+
+// CSS Variables
+@import 'printing/css-variables';
+
+// Library Printing Styles
+@import 'printing/libs/all';
+
+// Custom CSS-generating output
+@import 'printing/type';
+@import 'printing/forms';
+@import 'printing/tables';
+@import 'printing/animations';
+@import 'printing/elements';
+
+// Wordpress specific style overrides
+@import 'printing/wordpress/all';
+
+// Plugin specific style overrides
+@import 'printing/wordpress/plugins/all';
+
+// Component Styles [For components without a corresponding pattern]
+@import 'printing/components/all';
+
+// Utilities
+@import 'printing/utilities';
+
+// Import print styles
+@import 'printing/print';
+
+.test-icon {
+  @include sprite('close', (color: c(torch-red)));
+  @include rem-calc('width', 20px, true);
+  height: rem-calc(20px);
+  display: inline-block;
+  fill: c(torch-red);
+  z-index: z(modal);
+  background-size: contain !important;
+}

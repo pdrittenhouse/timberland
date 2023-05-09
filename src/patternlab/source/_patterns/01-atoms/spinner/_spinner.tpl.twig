@@ -1,0 +1,41 @@
+{#
+/**
+ * @file
+ * spinner
+ *
+ * Available variables for spinner:
+ *  - spinner_classes [array]: Additional component classes.
+ *  - spinner_other_classes [string]: Additional component classes.
+ *  - spinner_attributes [array]: Additional component attributes.
+ *  - spinner_other_attributes [string]: Additional component attributes.
+ *  - spinner_style [string: 'border', 'grow']: Set spinner style.
+ *  - spinner_color [string]: Set spinner color.
+ *  - spinner_small [boolean]: Use small size spinner.
+ *  - width [string]: Set spinner width.
+ *  - height [string]: Set spinner height.
+ *  - spinner_label [string]: Set spinner label.
+ */
+#}
+
+{% set spinner_style = spinner_style | default('border') %}
+
+{% set spinner_classes = spinner_classes|default([])|merge([
+  spinner_style == 'border' ? 'spinner-border' : spinner_style == 'grow' ? 'spinner-grow',
+  spinner_small == true and spinner_style == 'border' ? 'spinner-border-sm' : spinner_small == true and spinner_style == 'grow' ? 'spinner-grow-sm',
+  spinner_color ? 'text-' ~ spinner_color,
+  spinner_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set spinner_attributes = spinner_attributes|default([])|merge([
+  width or height ? 'style="width:' ~ width ~ '; height:' ~ height ~ ';"',
+  'role="status"',
+  spinner_other_attributes,
+]) | sort | join(' ') | trim %}
+
+<div class="{{ spinner_classes }}" {{ spinner_attributes }}>
+  {% block label %}
+    {% if spinner_label %}
+      <span class="visually-hidden">{{ spinner_label }}</span>
+    {% endif %}
+  {% endblock %}
+</div>

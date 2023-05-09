@@ -1,0 +1,107 @@
+{#
+/**
+ * Block Name: Section
+ *
+ * This is the template that displays the section block.
+ */
+#}
+
+{# Set block data object for block registration: src/funcions/blocks.php #}
+{% set block_data = {
+  name: 'Section',
+  description: 'A section block',
+  category: 'dream',
+  icon: 'table-row-after',
+  keywords: '',
+  mode: 'preview',
+  post_types: true,
+  align: '',
+  align_text: '',
+  align_content: '',
+  enqueue_style: '',
+  enqueue_script: '',
+  supports_align: true,
+  supports_align_text: true,
+  supports_align_content: true,
+  supports_mode: true,
+  supports_multiple: true,
+  supports_anchor: true,
+  supports_className: true,
+  supports_full_height: true,
+  supports_jsx: true
+} %}
+
+{% if is_preview %}
+{# <p>Some editor instructions here.</p> #}
+{% endif %}
+
+{# Vertical Alignment #}
+{% if fields.vertical_alignment['vert_align'] %}
+  {% set vertical_alignment = [] %}
+  {% for alignment in fields.vertical_alignment['vert_align'] %}
+    {% if alignment['breakpoint'] %}
+      {% set bp = '-' ~ alignment.breakpoint %}
+    {% else %}
+      {% set bp = '' %}
+    {% endif %}
+    {% if alignment['alignment'] %}
+      {% set valign = '-' ~ alignment.alignment %}
+    {% endif %}
+    {% if valign %}
+      {% set vertical_alignment = vertical_alignment|default([])|merge([
+        'align-items' ~ bp  ~ valign
+      ]) %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% set section_classes = [
+  'block-section',
+  block['className'],
+  fields.section_bg_color['bg_color'] == 'palette' and fields.section_bg_color['bg_theme_color'] ? 'bg-' ~ fields.section_bg_color['bg_theme_color']
+] | sort | join(' ') | trim %}
+
+{% set section_styles = [
+  fields.section_bg_color['bg_color'] == 'custom' ? 'background-color:' ~ fields.section_bg_color['bg_custom_color'] ~ ';',
+  fields.margin['top']['auto'] == true ? 'margin-top: auto;' : fields.margin['top']['top'] >= 0 ? 'margin-top: ' ~ fields.margin['top']['top'] ~ 'px;',
+  fields.margin['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.margin['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.margin['bottom']['bottom'] ~ 'px;'
+] | sort | join(' ') | trim %}
+
+{% set section_wrapper_classes = [
+  'block-section--wrapper',
+  vertical_alignment|length > 0 ? vertical_alignment|sort|join(' ')|trim
+] | sort | join(' ') | trim %}
+
+{% set wrapper_styles = [
+  fields.height['height']['value'] >= 0 ? 'height: ' ~ fields.height['height']['value'] ~ fields.height['height']['unit'] ~ ';',
+  fields.height['min_height'] >= 0 ? 'min-height: ' ~ fields.height['min_height'] ~ 'px;',
+  fields.height['max_height'] >= 0 ? 'max-height: ' ~ fields.height['max_height'] ~ 'px;',
+  fields.container != true and fields.padding['padding']['top'] >= 0 ? 'padding-top: ' ~ fields.padding['padding']['top'] ~ 'px;',
+  fields.container != true and fields.padding['padding']['bottom'] >= 0 ? 'padding-bottom: ' ~ fields.padding['padding']['bottom'] ~ 'px;',
+  fields.container != true and fields.padding['padding']['left'] >= 0 ? 'padding-left: ' ~ fields.padding['padding']['left'] ~ 'px;',
+  fields.container != true and fields.padding['padding']['right'] >= 0 ? 'padding-right: ' ~ fields.padding['padding']['right'] ~ 'px;',
+  fields.col_gap['value'] ? 'column-gap: ' ~ fields.col_gap['value'] ~ fields.col_gap['unit'] ~ ';'
+] | sort | join(' ') | trim %}
+
+{% set container_classes = [
+  fields.full_width == true ? 'container-fluid' : 'container',
+  fields.container_bg_color['bg_color'] == 'palette' and fields.container_bg_color['bg_theme_color'] ? 'bg-' ~ fields.container_bg_color['bg_theme_color']
+] | sort | join(' ') | trim %}
+
+{% set container_styles = [
+  fields.container_bg_color['bg_color'] == 'custom' ? 'background-color:' ~ fields.container_bg_color['bg_custom_color'] ~ ';',
+  fields.container == true and fields.padding['padding']['top'] >= 0 ? 'padding-top: ' ~ fields.padding['padding']['top'] ~ 'px;',
+  fields.container == true and fields.padding['padding']['bottom'] >= 0 ? 'padding-bottom: ' ~ fields.padding['padding']['bottom'] ~ 'px;',
+  fields.container == true and fields.padding['padding']['left'] >= 0 ? 'padding-left: ' ~ fields.padding['padding']['left'] ~ 'px;',
+  fields.container == true and fields.padding['padding']['right'] >= 0 ? 'padding-right: ' ~ fields.padding['padding']['right'] ~ 'px;'
+] | sort | join(' ') | trim %}
+
+<section class="{{ section_classes }}" {{ section_styles ? 'style="' ~ section_styles ~ '"'}}>
+  <div class="{{ section_wrapper_classes }}" {{ wrapper_styles ? 'style="' ~ wrapper_styles ~ '"' }}>
+    {% if fields.container == true %}<div class="{{ container_classes }}" {{ container_styles ? 'style="' ~ container_styles ~ '"' }}>{% endif %}
+
+      <InnerBlocks disallowedBlocks="{{ ['core/image', 'core/paragraph', 'core/heading', 'acf/section'] | json_encode() | escape('html_attr') }}" />
+
+    {% if fields.container == true %}</div>{% endif %}
+  </div>
+</section>

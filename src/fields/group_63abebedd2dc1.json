@@ -1,0 +1,108 @@
+{
+    "key": "group_63abebedd2dc1",
+    "title": "Module: Jumbotron Layouts",
+    "fields": [
+        {
+            "key": "field_63abebeef2080",
+            "label": "",
+            "name": "jumbotron_layout",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "choices": {
+                "default": "Default",
+                "fifty-fifty": "50\/50",
+                "card-content-left": "Card: Content Left",
+                "card-content-right": "Card: Content Right",
+                "full-height-centered": "Full Height Centered",
+                "content-overlap-left": "Content Overlap Left",
+                "content-overlap-right": "Content Overlap Right",
+                "gradient-overlay-left": "Gradient Overlay Left",
+                "gradient-overlay-right": "Gradient Overlay Right",
+                "angles-right": "Angles Right",
+                "angles-left": "Angles Left",
+                "content-overlay-bottom": "Content Overlay Bottom"
+            },
+            "default_value": "default",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_63c88baf05c04",
+            "label": "",
+            "name": "gradient",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_63abebeef2080",
+                        "operator": "==",
+                        "value": "gradient-overlay-left"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_63abebeef2080",
+                        "operator": "==",
+                        "value": "gradient-overlay-right"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "choices": {
+                "primary-secondary-horizontal": "Horizontal - Primary\/Secondary",
+                "tertiary-quaternary-vertical": "Vertical - Tertiary\/Quaternary",
+                "quinary-senary-diagonal-up": "Diagonal Up - Quinary\/Senary",
+                "septenary-octonary-diagonal-down": "Diagonal Down - Septenary\/Octonary",
+                "nonary-denary-diagonal-down": "Diagonal Down - Nonary\/Denary",
+                "primary-secondary-radial": "Radial - Primary\/Secondary"
+            },
+            "default_value": "primary-secondary-horizontal",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "block-modules"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1674431005
+}

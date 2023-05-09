@@ -1,0 +1,59 @@
+{#
+/**
+ * @file
+ * card grid
+ *
+ * Available variables for card grid:
+ *  - type [string: 'grid', 'group', 'deck', 'row']: Card grid type
+ *  - card_grid_title [string]: Grid title
+ *  - card_grid_classes [array]: Additional component classes.
+ *  - card_grid_other_classes [string]: Additional component classes.
+ *  - columns [string, int: 2-6]: Card grid column count.
+ *  - placecard [bool]: Include placecards to align cards in last row.
+ *  - singlerow [bool]: Single row grid.
+ *  - mobilecolumns [bool]: Show columns on mobile.
+ *  - vertical_offset [string: 'left', 'right']: Card vertical offset.
+ */
+#}
+
+{% set type = type | default('grid') %}
+
+{% set card_grid_classes = card_grid_classes|default([])|merge([
+  'card-grid-wrapper',
+  card_grid_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set card_grid_attributes = card_grid_attributes|default([])|merge([
+  card_grid_classes ? 'class="' ~ card_grid_classes ~ '"',
+  card_grid_other_attributes,
+]) | sort | join(' ') | trim %}
+
+{% set grid_classes = grid_classes|default([])|merge([
+  'card-' ~ type,
+  type == 'row' ? 'row',
+  columns and type == 'row' ? 'row-cols-' ~ columns,
+  columns and type == 'grid' ? 'grid-cols-' ~ columns,
+  columns and type == 'grid' and singlerow == true ? 'single-row',
+  columns and type == 'grid' and mobilecolumns == true ? 'mobile-columns',
+  vertical_offset == 'left' or vertical_offset == 'right' ? 'vertical-offset vertical-offset-' ~ vertical_offset,
+  grid_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set grid_attributes = grid_attributes|default([])|merge([
+  grid_classes ? 'class="' ~ grid_classes ~ '"',
+  grid_other_attributes,
+]) | sort | join(' ') | trim %}
+
+<div {{ card_grid_attributes }}>
+  {% if card_grid_title %}
+    <h2 class="card-grid--title">{{ card_grid_title }}</h2>
+  {% endif %}
+  <div {{ grid_attributes }}>
+    {% block card_grid_cards %}{% endblock card_grid_cards %}
+    {% if placecard == true and columns | number_format >= 2 %}
+      {% for i in 1..columns | number_format - 2 %}
+        <span class="placecard"></span>
+      {% endfor %}
+    {% endif %}
+  </div>
+</div>

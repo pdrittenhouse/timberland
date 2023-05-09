@@ -1,0 +1,12 @@
+{% include '@atoms/button/_button.tpl.twig' with {
+  button_element: 'a',
+  button_link: fn('wc_get_cart_url'),
+  button_color: 'link',
+  button_text: 'Cart <strong class="count">(' ~ woo.cart.get_cart_contents_count ~ ')</strong>',
+  button_id: 'cart-button',
+  button_classes: [
+    woo.cart.is_empty ? 'button button--passive' : 'button',
+    'header-cta-button',
+    'woocommerce--cart-trigger'
+  ]
+} %}

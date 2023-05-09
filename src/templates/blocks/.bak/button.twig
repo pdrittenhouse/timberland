@@ -1,0 +1,192 @@
+{#
+/**
+ * Block Name: Button
+ *
+ * This is the template that displays the button block.
+ */
+#}
+
+{# Set block data object for block registration: src/funcions/blocks.php #}
+{% set block_data = {
+  name: 'Button',
+  description: 'A button block',
+  category: 'dream',
+  icon: 'button',
+  keywords: '',
+  mode: 'preview',
+  post_types: true,
+  align: '',
+  align_text: '',
+  align_content: '',
+  enqueue_style: '',
+  enqueue_script: '',
+  supports_align: true,
+  supports_align_text: true,
+  supports_align_content: true,
+  supports_mode: true,
+  supports_multiple: true,
+  supports_anchor: true,
+  supports_className: true,
+  supports_full_height: true,
+  supports_jsx: true
+} %}
+
+{#{% if is_preview %}#}
+{#<p>Some editor instructions here.</p>#}
+{#{% endif %}#}
+
+{#{{ block['className'] }}#}
+{#{{ block['align'] ? 'align-' ~ block['align'] }}#}
+
+{% if fields.dropdown == true %}
+  {% set template = '_button~dropdown.tpl.twig' %}
+{% else %}
+  {% set template = '_button.tpl.twig' %}
+{% endif %}
+
+{#{% set parent = function('get_parent_block', block['id'], block['name']) %}#}
+
+{#{{ function('print_r', '<pre>') }}#}
+{#{{ function('print_r', parent_block_data) }}#}
+{#{{ function('print_r', '</pre>') }}#}
+
+{# Set custom button styles #}
+{% if fields.close != 'black' and fields.close != 'white' and fields.style == 'custom' %}
+  {% set bg_color = fields.background_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.background_color['bg_custom_color'] ~ ';' %}
+  {% set text_color = fields.text_color['color'] == 'custom' ? 'color: ' ~ fields.text_color['custom_color'] ~ ';' %}
+  {% set transform = fields['text_transform']['text_transform'] ? 'text-transform: ' ~ fields['text_transform']['text_transform'] ~ ';' %}
+  {% set btn_padding_top  = fields['padding']['padding']['top'] >= 0 ? 'padding-top: ' ~ fields['padding']['padding']['top'] ~ 'px;' %}
+  {% set btn_padding_bottom = fields['padding']['padding']['bottom'] >= 0 ? 'padding-bottom: ' ~ fields['padding']['padding']['bottom'] ~ 'px;' %}
+  {% set btn_padding_left = fields['padding']['padding']['left'] >= 0 ? 'padding-left: ' ~ fields['padding']['padding']['left'] ~ 'px;' %}
+  {% set btn_padding_right = fields['padding']['padding']['right'] >= 0 ? 'padding-right: ' ~ fields['padding']['padding']['right'] ~ 'px;' %}
+  {% set btn_border_top_width = fields['border']['top']['width'] >= 0 ? 'border-top-width: ' ~ fields['border']['top']['width'] ~ 'px;' %}
+  {% set btn_border_top_style = fields['border']['top']['style'] ? 'border-top-style: ' ~ fields['border']['top']['style'] ~ ';' %}
+  {% set btn_border_top_color = fields['border']['top']['color'] == 'custom' and fields['border']['top']['custom_color'] ? 'border-top-color: ' ~ fields['border']['top']['custom_color'] ~ ';' : fields['border']['top']['color'] == 'palette' and fields['border']['top']['theme_color'] ? 'border-top-color: var(--' ~ fields['border']['top']['theme_color'] ~ ');' %}
+  {% set btn_border_bottom_width = fields['border']['bottom']['width'] >= 0 ? 'border-bottom-width: ' ~ fields['border']['bottom']['width'] ~ 'px;' %}
+  {% set btn_border_bottom_style = fields['border']['bottom']['style'] ? 'border-bottom-style: ' ~ fields['border']['bottom']['style'] ~ ';' %}
+  {% set btn_border_bottom_color = fields['border']['bottom']['color'] == 'custom' and fields['border']['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields['border']['bottom']['custom_color'] ~ ';' : fields['border']['bottom']['color'] == 'palette' and fields['border']['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields['border']['bottom']['theme_color'] ~ ');' %}
+  {% set btn_border_left_width = fields['border']['left']['width'] >= 0 ? 'border-left-width: ' ~ fields['border']['left']['width'] ~ 'px;' %}
+  {% set btn_border_left_style = fields['border']['left']['style'] ? 'border-left-style: ' ~ fields['border']['left']['style'] ~ ';' %}
+  {% set btn_border_left_color = fields['border']['left']['color'] == 'custom' and fields['border']['left']['custom_color'] ? 'border-left-color: ' ~ fields['border']['left']['custom_color'] ~ ';' : fields['border']['left']['color'] == 'palette' and fields['border']['left']['theme_color'] ? 'border-left-color: var(--' ~ fields['border']['left']['theme_color'] ~ ');' %}
+  {% set btn_border_right_width = fields['border']['right']['width'] >= 0 ? 'border-right-width: ' ~ fields['border']['right']['width'] ~ 'px;' %}
+  {% set btn_border_right_style = fields['border']['right']['style'] ? 'border-right-style: ' ~ fields['border']['right']['style'] ~ ';' %}
+  {% set btn_border_right_color = fields['border']['right']['color'] == 'custom' and fields['border']['right']['custom_color'] ? 'border-right-color: ' ~ fields['border']['right']['custom_color'] ~ ';' : fields['border']['right']['color'] == 'palette' and fields['border']['right']['theme_color'] ? 'border-right-color: var(--' ~ fields['border']['right']['theme_color'] ~ ');' %}
+  {% set btn_border_top_left_radius = fields['border_radius']['top_left'] >= 0 ? 'border-top-left-radius: ' ~ fields['border_radius']['top_left'] ~ 'px;' %}
+  {% set btn_border_top_right_radius = fields['border_radius']['top_right'] >= 0 ? 'border-top-right-radius: ' ~ fields['border_radius']['top_right'] ~ 'px;' %}
+  {% set btn_border_bottom_left_radius = fields['border_radius']['bottom_left'] >= 0 ? 'border-bottom-left-radius: ' ~ fields['border_radius']['bottom_left'] ~ 'px;' %}
+  {% set btn_border_bottom_right_radius = fields['border_radius']['bottom_right'] >= 0 ? 'border-bottom-right-radius: ' ~ fields['border_radius']['bottom_right'] ~ 'px;' %}
+  {% set box_shadow_color = fields['box_shadow']['color']['color'] == 'palette' and fields['box_shadow']['color']['theme_color'] ? 'var(--' ~ fields['box_shadow']['color']['theme_color'] ~ ')' : fields['box_shadow']['color']['color'] == 'custom' and fields['box_shadow']['color']['custom_color'] ? fields['box_shadow']['color']['custom_color'] %}
+  {% set box_shadow_inset = fields['box_shadow']['inset'] == true ? 'inset' %}
+  {% set btn_box_shadow = fields['box_shadow']['horizontal_offset'] >= 0 or fields['box_shadow']['vertical_offset'] >= 0 or fields['box_shadow']['blur'] >= 0 or fields['box_shadow']['spread'] >= 0 or box_shadow_color or box_shadow_inset == true ? 'box-shadow: ' ~ fields['box_shadow']['horizontal_offset'] ~ 'px ' ~ fields['box_shadow']['vertical_offset'] ~ 'px ' ~ fields['box_shadow']['blur'] ~ 'px ' ~ fields['box_shadow']['spread'] ~ 'px ' ~ box_shadow_color ~ ' ' ~ box_shadow_inset ~ ';' %}
+  {% set text_shadow_color = fields['text_shadow']['color']['color'] == 'palette' and fields['text_shadow']['color']['theme_color'] ? 'var(--' ~ fields['text_shadow']['color']['theme_color'] ~ ')' : fields['text_shadow']['color']['color'] == 'custom' and fields['text_shadow']['color']['custom_color'] ? fields['text_shadow']['color']['custom_color'] %}
+  {% set btn_text_shadow = fields['text_shadow']['horizontal_offset'] >= 0 or fields['text_shadow']['vertical_offset'] >= 0 or fields['text_shadow']['blur'] >= 0 or text_shadow_color ? 'text-shadow: ' ~ fields['text_shadow']['horizontal_offset'] ~ 'px ' ~ fields['text_shadow']['vertical_offset'] ~ 'px ' ~ fields['text_shadow']['blur'] ~ 'px ' ~ text_shadow_color ~ ';' %}
+{% endif %}
+{% set fontsize = fields['font_size']['font_size']['value'] >= 0 ? 'font-size: ' ~ fields['font_size']['font_size']['value'] ~ fields['font_size']['font_size']['unit'] ~ ';' %}
+{% set width = fields.width['width']['value'] >= 0 ? 'width: ' ~ fields.width['width']['value']  ~ fields.width['width']['unit'] ~  ';' %}
+{% set min_width = fields.width['min_width'] >= 0 ? 'min-width: ' ~ fields.width['min_width']  ~ 'px;' %}
+{% set max_width = fields.width['max_width'] >= 0 ? 'max-width: ' ~ fields.width['max_width']  ~ 'px;' %}
+{% set margin_top = fields.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['top']['top'] >= 0 ? 'margin-top: ' ~ fields.margin['margin']['top']['top'] ~ 'px;' %}
+{% set margin_bottom = fields.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.margin['margin']['bottom']['bottom'] ~ 'px;' %}
+{% set margin_left = fields.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.margin['margin']['left']['left'] ~ 'px;' %}
+{% set margin_right = fields.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.margin['margin']['right']['right'] ~ 'px;' %}
+
+{# Button #}
+{% embed '@atoms/button/' ~ template with {
+  button_element: fields.element,
+  button_text: fields.link['title'],
+  button_link: fields.link['url'],
+  button_target: fields.toggle == true ? fields.link['url'] : fields.link['target'],
+  button_color: fields.close != 'black' and fields.close != 'white' and fields.style != 'custom' ? fields.style | default('default'),
+  button_size: fields.size,
+  button_outline: fields.outline,
+  button_block: fields.full_width,
+  button_toggle: fields.toggle,
+  button_id: fields.id ? fields.id : fields.id_gen ? 'button' ~ fields.id_gen,
+  button_active: fields.active,
+  button_disabled: fields.disabled,
+  button_expanded: fields.active,
+  button_value: fields.value,
+  button_controls: fields.toggle == true ? fields.link['url'] | trim('#'),
+  nowrap: fields.nowrap,
+  contextual_content: fields.toggle == 'tooltip' or fields.toggle == 'popover' ? fields.toggle,
+  title: fields.context['title'],
+  popover_content: fields.context['content'],
+  context_placement: fields.context['placement'],
+  context_container: fields.context['container'],
+  close_button: fields.close,
+  hide_label: fields.hide_label,
+  button_classes: [
+    fields.close != 'black' and fields.close != 'white' and fields.background_color['bg_color'] == 'palette' and fields.background_color['bg_theme_color'] ? 'bg-' ~ fields.background_color['bg_theme_color'],
+    fields.close != 'black' and fields.close != 'white' and fields.text_color['color'] == 'palette' and fields.text_color['theme_color'] ? 'text-' ~ fields.text_color['theme_color'],
+    fields.full_width != true and fields.display['display'] is not null ? fields.display['display']
+  ],
+  button_other_classes: fields.classes,
+  button_attributes: [
+    bg_color or text_color or transform or btn_padding_top or btn_padding_bottom or btn_padding_left or btn_padding_right or btn_border_top_width or btn_border_top_style or btn_border_top_color or btn_border_bottom_width or btn_border_bottom_style or btn_border_bottom_color or btn_border_left_width or btn_border_left_style or btn_border_left_color or btn_border_right_width or btn_border_right_style or btn_border_right_color or btn_border_top_left_radius or btn_border_top_right_radius or btn_border_bottom_left_radius or btn_border_bottom_right_radius or btn_box_shadow or btn_text_shadow or fontsize or width or min_width or max_width or margin_top or margin_bottom or margin_left or margin_right ? 'style="' ~ bg_color ~ text_color ~ fontsize ~ transform ~ btn_padding_top ~ btn_padding_bottom ~ btn_padding_left ~ btn_padding_right ~ btn_border_top_width ~ btn_border_top_style ~ btn_border_top_color ~ btn_border_bottom_width ~ btn_border_bottom_style ~ btn_border_bottom_color ~ btn_border_left_width ~ btn_border_left_style ~ btn_border_left_color ~ btn_border_right_width ~ btn_border_right_style ~ btn_border_right_color ~ btn_border_top_left_radius ~ btn_border_top_right_radius ~ btn_border_bottom_left_radius ~ btn_border_bottom_right_radius ~ btn_box_shadow ~ btn_text_shadow ~ width ~ min_width ~ max_width ~ margin_top ~ margin_bottom ~ margin_left ~ margin_right ~ '"'
+  ]
+} %}
+  {% block left %}
+    {% if fields.show_left_icon == true %}
+      {% set left_v_offset = fields.icon_left.vertical_offset ? fields.icon_left.vertical_offset ~ 'px' : '0px' %}
+      {% set left_h_offset = fields.icon_left.horizontal_offset ? fields.icon_left.horizontal_offset ~ 'px' : '0px' %}
+      {% set left_offset = left_h_offset or left_v_offset ? 'transform: translate(' ~ left_v_offset ~ ' , ' ~ left_h_offset ~ ');'  %}
+      {% if fields.icon_left.type == 'custom' %}
+        {% include '@atoms/svg/_svg~icon.tpl.twig' with {
+          svg_other_classes: 'icon',
+          width: fields.icon_left.size ~ 'px',
+          height: fields.icon_left.size ~ 'px',
+          name: fields.icon_left.icon,
+          fill: fields.icon_left.icon_color.color == 'palette' ? fields.icon_left.icon_color.theme_color,
+          svg_styles: [
+            fields.icon_left.icon_color.color == 'custom' ? 'color: ' ~ fields.icon_left.icon_color.custom_color ~ ';',
+            left_offset
+          ]
+        } %}
+      {% elseif fields.icon_left.type == "font-awesome"%}
+        {% set color = fields.icon_left.icon_color.color == 'palette' ? 'color: var(--' ~ fields.icon_left.icon_color.theme_color ~ ');' : fields.icon_left.icon_color.color == 'custom' ? 'color: ' ~ fields.icon_left.icon_color.custom_color ~ ';' %}
+        {% set fontsize = fields.icon_left.size ? 'font-size: ' ~ fields.icon_left.size ~ 'px;' %}
+        <span class="icon">
+          <i class="{{ fields.icon_left.fa_icon_style }} fa-{{ fields.icon_left.fa_icon }}" {{ color or fontsize or left_offset ? 'style="' ~ color ~ fontsize ~ left_offset ~ '"' }}></i>
+        </span>
+      {% endif %}
+    {% endif %}
+  {% endblock left %}
+  {% block button_content %}
+    {% if close_button != 'black' and close_button != 'white' %}
+      <span class="button--label">
+        <InnerBlocks allowedBlocks="{{ ['acf/button-text'] | json_encode() | escape('html_attr') }}" template="{{ [['acf/button-text']] | json_encode() | escape('html_attr') }}" templateLock="all" />
+      </span>
+    {% endif %}
+  {% endblock button_content %}
+  {% block right %}
+    {% if fields.show_right_icon == true %}
+      {% set right_v_offset = fields.icon_right.vertical_offset ? fields.icon_right.vertical_offset ~ 'px' : '0px' %}
+      {% set right_h_offset = fields.icon_right.horizontal_offset ? fields.icon_right.horizontal_offset ~ 'px' : '0px' %}
+      {% set right_offset = right_h_offset or right_v_offset ? 'transform: translate(' ~ right_v_offset ~ ' , ' ~ right_h_offset ~ ');'  %}
+      {% if fields.icon_right.type == 'custom' %}
+        {% include '@atoms/svg/_svg~icon.tpl.twig' with {
+          svg_other_classes: 'icon',
+          width: fields.icon_right.size ~ 'px',
+          height: fields.icon_right.size ~ 'px',
+          name: fields.icon_right.icon,
+          fill: fields.icon_right.icon_color.color == 'palette' ? fields.icon_right.icon_color.theme_color,
+          svg_styles: [
+            fields.icon_right.icon_color.color == 'custom' ? 'color: ' ~ fields.icon_right.icon_color.custom_color ~ ';',
+            right_offset
+          ]
+        } %}
+      {% elseif fields.icon_right.type == "font-awesome"%}
+        {% set color = fields.icon_right.icon_color.color == 'palette' ? 'color: var(--' ~ fields.icon_right.icon_color.theme_color ~ ');' : fields.icon_right.icon_color.color == 'custom' ? 'color: ' ~ fields.icon_right.icon_color.custom_color ~ ';' %}
+        {% set fontsize = fields.icon_right.size ? 'font-size: ' ~ fields.icon_right.size ~ 'px;' %}
+        <span class="icon">
+          <i class="{{ fields.icon_right.fa_icon_style }} fa-{{ fields.icon_right.fa_icon }}" {{ color or fontsize or right_offset ? 'style="' ~ color ~ fontsize ~ right_offset ~ '"' }}></i>
+        </span>
+      {% endif %}
+    {% endif %}
+  {% endblock right %}
+{% endembed %}
+
+
+{% if is_preview and (fields.id or fields.id_gen) and fields.show_ids == true %}
+  <small><strong>Button {{ fields.link['title'] ? '"' ~ fields.link['title'] ~ '"' : loop.index }} ID:</strong> {{ fields.id ? fields.id}}{{ fields.id_gen ? 'button' ~ fields.id_gen }}</small>
+{% endif %}

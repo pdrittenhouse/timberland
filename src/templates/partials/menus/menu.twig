@@ -1,0 +1,65 @@
+{% if menu %}
+  {% set nav_items = {} %}
+
+  {% for item in menu %}
+
+    {% set children_level_1 = {} %}
+
+    {% for child_item_level_1 in item.children %}
+
+      {% set children_level_2 = {} %}
+
+      {% for child_item_level_2 in child_item_level_1.children %}
+
+        {% set level_2_child = {
+          title: child_item_level_2.title,
+          url: child_item_level_2.link,
+          parent_element: 'ul',
+          item_classes: child_item_level_2.classes,
+          link_id: child_item_level_2.title|replace({' ': ''})|lower,
+          link_target: child_item_level_2.target,
+          description: child_item_level_2.description,
+          items: child_item_level_2.children
+        } %}
+
+        {% set children_level_2 = children_level_2|merge([level_2_child]) %}
+
+      {% endfor %}
+
+
+      {% set level_1_child = {
+        title: child_item_level_1.title,
+        url: child_item_level_1.link,
+        parent_element: 'ul',
+        item_classes: child_item_level_1.classes,
+        link_id: child_item_level_1.title|replace({' ': ''})|lower,
+        link_target: child_item_level_1.target,
+        description: child_item_level_1.description,
+        items: children_level_2
+      } %}
+
+      {% set children_level_1 = children_level_1|merge([level_1_child]) %}
+
+    {% endfor %}
+
+    {% set nav_item = {
+      title: item.title,
+      url: item.link,
+      parent_element: 'ul',
+      item_classes: item.classes,
+      link_id: item.title|replace({' ': ''})|lower,
+      link_target: item.target,
+      description: item.description,
+      items: children_level_1
+    } %}
+
+    {% set nav_items = nav_items|merge([nav_item]) %}
+  {% endfor %}
+
+  {% include '@molecules/nav/_nav.tpl.twig' with {
+    nav_element: 'ul',
+    nav_id: nav_id,
+    nav_other_classes: nav_other_classes,
+    items: nav_items
+  } %}
+{% endif %}

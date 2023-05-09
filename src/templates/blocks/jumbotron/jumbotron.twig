@@ -1,0 +1,241 @@
+{#
+/**
+ * Block Name: Jumbotron
+ *
+ * This is the template that displays the  block.
+ */
+#}
+
+{#{% if is_preview %}#}
+{#<p>Some editor instructions here.</p>#}
+{#{% endif %}#}
+
+{#{{ block['className'] }}#}
+{#{{ block['align'] ? 'align-' ~ block['align'] }}#}
+{#{{ block['align_text']}}#}
+{#{{ block['align_content'] }}#}
+{#{{ block['full_height'] }}#}
+
+{# Parent Block Data #}
+{# ACF <= v.5.9 #}
+{#{% set parent = function('get_parent_block', block['id'], block['name']) %}#}
+{# ACF >= v.6.0 #}
+{#{{ parent_block_data['data'] }}#}
+{# Block Context #}
+{#{{ block_context['acf/fields'] }}#}
+{# ACF Options Fields #}
+{#{{ options }}#}
+{# ACF Fields #}
+{#{{ fields }}#}
+
+{# Set Jumbotron Styles #}
+{% set bg_color =  fields.bg_video != true and fields.jumbotron_bg_color['bg_color'] == 'custom' and fields.jumbotron_bg_color['bg_custom_color'] ? 'background-color: ' ~  fields.jumbotron_bg_color['bg_custom_color'] ~ ';' %}
+{% set text_color =  fields.jumbotron_text_color['color'] == 'custom' and fields.jumbotron_text_color['custom_color'] ? 'color: ' ~  fields.jumbotron_text_color['custom_color'] ~ ';' %}
+{% set bg_image = fields.jumbotron_bg_image['bg_image_type'] == 'file' and fields.jumbotron_bg_image['bg_image']['url'] ? fields.jumbotron_bg_image['bg_image']['url'] : fields.jumbotron_bg_image['bg_image_type'] == 'url' and fields.jumbotron_bg_image['bg_image_url'] ? fields.jumbotron_bg_image['bg_image_url'] %}
+{% set bg_image_size = fields.jumbotron_bg_image['bg_size'] == 'custom' and fields.jumbotron_bg_image['custom_bg_size'] ? 'background-size: ' ~ fields.jumbotron_bg_image['custom_bg_size'] ~ ';' : fields.jumbotron_bg_image['bg_size'] ? 'background-size: ' ~ fields.jumbotron_bg_image['bg_size'] ~ ';' %}
+{% set bg_hor_pos = fields.jumbotron_bg_image['bg_horizontal_position'] == 'custom' ? fields.jumbotron_bg_image['custom_bg_horizontal_position'] : fields.jumbotron_bg_image['bg_horizontal_position'] ? fields.jumbotron_bg_image['bg_horizontal_position'] %}
+{% set bg_ver_pos = fields.jumbotron_bg_image['bg_vertical_position'] == 'custom' ? fields.jumbotron_bg_image['custom_bg_vertical_position'] : fields.jumbotron_bg_image['bg_vertical_position'] ? fields.jumbotron_bg_image['bg_vertical_position'] %}
+{% set bg_position = bg_hor_pos or bg_ver_pos ? 'background-position: ' ~ bg_hor_pos ~ ' ' ~ bg_ver_pos ~ ';' %}
+{% set bg_repeat = fields.jumbotron_bg_image['bg_repeat'] ? 'background-repeat: ' ~ fields.jumbotron_bg_image['bg_repeat'] ~ ';' %}
+{% set bg_attachment = fields.jumbotron_bg_image['bg_attachment'] ? 'background-attachment: ' ~ fields.jumbotron_bg_image['bg_attachment'] ~ ';' %}
+{% set padding_top  = fields.jumbotron_padding['padding']['top'] is not empty ? 'padding-top: ' ~ fields.jumbotron_padding['padding']['top'] ~ 'px;' %}
+{% set padding_bottom = fields.jumbotron_padding['padding']['bottom'] is not empty ? 'padding-bottom: ' ~ fields.jumbotron_padding['padding']['bottom'] ~ 'px;' %}
+{% set padding_left = fields.jumbotron_padding['padding']['left'] is not empty ? 'padding-left: ' ~ fields.jumbotron_padding['padding']['left'] ~ 'px;' %}
+{% set padding_right = fields.jumbotron_padding['padding']['right'] is not empty ? 'padding-right: ' ~ fields.jumbotron_padding['padding']['right'] ~ 'px;' %}
+{% set margin_top = fields.jumbotron_margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : fields.jumbotron_margin['margin']['top']['top'] is not empty ? 'margin-top: ' ~ fields.jumbotron_margin['margin']['top']['top'] ~ 'px;' %}
+{% set margin_bottom = fields.jumbotron_margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.jumbotron_margin['margin']['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ fields.jumbotron_margin['margin']['bottom']['bottom'] ~ 'px;' %}
+{% set margin_left = fields.jumbotron_margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : fields.jumbotron_margin['margin']['left']['left'] is not empty ? 'margin-left: ' ~ fields.jumbotron_margin['margin']['left']['left'] ~ 'px;' %}
+{% set margin_right = fields.jumbotron_margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : fields.jumbotron_margin['margin']['right']['right'] is not empty ? 'margin-right: ' ~ fields.jumbotron_margin['margin']['right']['right'] ~ 'px;' %}
+{% set height = fields.height['height']['height']['value'] is not empty ? 'height: ' ~ fields.height['height']['height']['value']  ~ fields.height['height']['height']['unit'] ~  ';' %}
+{% set min_height = fields.height['height']['min_height'] is not empty ? 'min-height: ' ~ fields.height['height']['min_height']  ~ 'px;' %}
+{% set max_height = fields.height['height']['max_height'] is not empty ? 'max-height: ' ~ fields.height['height']['max_height']  ~ 'px;' %}
+{% set border_top_width = fields['border']['top']['width'] is not empty ? 'border-top-width: ' ~ fields['border']['top']['width'] ~ 'px;' %}
+{% set border_top_style = fields['border']['top']['style'] ? 'border-top-style: ' ~ fields['border']['top']['style'] ~ ';' %}
+{% set border_top_color = fields['border']['top']['color'] == 'custom' and fields['border']['top']['custom_color'] ? 'border-top-color: ' ~ fields['border']['top']['custom_color'] ~ ';' : fields['border']['top']['color'] == 'palette' and fields['border']['top']['theme_color'] ? 'border-top-color: var(--' ~ fields['border']['top']['theme_color'] ~ ');' %}
+{% set border_bottom_width = fields['border']['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ fields['border']['bottom']['width'] ~ 'px;' %}
+{% set border_bottom_style = fields['border']['bottom']['style'] ? 'border-bottom-style: ' ~ fields['border']['bottom']['style'] ~ ';' %}
+{% set border_bottom_color = fields['border']['bottom']['color'] == 'custom' and fields['border']['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields['border']['bottom']['custom_color'] ~ ';' : fields['border']['bottom']['color'] == 'palette' and fields['border']['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields['border']['bottom']['theme_color'] ~ ');' %}
+{% set border_left_width = fields['border']['left']['width'] is not empty ? 'border-left-width: ' ~ fields['border']['left']['width'] ~ 'px;' %}
+{% set border_left_style = fields['border']['left']['style'] ? 'border-left-style: ' ~ fields['border']['left']['style'] ~ ';' %}
+{% set border_left_color = fields['border']['left']['color'] == 'custom' and fields['border']['left']['custom_color'] ? 'border-left-color: ' ~ fields['border']['left']['custom_color'] ~ ';' : fields['border']['left']['color'] == 'palette' and fields['border']['left']['theme_color'] ? 'border-left-color: var(--' ~ fields['border']['left']['theme_color'] ~ ');' %}
+{% set border_right_width = fields['border']['right']['width'] is not empty ? 'border-right-width: ' ~ fields['border']['right']['width'] ~ 'px;' %}
+{% set border_right_style = fields['border']['right']['style'] ? 'border-right-style: ' ~ fields['border']['right']['style'] ~ ';' %}
+{% set border_right_color = fields['border']['right']['color'] == 'custom' and fields['border']['right']['custom_color'] ? 'border-right-color: ' ~ fields['border']['right']['custom_color'] ~ ';' : fields['border']['right']['color'] == 'palette' and fields['border']['right']['theme_color'] ? 'border-right-color: var(--' ~ fields['border']['right']['theme_color'] ~ ');' %}
+{% set border_top_left_radius = fields['border_radius']['top_left'] is not empty ? 'border-top-left-radius: ' ~ fields['border_radius']['top_left'] ~ 'px;' %}
+{% set border_top_right_radius = fields['border_radius']['top_right'] is not empty ? 'border-top-right-radius: ' ~ fields['border_radius']['top_right'] ~ 'px;' %}
+{% set border_bottom_left_radius = fields['border_radius']['bottom_left'] is not empty ? 'border-bottom-left-radius: ' ~ fields['border_radius']['bottom_left'] ~ 'px;' %}
+{% set border_bottom_right_radius = fields['border_radius']['bottom_right'] is not empty ? 'border-bottom-right-radius: ' ~ fields['border_radius']['bottom_right'] ~ 'px;' %}
+{% set box_shadow_color = fields['box_shadow']['color']['color'] == 'palette' and fields['box_shadow']['color']['theme_color'] ? 'var(--' ~ fields['box_shadow']['color']['theme_color'] ~ ')' : fields['box_shadow']['color']['color'] == 'custom' and fields['box_shadow']['color']['custom_color'] ? fields['box_shadow']['color']['custom_color'] %}
+{% set box_shadow_inset = fields['box_shadow']['inset'] == true ? 'inset' %}
+{% set box_shadow = fields['box_shadow']['horizontal_offset'] is not empty or fields['box_shadow']['vertical_offset'] is not empty or fields['box_shadow']['blur'] is not empty or fields['box_shadow']['spread'] is not empty or box_shadow_color or box_shadow_inset == true ? 'box-shadow: ' ~ fields['box_shadow']['horizontal_offset'] ~ 'px ' ~ fields['box_shadow']['vertical_offset'] ~ 'px ' ~ fields['box_shadow']['blur'] ~ 'px ' ~ fields['box_shadow']['spread'] ~ 'px ' ~ box_shadow_color ~ ' ' ~ box_shadow_inset ~ ';' %}
+
+{% set block_classes = block_classes|default([])|merge([
+  ((fields.jumbotron_image['image_type'] == 'file' and fields.jumbotron_image['image']['url'] is empty) or (fields.jumbotron_image['image_type'] == 'url' and fields.jumbotron_image['image_url'] is empty)) and fields.innerblocks_location == 'image' ? 'has-image',
+  fields.layout.jumbotron_layout != 'default' ? 'jumbotron-' ~ fields.layout.jumbotron_layout,
+  fields.layout.jumbotron_layout == 'gradient-overlay-left' or fields.layout.jumbotron_layout == 'gradient-overlay-right' ? 'gradient-' ~ fields.layout.gradient,
+  fields.bg_video != true and fields.jumbotron_bg_color['bg_color'] == 'palette' and fields.jumbotron_bg_color['bg_theme_color'] ? 'bg-' ~ fields.jumbotron_bg_color['bg_theme_color'],
+  fields.jumbotron_text_color['color'] == 'palette' and fields.jumbotron_text_color['theme_color'] ? 'text-' ~ fields.jumbotron_text_color['theme_color'],
+  block['className']
+]) | sort | join(' ') | trim %}
+
+{# Set Background Video Position #}
+{% set vpos = fields.bg_vertical_position ? fields.bg_vertical_position ~ '%' : '0%' %}
+{% set hpos = fields.bg_horizontal_position ? fields.bg_horizontal_position ~ '%' : '0%' %}
+
+{% set block_attributes = block_attributes|default([])|merge([
+  fields.bg_video == true and fields.bg_mp4 ? 'data-mp4="' ~ fields.bg_mp4 ~ '"',
+  fields.bg_video == true and fields.bg_webm ? 'data-webm="' ~ fields.bg_webm ~ '"',
+  fields.bg_video == true and fields.bg_ogv ? 'data-ogv="' ~ fields.bg_ogv ~ '"',
+  fields.bg_video == true and fields.jumbotron_bg_image['bg_image_type'] == 'file' and fields.jumbotron_bg_image['bg_image']['url'] ? 'data-poster="' ~ fields.jumbotron_bg_image['bg_image']['url'] ~ '"' : fields.bg_video == true and fields.jumbotron_bg_image['bg_image_type'] == 'url' and fields.jumbotron_bg_image['bg_image_url'] ? 'data-poster="' ~ fields.jumbotron_bg_image['bg_image_url'] ~ '"',
+  fields.bg_video == true and fields.bg_loop == true ? 'data-loop="true"' : 'data-loop="false"',
+  fields.bg_video == true and fields.bg_muted == true ? 'data-muted="true"' : 'data-muted="false"',
+  fields.bg_video == true and fields.bg_autoplay == true ? 'data-autoplay="true"' : 'data-autoplay="false"',
+  fields.bg_video == true and fields.bg_resizing == true ? 'data-resizing="true"' : 'data-resizing="false"',
+  fields.bg_video == true ? 'data-position="' ~ hpos ~ ' ' ~ vpos ~ '"',
+  fields.bg_video == true and fields.jumbotron_bg_color['bg_color'] == 'custom' and fields.jumbotron_bg_color['bg_custom_color'] ? 'data-bg-color="' ~ fields.jumbotron_bg_color['bg_custom_color'] ~ '"' : fields.bg_video == true and fields.jumbotron_bg_color['bg_color'] == 'palette' and fields.jumbotron_bg_color['bg_theme_color'] ? 'data-bg-color="var(--' ~ fields.jumbotron_bg_color['bg_theme_color'] ~ ')"' : fields.bg_video == true ? 'data-bg-color="transparent"',
+  fields.bg_video == true and fields.bg_video_classes ? 'data-video-classes="' ~ fields.bg_video_classes ~ '"'
+]) | sort | join(' ') | trim %}
+
+{% embed '@molecules/jumbotron/_jumbotron.tpl.twig' with {
+  id: fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'jumbotron' ~ fields.id['id_gen'],
+  jumbotron_other_styles: bg_color ~ text_color ~ bg_image_size ~ bg_position ~ bg_repeat ~ bg_attachment ~ margin_top ~ margin_bottom ~ margin_left ~ margin_right ~ height ~ min_height ~ max_height ~ border_top_width ~ border_top_style ~ border_top_color ~ border_bottom_width ~ border_bottom_style ~ border_bottom_color ~ border_left_width ~ border_left_style ~ border_left_color ~ border_right_width ~ border_right_style ~ border_right_color ~ border_top_left_radius ~ border_top_right_radius ~ border_bottom_left_radius ~ border_bottom_right_radius ~ box_shadow,
+  jumbotron_bg_image: fields.bg_video != true ? bg_image,
+  image_left: fields.image_left,
+  jumbotron_image: fields.jumbotron_image['image_type'] == 'file' and fields.jumbotron_image['image']['url'] ? fields.jumbotron_image['image']['url'] : fields.jumbotron_image['image_type'] == 'url' and fields.jumbotron_image['image_url'] ? fields.jumbotron_image['image_url'],
+  remove_container: fields.jumbotron_container == true and (options.remove_content_containers == true or block_post.custom['remove_content_container'] == true) ? false : true,
+  jumbotron_fluid: fields['jumbotron_fluid'],
+  vertical_center: fields.vertical_center,
+  jumbotron_other_classes: block_classes,
+  jumbotron_other_attributes: block_attributes
+} %}
+  {% block jumbotron_image %}
+    {% if (fields.jumbotron_image['image_type'] == 'file' and fields.jumbotron_image['image']['url']) or (fields.jumbotron_image['image_type'] == 'url' and fields.jumbotron_image['image_url']) or fields.innerblocks_location == 'image' %}
+      <div class="jumbotron--image">
+        <div class="image-wrapper">
+          {% include '@atoms/image/_image.tpl.twig' with {
+            variant: 'primary',
+            src: fields.jumbotron_image['image_type'] == 'file' and fields.jumbotron_image['image']['url'] ? fields.jumbotron_image['image']['url'] : fields.jumbotron_image['image_type'] == 'url' and fields.jumbotron_image['image_url'] ? fields.jumbotron_image['image_url'],
+            alt: fields.jumbotron_image['image_type'] == 'file' and fields.jumbotron_image['image']['alt'] ? fields.jumbotron_image['image']['alt'],
+            image_other_classes: ''
+          } %}
+        </div>
+        {% if fields.innerblocks_location == 'image' %}
+          <div class="jumbotron-inner-blocks">
+            <InnerBlocks />
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% endblock jumbotron_image %}
+  {% block jumbotron_content %}
+    <div class="jumbotron--content" {{ padding_top or padding_bottom or padding_left or padding_right ? 'style="' ~ padding_top ~ padding_bottom ~ padding_left ~ padding_right ~ '"' }}>
+      <div class="content-wrapper">
+        {% if fields['label'] %}
+          <span class="jumbotron--label" {{ (fields.jumbotron_text_color['color'] == 'palette' and fields.jumbotron_text_color['theme_color']) or (fields.jumbotron_text_color['color'] == 'custom' and fields.jumbotron_text_color['custom_color']) ? 'style="color: inherit;"' }}>{{ fields['label'] }}</span>
+        {% endif %}
+
+        {% if fields['jumbotron_title'] %}
+          <h2 class="jumbotron--title" {{ (fields.jumbotron_text_color['color'] == 'palette' and fields.jumbotron_text_color['theme_color']) or (fields.jumbotron_text_color['color'] == 'custom' and fields.jumbotron_text_color['custom_color']) ? 'style="color: inherit;"' }}>{{ fields['jumbotron_title'] }}</h2>
+        {% endif %}
+
+        {% if fields['jumbotron_subtitle'] %}
+          <h3 class="jumbotron--subtitle" {{ (fields.jumbotron_text_color['color'] == 'palette' and fields.jumbotron_text_color['theme_color']) or (fields.jumbotron_text_color['color'] == 'custom' and fields.jumbotron_text_color['custom_color']) ? 'style="color: inherit;"' }}>{{ fields['jumbotron_subtitle'] }}</h3>
+        {% endif %}
+
+        {% if fields['jumbotron_text'] %}
+          <div class="jumbotron--text">{{ fields['jumbotron_text'] }}</div>
+        {% endif %}
+      </div>
+
+      {% if fields.innerblocks_location == 'content' %}
+        <div class="jumbotron-inner-blocks">
+          <InnerBlocks />
+        </div>
+      {% endif %}
+
+      {% if fields.jumbotron_button['link']['title'] or fields.jumbotron_button['link']['url'] %}
+        {% if fields.jumbotron_button['dropdown'] == true %}
+          {% set jumbotron_button_template = '_button~dropdown.tpl.twig' %}
+        {% else %}
+          {% set jumbotron_button_template = '_button.tpl.twig' %}
+        {% endif %}
+
+        {# Set Button Styles #}
+        {% if fields.jumbotron_button['close'] != 'black' and fields.jumbotron_button['close'] != 'white' and fields.jumbotron_button['style'] == 'custom' %}
+          {% set jumbotron_button_bg_color = fields.jumbotron_button['background_color']['bg_color'] == 'custom' ? 'background-color: ' ~ fields.jumbotron_button['background_color']['bg_custom_color'] ~ ';' %}
+          {% set jumbotron_button_text_color = fields.jumbotron_button['text_color']['color'] == 'custom' ? 'color: ' ~ fields.jumbotron_button['text_color']['custom_color'] ~ ';' %}
+          {% set jumbotron_button_transform = fields.jumbotron_button['text_transform']['text_transform'] ? 'text-transform: ' ~ fields.jumbotron_button['text_transform']['text_transform'] ~ ';' %}
+          {% set jumbotron_button_btn_padding_top  = fields.jumbotron_button['padding']['padding']['top'] is not empty ? 'padding-top: ' ~ fields.jumbotron_button['padding']['padding']['top'] ~ 'px;' %}
+          {% set jumbotron_button_btn_padding_bottom = fields.jumbotron_button['padding']['padding']['bottom'] is not empty ? 'padding-bottom: ' ~ fields.jumbotron_button['padding']['padding']['bottom'] ~ 'px;' %}
+          {% set jumbotron_button_btn_padding_left = fields.jumbotron_button['padding']['padding']['left'] is not empty ? 'padding-left: ' ~ fields.jumbotron_button['padding']['padding']['left'] ~ 'px;' %}
+          {% set jumbotron_button_btn_padding_right = fields.jumbotron_button['padding']['padding']['right'] is not empty ? 'padding-right: ' ~ fields.jumbotron_button['padding']['padding']['right'] ~ 'px;' %}
+          {% set jumbotron_button_btn_border_top_width = fields.jumbotron_button['border']['top']['width'] is not empty ? 'border-top-width: ' ~ fields.jumbotron_button['border']['top']['width'] ~ 'px;' %}
+          {% set jumbotron_button_btn_border_top_style = fields.jumbotron_button['border']['top']['style'] ? 'border-top-style: ' ~ fields.jumbotron_button['border']['top']['style'] ~ ';' %}
+          {% set jumbotron_button_btn_border_top_color = fields.jumbotron_button['border']['top']['color'] == 'custom' and fields.jumbotron_button['border']['top']['custom_color'] ? 'border-top-color: ' ~ fields.jumbotron_button['border']['top']['custom_color'] ~ ';' : fields.jumbotron_button['border']['top']['color'] == 'palette' and fields.jumbotron_button['border']['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.jumbotron_button['border']['top']['theme_color'] ~ ');' %}
+          {% set jumbotron_button_btn_border_bottom_width = fields.jumbotron_button['border']['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ fields.jumbotron_button['border']['bottom']['width'] ~ 'px;' %}
+          {% set jumbotron_button_btn_border_bottom_style = fields.jumbotron_button['border']['bottom']['style'] ? 'border-bottom-style: ' ~ fields.jumbotron_button['border']['bottom']['style'] ~ ';' %}
+          {% set jumbotron_button_btn_border_bottom_color = fields.jumbotron_button['border']['bottom']['color'] == 'custom' and fields.jumbotron_button['border']['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.jumbotron_button['border']['bottom']['custom_color'] ~ ';' : fields.jumbotron_button['border']['bottom']['color'] == 'palette' and fields.jumbotron_button['border']['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.jumbotron_button['border']['bottom']['theme_color'] ~ ');' %}
+          {% set jumbotron_button_btn_border_left_width = fields.jumbotron_button['border']['left']['width'] is not empty ? 'border-left-width: ' ~ fields.jumbotron_button['border']['left']['width'] ~ 'px;' %}
+          {% set jumbotron_button_btn_border_left_style = fields.jumbotron_button['border']['left']['style'] ? 'border-left-style: ' ~ fields.jumbotron_button['border']['left']['style'] ~ ';' %}
+          {% set jumbotron_button_btn_border_left_color = fields.jumbotron_button['border']['left']['color'] == 'custom' and fields.jumbotron_button['border']['left']['custom_color'] ? 'border-left-color: ' ~ fields.jumbotron_button['border']['left']['custom_color'] ~ ';' : fields.jumbotron_button['border']['left']['color'] == 'palette' and fields.jumbotron_button['border']['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.jumbotron_button['border']['left']['theme_color'] ~ ');' %}
+          {% set jumbotron_button_btn_border_right_width = fields.jumbotron_button['border']['right']['width'] is not empty ? 'border-right-width: ' ~ fields.jumbotron_button['border']['right']['width'] ~ 'px;' %}
+          {% set jumbotron_button_btn_border_right_style = fields.jumbotron_button['border']['right']['style'] ? 'border-right-style: ' ~ fields.jumbotron_button['border']['right']['style'] ~ ';' %}
+          {% set jumbotron_button_btn_border_right_color = fields.jumbotron_button['border']['right']['color'] == 'custom' and fields.jumbotron_button['border']['right']['custom_color'] ? 'border-right-color: ' ~ fields.jumbotron_button['border']['right']['custom_color'] ~ ';' : fields.jumbotron_button['border']['right']['color'] == 'palette' and fields.jumbotron_button['border']['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.jumbotron_button['border']['right']['theme_color'] ~ ');' %}
+          {% set jumbotron_button_btn_border_top_left_radius = fields.jumbotron_button['border_radius']['top_left'] is not empty ? 'border-top-left-radius: ' ~ fields.jumbotron_button['border_radius']['top_left'] ~ 'px;' %}
+          {% set jumbotron_button_btn_border_top_right_radius = fields.jumbotron_button['border_radius']['top_right'] is not empty ? 'border-top-right-radius: ' ~ fields.jumbotron_button['border_radius']['top_right'] ~ 'px;' %}
+          {% set jumbotron_button_btn_border_bottom_left_radius = fields.jumbotron_button['border_radius']['bottom_left'] is not empty ? 'border-bottom-left-radius: ' ~ fields.jumbotron_button['border_radius']['bottom_left'] ~ 'px;' %}
+          {% set jumbotron_button_btn_border_bottom_right_radius = fields.jumbotron_button['border_radius']['bottom_right'] is not empty ? 'border-bottom-right-radius: ' ~ fields.jumbotron_button['border_radius']['bottom_right'] ~ 'px;' %}
+          {% set jumbotron_button_box_shadow_color = fields.jumbotron_button['box_shadow']['color']['color'] == 'palette' and fields.jumbotron_button['box_shadow']['color']['theme_color'] ? 'var(--' ~ fields.jumbotron_button['box_shadow']['color']['theme_color'] ~ ')' : fields.jumbotron_button['box_shadow']['color']['color'] == 'custom' and fields.jumbotron_button['box_shadow']['color']['custom_color'] ? fields.jumbotron_button['box_shadow']['color']['custom_color'] %}
+          {% set jumbotron_button_box_shadow_inset = fields.jumbotron_button['box_shadow']['inset'] == true ? 'inset' %}
+          {% set jumbotron_button_btn_box_shadow = fields.jumbotron_button['box_shadow']['horizontal_offset'] is not empty or fields.jumbotron_button['box_shadow']['vertical_offset'] is not empty or fields.jumbotron_button['box_shadow']['blur'] is not empty or fields.jumbotron_button['box_shadow']['spread'] is not empty or box_shadow_color or box_shadow_inset == true ? 'box-shadow: ' ~ fields.jumbotron_button['box_shadow']['horizontal_offset'] ~ 'px ' ~ fields.jumbotron_button['box_shadow']['vertical_offset'] ~ 'px ' ~ fields.jumbotron_button['box_shadow']['blur'] ~ 'px ' ~ fields.jumbotron_button['box_shadow']['spread'] ~ 'px ' ~ box_shadow_color ~ ' ' ~ box_shadow_inset ~ ';' %}
+          {% set jumbotron_button_text_shadow_color = fields.jumbotron_button['text_shadow']['color']['color'] == 'palette' and fields.jumbotron_button['text_shadow']['color']['theme_color'] ? 'var(--' ~ fields.jumbotron_button['text_shadow']['color']['theme_color'] ~ ')' : fields.jumbotron_button['text_shadow']['color']['color'] == 'custom' and fields.jumbotron_button['text_shadow']['color']['custom_color'] ? fields.jumbotron_button['text_shadow']['color']['custom_color'] %}
+          {% set jumbotron_button_btn_text_shadow = fields.jumbotron_button['text_shadow']['horizontal_offset'] is not empty or fields.jumbotron_button['text_shadow']['vertical_offset'] is not empty or fields.jumbotron_button['text_shadow']['blur'] is not empty or text_shadow_color ? 'text-shadow: ' ~ fields.jumbotron_button['text_shadow']['horizontal_offset'] ~ 'px ' ~ fields.jumbotron_button['text_shadow']['vertical_offset'] ~ 'px ' ~ fields.jumbotron_button['text_shadow']['blur'] ~ 'px ' ~ text_shadow_color ~ ';' %}
+        {% endif %}
+        {% set jumbotron_button_fontsize = fields.jumbotron_button['font_size']['font_size']['value'] is not empty ? 'font-size: ' ~ fields.jumbotron_button['font_size']['font_size']['value'] ~ fields['font_size']['font_size']['unit'] ~ ';' %}
+        {% set jumbotron_button_width = fields.jumbotron_button['width']['width']['value'] is not empty ? 'width: ' ~ fields.jumbotron_button['width']['width']['value']  ~ fields.jumbotron_button['width']['width']['unit'] ~  ';' %}
+        {% set jumbotron_button_min_width = fields.jumbotron_button['width']['min_width'] is not empty ? 'min-width: ' ~ fields.jumbotron_button['width']['min_width']  ~ 'px;' %}
+        {% set jumbotron_button_max_width = fields.jumbotron_button['width']['max_width'] is not empty ? 'max-width: ' ~ fields.jumbotron_button['width']['max_width']  ~ 'px;' %}
+        {% set jumbotron_button_margin_top = fields.jumbotron_button['margin']['margin']['top']['auto'] == true ? 'margin-top: auto;' : parent_block_data['name'] != 'acf/group' and fields.jumbotron_button['margin']['margin']['top']['top'] is not empty ? 'margin-top: ' ~ fields.jumbotron_button['margin']['margin']['top']['top'] ~ 'px;' %}
+        {% set jumbotron_button_margin_bottom = fields.jumbotron_button['margin']['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : parent_block_data['name'] != 'acf/group' and fields.jumbotron_button['margin']['margin']['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ fields.jumbotron_button['margin']['margin']['bottom']['bottom'] ~ 'px;' %}
+        {% set jumbotron_button_margin_left = fields.jumbotron_button['margin']['margin']['left']['auto'] == true ? 'margin-left: auto;' : parent_block_data['name'] != 'acf/group' and fields.jumbotron_button['margin']['margin']['left']['left'] is not empty ? 'margin-left: ' ~ fields.jumbotron_button['margin']['margin']['left']['left'] ~ 'px;' %}
+        {% set jumbotron_button_margin_right = fields.jumbotron_button['margin']['margin']['right']['auto'] == true ? 'margin-right: auto;' : parent_block_data['name'] != 'acf/group' and fields.jumbotron_button['margin']['margin']['right']['right'] is not empty ? 'margin-right: ' ~ fields.jumbotron_button['margin']['margin']['right']['right'] ~ 'px;' %}
+
+        {% include '@atoms/button/' ~ jumbotron_button_template with {
+          button_element: fields.jumbotron_button['element'],
+          button_text: fields.jumbotron_button['link']['title'],
+          button_link: fields.jumbotron_button['link']['url'],
+          button_target: fields.jumbotron_button['toggle'] == true ? fields.jumbotron_button['link']['url'] : fields.jumbotron_button['link']['target'],
+          button_color: fields.jumbotron_button['close'] != 'black' and fields.jumbotron_button['close'] != 'white' and fields.jumbotron_button['style'] != 'custom' ? fields.jumbotron_button['style'] | default('default'),
+          button_size: fields.jumbotron_button['size'],
+          button_outline: fields.jumbotron_button['outline'],
+          button_block: fields.jumbotron_button['full_width'],
+          button_toggle: fields.jumbotron_button['toggle'],
+          button_id: fields.jumbotron_button['id'] ? fields.jumbotron_button['id'] : fields.jumbotron_button['id_gen'] ? 'button' ~ fields.jumbotron_button['id_gen'],
+          button_active: fields.jumbotron_button['active'],
+          button_disabled: fields.jumbotron_button['disabled'],
+          button_expanded: fields.jumbotron_button['active'],
+          button_value: fields.jumbotron_button['value'],
+          button_controls: fields.jumbotron_button['toggle'] == true ? fields.jumbotron_button['link']['url'] | trim('#'),
+          nowrap: fields.jumbotron_button['nowrap'],
+          contextual_content: fields.jumbotron_button['toggle'] == 'tooltip' or fields.jumbotron_button['toggle'] == 'popover' ? fields.jumbotron_button['toggle'],
+          title: fields.jumbotron_button['context']['title'],
+          popover_content: fields.jumbotron_button['context']['content'],
+          context_placement: fields.jumbotron_button['context']['placement'],
+          context_container: fields.jumbotron_button['context']['container'],
+          close_button: fields.jumbotron_button['close'],
+          hide_label: fields.jumbotron_button['hide_label'],
+          button_classes: [
+            fields.jumbotron_button['close'] != 'black' and fields.jumbotron_button['close'] != 'white' and fields.jumbotron_button['background_color']['bg_color'] == 'palette' and fields.jumbotron_button['background_color']['bg_theme_color'] ? 'bg-' ~ fields.jumbotron_button['background_color']['bg_theme_color'],
+            fields.jumbotron_button['close'] != 'black' and fields.jumbotron_button['close'] != 'white' and fields.jumbotron_button['text_color']['color'] == 'palette' and fields.jumbotron_button['text_color']['theme_color'] ? 'text-' ~ fields.jumbotron_button['text_color']['theme_color'],
+            fields.jumbotron_button['full_width'] != true and fields.jumbotron_button['display']['display'] is not null ? fields.jumbotron_button['display']['display']
+          ],
+          button_other_classes: fields.jumbotron_button['classes'],
+          button_attributes: [
+            jumbotron_button_bg_color or jumbotron_button_text_color or jumbotron_button_transform or jumbotron_button_btn_padding_top or jumbotron_button_btn_padding_bottom or jumbotron_button_btn_padding_left or jumbotron_button_btn_padding_right or jumbotron_button_btn_border_top_width or jumbotron_button_btn_border_top_style or jumbotron_button_btn_border_top_color or jumbotron_button_btn_border_bottom_width or jumbotron_button_btn_border_bottom_style or jumbotron_button_btn_border_bottom_color or jumbotron_button_btn_border_left_width or jumbotron_button_btn_border_left_style or jumbotron_button_btn_border_left_color or jumbotron_button_btn_border_right_width or jumbotron_button_btn_border_right_style or jumbotron_button_btn_border_right_color or jumbotron_button_btn_border_top_left_radius or jumbotron_button_btn_border_top_right_radius or jumbotron_button_btn_border_bottom_left_radius or jumbotron_button_btn_border_bottom_right_radius or jumbotron_button_btn_box_shadow or jumbotron_button_btn_text_shadow or jumbotron_button_fontsize or jumbotron_button_width or jumbotron_button_min_width or jumbotron_button_max_width or jumbotron_button_margin_top or jumbotron_button_margin_bottom or jumbotron_button_margin_left or jumbotron_button_margin_right ? 'style="' ~ jumbotron_button_bg_color ~ jumbotron_button_text_color ~ jumbotron_button_fontsize ~ jumbotron_button_transform ~ jumbotron_button_btn_padding_top ~ jumbotron_button_btn_padding_bottom ~ jumbotron_button_btn_padding_left ~ jumbotron_button_btn_padding_right ~ jumbotron_button_btn_border_top_width ~ jumbotron_button_btn_border_top_style ~ jumbotron_button_btn_border_top_color ~ jumbotron_button_btn_border_bottom_width ~ jumbotron_button_btn_border_bottom_style ~ jumbotron_button_btn_border_bottom_color ~ jumbotron_button_btn_border_left_width ~ jumbotron_button_btn_border_left_style ~ jumbotron_button_btn_border_left_color ~ jumbotron_button_btn_border_right_width ~ jumbotron_button_btn_border_right_style ~ jumbotron_button_btn_border_right_color ~ jumbotron_button_btn_border_top_left_radius ~ jumbotron_button_btn_border_top_right_radius ~ jumbotron_button_btn_border_bottom_left_radius ~ jumbotron_button_btn_border_bottom_right_radius ~ jumbotron_button_btn_box_shadow ~ jumbotron_button_btn_text_shadow ~ jumbotron_button_width ~ jumbotron_button_min_width ~ jumbotron_button_max_width ~ jumbotron_button_margin_top ~ jumbotron_button_margin_bottom ~ jumbotron_button_margin_left ~ jumbotron_button_margin_right ~ '"'
+          ]
+        } %}
+      {% endif %}
+
+    </div>
+  {% endblock jumbotron_content %}
+{% endembed %}

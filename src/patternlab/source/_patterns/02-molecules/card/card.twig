@@ -1,0 +1,289 @@
+{% embed '@atoms/grid/_grid.tpl.twig' %}
+  {% set container = true %}
+
+  {% block column_1 %}
+    <h1 class="mb-3">Cards</h1>
+    <div class="mb-3 p-3 bg-light border border-secondary rounded">
+      <p class="lead">Bootstrap's cards provide a flexible and extensible content container with multiple variants and options. Each card has at least the <code>card_title</code> and <code>card_text</code> variables in use and will have a card like this one above it explaining the other variables it is using. Also, each row is demonstrating a different feature of the bootstrap grid system.</p>
+      <div><a href="https://getbootstrap.com/docs/4.0/components/card/" target="_blank" rel="noopener noreferrer">Bootstrap Documentation</a></div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm mb-3">
+        {% include '@molecules/card/_card.tpl.twig' with {
+          card_title: "Card Title",
+          card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+          card_subtitle: "Card subtitle"
+        } %}
+      </div>
+      <div class="col-sm mb-3">
+        {% include '@molecules/card/_card.tpl.twig' with {
+          text_alignment: center,
+          card_title: "Card Title",
+          card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+          card_subtitle: 'Card subtitle',
+          card_link: 'https://github.com/phase2/particle',
+          card_link_text: 'Card link'
+        } %}
+      </div>
+      <div class="col-sm mb-3">
+        {% include '@molecules/card/_card.tpl.twig' with {
+          card_title: "Card Title",
+          card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+          text_color: 'royal-blue'
+        } %}
+      </div>
+    </div>
+    <hr>
+
+    <h2>Grid 3</h2>
+    <div class="mb-3 p-3 bg-light border border-secondary rounded">
+      <p>Grid: This row uses the pattern lab "grid-3" atom located in <code>source/_patterns/01-atoms/grid</code></p>
+    </div>
+    <div class="mb-3">
+      <div class="row">
+        <div class="col">
+          {% include '@molecules/card/_card.tpl.twig' with {
+            card_title: "Card Title",
+            card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+            card_subtitle: "Card subtitle"
+          } %}
+        </div>
+        <div class="col">
+          {% include '@molecules/card/_card.tpl.twig' with {
+            text_alignment: center,
+            card_title: "Card Title",
+            card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+            card_subtitle: 'Card subtitle',
+            card_link: 'https://github.com/phase2/particle',
+            card_link_text: 'Card link'
+          } %}
+        </div>
+        <div class="col">
+          {% include '@molecules/card/_card.tpl.twig' with {
+            card_title: "Card Title",
+            card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+            text_color: 'royal-blue',
+            card_flush: true
+          } %}
+        </div>
+      </div>
+    </div>
+    <hr>
+
+    <h2>Widths</h2>
+    <div class="mb-3 p-3 bg-light border border-secondary rounded">
+      <p>Variables: <code>card_width</code><p>Grid: This row is occupying the whole container by using the <code>col-sm-12</code> class.</p>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 mb-3">
+        {% include '@molecules/card/_card.tpl.twig' with {
+          card_title: 'Card Title',
+          card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+          card_width: 25
+        } %}
+        {% include '@molecules/card/_card.tpl.twig' with {
+          card_title: 'Card Title',
+          card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+          card_width: 50
+        } %}
+        {% include '@molecules/card/_card.tpl.twig' with {
+          card_title: "Card Title",
+          card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+          card_width: 75
+        } %}
+      </div>
+    </div>
+    <hr>
+
+    <h2>Image</h2>
+    <div class="mb-3 p-3 bg-light border border-secondary rounded">
+      <p>Variables: <code>card_image, card_image_location, card_image_overlay</code><p>Grid: This row is using the  <code>card-deck</code> class which is unique to cards. It sets all of its cards to an equal width and height.</p>
+    </div>
+    <div class="card-deck mb-3">
+      {% include '@molecules/card/_card.tpl.twig' with {
+        card_title: "Card Title",
+        card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+        card_image_location: "top",
+        card_image: {
+          variant: 'aspect-ratio',
+          src: 'https://via.placeholder.com/300x200',
+          alt: 'A 3x2 image',
+          style: '',
+          placeholder: false,
+          width: '3',
+          height: '2',
+        }
+      } %}
+      {% include '@molecules/card/_card.tpl.twig' with {
+        card_title: "Card Title",
+        card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+        card_image_location: 'bottom',
+        card_image: {
+          variant: 'aspect-ratio',
+          src: 'https://via.placeholder.com/300x200',
+          alt: 'A 3x2 image',
+          style: '',
+          placeholder: false,
+          width: '3',
+          height: '2',
+        }
+      } %}
+      {% include '@molecules/card/_card.tpl.twig' with {
+        flip_card: true,
+        card_title: 'Card Title',
+        card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+        card_image_overlay: "Hi! I'm an overlay!",
+        card_image_location: 'top',
+        card_image: {
+          variant: 'aspect-ratio',
+          src: 'https://via.placeholder.com/300x200',
+          alt: 'A 3x2 image',
+          style: '',
+          placeholder: false,
+          width: '3',
+          height: '2'
+        }
+      } %}
+    </div>
+    <hr>
+
+    <h2>Structure</h2>
+    <div class="mb-3 p-3 bg-light border border-secondary rounded">
+      <p>Variables: <code>card_header, card_footer, button_text, button_color, card_list</code><p>Grid: This row is using the <code>card-group</code> class which is unique to cards. It renders cards as a single, attached element with equal width and height columns.</p></p>
+    </div>
+    <div class="card-group mb-3">
+      {% include '@molecules/card/_card.tpl.twig' with {
+        card_title: "Card Title",
+        card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+        card_header: "Header"
+      } %}
+      {% include '@molecules/card/_card.tpl.twig' with {
+        card_title: "Card Title",
+        card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+        card_footer: "Footer",
+        card_button: {
+          button_text: "click me!",
+          button_color: "royal-blue"
+        }
+      } %}
+      {% include '@molecules/card/_card.tpl.twig' with {
+        card_title: "Card Title",
+        card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+        card_list: {
+          items: {
+            item1: {
+              item_text: 'Haero jus pala patria'
+            },
+            item2: {
+              item_text: 'Proprius turpis valde wisi'
+            },
+            item3: {
+              item_text: 'Eu feugiat laoreet si usitas'
+            },
+          }
+        }
+      } %}
+    </div>
+    <hr>
+
+    <h2>Background and Border</h2>
+    <div class="mb-3 p-3 bg-light border border-secondary rounded">
+      <p>Variables: <code>card_background, card_border</code><p>Grid: This row is using the <code>card-columns</code> class which is unique to cards. It renders cards in the optimal position based on vertical space.</p>
+    </div>
+    <div class="card-columns mb-3">
+      {% include '@molecules/card/_card.tpl.twig' with {
+        card_title: "Card Title",
+        card_text: "These cards have variable body length",
+        card_background: "primary",
+        text_color: "white"
+      } %}
+      {% include '@molecules/card/_card.tpl.twig' with {
+        card_title: "Card Title",
+        card_text: "In order to show off bootstrap's column functionality",
+        card_background: "secondary",
+        text_color: "white"
+      } %}
+      {% include '@molecules/card/_card.tpl.twig' with {
+        card_title: "Card Title",
+        card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+        card_background: "success",
+        text_color: "white"
+      } %}
+      {% include '@molecules/card/_card.tpl.twig' with {
+        card_title: "Card Title",
+        card_text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sit amet facilisis erat. Suspendisse ultrices sed massa a faucibus. Vivamus scelerisque eleifend dui, ut consectetur tellus rutrum in. Nullam lobortis, ex vel rutrum volutpat, magna eros tristique nisi, quis bibendum urna erat consequat sapien.",
+        card_background: "royal-blue",
+        text_color: "white"
+      } %}
+      {% include '@molecules/card/_card.tpl.twig' with {
+        card_title: "Card Title",
+        card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+        card_border: "warning",
+        text_color: "warning"
+      } %}
+      {% include '@molecules/card/_card.tpl.twig' with {
+        card_title: "Card Title",
+        card_text: "I'm using a lot of extra words and characters in this sentence to make sure it takes at least three lines!",
+        card_border: "info",
+        text_color: "info"
+      } %}
+      {% include '@molecules/card/_card.tpl.twig' with {
+        card_title: "Card Title",
+        card_text: "This card takes two lines. Oops, not quite enough characters, heres some more.",
+        card_border: "light"
+      } %}
+      {% include '@molecules/card/_card.tpl.twig' with {
+        card_title: "Card Title",
+        card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+        card_border: "dark",
+        text_color: "dark"
+      } %}
+    </div>
+    <hr>
+
+    <h2>Variation</h2>
+    <div class="mb-3 p-3 bg-light border border-secondary rounded">
+      <p>This example card uses twig's block system to override the provided default body template with new elements.</p>
+    </div>
+    <div class="mb3">
+      {% embed '@molecules/card/_card.tpl.twig' %}
+        {% block card_body %}
+          <h2 class="text-left">First Title</h2>
+          <h2 class="text-right">Second Title</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sit amet facilisis erat. Suspendisse ultrices sed massa a faucibus.</p>
+        {% endblock %}
+      {% endembed %}
+    </div>
+    <hr>
+
+    <h2>Linked Card</h2>
+    <div class="mb-3 p-3 bg-light border border-secondary rounded">
+      <p>Entire cards can be linked by setting the card_linked option to true and passing in a URL in the card_link option.</p>
+    </div>
+    <div class="card-deck mb-3">
+      {% include '@molecules/card/_card.tpl.twig' with {
+        card_title: 'Card Title',
+        card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+        card_subtitle: 'Card subtitle',
+        card_linked: true,
+        card_link: 'https://github.com/phase2/particle'
+      } %}
+      {% include '@molecules/card/_card.tpl.twig' with {
+        card_title: 'Card Title',
+        card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+        card_subtitle: 'Card subtitle',
+        card_linked: true,
+        card_link: 'https://github.com/phase2/particle'
+      } %}
+      {% include '@molecules/card/_card.tpl.twig' with {
+        card_title: 'Card Title',
+        card_text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+        card_subtitle: 'Card subtitle',
+        card_linked: true,
+        card_link: 'https://github.com/phase2/particle'
+      } %}
+    </div>
+    <hr>
+  {% endblock column_1 %}
+{% endembed %}

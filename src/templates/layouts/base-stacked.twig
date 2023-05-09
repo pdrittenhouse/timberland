@@ -1,0 +1,175 @@
+{% block html_head_container %}
+  {% include 'partials/wrapper/head.twig' %}
+	{% block head %}{% endblock %}
+	</head>
+{% endblock %}
+
+{# Set Page Styles #}
+{% set page_bg_color = post.meta('page_background_color')['bg_color'] == 'custom' and post.meta('page_background_color')['bg_custom_color'] ? 'background-color: ' ~ post.meta('page_background_color')['bg_custom_color'] ~ ';' %}
+{% set page_text_color = post.meta('page_text_color')['color'] == 'custom' and  post.meta('page_text_color')['custom_color'] ? 'color: ' ~  post.meta('page_text_color')['custom_color'] ~ ';' %}
+{% set content_padding_top = post.meta('content_padding')['padding']['top'] >= 0 ? 'padding-top: ' ~ post.meta('content_padding')['padding']['top'] ~ 'px;' : options.content_padding['padding']['top'] >= 0 ? 'padding-top: ' ~ options.content_padding['padding']['top'] ~ 'px;' %}
+{% set content_padding_bottom = post.meta('content_padding')['padding']['bottom'] >= 0 ? 'padding-bottom: ' ~ post.meta('content_padding')['padding']['bottom'] ~ 'px;' : options.content_padding['padding']['bottom'] >= 0 ? 'padding-bottom: ' ~ options.content_padding['padding']['bottom'] ~ 'px;' %}
+{% set content_padding_left = post.meta('content_padding')['padding']['left'] >= 0 ? 'padding-left: ' ~ post.meta('content_padding')['padding']['left'] ~ 'px;' : options.content_padding['padding']['left'] >= 0 ? 'padding-left: ' ~ options.content_padding['padding']['left'] ~ 'px;' %}
+{% set content_padding_right = post.meta('content_padding')['padding']['right'] >= 0 ? 'padding-right: ' ~ post.meta('content_padding')['padding']['right'] ~ 'px;' : options.content_padding['padding']['right'] >= 0 ? 'padding-right: ' ~ options.content_padding['padding']['right'] ~ 'px;' %}
+{% set sidebar_bg_color =  post.meta('sidebar_bg_color')['bg_color'] == 'custom' and post.meta('sidebar_bg_color')['bg_custom_color'] ? 'background-color: ' ~  post.meta('sidebar_bg_color')['bg_custom_color'] ~ ';' : ((post.meta('sidebar_bg_color')['bg_color'] == 'custom' and post.meta('sidebar_bg_color')['bg_custom_color'] == null) or (post.meta('sidebar_bg_color')['bg_color'] == 'palette' and post.meta('sidebar_bg_color')['bg_theme_color'] == null)) and (options.sidebar_bg_color['bg_color'] == 'custom' and options.sidebar_bg_color['bg_custom_color']) ? 'background-color: ' ~  options.sidebar_bg_color['bg_custom_color'] ~ ';' %}
+{% set sidebar_text_color =  post.meta('sidebar_text_color')['color'] == 'custom' and post.meta('sidebar_text_color')['custom_color'] ? 'color: ' ~  post.meta('sidebar_text_color')['custom_color'] ~ ';' : ((post.meta('sidebar_text_color')['color'] == 'custom' and post.meta('sidebar_text_color')['custom_color'] == null) or (post.meta('sidebar_text_color')['color'] == 'palette' and post.meta('sidebar_text_color')['theme_color'] == null)) and (options.sidebar_text_color['color'] == 'custom' and options.sidebar_text_color['custom_color']) ? 'color: ' ~  options.sidebar_text_color['custom_color'] ~ ';' %}
+{% set sidebar_padding_top  = post.meta('sidebar_padding')['padding']['top'] >= 0 ? 'padding-top: ' ~ post.meta('sidebar_padding')['padding']['top'] ~ 'px;' : options.sidebar_padding['padding']['top'] >= 0 ? 'padding-top: ' ~ options.sidebar_padding['padding']['top'] ~ 'px;' %}
+{% set sidebar_padding_bottom = post.meta('sidebar_padding')['padding']['bottom'] >= 0 ? 'padding-bottom: ' ~ post.meta('sidebar_padding')['padding']['bottom'] ~ 'px;' : options.sidebar_padding['padding']['bottom'] >= 0 ? 'padding-bottom: ' ~ options.sidebar_padding['padding']['bottom'] ~ 'px;' %}
+{% set sidebar_padding_left = post.meta('sidebar_padding')['padding']['left'] >= 0 ? 'padding-left: ' ~ post.meta('sidebar_padding')['padding']['left'] ~ 'px;' : options.sidebar_padding['padding']['left'] >= 0 ? 'padding-left: ' ~ options.sidebar_padding['padding']['left'] ~ 'px;' %}
+{% set sidebar_padding_right = post.meta('sidebar_padding')['padding']['right'] >= 0 ? 'padding-right: ' ~ post.meta('sidebar_padding')['padding']['right'] ~ 'px;' : options.sidebar_padding['padding']['right'] >= 0 ? 'padding-right: ' ~ options.sidebar_padding['padding']['right'] ~ 'px;' %}
+{% set sidebar_width = post.meta('sidebar_width')['width']['value'] >= 0 ? post.meta('sidebar_width')['width']['value'] ~ post.meta('sidebar_width')['width']['unit'] : options.sidebar_width['width']['value'] >= 0 ? options.sidebar_width['width']['value'] ~ options.sidebar_width['width']['unit'] %}
+
+{# Global background image styles #}
+{% set bg_image = options.bg_image['bg_image_type'] == 'file' and options.bg_image['bg_image']['url'] ? "background-image: url('" ~ options.bg_image['bg_image']['url'] ~ "');" : options.bg_image['bg_image_type'] == 'url' and options.bg_image['bg_image_url'] ? "background-image: url('" ~ options.bg_image['bg_image_url'] ~ "');" %}
+{% set bg_image_size = options.bg_image['bg_size'] == 'custom' and options.bg_image['custom_bg_size'] ? 'background-size: ' ~ options.bg_image['custom_bg_size'] ~ ';' : options.bg_image['bg_size'] ? 'background-size: ' ~ options.bg_image['bg_size'] ~ ';' %}
+{% set bg_hor_pos = options.bg_image['bg_horizontal_position'] == 'custom' ? options.bg_image['custom_bg_horizontal_position'] : options.bg_image['bg_horizontal_position'] ? options.bg_image['bg_horizontal_position'] %}
+{% set bg_ver_pos = options.bg_image['bg_vertical_position'] == 'custom' ? options.bg_image['custom_bg_vertical_position'] : options.bg_image['bg_vertical_position'] ? options.bg_image['bg_vertical_position'] %}
+{% set bg_repeat = options.bg_image['bg_repeat'] ? 'background-repeat: ' ~ options.bg_image['bg_repeat'] ~ ';' %}
+{% set bg_attachment = options.bg_image['bg_attachment'] ? 'background-attachment: ' ~ options.bg_image['bg_attachment'] ~ ';' %}
+
+{# Post background image styles #}
+{% set post_bg_image = post.meta('bg_image')['bg_image_type'] == 'file' and post.meta('bg_image')['bg_image']['url'] ? "background-image: url('" ~ post.meta('bg_image')['bg_image']['url'] ~ "');" : post.meta('bg_image')['bg_image_type'] == 'url' and post.meta('bg_image')['bg_image_url'] ? "background-image: url('" ~ post.meta('bg_image')['bg_image_url'] ~ "');" %}
+{% set post_bg_image_size = post.meta('bg_image')['bg_size'] == 'custom' ? 'background-size: ' ~ post.meta('bg_image')['custom_bg_size'] ~ ';' : post.meta('bg_image')['bg_size'] ? 'background-size: ' ~ post.meta('bg_image')['bg_size'] ~ ';' %}
+{% set post_bg_hor_pos = post.meta('bg_image')['bg_horizontal_position'] == 'custom' ? post.meta('bg_image')['custom_bg_horizontal_position'] : post.meta('bg_image')['bg_horizontal_position'] ? post.meta('bg_image')['bg_horizontal_position'] %}
+{% set post_bg_ver_pos = post.meta('bg_image')['bg_vertical_position'] == 'custom' ? post.meta('bg_image')['custom_bg_vertical_position'] : post.meta('bg_image')['bg_vertical_position'] ? post.meta('bg_image')['bg_vertical_position'] %}
+{% set post_bg_repeat = post.meta('bg_image')['bg_repeat'] ? 'background-repeat: ' ~ post.meta('bg_image')['bg_repeat'] ~ ';' %}
+{% set post_bg_attachment = post.meta('bg_image')['bg_attachment'] ? 'background-attachment: ' ~ post.meta('bg_image')['bg_attachment'] ~ ';' %}
+
+{# Page background image styles #}
+{% set page_bg_image = (post.meta('bg_image')['bg_image_type'] == 'file' and post.meta('bg_image')['bg_image']['url']) or (post.meta('bg_image')['bg_image_type'] == 'url' and post.meta('bg_image')['bg_image_url']) ? post_bg_image :  (options.bg_image['bg_image_type'] == 'file' and options.bg_image['bg_image']['url']) or (options.bg_image['bg_image_type'] == 'url' and options.bg_image['bg_image_url']) ? bg_image %}
+{% set page_bg_image_size = (post.meta('bg_image')['bg_image_type'] == 'file' and post.meta('bg_image')['bg_image']['url']) or (post.meta('bg_image')['bg_image_type'] == 'url' and post.meta('bg_image')['bg_image_url']) ? post_bg_image_size : (options.bg_image['bg_image_type'] == 'file' and options.bg_image['bg_image']['url']) or (options.bg_image['bg_image_type'] == 'url' and options.bg_image['bg_image_url']) ? bg_image_size %}
+{% set page_bg_hor_pos = (post.meta('bg_image')['bg_image_type'] == 'file' and post.meta('bg_image')['bg_image']['url']) or (post.meta('bg_image')['bg_image_type'] == 'url' and post.meta('bg_image')['bg_image_url']) ? post_bg_hor_pos : (options.bg_image['bg_image_type'] == 'file' and options.bg_image['bg_image']['url']) or (options.bg_image['bg_image_type'] == 'url' and options.bg_image['bg_image_url']) ? bg_hor_pos %}
+{% set page_bg_ver_pos = (post.meta('bg_image')['bg_image_type'] == 'file' and post.meta('bg_image')['bg_image']['url']) or (post.meta('bg_image')['bg_image_type'] == 'url' and post.meta('bg_image')['bg_image_url']) ? post_bg_ver_pos : (options.bg_image['bg_image_type'] == 'file' and options.bg_image['bg_image']['url']) or (options.bg_image['bg_image_type'] == 'url' and options.bg_image['bg_image_url']) ? bg_ver_pos %}
+{% set page_bg_position = page_bg_hor_pos or page_bg_ver_pos ? 'background-position: ' ~ page_bg_hor_pos ~ ' ' ~ page_bg_ver_pos ~ ';' %}
+{% set page_bg_repeat = (post.meta('bg_image')['bg_image_type'] == 'file' and post.meta('bg_image')['bg_image']['url']) or (post.meta('bg_image')['bg_image_type'] == 'url' and post.meta('bg_image')['bg_image_url']) ? post_bg_repeat : (options.bg_image['bg_image_type'] == 'file' and options.bg_image['bg_image']['url']) or (options.bg_image['bg_image_type'] == 'url' and options.bg_image['bg_image_url']) ? bg_repeat %}
+{% set page_bg_attachment = (post.meta('bg_image')['bg_image_type'] == 'file' and post.meta('bg_image')['bg_image']['url']) or (post.meta('bg_image')['bg_image_type'] == 'url' and post.meta('bg_image')['bg_image_url']) ? post_bg_attachment : (options.bg_image['bg_image_type'] == 'file' and options.bg_image['bg_image']['url']) or (options.bg_image['bg_image_type'] == 'url' and options.bg_image['bg_image_url']) ? bg_attachment %}
+
+{# Sidebar global background image styles #}
+{% set sidebar_bg_image = options.sidebar_bg_image['bg_image_type'] == 'file' and options.sidebar_bg_image['bg_image']['url'] ? "background-image: url('" ~ options.sidebar_bg_image['bg_image']['url'] ~ "');" : options.sidebar_bg_image['bg_image_type'] == 'url' and options.sidebar_bg_image['bg_image_url'] ? "background-image: url('" ~ options.sidebar_bg_image['bg_image_url'] ~ "');" %}
+{% set sidebar_bg_image_size = options.sidebar_bg_image['bg_size'] == 'custom' and options.sidebar_bg_image['custom_bg_size'] ? 'background-size: ' ~ options.sidebar_bg_image['custom_bg_size'] ~ ';' : options.sidebar_bg_image['bg_size'] ? 'background-size: ' ~ options.sidebar_bg_image['bg_size'] ~ ';' %}
+{% set sidebar_bg_hor_pos = options.sidebar_bg_image['bg_horizontal_position'] == 'custom' ? options.sidebar_bg_image['custom_bg_horizontal_position'] : options.sidebar_bg_image['bg_horizontal_position'] ? options.sidebar_bg_image['bg_horizontal_position'] %}
+{% set sidebar_bg_ver_pos = options.sidebar_bg_image['bg_vertical_position'] == 'custom' ? options.sidebar_bg_image['custom_bg_vertical_position'] : options.sidebar_bg_image['bg_vertical_position'] ? options.sidebar_bg_image['bg_vertical_position'] %}
+{% set sidebar_bg_repeat = options.sidebar_bg_image['bg_repeat'] ? 'background-repeat: ' ~ options.sidebar_bg_image['bg_repeat'] ~ ';' %}
+{% set sidebar_bg_attachment = options.sidebar_bg_image['bg_attachment'] ? 'background-attachment: ' ~ options.sidebar_bg_image['bg_attachment'] ~ ';' %}
+
+{# Sidebar post background image styles #}
+{% set sidebar_post_bg_image = post.meta('sidebar_bg_image')['bg_image_type'] == 'file' and post.meta('sidebar_bg_image')['bg_image']['url'] ? "background-image: url('" ~ post.meta('sidebar_bg_image')['bg_image']['url'] ~ "');" : post.meta('sidebar_bg_image')['bg_image_type'] == 'url' and post.meta('sidebar_bg_image')['bg_image_url'] ? "background-image: url('" ~ post.meta('sidebar_bg_image')['bg_image_url'] ~ "');" %}
+{% set sidebar_post_bg_image_size = post.meta('sidebar_bg_image')['bg_size'] == 'custom' ? 'background-size: ' ~ post.meta('sidebar_bg_image')['custom_bg_size'] ~ ';' : post.meta('sidebar_bg_image')['bg_size'] ? 'background-size: ' ~ post.meta('sidebar_bg_image')['bg_size'] ~ ';' %}
+{% set sidebar_post_bg_hor_pos = post.meta('sidebar_bg_image')['bg_horizontal_position'] == 'custom' ? post.meta('sidebar_bg_image')['custom_bg_horizontal_position'] : post.meta('sidebar_bg_image')['bg_horizontal_position'] ? post.meta('sidebar_bg_image')['bg_horizontal_position'] %}
+{% set sidebar_post_bg_ver_pos = post.meta('sidebar_bg_image')['bg_vertical_position'] == 'custom' ? post.meta('sidebar_bg_image')['custom_bg_vertical_position'] : post.meta('sidebar_bg_image')['bg_vertical_position'] ? post.meta('sidebar_bg_image')['bg_vertical_position'] %}
+{% set sidebar_post_bg_repeat = post.meta('sidebar_bg_image')['bg_repeat'] ? 'background-repeat: ' ~ post.meta('sidebar_bg_image')['bg_repeat'] ~ ';' %}
+{% set sidebar_post_bg_attachment = post.meta('sidebar_bg_image')['bg_attachment'] ? 'background-attachment: ' ~ post.meta('sidebar_bg_image')['bg_attachment'] ~ ';' %}
+
+{# Sidebar background image styles #}
+{% set sidebar_page_bg_image = (post.meta('sidebar_bg_image')['bg_image_type'] == 'file' and post.meta('sidebar_bg_image')['bg_image']['url']) or (post.meta('sidebar_bg_image')['bg_image_type'] == 'url' and post.meta('sidebar_bg_image')['bg_image_url']) ? sidebar_post_bg_image :  (options.sidebar_bg_image['bg_image_type'] == 'file' and options.sidebar_bg_image['bg_image']['url']) or (options.sidebar_bg_image['bg_image_type'] == 'url' and options.sidebar_bg_image['bg_image_url']) ? sidebar_bg_image %}
+{% set sidebar_page_bg_image_size = (post.meta('sidebar_bg_image')['bg_image_type'] == 'file' and post.meta('sidebar_bg_image')['bg_image']['url']) or (post.meta('sidebar_bg_image')['bg_image_type'] == 'url' and post.meta('sidebar_bg_image')['bg_image_url']) ? sidebar_post_bg_image_size : (options.sidebar_bg_image['bg_image_type'] == 'file' and options.sidebar_bg_image['bg_image']['url']) or (options.sidebar_bg_image['bg_image_type'] == 'url' and options.sidebar_bg_image['bg_image_url']) ? sidebar_bg_image_size %}
+{% set sidebar_page_bg_hor_pos = (post.meta('sidebar_bg_image')['bg_image_type'] == 'file' and post.meta('sidebar_bg_image')['bg_image']['url']) or (post.meta('sidebar_bg_image')['bg_image_type'] == 'url' and post.meta('sidebar_bg_image')['bg_image_url']) ? sidebar_post_bg_hor_pos : (options.sidebar_bg_image['bg_image_type'] == 'file' and options.sidebar_bg_image['bg_image']['url']) or (options.sidebar_bg_image['bg_image_type'] == 'url' and options.sidebar_bg_image['bg_image_url']) ? sidebar_bg_hor_pos %}
+{% set sidebar_page_bg_ver_pos = (post.meta('sidebar_bg_image')['bg_image_type'] == 'file' and post.meta('sidebar_bg_image')['bg_image']['url']) or (post.meta('sidebar_bg_image')['bg_image_type'] == 'url' and post.meta('sidebar_bg_image')['bg_image_url']) ? sidebar_post_bg_ver_pos : (options.sidebar_bg_image['bg_image_type'] == 'file' and options.sidebar_bg_image['bg_image']['url']) or (options.sidebar_bg_image['bg_image_type'] == 'url' and options.sidebar_bg_image['bg_image_url']) ? sidebar_bg_ver_pos %}
+{% set sidebar_page_bg_position = sidebar_page_bg_hor_pos or sidebar_page_bg_ver_pos ? 'background-position: ' ~ sidebar_page_bg_hor_pos ~ ' ' ~ sidebar_page_bg_ver_pos ~ ';' %}
+{% set sidebar_page_bg_repeat = (post.meta('sidebar_bg_image')['bg_image_type'] == 'file' and post.meta('sidebar_bg_image')['bg_image']['url']) or (post.meta('sidebar_bg_image')['bg_image_type'] == 'url' and post.meta('sidebar_bg_image')['bg_image_url']) ? sidebar_post_bg_repeat : (options.sidebar_bg_image['bg_image_type'] == 'file' and options.sidebar_bg_image['bg_image']['url']) or (options.sidebar_bg_image['bg_image_type'] == 'url' and options.sidebar_bg_image['bg_image_url']) ? sidebar_bg_repeat %}
+{% set sidebar_page_bg_attachment = (post.meta('sidebar_bg_image')['bg_image_type'] == 'file' and post.meta('sidebar_bg_image')['bg_image']['url']) or (post.meta('sidebar_bg_image')['bg_image_type'] == 'url' and post.meta('sidebar_bg_image')['bg_image_url']) ? sidebar_post_bg_attachment : (options.sidebar_bg_image['bg_image_type'] == 'file' and options.sidebar_bg_image['bg_image']['url']) or (options.sidebar_bg_image['bg_image_type'] == 'url' and options.sidebar_bg_image['bg_image_url']) ? sidebar_bg_attachment %}
+
+{# Set Body Classes #}
+{% set body_classes = body_classes|default([])|merge([
+  body_class,
+  post.slug,
+  post.meta('page_background_color')['bg_color'] == 'palette' and post.meta('page_background_color')['bg_theme_color'] ? 'bg-' ~ post.meta('page_background_color')['bg_theme_color'],
+  post.meta('page_text_color')['color'] == 'palette' and post.meta('page_text_color')['theme_color'] ? 'text-' ~ post.meta('page_text_color')['theme_color'],
+  options.remove_content_containers != true and post.meta('remove_content_container') != true ? 'include-content-containers',
+  options.remove_header_containers != true and post.meta('remove_header_container') != true ? 'include-header-containers',
+  options.remove_footer_containers != true and post.meta('remove_footer_container') != true ? 'include-footer-containers',
+  options.fluid_content_containers != true and post.meta('fluid_content_container') != true ? 'max-width-content-container',
+  options.fluid_footer_containers != true and post.meta('fluid_footer_container') != true ? 'max-width-footer-container',
+  options.max_width_fluid_containers == true ? 'max-width-fluid-containers',
+  options.header_position is not null ? options.header_position ~ '-header-enabled',
+  options.shrink_header == true ? 'shrink-header-enabled',
+  options.disable_gf_layout == true ? 'no-gf-layout'
+]) | sort | join(' ') | trim %}
+
+{# Set Body Attributes #}
+{% set body_attributes = body_attributes|default([])|merge([
+  'data-template="base.twig"',
+  'data-bs-spy="scroll"',
+  'data-bs-target="#primaryNavigation"',
+  page_bg_color or page_text_color ? 'style="' ~ page_bg_color ~ page_text_color ~ '"'
+]) | sort | join(' ') | trim %}
+
+{# Set Main Classes #}
+{% set main_classes = main_classes|default([])|merge([
+  'content-wrapper',
+  sidebar_class and post.meta('hide_sidebar') != true and options.hide_sidebars != true ? sidebar_class,
+  sidebar_class and (options.left_sidebar == true or post.meta('left_sidebar') == true) ? 'sidebar-left'
+]) | sort | join(' ') | trim %}
+
+{# Set Main Attributes #}
+{% set main_attributes = main_attributes|default([])|merge([
+  page_bg_image or page_bg_image_size or page_bg_position or page_bg_repeat or page_bg_attachment ? 'style="' ~ page_bg_image ~ page_bg_image_size ~ page_bg_position ~ page_bg_repeat ~ page_bg_attachment ~ '"'
+]) | sort | join(' ') | trim %}
+
+{# Set Wrapper Classes #}
+{% set content_wrapper_classes = content_wrapper_classes|default([])|merge([
+  'wrapper'
+]) | sort | join(' ') | trim %}
+
+{# Set Wrapper Attributes #}
+{% set content_wrapper_attributes = content_wrapper_attributes|default([])|merge([
+  content_padding_top or content_padding_bottom or content_padding_left or content_padding_right ? 'style="' ~ content_padding_top ~ content_padding_bottom ~ content_padding_left ~ content_padding_right ~ '"'
+]) | sort | join(' ') | trim %}
+
+{# Set Sidebar Classes #}
+{% set sidebar_classes = sidebar_classes|default([])|merge([
+  'sidebar',
+  post.meta('page_sidebar') is not empty ? 'sidebar-' ~ post.meta('page_sidebar') : 'sidebar-' ~ options.default_sidebar,
+  post.meta('sidebar_bg_color')['bg_color'] == 'palette' and post.meta('sidebar_bg_color')['bg_theme_color'] ? 'bg-' ~ post.meta('sidebar_bg_color')['bg_theme_color'] : ((post.meta('sidebar_bg_color')['bg_color'] == 'custom' and post.meta('sidebar_bg_color')['bg_custom_color'] == null) or (post.meta('sidebar_bg_color')['bg_color'] == 'palette' and post.meta('sidebar_bg_color')['bg_theme_color'] == null)) and (options.sidebar_bg_color['bg_color'] == 'palette' and options.sidebar_bg_color['bg_theme_color']) ? 'bg-' ~ options.sidebar_bg_color['bg_theme_color'],
+  post.meta('sidebar_text_color')['color'] == 'palette' and post.meta('sidebar_text_color')['theme_color'] ? 'text-' ~ post.meta('sidebar_text_color')['theme_color'] : ((post.meta('sidebar_text_color')['color'] == 'custom' and post.meta('sidebar_text_color')['custom_color'] == null) or (post.meta('sidebar_text_color')['color'] == 'palette' and post.meta('sidebar_text_color')['theme_color'] == null)) and (options.sidebar_text_color['color'] == 'palette' and options.sidebar_text_color['theme_color']) ? 'text-' ~ options.sidebar_text_color['theme_color']
+]) | sort | join(' ') | trim %}
+
+{# Set Sidebar Attributes #}
+{% set sidebar_attributes = sidebar_attributes|default([])|merge([
+  sidebar_page_bg_image or sidebar_page_bg_image_size or sidebar_page_bg_position or sidebar_page_bg_repeat or sidebar_page_bg_attachment or sidebar_bg_color or sidebar_text_color or sidebar_padding_top or sidebar_padding_bottom or sidebar_padding_left or sidebar_padding_right ? 'style="' ~ sidebar_page_bg_image ~ sidebar_page_bg_image_size ~ sidebar_page_bg_position ~ sidebar_page_bg_repeat ~ sidebar_page_bg_attachment ~ sidebar_bg_color ~ sidebar_text_color ~ sidebar_padding_top ~ sidebar_padding_bottom ~ sidebar_padding_left ~ sidebar_padding_right ~ '"'
+]) | sort | join(' ') | trim %}
+
+	<body class="{{body_classes}}" {{ body_attributes }}>
+  {% include "partials/wrapper/scripts-body.twig" %}
+
+  {% include 'partials/wrapper/header-stacked.twig' %}
+
+    {% if sidebar_width or sidebar_min_width or sidebar_max_width %}
+      <style>
+        @media screen and (min-width: {{ sass_data.scssBreakpoints.lg }}) {
+          {% if sidebar_width %}
+          .content-wrapper.sidebar-active {
+            grid-template-columns: auto {{ sidebar_width }};
+          }
+          {% endif %}
+        }
+      </style>
+    {% endif %}
+
+    <main class="{{ main_classes }}" {{ main_attributes }}>
+			<div class="{{ content_wrapper_classes }}" {{ content_wrapper_attributes }}>
+        {% if title %}
+          {% include "partials/content/page-header.twig" %}
+        {% endif %}
+				{% block content %}
+					Sorry, no content
+				{% endblock content %}
+			</div>
+			{% block sidebar %}
+        {% if sidebar and post.meta('hide_sidebar') != true and options.hide_sidebars != true  %}
+          <aside class="{{ sidebar_classes }}" {{ sidebar_attributes }}>
+            {{sidebar}}
+          </aside>
+        {% endif %}
+			{% endblock sidebar %}
+		</main>
+
+    {% include 'partials/wrapper/footer.twig' %}
+
+    {% block foot %}{% endblock foot %}
+
+    {% include "partials/wrapper/scripts-footer.twig" %}
+
+    {{ function('wp_footer') }}
+	</body>
+</html>

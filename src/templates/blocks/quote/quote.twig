@@ -1,0 +1,22 @@
+{#
+/**
+ * Block Name: Quote
+ *
+ * This is the template that displays the quote block.
+ */
+#}
+
+{% if is_preview %}
+<p>Some editor instructions here.</p>
+{% endif %}
+
+{% include '@atoms/blockquote/_blockquote.tpl.twig' with {
+  quote: fields.quote,
+  citation: fields.citation,
+  citation_position: fields.citation_position,
+  blockquote_classes: [
+    'block-quote',
+    block['className'],
+    block['align'] ? 'align-' ~ block['align']
+  ]
+} %}

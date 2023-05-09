@@ -1,0 +1,323 @@
+{#
+/**
+ * @file
+ * card
+ *
+ *  Available variables for card:
+ *  - card_element: String (optional): Element tag that defaults to div.
+ *  - card_width: Integer: 25|50|75 If left empty the card will fill the width of it's parent element.
+ *  - card_background: String: primary|secondary|succes|danger|warning|info|light|dark Background color.
+ *  - card_border: String: primary|secondary|succes|danger|warning|info|light|dark Border color.
+ *  - text_alignment: String: center|right|left|jusfify Text alignment.
+ *  - card_header: String: The header on the card.
+ *  - card_label [string]: A label or category for the card.
+ *  - background_image [string]: Card front background image URL.
+ *  - back_background_image [string]: Card back background image URL.
+ *  - card_image_location: String: top|bottom Indicates where the image is.
+ *  - card_icon: Object: Card image
+ *  - card_image: Object: Card icon
+ *  - src: String: Path to image
+ *  - card_image_overlay: Bool: Overlay text on image.
+ *  - card_image_overlay_text: String: The text overlay for an image (may require additional utilities).
+ *  - card_title: String: The title on the card.
+ *  - card_subtitle: String: The subtitle on the card.
+ *  - card_text: String: The text on the card.
+ *  - text_color: String: primary|secondary|succes|danger|warning|info|light|dark Text color.
+ *  - card_linked [bool]: Set to true to link entire card.
+ *  - card_link: String: The path to another URL.
+ *  - card_link_target [string: _self | _blank | _parent | _top]: Sets the target for the card link.
+ *  - card_link_text: String: The link's text.
+ *  - card_list: Number: The number of items in the list.
+ *  - list_item: Loop variable: Do not set.
+ *  - card_footer: String: The text on the footer.
+ *  - card_other_classes [array]: Additional component classes.
+ *  - no_header_padding: Remove card header padding.
+ *  - no_body_padding: Remove card body padding.
+ *  - no_footer_padding: Remove card footer padding.
+ *  - no_border: Remove card border.
+ *  - inherit_color: Resets card label, title and subtitle so that it inherits the color from its parent.
+ */
+#}
+
+{% set card_classes = card_classes|default([])|merge([
+  'card',
+  card_width ? 'w-' ~ card_width,
+  card_cols ? card_cols : '',
+  text_alignment ? 'text-' ~ text_alignment,
+  text_color ? 'text-' ~ text_color,
+  card_background ? 'bg-' ~ card_background,
+  card_border ? 'border border-' ~ card_border,
+  card_linked ? 'card--linked' : '',
+  card_image_overlay == true ? 'has-image-overlay',
+  card_image_overlay_text == true ? 'has-overlay-text',
+  background_image or back_background_image ? 'has-bg-img',
+  flip_card ? 'flip-card',
+  src or card_image.src ? 'has-img',
+  no_border == true ? 'no-border',
+  card_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set card_styles = card_styles|default([])|merge([
+  flip_card != true and background_image ? 'background-image: url(\'' ~ background_image ~ '\');',
+  card_other_styles,
+]) | sort | join(' ') | trim %}
+
+{% set card_attributes = card_attributes|default([])|merge([
+  card_id ? 'id="' ~ card_id ~ '"',
+  card_classes ? 'class="' ~ card_classes ~ '"',
+  card_styles ? 'style="' ~ card_styles ~ '"',
+  card_link_target ? 'target="' ~ card_link_target ~ '"' : 'target="_self"',
+  card_other_attributes,
+]) | sort | join(' ') | trim %}
+
+{% set card_front_classes = card_front_classes|default([])|merge([
+  'front',
+  card_front_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set card_front_styles = card_front_styles|default([])|merge([
+  flip_card == true and background_image ? 'background-image: url(\'' ~ background_image ~ '\');',
+  card_front_other_styles,
+]) | sort | join(' ') | trim %}
+
+{% set card_front_attributes = card_front_attributes|default([])|merge([
+  card_front_classes ? 'class="' ~ card_front_classes ~ '"',
+  card_front_styles ? 'style="' ~ card_front_styles ~ '"',
+  card_front_other_attributes,
+]) | sort | join(' ') | trim %}
+
+{% set card_back_classes = card_back_classes|default([])|merge([
+  'back',
+  card_back_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set card_back_styles = card_back_styles|default([])|merge([
+  flip_card == true and back_background_image ? 'background-image: url(\'' ~ back_background_image ~ '\');',
+  card_back_other_styles,
+]) | sort | join(' ') | trim %}
+
+{% set card_back_attributes = card_back_attributes|default([])|merge([
+  card_back_classes ? 'class="' ~ card_back_classes ~ '"',
+  card_back_styles ? 'style="' ~ card_back_styles ~ '"',
+  card_back_other_attributes,
+]) | sort | join(' ') | trim %}
+
+{% if card_link and card_linked == true %}
+<a href="{{ card_link }}" {{ card_attributes }}>
+  {% else %}
+  <div {{ card_attributes }}>
+    {% endif %}
+
+    <div class="card-wrapper">
+
+      <div {{ card_front_attributes }}>
+        <div class="card-content-wrapper-outer">
+          <div class="card-content-wrapper-inner">
+            {% block front %}
+              {% block card_header %}
+                {% if card_icon.name is not empty or card_label or card_header or card_image_location == 'top' %}
+                  <div class="card-header {{ no_header_padding == true ? 'p-0' }}">
+                    {% if card_icon.name is not empty or card_label %}
+                      <div class="card-lead">
+                        {% block card_icon %}
+                          {% if card_icon.name is not empty %}
+                            <div class="card-icon">
+                              {% if card_icon is iterable %}
+                                {% include '@atoms/svg/_svg~icon.tpl.twig' with {
+                                  name: card_icon.name,
+                                  fill: card_icon.fill,
+                                  width: card_icon.width,
+                                  height: card_icon.height,
+                                  svg_classes: card_icon.svg_classes,
+                                  svg_other_classes: card_icon.svg_other_classes,
+                                  svg_styles: card_icon.svg_styles,
+                                  svg_other_styles: card_icon.svg_other_styles,
+                                  svg_attributes: card_icon.svg_attributes,
+                                  svg_other_attributes: card_icon.svg_other_attributes,
+                                } %}
+                              {% elseif card_icon %}
+                                <span class="{{ card_icon }}"></span>
+                              {% endif %}
+                            </div>
+                          {% endif %}
+                        {% endblock card_icon %}
+                        {% block card_label %}
+                          {% if card_label %}
+                            <span class="card-label {{ inherit_color == true ? 'text-reset' }}">
+                              {{ card_label }}
+                            </span>
+                          {% endif %}
+                        {% endblock card_label %}
+                      </div>
+                    {% endif %}
+
+                    {% if card_image_location == 'top' %}
+                      {% block card_image_top %}
+                        {# if `card_image` is null, this falls back to a holderjs placeholder #}
+                        <div class="card-image {{ card_image_overlay != true and card_image_overlay_text ? 'has-image-overlay' }}">
+                          {% include '@atoms/image/_image.tpl.twig' with {
+                            imageStyleName: 'card',
+                            class: 'card-img-top',
+                            variant: card_image.variant,
+                            src: card_image.src,
+                            alt: card_image.alt,
+                            placeholder: card_image.placeholder,
+                            image_classes: card_image.image_classes,
+                            image_other_classes: card_image.image_other_classes,
+                            width: card_image.width,
+                            height: card_image.height,
+                            background_color: card_image.background_color,
+                            text_color: card_image.text_color,
+                            text: card_image.text,
+                            format: card_image.format
+                          } %}
+
+                          {% if card_image_overlay != true and card_image_overlay_text %}
+                            <div class="card-img-overlay card-img-overlay--text">
+                              <p>{{ card_image_overlay_text }}</p>
+                            </div>
+                          {% endif %}
+                        </div>
+                      {% endblock %}
+                    {% endif %}
+                  </div>
+                {% endif %}
+              {% endblock card_header %}
+
+              <div class="card-content {{ card_image_overlay == true and card_image_overlay_text is empty ? 'card-img-overlay' }} {{ no_body_padding == true ? 'p-0' }}">
+                {% block card_content %}
+                  {% block card_intro %}
+                    {% if card_title or card_subtitle %}
+                      <div class="card-intro {{ no_body_padding == true ? 'p-0' }}">
+                        {% if card_title %}
+                          <h4 class="card-title {{ inherit_color == true ? 'text-reset' }}">{{ card_title }}</h4>
+                        {% endif %}
+                        {% if card_subtitle %}
+                          <h6 class="card-subtitle {{ inherit_color == true ? 'text-reset' }}">{{ card_subtitle }}</h6>
+                        {% endif %}
+                      </div>
+                    {% endif %}
+                  {% endblock card_intro %}
+
+                  {% block card_body %}
+                    {% if card_text or card_button or card_list or (card_link and card_linked is empty) %}
+                      <div class="card-body {{ no_body_padding == true ? 'p-0' }}">
+                        {% block card_text %}
+                          {% if card_text %}
+                            <div class="card-text {{ text_color }}">{{ card_text }}</div>
+                          {% endif %}
+                        {% endblock %}
+
+                        {% if card_link and card_linked is empty %}
+                          <a href="{{ card_link }}" class="card-link" target="{{ card_link_target ? card_link_target : '_self' }}">{{ card_link_text }}</a>
+                        {% endif %}
+
+                        {% if card_button %}
+                          {% include "@atoms/button/_button.tpl.twig" with {
+                            button_classes: card_button.button_classes,
+                            button_other_classes: card_button.button_other_classes,
+                            button_element: card_button.button_element,
+                            button_type: card_button.button_type,
+                            button_outline: card_button.button_outline,
+                            buttonless_dropdown: card_button.buttonless_dropdown,
+                            button_color: card_button.button_color,
+                            button_size: card_button.button_size,
+                            button_block: card_button.button_block,
+                            button_active: card_button.button_active,
+                            button_toggle: card_button.button_toggle,
+                            button_link: card_button.button_link,
+                            button_value: card_button.button_value,
+                            button_id: card_button.button_id,
+                            button_disabled: card_button.button_disabled,
+                            button_attributes: card_button.button_attributes,
+                            button_other_attributes: card_button.button_other_attributes,
+                            button_text: card_button.button_text,
+                            button_target: card_button.button_target,
+                            button_expanded: card_button.button_expanded,
+                            button_controls: card_button.button_controls,
+                            nowrap: card_button.nowrap,
+                            contextual_content: card_button.contextual_content,
+                            title: card_button.title,
+                            popover_content: card_button.popover_content,
+                            context_placement: card_button.context_placement,
+                            context_container: card_button.context_container
+                          } %}
+                        {% endif %}
+
+                        {% if card_list %}
+                          {% include '@atoms/list/_list.tpl.twig' with {
+                            parent_classes: card_list.parent_classes,
+                            parent_other_classes: card_list.parent_other_classes,
+                            parent_element: card_list.parent_element,
+                            list_id: card_list.list_id,
+                            bullet_icons: card_list.bullet_icons,
+                            bullet_icon_position: card_list.bullet_icon_position,
+                            bullet_icon_size: card_list.bullet_icon_size,
+                            items: card_list.items
+                          } %}
+                        {% endif %}
+                      </div>
+                    {% endif %}
+                  {% endblock %}
+                {% endblock card_content %}
+              </div>
+
+              {% if card_footer or (card_image_location == 'bottom' and card_image.src) %}
+                <div class="card-footer {{ no_footer_padding == true ? 'p-0' }}">
+
+                  {% block card_footer %}
+                    <div class="card-footer-content">
+                      {{ card_footer }}
+                    </div>
+                  {% endblock card_footer %}
+
+                  {% if card_image_location == 'bottom' %}
+                    {% block card_image_bottom %}
+                      {# if `card_image` is null, this falls back to a holderjs placeholder #}
+                      <div class="card-image">
+                        {% include '@atoms/image/_image.tpl.twig' with {
+                          imageStyleName: 'card',
+                          class: 'card-img-top',
+                          variant: card_image.variant,
+                          src: card_image.src,
+                          alt: card_image.alt,
+                          placeholder: card_image.placeholder,
+                          image_classes: card_image.image_classes,
+                          image_other_classes: card_image.image_other_classes,
+                          width: card_image.width,
+                          height: card_image.height,
+                          background_color: card_image.background_color,
+                          text_color: card_image.text_color,
+                          text: card_image.text,
+                          format: card_image.format
+                        } %}
+                      </div>
+                    {% endblock card_image_bottom %}
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endblock front %}
+          </div>
+        </div>
+      </div>
+
+      {% if flip_card == true %}
+        <div {{ card_back_attributes }}>
+          <div class="card-content-wrapper-outer">
+            <div class="card-content-wrapper-inner">
+              {% block back %}
+                <div class="card-back-content"></div>
+              {% endblock back %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+    </div>
+
+
+    {% if card_link and card_linked == true %}
+</a>
+{% else %}
+  </div>
+{% endif %}

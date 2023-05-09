@@ -1,0 +1,33 @@
+{# see `archive.twig` for an alternative strategy of extending templates #}
+{% extends "layouts/base.twig" %}
+
+{% block content %}
+  {# see `base.twig:27` for where this block's content will be inserted #}
+  <div class="content-wrapper">
+    <div class="{{ options.post_display }}">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 {{ options.grid_columns }}">
+            {% for post in posts %}
+              <article class="{{ options.post_display }}--item">
+                {% include ['partials/content/tease-'~post.post_type~'.twig', 'partials/content/tease.twig'] %}
+              </article>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pagination-wrapper">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            {% include 'partials/menus/pagination.twig' with { pagination: posts.pagination({show_all: false, mid_size: 3, end_size: 2}) } %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+{% endblock %}

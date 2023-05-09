@@ -1,0 +1,35 @@
+{#
+/**
+ * @file
+ * <%= spacedName %>
+ *
+ * Available variables for <%= spacedName %>:
+ *  - <%= underscoreName %>_id [string]: Component ID.
+ *  - <%= underscoreName %>_classes [array]: Additional component classes.
+ *  - <%= underscoreName %>_other_classes [string]: Additional component classes.
+ *  - <%= underscoreName %>_styles [array]: Additional component styles.
+ *  - <%= underscoreName %>_other_styles [string]: Additional component styles.
+ *  - <%= underscoreName %>_attributes [array]: Additional component attributes.
+ *  - <%= underscoreName %>_other_attributes [string]: Additional component attributes.
+ */
+#}
+
+{% set <%= underscoreName %>_classes = <%= underscoreName %>_classes|default([])|merge([
+  '<%= name %>',
+  <%= underscoreName %>_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set <%= underscoreName %>_styles = <%= underscoreName %>_styles|default([])|merge([
+  <%= underscoreName %>_other_styles,
+]) | sort | join(' ') | trim %}
+
+{% set <%= underscoreName %>_attributes = <%= underscoreName %>_attributes|default([])|merge([
+  <%= underscoreName %>_id ? 'id="' ~ <%= underscoreName %>_id ~ '"',
+  <%= underscoreName %>_classes ? 'class="' ~ <%= underscoreName %>_classes ~ '"',
+  <%= underscoreName %>_styles ? 'style="' ~ <%= underscoreName %>_styles ~ '"',
+  <%= underscoreName %>_other_attributes,
+]) | sort | join(' ') | trim %}
+
+<div  {{<%= underscoreName %>_attributes }}>
+  <h1><%= spacedName %></h1>
+</div>

@@ -1,0 +1,41 @@
+{% embed '@atoms/form/_form.tpl.twig' with {
+  attributes: 'role="search"',
+  name: 'searchform',
+  id: 'searchform',
+  charset: '',
+  action: site.link,
+  autocomplete: '',
+  method: 'get',
+  enctype: '',
+  novalidate: '',
+  target: '',
+  form_classes: [
+    'searchform'
+  ]
+} %}
+  {% block form_content %}
+    <div>
+      <label class="screen-reader-text" for="s">Search for:</label>
+      <input type="text" value="{{ function('get_search_query') }}" name="s" id="s" class="search-field" />
+      {% embed '@atoms/button/_button.tpl.twig' with {
+        button_element: 'button',
+        button_color: 'link',
+        button_text: '',
+        button_type: 'submit',
+        button_id: 'searchsubmit',
+        button_value: 'Search',
+        button_other_classes: 'search-submit'
+      } %}
+        {% block left %}
+          {% include '@atoms/svg/_svg~icon.tpl.twig' with {
+            svg_other_classes: 'test-svg-class',
+            width: '30px',
+            height: '30px',
+            name: 'search',
+            fill: 'white'
+          } %}
+        {% endblock left %}
+      {% endembed %}
+    </div>
+  {% endblock %}
+{% endembed %}

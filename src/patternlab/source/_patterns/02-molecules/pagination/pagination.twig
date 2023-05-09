@@ -1,0 +1,79 @@
+<p>Here are some paginations with which to paginate.</p>
+<h2>Default with text</h2>
+{% include '@molecules/pagination/_pagination.tpl.twig' with {
+  pagination_title: 'Page Navigation Example #1',
+  page_icon: FALSE,
+  page_items: [
+    {
+      title: '1',
+      link: '#'
+    },
+    {
+      title: '2',
+      link: '#'
+    },
+    {
+      title: '3',
+      link: '#'
+    },
+  ],
+} %}
+<h2>Default with arrows</h2>
+{% include '@molecules/pagination/_pagination.tpl.twig' with {
+  pagination_title: 'Page Navigation Example #2',
+  page_icon: TRUE,
+  page_items: [
+    {
+      title: '1',
+      link: '#'
+    },
+    {
+      title: '2',
+      link: '#'
+    },
+    {
+      title: '3',
+      link: '#'
+    },
+  ],
+} %}
+<h2>Small</h2>
+{% include '@molecules/pagination/_pagination.tpl.twig' with {
+  pagination_title: 'Page Navigation Example #3',
+  pagination_size: 'sm',
+  page_icon: TRUE,
+  page_items: [
+    {
+      title: '1',
+      link: '#'
+    },
+    {
+      title: '2',
+      link: '#'
+    },
+    {
+      title: '3',
+      link: '#'
+    },
+  ],
+} %}
+<h2>Large</h2>
+{% include '@molecules/pagination/_pagination.tpl.twig' with {
+  pagination_title: 'Page Navigation Example #4',
+  pagination_size: 'lg',
+  page_icon: TRUE,
+  page_items: [
+    {
+      title: '1',
+      link: '#'
+    },
+    {
+      title: '2',
+      link: '#'
+    },
+    {
+      title: '3',
+      link: '#'
+    },
+  ],
+} %}

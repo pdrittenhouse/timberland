@@ -1,0 +1,85 @@
+{# Set Page Header Styles #}
+{% set page_header_bg_color =  post.meta('page_header_bg_color')['bg_color'] == 'custom' and post.meta('page_header_bg_color')['bg_custom_color'] ? 'background-color: ' ~  post.meta('page_header_bg_color')['bg_custom_color'] ~ ';' : ((post.meta('page_header_bg_color')['bg_color'] == 'custom' and post.meta('page_header_bg_color')['bg_custom_color'] == null) or (post.meta('page_header_bg_color')['bg_color'] == 'palette' and post.meta('page_header_bg_color')['bg_theme_color'] == null)) and (options.page_header_bg_color['bg_color'] == 'custom' and options.page_header_bg_color['bg_custom_color']) ? 'background-color: ' ~  options.page_header_bg_color['bg_custom_color'] ~ ';' %}
+{% set page_header_text_color =  post.meta('page_header_text_color')['color'] == 'custom' and post.meta('page_header_text_color')['custom_color'] ? 'color: ' ~  post.meta('page_header_text_color')['custom_color'] ~ ';' : ((post.meta('page_header_text_color')['color'] == 'custom' and post.meta('page_header_text_color')['custom_color'] == null) or (post.meta('page_header_text_color')['color'] == 'palette' and post.meta('page_header_text_color')['theme_color'] == null)) and (options.page_header_text_color['color'] == 'custom' and options.page_header_text_color['custom_color']) ? 'color: ' ~  options.page_header_text_color['custom_color'] ~ ';' %}
+{% set page_header_padding_top  = post.meta('page_header_padding')['padding']['top'] >= 0 ? 'padding-top: ' ~ post.meta('page_header_padding')['padding']['top'] ~ 'px;' : options.page_header_padding['padding']['top'] >= 0 ? 'padding-top: ' ~ options.page_header_padding['padding']['top'] ~ 'px;' %}
+{% set page_header_padding_bottom = post.meta('page_header_padding')['padding']['bottom'] >= 0 ? 'padding-bottom: ' ~ post.meta('page_header_padding')['padding']['bottom'] ~ 'px;' : options.page_header_padding['padding']['bottom'] >= 0 ? 'padding-bottom: ' ~ options.page_header_padding['padding']['bottom'] ~ 'px;' %}
+{% set page_header_padding_left = post.meta('page_header_padding')['padding']['left'] >= 0 ? 'padding-left: ' ~ post.meta('page_header_padding')['padding']['left'] ~ 'px;' : options.page_header_padding['padding']['left'] >= 0 ? 'padding-left: ' ~ options.page_header_padding['padding']['left'] ~ 'px;' %}
+{% set page_header_padding_right = post.meta('page_header_padding')['padding']['right'] >= 0 ? 'padding-right: ' ~ post.meta('page_header_padding')['padding']['right'] ~ 'px;' : options.page_header_padding['padding']['right'] >= 0 ? 'padding-right: ' ~ options.page_header_padding['padding']['right'] ~ 'px;' %}
+{% set page_header_margin_top = post.meta('page_header_margin')['margin']['top']['auto'] == true ? 'margin-top: auto;' : post.meta('page_header_margin')['margin']['top']['top'] >= 0 ? 'margin-top: ' ~ post.meta('page_header_margin')['margin']['top']['top'] ~ 'px;' : options.page_header_margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : options.page_header_margin['margin']['top']['top'] >= 0 ? 'margin-top: ' ~ options.page_header_margin['margin']['top']['top'] ~ 'px;' %}
+{% set page_header_margin_bottom = post.meta('page_header_margin')['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : post.meta('page_header_margin')['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ post.meta('page_header_margin')['margin']['bottom']['bottom'] ~ 'px;' : options.page_header_margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : options.page_header_margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ options.page_header_margin['margin']['bottom']['bottom'] ~ 'px;' %}
+{% set page_header_margin_left = post.meta('page_header_margin')['margin']['left']['auto'] == true ? 'margin-left: auto;' : post.meta('page_header_margin')['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ post.meta('page_header_margin')['margin']['left']['left'] ~ 'px;' : options.page_header_margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : options.page_header_margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ options.page_header_margin['margin']['left']['left'] ~ 'px;' %}
+{% set page_header_margin_right = post.meta('page_header_margin')['margin']['right']['auto'] == true ? 'margin-right: auto;' : post.meta('page_header_margin')['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ post.meta('page_header_margin')['margin']['right']['right'] ~ 'px;' : options.page_header_margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : options.page_header_margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ options.page_header_margin['margin']['right']['right'] ~ 'px;' %}
+{% set page_header_fontsize = post.meta('page_header_font_size')['font_size']['value'] >= 0 ? 'font-size: ' ~ post.meta('page_header_font_size')['font_size']['value'] ~ post.meta('page_header_font_size')['font_size']['unit'] ~ ';' : options.page_header_font_size['font_size']['value'] >= 0 ? 'font-size: ' ~ options.page_header_font_size['font_size']['value'] ~ options.page_header_font_size['font_size']['unit'] ~ ';' %}
+
+{# Page header global background image styles #}
+{% set page_header_bg_image = options.page_header_bg_image['bg_image_type'] == 'file' and options.page_header_bg_image['bg_image']['url'] ? "background-image: url('" ~ options.page_header_bg_image['bg_image']['url'] ~ "');" : options.page_header_bg_image['bg_image_type'] == 'url' and options.page_header_bg_image['bg_image_url'] ? "background-image: url('" ~ options.page_header_bg_image['bg_image_url'] ~ "');" %}
+{% set page_header_bg_image_size = options.page_header_bg_image['bg_size'] == 'custom' and options.page_header_bg_image['custom_bg_size'] ? 'background-size: ' ~ options.page_header_bg_image['custom_bg_size'] ~ ';' : options.page_header_bg_image['bg_size'] ? 'background-size: ' ~ options.page_header_bg_image['bg_size'] ~ ';' %}
+{% set page_header_bg_hor_pos = options.page_header_bg_image['bg_horizontal_position'] == 'custom' ? options.page_header_bg_image['custom_bg_horizontal_position'] : options.page_header_bg_image['bg_horizontal_position'] ? options.page_header_bg_image['bg_horizontal_position'] %}
+{% set page_header_bg_ver_pos = options.page_header_bg_image['bg_vertical_position'] == 'custom' ? options.page_header_bg_image['custom_bg_vertical_position'] : options.page_header_bg_image['bg_vertical_position'] ? options.page_header_bg_image['bg_vertical_position'] %}
+{% set page_header_bg_repeat = options.page_header_bg_image['bg_repeat'] ? 'background-repeat: ' ~ options.page_header_bg_image['bg_repeat'] ~ ';' %}
+{% set page_header_bg_attachment = options.page_header_bg_image['bg_attachment'] ? 'background-attachment: ' ~ options.page_header_bg_image['bg_attachment'] ~ ';' %}
+
+{# Page header post background image styles #}
+{% set page_header_post_bg_image = post.meta('page_header_bg_image')['bg_image_type'] == 'file' and post.meta('page_header_bg_image')['bg_image']['url'] ? "background-image: url('" ~ post.meta('page_header_bg_image')['bg_image']['url'] ~ "');" : post.meta('page_header_bg_image')['bg_image_type'] == 'url' and post.meta('page_header_bg_image')['bg_image_url'] ? "background-image: url('" ~ post.meta('page_header_bg_image')['bg_image_url'] ~ "');" %}
+{% set page_header_post_bg_image_size = post.meta('page_header_bg_image')['bg_size'] == 'custom' ? 'background-size: ' ~ post.meta('page_header_bg_image')['custom_bg_size'] ~ ';' : post.meta('page_header_bg_image')['bg_size'] ? 'background-size: ' ~ post.meta('page_header_bg_image')['bg_size'] ~ ';' %}
+{% set page_header_post_bg_hor_pos = post.meta('page_header_bg_image')['bg_horizontal_position'] == 'custom' ? post.meta('page_header_bg_image')['custom_bg_horizontal_position'] : post.meta('page_header_bg_image')['bg_horizontal_position'] ? post.meta('page_header_bg_image')['bg_horizontal_position'] %}
+{% set page_header_post_bg_ver_pos = post.meta('page_header_bg_image')['bg_vertical_position'] == 'custom' ? post.meta('page_header_bg_image')['custom_bg_vertical_position'] : post.meta('page_header_bg_image')['bg_vertical_position'] ? post.meta('page_header_bg_image')['bg_vertical_position'] %}
+{% set page_header_post_bg_repeat = post.meta('page_header_bg_image')['bg_repeat'] ? 'background-repeat: ' ~ post.meta('page_header_bg_image')['bg_repeat'] ~ ';' %}
+{% set page_header_post_bg_attachment = post.meta('page_header_bg_image')['bg_attachment'] ? 'background-attachment: ' ~ post.meta('page_header_bg_image')['bg_attachment'] ~ ';' %}
+
+{# Page header background image styles #}
+{% set page_header_page_bg_image = (post.meta('page_header_bg_image')['bg_image_type'] == 'file' and post.meta('page_header_bg_image')['bg_image']['url']) or (post.meta('page_header_bg_image')['bg_image_type'] == 'url' and post.meta('page_header_bg_image')['bg_image_url']) ? page_header_post_bg_image :  (options.page_header_bg_image['bg_image_type'] == 'file' and options.page_header_bg_image['bg_image']['url']) or (options.page_header_bg_image['bg_image_type'] == 'url' and options.page_header_bg_image['bg_image_url']) ? page_header_bg_image %}
+{% set page_header_page_bg_image_size = (post.meta('page_header_bg_image')['bg_image_type'] == 'file' and post.meta('page_header_bg_image')['bg_image']['url']) or (post.meta('page_header_bg_image')['bg_image_type'] == 'url' and post.meta('page_header_bg_image')['bg_image_url']) ? page_header_post_bg_image_size : (options.page_header_bg_image['bg_image_type'] == 'file' and options.page_header_bg_image['bg_image']['url']) or (options.page_header_bg_image['bg_image_type'] == 'url' and options.page_header_bg_image['bg_image_url']) ? page_header_bg_image_size %}
+{% set page_header_page_bg_hor_pos = (post.meta('page_header_bg_image')['bg_image_type'] == 'file' and post.meta('page_header_bg_image')['bg_image']['url']) or (post.meta('page_header_bg_image')['bg_image_type'] == 'url' and post.meta('page_header_bg_image')['bg_image_url']) ? page_header_post_bg_hor_pos : (options.page_header_bg_image['bg_image_type'] == 'file' and options.page_header_bg_image['bg_image']['url']) or (options.page_header_bg_image['bg_image_type'] == 'url' and options.page_header_bg_image['bg_image_url']) ? page_header_bg_hor_pos %}
+{% set page_header_page_bg_ver_pos = (post.meta('page_header_bg_image')['bg_image_type'] == 'file' and post.meta('page_header_bg_image')['bg_image']['url']) or (post.meta('page_header_bg_image')['bg_image_type'] == 'url' and post.meta('page_header_bg_image')['bg_image_url']) ? page_header_post_bg_ver_pos : (options.page_header_bg_image['bg_image_type'] == 'file' and options.page_header_bg_image['bg_image']['url']) or (options.page_header_bg_image['bg_image_type'] == 'url' and options.page_header_bg_image['bg_image_url']) ? page_header_bg_ver_pos %}
+{% set page_header_page_bg_position = page_header_page_bg_hor_pos or page_header_page_bg_ver_pos ? 'background-position: ' ~ page_header_page_bg_hor_pos ~ ' ' ~ page_header_page_bg_ver_pos ~ ';' %}
+{% set page_header_page_bg_repeat = (post.meta('page_header_bg_image')['bg_image_type'] == 'file' and post.meta('page_header_bg_image')['bg_image']['url']) or (post.meta('page_header_bg_image')['bg_image_type'] == 'url' and post.meta('page_header_bg_image')['bg_image_url']) ? page_header_post_bg_repeat : (options.page_header_bg_image['bg_image_type'] == 'file' and options.page_header_bg_image['bg_image']['url']) or (options.page_header_bg_image['bg_image_type'] == 'url' and options.page_header_bg_image['bg_image_url']) ? page_header_bg_repeat %}
+{% set page_header_page_bg_attachment = (post.meta('page_header_bg_image')['bg_image_type'] == 'file' and post.meta('page_header_bg_image')['bg_image']['url']) or (post.meta('page_header_bg_image')['bg_image_type'] == 'url' and post.meta('page_header_bg_image')['bg_image_url']) ? page_header_post_bg_attachment : (options.page_header_bg_image['bg_image_type'] == 'file' and options.page_header_bg_image['bg_image']['url']) or (options.page_header_bg_image['bg_image_type'] == 'url' and options.page_header_bg_image['bg_image_url']) ? page_header_bg_attachment %}
+
+{# Set Page Header Classes #}
+{% set page_header_classes = page_header_classes|default([])|merge([
+  'page-header',
+  post.meta('page_header_bg_color')['bg_color'] == 'palette' and post.meta('page_header_bg_color')['bg_theme_color'] ? 'bg-' ~ post.meta('page_header_bg_color')['bg_theme_color'] : ((post.meta('page_header_bg_color')['bg_color'] == 'custom' and post.meta('page_header_bg_color')['bg_custom_color'] == null) or (post.meta('page_header_bg_color')['bg_color'] == 'palette' and post.meta('page_header_bg_color')['bg_theme_color'] == null)) and (options.page_header_bg_color['bg_color'] == 'palette' and options.page_header_bg_color['bg_theme_color']) ? 'bg-' ~ options.page_header_bg_color['bg_theme_color'],
+  post.meta('page_header_text_color')['color'] == 'palette' and post.meta('page_header_text_color')['theme_color'] ? 'text-' ~ post.meta('page_header_text_color')['theme_color'] : ((post.meta('page_header_text_color')['color'] == 'custom' and post.meta('page_header_text_color')['custom_color'] == null) or (post.meta('page_header_text_color')['color'] == 'palette' and post.meta('page_header_text_color')['theme_color'] == null)) and (options.page_header_text_color['color'] == 'palette' and options.page_header_text_color['theme_color']) ? 'text-' ~ options.page_header_text_color['theme_color'],
+  options.remove_page_header_containers != true and post.meta('remove_content_container') != true and post.meta('remove_page_header_container') != true ? 'include-content-containers',
+  options.fluid_content_containers != true and post.meta('fluid_content_container') != true ? 'max-width-content-container',
+  options.max_width_fluid_containers == true ? 'max-width-fluid-containers'
+]) | sort | join(' ') | trim %}
+
+{# Set Page Header Attributes #}
+{% set page_header_attributes = page_header_attributes|default([])|merge([
+  page_header_page_bg_image or page_header_page_bg_image_size or page_header_page_bg_position or page_header_page_bg_repeat or page_header_page_bg_attachment or page_header_bg_color or page_header_text_color or page_header_padding_top or page_header_padding_bottom or page_header_padding_left or page_header_padding_right or page_header_margin_top or page_header_margin_bottom or page_header_margin_left or page_header_margin_right ? 'style="' ~ page_header_page_bg_image ~ page_header_page_bg_image_size ~ page_header_page_bg_position ~ page_header_page_bg_repeat ~ page_header_page_bg_attachment ~ page_header_bg_color ~ page_header_text_color ~ page_header_padding_top ~ page_header_padding_bottom ~ page_header_padding_left ~ page_header_padding_right ~ page_header_margin_top ~ page_header_margin_bottom ~ page_header_margin_left ~ page_header_margin_right ~ '"'
+]) | sort | join(' ') | trim %}
+
+{# Set Heading Classes #}
+{% set heading_classes = heading_classes|default([])|merge([
+  'article-title'
+]) | sort | join(' ') | trim %}
+
+{# Set Heading Attributes #}
+{% set heading_attributes = heading_attributes|default([])|merge([
+  page_header_fontsize ? 'style="' ~ page_header_fontsize ~ '"'
+]) | sort | join(' ') | trim %}
+
+{% if options.hide_page_headers != true and post.meta('hide_page_header') != true %}
+  <header class="{{ page_header_classes }}" {{ page_header_attributes }}>
+    <div class="page-header--container">
+      <div class="page-header--row">
+        <div class="page-header--content">
+          {% if thumbnail and (options.hide_featured_images != true and post.meta('hide_featured_image') != true) %}
+            {% include "@atoms/image/_image.tpl.twig" with {
+              variant: 'primary',
+              src: thumbnail.src|resize(1600, 900),
+              alt: thumbnail.alt,
+              placeholder: false,
+              image_other_classes: 'article-image'
+            } %}
+          {% endif %}
+          {% if title and (options.hide_page_titles != true and post.meta('hide_page_title') != true) %}
+            <h2 class="{{ heading_classes }}" {{ heading_attributes }}>{{title}}</h2>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </header>
+{% endif %}

@@ -1,0 +1,68 @@
+{{ fn('timber_set_product', post) }}
+
+{% embed '@molecules/card/_card.tpl.twig' with {
+  card_image_location: 'top',
+  card_text: true,
+  card_linked: true,
+  card_link: card_link ? card_link : post.link,
+  card_classes: fn('get_post_class', ['entry'] ),
+  card_other_classes: card_other_classes,
+  card_attributes: card_attributes
+} %}
+  {% block card_image_top %}
+    <div class="card-image">
+      {% if card_image %}
+        {% include '@atoms/image/_image.tpl.twig' with {
+          imageStyleName: 'card',
+          class: 'card-img-top',
+          variant: card_image.variant,
+          src: card_image.src,
+          alt: card_image.alt,
+          placeholder: card_image.placeholder,
+          image_classes: card_image.image_classes,
+          image_other_classes: card_image.image_other_classes,
+          width: card_image.width,
+          height: card_image.height,
+          background_color: card_image.background_color,
+          text_color: card_image.text_color,
+          text: card_image.text,
+          format: card_image.format
+        } %}
+      {% else %}
+        {% include '@atoms/image/_image.tpl.twig' with {
+          variant: 'primary',
+          src: post.thumbnail.src|resize(post_thumb_size[0], post_thumb_size[1]),
+          alt: post.title
+        } %}
+      {% endif %}
+    </div>
+  {% endblock card_image_top %}
+  {% block card_intro %}
+    <div class="card-intro">
+      {% if card_title %}
+        <h4 class="card-title">{{ card_title }}</h4>
+      {% elseif post.title %}
+        <h4 class="card-title">{{ post.title }}</h4>
+      {% else %}
+        <h4 class="card-title">{{ fn('the_title') }}</h4>
+      {% endif %}
+    </div>
+  {% endblock card_intro %}
+  {% block card_text %}
+    {% if card_text %}
+      <div class="card-text">
+        {% if post._price is iterable %}
+          <span class="price">${{ post._price | sort | join(' - $') | trim }}</span>
+        {% elseif post._price %}
+          <span class="price">${{ post._price }}</span>
+        {% endif %}
+        {% if card_body_text %}
+          {{ card_body_text }}
+        {% endif %}
+        {#        {% do action('woocommerce_before_shop_loop_item_title') %}#}
+        {#        {% do action( 'woocommerce_after_shop_loop_item_title' ) %}#}
+        {#        <span class="options">{% do action( 'woocommerce_after_shop_loop_item' ) %}</span>#}
+      </div>
+    {% endif %}
+  {% endblock %}
+{% endembed %}

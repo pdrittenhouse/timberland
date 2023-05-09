@@ -1,0 +1,126 @@
+{#
+/**
+ * @file
+ * offcanvas
+ *
+ * Available variables for offcanvas:
+ *  - offcanvas_id [string]: Unique identifier for the offcanvas.
+ *  - offcanvas_wrapper_classes [array]: Additional component classes.
+ *  - offcanvas_wrapper_other_classes [string]: Additional component classes.
+ *  - offcanvas_wrapper_attributes [array]: Additional component attributes.
+ *  - offcanvas_wrapper_other_attributes [string]: Additional component attributes.
+ *  - offcanvas_classes [array]: Additional component classes.
+ *  - offcanvas_other_classes [string]: Additional component classes.
+ *  - offcanvas_attributes [array]: Additional component attributes.
+ *  - offcanvas_other_attributes [string]: Additional component attributes.
+ *  - offcanvas_button [object]: Button object for offcanvas toggle.
+ *  - offcanvas_placement [string: 'top', 'bottom', 'left', 'right']: Postion of offcanvas panel.
+ *  - offcanvas_backdrop [boolean]: Toggle the offcanvas back drop.
+ *  - offcanvas_scroll [boolean]: Toggle scrolling on the offcanvas.
+ *  - offcanvas_title [string]: Title for offcanvas panel.
+ *  - offcanvas_content [string]: Content for offcanvas panel.
+ *  - background_color [string]: Background color of offcanvas panel.
+ *  - text_color [string]: Text color of offcanvas panel.
+ *  - offcanvas_close_button [string: 'close', 'white']: Display close button.
+ */
+#}
+
+{% set offcanvasId = [] %}
+{% set alpha = 'abcdefghijklmnopqrstuvwxyz' %}
+{% set num = '0123456789' %}
+{% for i in 1..10 %}
+  {% set char = random(alpha ~ alpha|upper ~ num ~ '-_') %}
+  {% set offcanvasId = offcanvasId|merge([char]) %}
+{% endfor %}
+{% set offcanvasId = 'offcanvas_' ~ offcanvasId|join %}
+
+{% set offcanvas_wrapper_classes = offcanvas_wrapper_classes|default([])|merge([
+  'offcanvas-wrapper',
+  offcanvas_wrapper_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set offcanvas_wrapper_attributes = offcanvas_wrapper_attributes|default([])|merge([
+  offcanvas_wrapper_other_attributes,
+]) | sort | join(' ') | trim %}
+
+{% set offcanvas_classes = offcanvas_classes|default([])|merge([
+  'offcanvas',
+  background_color ? 'bg-' ~ background_color,
+  text_color ? 'text-' ~ text_color,
+  offcanvas_placement == 'top' ? 'offcanvas-top' : offcanvas_placement == 'bottom'  ? 'offcanvas-bottom' : offcanvas_placement == 'right' ? 'offcanvas-end' : 'offcanvas-start',
+  offcanvas_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set offcanvas_attributes = offcanvas_attributes|default([])|merge([
+  offcanvas_id ? 'id="' ~ offcanvas_id ~ '"' : 'id="' ~ offcanvasId ~ '"',
+  offcanvas_id ? 'aria-labelledby="' ~ offcanvas_id ~ '_label"' : 'id="' ~ offcanvasId ~ '_label"',
+  offcanvas_backdrop == true ? 'data-bs-backdrop="true"' : 'data-bs-backdrop="false"',
+  offcanvas_scroll == true ? 'data-bs-scroll="true"' : 'data-bs-scroll="false"',
+  'tabindex="-1"',
+  offcanvas_other_attributes,
+]) | sort | join(' ') | trim %}
+
+<div class="{{ offcanvas_wrapper_classes }}" {{ offcanvas_wrapper_attributes }}>
+
+  {%  block control %}
+    {% if button %}
+      {% include "@atoms/button/_button.tpl.twig" with {
+        button_classes: button.button_classes,
+        button_other_classes: button.button_other_classes,
+        button_element: button.button_element,
+        button_type: button.button_type,
+        button_outline: button.button_outline,
+        buttonless_dropdown: button.buttonless_dropdown,
+        button_color: button.button_color,
+        button_size: button.button_size,
+        button_block: button.button_block,
+        button_active: button.button_active,
+        button_toggle: 'offcanvas',
+        button_link: offcanvas_id ? '#' ~ offcanvas_id : '#' ~ offcanvasId,
+        button_value: button.button_value,
+        button_id: button.button_id,
+        button_disabled: button.button_disabled,
+        button_attributes: [
+          'aria-controls="' ~ offcanvas_id ? offcanvas_id : offcanvasId ~ '"'
+        ],
+        button_other_attributes: button.button_other_attributes,
+        button_text: button.button_text,
+        button_target: offcanvas_id ? '#' ~ offcanvas_id : '#' ~ offcanvasId,
+        button_expanded: button.button_expanded,
+        button_controls: button.button_controls,
+        nowrap: button.nowrap,
+        contextual_content: button.contextual_content,
+        title: button.title,
+        popover_content: button.popover_content,
+        context_placement: button.context_placement,
+        context_container: button.context_container
+      } %}
+    {% endif %}
+  {%  endblock control %}
+
+  <div class="{{ offcanvas_classes }}" {{ offcanvas_attributes }}>
+    {% block offcanvas_content %}
+    {% endblock offcanvas_content %}
+    <div class="offcanvas-header">
+      {% block offcanvas_header %}
+        {% if offcanvas_title %}
+          <h5 class="offcanvas-title" id="{{ offcanvas_id ? offcanvas_id ~ '_label' : offcanvasId ~ '_label' }}">{{ offcanvas_title }}</h5>
+        {% endif %}
+
+        {% if offcanvas_close_button %}
+          {% include '@atoms/button/_button.tpl.twig' with {
+            close_button: offcanvas_close_button,
+            button_other_classes: 'text-reset',
+            button_attributes: [
+              'data-bs-dismiss="offcanvas"'
+            ]
+          } %}
+        {% endif %}
+      {% block offcanvas_header %}
+    </div>
+    <div class="offcanvas-body">
+      {{ offcanvas_content }}
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,57 @@
+{#
+/**
+ * @file
+ * list group
+ *
+ * Available variables for list group:
+ *  - list_group_element [string]: List group element.
+ *  - list_group_flush [bool]: Remove border and border radius.
+ *  - list_group_horizontal [bool]: Display list group horizontally.
+ *  - list_group_classes [array]: Additional component classes.
+ *  - list_group_other_classes [string]: Additional component classes.
+ *  - list_group_attributes [array]: Additional component attributes.
+ *  - list_group_other_attributes [string]: Additional component attributes.
+ *  - items [array]: List group items.
+ *  - item_element [string]: List group item element.
+ *  - item_classes [array]: Additional item classes.
+ *  - item_other_classes [string]: Additional item classes.
+ *  - item_attributes [array]: Additional item attributes.
+ *  - item_other_attributes [string]: Additional item attributes.
+ *  - item.item_active [bool]: List group item active.
+ *  - item.item_disabled [bool]: List group item disabled.
+ *  - item.contextual_class [string (e.g.: 'primary')]: Adds contextual styling to item.
+ */
+#}
+
+{% set list_group_classes = list_group_classes|default([])|merge([
+  'list-group',
+  list_group_flush == true ? 'list-group-flush',
+  list_group_horizontal ? 'list-group-horizontal',
+  list_group_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set list_group_attributes = list_group_attributes|default([])|merge([
+  list_group_other_attributes,
+]) | sort | join(' ') | trim %}
+
+<{{ list_group_element | default('ul') }} class="{{ list_group_classes }}" {{ list_group_attributes }}>
+  {% block items %}
+    {% for item in items %}
+      {% set item_classes = item.item_classes|default([])|merge([
+        'list-group-item',
+        item.item_active == true ? 'active',
+        item.item_disabled == true ? 'disabled',
+        item_element == 'a' or item_element == 'button' ? 'list-group-item-action',
+        item.contextual_class ? 'list-group-item-' ~ item.contextual_class,
+        item.item_other_classes,
+      ]) | sort | join(' ') | trim %}
+
+      {% set item_attributes = item.item_attributes|default([])|merge([
+        item.item_elment == 'button' ? 'type=""button',
+        item.item_other_attributes,
+      ]) | sort | join(' ') | trim %}
+
+      <{{ item.item_element | default('li') }} class="{{ item_classes }}" {{ item_attributes }}>{{ item.item_content }}</{{ item.item_element | default('li') }}>
+    {% endfor %}
+  {% endblock %}
+</{{ list_group_element | default('ul') }}>

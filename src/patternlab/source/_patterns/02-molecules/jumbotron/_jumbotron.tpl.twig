@@ -1,0 +1,127 @@
+{#
+Jumbotron
+
+id: Jumbotron ID
+jumbotron_fluid: Boolean: Removes rounded corners and sets full horizontal space of parent.
+remove_container: Boolean: Removes contianer and row elements.
+vertical_center: Boolean: Center content vertically on desktop.
+jumbotron_label: String: The label of the Jumbotron
+jumbotron_title: String: The title of the Jumbotron
+jumbotron_subtitle: String: The Subtitle of the Jumbotron
+jumbotron_text: String: The text of the Jumbotron.
+jumbotron_link: String: the path to another URL
+jumbotron_link_text: String: the link's text
+
+button vars see @atoms/button
+button_text: String: Display text on the button
+button_color: String: primary|secondary|success|danger|warning|info|light|dark
+button_size: String: lg|sm set whether the button is large or small
+
+see https://getbootstrap.com/docs/4.0/components/jumbotron/ for more details
+#}
+
+{% set jumbotron_classes = jumbotron_classes|default([])|merge([
+  'jumbotron',
+  jumbotron_image ? 'has-image',
+  image_left == true ? 'image-left',
+  remove_container == true ? 'no-container',
+  vertical_center == true ? 'vertical-center',
+  jumbotron_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set jumbotron_styles = jumbotron_styles|default([])|merge([
+  jumbotron_bg_image ? 'background-image: url(' ~ jumbotron_bg_image ~ ');',
+  jumbotron_other_styles,
+]) | sort | join(' ') | trim %}
+
+{% set jumbotron_attributes = jumbotron_attributes|default([])|merge([
+  id ? 'id="' ~ id ~ '"',
+  jumbotron_styles ? 'style="' ~ jumbotron_styles ~ '"',
+  jumbotron_other_attributes,
+]) | sort | join(' ') | trim %}
+
+<div class="{{ jumbotron_classes }}" {{ jumbotron_attributes }}>
+  <span class="bg bg-top"></span>
+  {% if remove_container != true %}
+  <div class="{{ jumbotron_fluid == true ? 'container-fluid' : 'container' }}">
+    <div class="row">
+  {% endif %}
+
+      {% block jumbotron_image %}
+        {% if jumbotron_image %}
+          <div class="jumbotron--image">
+            {% include '@atoms/image/_image.tpl.twig' with {
+              variant: jumbotron_image.variant,
+              src: jumbotron_image.src,
+              alt: jumbotron_image.alt,
+              placeholder: jumbotron_image.placeholder,
+              image_classes: jumbotron_image.image_classes,
+              image_other_classes: jumbotron_image.image_other_classes,
+              width: jumbotron_image.width,
+              height: jumbotron_image.height,
+              background_color: jumbotron_image.background_color,
+              text_color: jumbotron_image.text_color,
+              text: jumbotron_image.text,
+              format: jumbotron_image.format
+            } %}
+          </div>
+        {% endif %}
+      {% endblock jumbotron_image %}
+      {% block jumbotron_content %}
+        <div class="jumbotron--content">
+          {% if jumbotron_label %}
+            <span class="jumbotron--label">{{ jumbotron_label }}</span>
+          {% endif %}
+
+          {% if jumbotron_title %}
+            <h2 class="jumbotron--title">{{ jumbotron_title }}</h2>
+          {% endif %}
+
+          {% if jumbotron_subtitle %}
+            <h3 class="jumbotron--subtitle">{{ jumbotron_subtitle }}</h3>
+          {% endif %}
+
+          {% if jumbotron_text %}
+            <div class="jumbotron--text">{{ jumbotron_text }}</div>
+          {% endif %}
+
+          {% if button_text or button_link %}
+            {% include "@atoms/button/_button.tpl.twig" with {
+              button_element: button_element|default('button'),
+              button_text: button_text,
+              button_color: button_color,
+              button_size: button_size,
+              button_link: button_link,
+              button_classes: button_classes,
+              button_other_classes: button_other_classes,
+              button_type: button_type,
+              button_value: button_value,
+              button_active: button_active,
+              button_disabled: button_disabled,
+              button_outline: button_outline,
+              buttonless_dropdown: buttonless_dropdown,
+              button_block: button_block,
+              button_toggle: button_toggle,
+              button_id: button_id,
+              button_attributes: button_attributes,
+              button_other_attributes: button_other_attributes,
+              button_target: button_target,
+              button_expanded: button_expanded,
+              button_controls: button_controls,
+              nowrap: nowrap,
+              contextual_content: contextual_content,
+              title: title,
+              popover_content: popover_content,
+              context_placement: context_placement,
+              context_container: context_container
+            } only %}
+          {% endif %}
+        </div>
+      {% endblock jumbotron_content %}
+
+  {% if remove_container != true %}
+    </div>
+  </div>
+  {% endif %}
+  <span class="bg bg-bottom"></span>
+</div>

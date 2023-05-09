@@ -1,0 +1,152 @@
+{% include '@molecules/button-group/_button-group.tpl.twig' with {
+  button_group_title: 'Button Group',
+  button_group_description: 'An example of a button group',
+  button_group_size: 'sm',
+  button_group_vertical: false,
+  button_group_toolbar: false,
+  button_group_toolbar_label: 'An example button group toolbar',
+  button_groups: [
+    {
+      button_group_display_grid: true,
+      button_group_label: 'An example button group',
+      button_group_gap: 2,
+      button_group_breakpoints: {
+        md: 'block',
+        lg: 'grid',
+        xl: 'block',
+      },
+      buttons: [
+        {
+          button_color: 'primary',
+          button_text: 'Button',
+          button_other_classes: '',
+        },
+        {
+          button_color: 'secondary',
+          button_text: 'Button',
+          button_other_classes: '',
+        },
+        {
+          button_color: 'tertiary',
+          button_text: 'Button',
+          button_other_classes: '',
+        }
+      ],
+      button_group_other_classes: '',
+    }
+  ],
+} %}
+
+
+{% include '@molecules/button-group/_button-group.tpl.twig' with {
+  button_group_title: 'Vertical Button Group',
+  button_group_description: 'An example of a button group',
+  button_group_size: 'sm',
+  button_group_vertical: true,
+  button_group_toolbar: false,
+  button_group_toolbar_label: 'An example button group toolbar',
+  button_groups: [
+    {
+      button_group_display_grid: true,
+      button_group_label: 'An example button group',
+      button_group_gap: 2,
+      buttons: [
+        {
+          button_color: 'primary',
+          button_text: 'Button',
+          button_other_classes: '',
+        },
+        {
+          button_color: 'secondary',
+          button_text: 'Button',
+          button_other_classes: '',
+        },
+        {
+          button_color: 'tertiary',
+          button_text: 'Button',
+          button_other_classes: '',
+        }
+      ],
+      button_group_other_classes: '',
+    }
+  ],
+} %}
+
+{% include '@molecules/button-group/_button-group.tpl.twig' with {
+  button_group_wrapper_display: 'block',
+  button_group_title: 'button group',
+  button_group_description: 'An example of a button group',
+  button_group_size: 'sm',
+  button_group_vertical: false,
+  button_group_toolbar: false,
+  button_group_toolbar_label: 'An example button group toolbar',
+  button_groups: [
+    {
+      button_group_display_grid: true,
+      button_group_label: 'An example button group',
+      button_group_gap: 2,
+      button_group_breakpoints: {
+        md: 'block',
+        lg: 'grid',
+        xl: 'block',
+      },
+      buttons: [
+        {
+          button_color: 'primary',
+          button_text: 'Button',
+          button_other_classes: '',
+        },
+        {
+          button_color: 'secondary',
+          button_text: 'Button',
+          button_other_classes: '',
+        },
+        {
+          button_color: 'tertiary',
+          button_text: 'Button',
+          button_other_classes: '',
+        }
+      ],
+      button_group_other_classes: '',
+    }
+  ],
+} %}
+
+{% include '@molecules/button-group/_button-group.tpl.twig' with {
+  button_group_title: 'Button Group Toolbar',
+  button_group_description: 'An example of a button group',
+  button_group_size: 'sm',
+  button_group_vertical: false,
+  button_group_toolbar: true,
+  button_group_toolbar_label: 'An example button group toolbar',
+  button_groups: [
+    {
+      button_group_display_grid: true,
+      button_group_label: 'An example button group',
+      button_group_gap: 2,
+      button_group_breakpoints: {
+        md: 'block',
+        lg: 'grid',
+        xl: 'block',
+      },
+      buttons: [
+        {
+          button_color: 'primary',
+          button_text: 'Button',
+          button_other_classes: '',
+        },
+        {
+          button_color: 'secondary',
+          button_text: 'Button',
+          button_other_classes: '',
+        },
+        {
+          button_color: 'tertiary',
+          button_text: 'Button',
+          button_other_classes: '',
+        }
+      ],
+      button_group_other_classes: '',
+    }
+  ],
+} %}

@@ -1,0 +1,288 @@
+{#
+/**
+ * Block Name:
+ *
+ * This is the template that displays the  block.
+ */
+#}
+
+{#{% if is_preview %}#}
+{#<p>Some editor instructions here.</p>#}
+{#{% endif %}#}
+
+{#{{ block['className'] }}#}
+{#{{ block['align'] ? 'align-' ~ block['align'] }}#}
+{#{{ block['align_text']}}#}
+{#{{ block['align_content'] }}#}
+{#{{ block['full_height'] }}#}
+
+{# Parent Block Data - ACF <= v.5.9 #}
+{#{% set parent = function('get_parent_block', block['id'], block['name']) %}#}
+{# Parent Block Data - ACF >= v.6.0 #}
+{#{{ parent_block_data['data'] }}#}
+{# Block Context #}
+{#{{ block_context['acf/fields'] }}#}
+{# ACF Options Fields #}
+{#{{ options }}#}
+{# ACF Fields #}
+{#{{ fields }}#}
+
+{% if is_preview and (fields.card_grid_id['id'] or fields.card_grid_id['id_gen']) and fields.card_grid_id['show_ids'] == true %}
+  <small><strong>Card Grid ID:</strong> {{ fields.card_grid_id['id'] ? fields.card_grid_id['id']}}{{ fields.card_grid_id['id_gen'] ? 'cardgrid' ~ fields.card_grid_id['id_gen'] }}</small>
+{% endif %}
+
+{# Row Columns #}
+{% if fields.type == 'row' and fields.row_column_count %}
+  {% set row_cols = [] %}
+  {% for col in fields.row_column_count %}
+    {% if col.breakpoint %}
+      {% set bp = '-' ~ col.breakpoint %}
+    {% else %}
+      {% set bp = '' %}
+    {% endif %}
+    {% if col.value %}
+      {% set column = '-' ~ col.value %}
+    {% else %}
+      {% set column = '' %}
+    {% endif %}
+    {% if column %}
+      {% set row_cols = row_cols|default([])|merge([
+        'row-cols' ~ bp ~ column
+      ]) %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{# Row Gutters #}
+{% if fields.type == 'row' and fields.row_gutter['gutters'] %}
+  {% set row_gutters = [] %}
+  {% for gutter in fields.row_gutter['gutters'] %}
+    {% if gutter.breakpoint %}
+      {% set bp = '-' ~ gutter.breakpoint %}
+    {% else %}
+      {% set bp = '' %}
+    {% endif %}
+    {% if gutter.value %}
+      {% set gap = '-' ~ gutter.value %}
+    {% else %}
+      {% set gap = '' %}
+    {% endif %}
+    {% if gap %}
+      {% set row_gutters = row_gutters|default([])|merge([
+        'g' ~ bp ~ gap
+      ]) %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% set block_classes = block_classes|default([])|merge([
+  fields.placecard == true ? 'has-placecard',
+  block['className']
+]) | sort | join(' ') | trim %}
+
+{% set block_styles = block_styles|default([])|merge([
+  fields.card_grid_width['width']['width']['value'] ? 'width: ' ~ fields.card_grid_width['width']['width']['value'] ~ fields.card_grid_width['width']['width']['unit'] ~ ';',
+  fields.card_grid_width['width']['min_width'] ? 'min-width: ' ~ fields.card_grid_width['width']['min_width'] ~ 'px;',
+  fields.card_grid_width['width']['max_width'] ? 'max-width: ' ~ fields.card_grid_width['width']['max_width'] ~ 'px;',
+  fields.card_grid_margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : fields.card_grid_margin['margin']['top']['top'] >= 0 ? 'margin-top: ' ~ fields.card_grid_margin['margin']['top']['top'] ~ 'px;',
+  fields.card_grid_margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.card_grid_margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.card_grid_margin['margin']['bottom']['bottom'] ~ 'px;',
+  fields.card_grid_margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : fields.card_grid_margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.card_grid_margin['margin']['left']['left'] ~ 'px;',
+  fields.card_grid_margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : fields.card_grid_margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.card_grid_margin['margin']['right']['right'] ~ 'px;'
+]) | sort | join(' ') | trim %}
+
+{% set grid_id = fields.card_grid_id['id_type'] == 'generated' ? 'cardgrid' ~ fields.card_grid_id['id_gen'] : fields.card_grid_id['id_type'] == 'custom' ? fields.card_grid_id['id'] %}
+
+{% set block_attributes = block_attributes|default([])|merge([
+  grid_id ? 'id="' ~ grid_id ~ '"',
+  block_styles ? 'style="' ~ block_styles ~ '"'
+]) | sort | join(' ') | trim %}
+
+{# Set Gutter Styling: Overrides _flex-card-grid.scss styles #}
+{% if fields.type == 'grid' and fields.gutter is not empty %}
+  <style type="text/css">
+    /* #{{ grid_id }} .card-grid > .card {
+    {{ fields.gutter == 0 ? 'margin-left: 0;' : 'margin-left: ' ~ fields.gutter / 2 ~ 'px;' }}
+    {{ fields.gutter == 0 ? 'margin-right: 0;' : 'margin-right: ' ~ fields.gutter / 2 ~ 'px;' }}
+    {{ fields.gutter == 0 ? 'margin-top: 0;' : 'margin-top: ' ~ fields.gutter ~ 'px;' }}
+  } */
+
+    {% if fields.mobile_columns == true %}
+    @media only screen and (max-width: {{ sass_data.scssBreakpoints['lg'] }}) {
+    #{{ grid_id }} .card-grid > .card,
+    #{{ grid_id }} .card-grid > .card:after,
+    #{{ grid_id }} .card-grid > .placecard {
+                     flex-basis: calc((100% - {{ fields.gutter }}px) / 2);
+                   }
+    }
+    {% endif %}
+
+    {% if fields.column_count == 2 %}
+    @media only screen and (min-width: {{ sass_data.scssBreakpoints['lg'] }}) {
+    #{{ grid_id }} .card-grid > .card {
+    {{ fields.gutter == 0 ? 'margin-left: 0;' : 'margin-left: ' ~ fields.gutter / 2 ~ 'px;' }}
+    {{ fields.gutter == 0 ? 'margin-right: 0;' : 'margin-right: ' ~ fields.gutter / 2 ~ 'px;' }}
+    {{ fields.gutter == 0 ? 'margin-top: 0;' : 'margin-top: ' ~ fields.gutter ~ 'px;' }}
+    }
+    }
+
+    @media only screen and (min-width: {{ sass_data.scssBreakpoints['lg'] }}) {
+    #{{ grid_id }} .card-grid > .card,
+    #{{ grid_id }} .card-grid > .card:after,
+    #{{ grid_id }} .card-grid > .placecard {
+                     flex-basis: calc((100% - ({{ fields.column_count - 1 }} * {{ fields.gutter }}px)) / {{ fields.column_count }});
+                   }
+
+    #{{ grid_id }} .card-grid > .card.featured {
+                     flex-basis: calc(((100% - ({{ fields.column_count - 1 }} * {{ fields.gutter }}px)) / {{ fields.column_count }}) * 2);
+                   }
+    }
+    {% endif %}
+
+    {% if fields.column_count == 3 %}
+    @media only screen and (min-width: {{ sass_data.scssBreakpoints['xl'] }}) {
+    #{{ grid_id }} .card-grid > .card {
+    {{ fields.gutter == 0 ? 'margin-left: 0;' : 'margin-left: ' ~ fields.gutter / 2 ~ 'px;' }}
+    {{ fields.gutter == 0 ? 'margin-right: 0;' : 'margin-right: ' ~ fields.gutter / 2 ~ 'px;' }}
+    {{ fields.gutter == 0 ? 'margin-top: 0;' : 'margin-top: ' ~ fields.gutter ~ 'px;' }}
+    }
+    }
+
+    @media only screen and (min-width: {{ sass_data.scssBreakpoints['xl'] }}) {
+    #{{ grid_id }} .card-grid > .card,
+    #{{ grid_id }} .card-grid > .card:after,
+    #{{ grid_id }} .card-grid > .placecard {
+                     flex-basis: calc((100% - ({{ fields.column_count - 1 }} * {{ fields.gutter }}px)) / {{ fields.column_count }});
+                   }
+
+    #{{ grid_id }} .card-grid > .card.featured {
+                     flex-basis: calc(((100% - ({{ fields.column_count - 1 }} * {{ fields.gutter }}px)) / {{ fields.column_count }}) * 2);
+                   }
+    }
+    {% endif %}
+
+    {% if fields.column_count == 4 or fields.column_count == 5 %}
+    @media only screen and (min-width: {{ sass_data.scssBreakpoints['lg'] }}) and (max-width: {{ sass_data.scssBreakpoints['xl'] }}) {
+    #{{ grid_id }} .card-grid > .card,
+    #{{ grid_id }} .card-grid > .card:after,
+    #{{ grid_id }} .card-grid > .placecard {
+                     flex-basis: calc((100% - {{ fields.gutter }}px) / 2);
+                   }
+
+    #{{ grid_id }} .card-grid > .card.featured {
+                     flex-basis: 100%;
+                   }
+    }
+
+    @media only screen and (min-width: {{ sass_data.scssBreakpoints['xl'] }}) {
+    #{{ grid_id }} .card-grid > .card {
+    {{ fields.gutter == 0 ? 'margin-left: 0;' : 'margin-left: ' ~ fields.gutter / 2 ~ 'px;' }}
+    {{ fields.gutter == 0 ? 'margin-right: 0;' : 'margin-right: ' ~ fields.gutter / 2 ~ 'px;' }}
+    {{ fields.gutter == 0 ? 'margin-top: 0;' : 'margin-top: ' ~ fields.gutter ~ 'px;' }}
+    }
+    }
+
+    @media only screen and (min-width: {{ sass_data.scssBreakpoints['xl'] }}) {
+    #{{ grid_id }} .card-grid > .card,
+    #{{ grid_id }} .card-grid > .card:after,
+    #{{ grid_id }} .card-grid > .placecard {
+                     flex-basis: calc((100% - ({{ fields.column_count - 1 }} * {{ fields.gutter }}px)) / {{ fields.column_count }});
+                   }
+
+    #{{ grid_id }} .card-grid > .card.featured {
+                     flex-basis: calc(((100% - ({{ fields.column_count - 1 }} * {{ fields.gutter }}px)) / {{ fields.column_count }}) * 2);
+                   }
+    }
+    {% endif %}
+
+    {% if fields.column_count == 6 %}
+    @media only screen and (min-width: {{ sass_data.scssBreakpoints['lg'] }}) and (max-width: {{ sass_data.scssBreakpoints['xl'] }}) {
+    #{{ grid_id }} .card-grid > .card,
+    #{{ grid_id }} .card-grid > .card:after,
+    #{{ grid_id }} .card-grid > .placecard {
+                     flex-basis: calc((100% - {{ fields.gutter }}px) / 2);
+                   }
+
+    #{{ grid_id }} .card-grid > .card.featured {
+                     flex-basis: 100%;
+                   }
+    }
+
+    @media only screen and (min-width: {{ sass_data.scssBreakpoints['xl'] }}) {
+    #{{ grid_id }} .card-grid > .card,
+    #{{ grid_id }} .card-grid > .card:after,
+    #{{ grid_id }} .card-grid > .placecard {
+                     flex-basis: calc((100% - ({{ fields.gutter }}px * 2)) / 3);
+                   }
+
+    #{{ grid_id }} .card-grid > .card.featured {
+                     flex-basis: 100%;
+                   }
+    }
+
+    @media only screen and (min-width: {{ sass_data.scssBreakpoints['xxl'] }}) {
+    #{{ grid_id }} .card-grid > .card {
+    {{ fields.gutter == 0 ? 'margin-left: 0;' : 'margin-left: ' ~ fields.gutter / 2 ~ 'px;' }}
+    {{ fields.gutter == 0 ? 'margin-right: 0;' : 'margin-right: ' ~ fields.gutter / 2 ~ 'px;' }}
+    {{ fields.gutter == 0 ? 'margin-top: 0;' : 'margin-top: ' ~ fields.gutter ~ 'px;' }}
+    }
+    }
+
+    @media only screen and (min-width: {{ sass_data.scssBreakpoints['xxl'] }}) {
+    #{{ grid_id }} .card-grid > .card,
+    #{{ grid_id }} .card-grid > .card:after,
+    #{{ grid_id }} .card-grid > .placecard {
+                     flex-basis: calc((100% - ({{ fields.column_count - 1 }} * {{ fields.gutter }}px)) / {{ fields.column_count }});
+                   }
+
+    #{{ grid_id }} .card-grid > .card.featured {
+                     flex-basis: calc(((100% - ({{ fields.column_count - 1 }} * {{ fields.gutter }}px)) / {{ fields.column_count }}) * 2);
+                   }
+    }
+    {% endif %}
+  </style>
+{% endif %}
+
+{# Set Grid Styles #}
+{% set grid_styles = grid_styles|default([])|merge([
+  fields.type == 'grid' and fields.alignment ? 'justify-content: ' ~ fields.alignment ~ ';',
+  fields.type == 'grid' and fields.equal_height ? 'align-items: stretch;'
+]) | sort | join(' ') | trim %}
+
+{% embed '@organisms/card-grid/_card-grid.tpl.twig' with {
+  type: fields.type | default('grid'),
+  columns: fields.column_count,
+  placecard: fields.placecard,
+  singlerow: fields.single_row,
+  mobilecolumns: fields.mobile_columns,
+  vertical_offset: fields.vertical_offset,
+  card_grid_title: fields.title,
+  card_grid_other_classes: block_classes,
+  card_grid_other_attributes: block_attributes,
+  grid_classes: [
+    fields.numbered_cards == true ? 'card-count',
+    row_cols|length > 0 ? row_cols|sort|join(' ')|trim : fields.type == 'row' and row_cols|length <= 0 ? 'row-cols-2',
+    row_gutters|length > 0 ? row_gutters|sort|join(' ')|trim : fields.type == 'row' and row_gutters|length <= 0 ? 'g-3',
+  ],
+  grid_attributes: [
+    grid_styles ? 'style="' ~ grid_styles ~ '"'
+  ]
+} %}
+  {% block card_grid_cards %}
+    <InnerBlocks allowedBlocks="{{ ['acf/card'] | json_encode() | escape('html_attr') }}" template="{{ [
+      ['acf/card', {
+      'data' : {
+        'field_620837205a887': 'CARD TITLE'
+        }
+      }],
+      ['acf/card', {
+      'data' : {
+          'field_620837205a887': 'CARD TITLE'
+        }
+      }],
+      ['acf/card', {
+        'data' : {
+          'field_620837205a887': 'CARD TITLE'
+        }
+      }]] | json_encode() | escape('html_attr') }}" />
+  {% endblock %}
+{% endembed %}

@@ -1,0 +1,44 @@
+{#
+/**
+ * @file
+ * svg
+ *
+ * Available variables for svg:
+ *  - path [string]: Generic element to define shape of svg.
+ *  - type [string: 'object', 'picture']: Sets the type of svg embed.  Defaults to inline svg.
+ *  - colorOriginal [bool]: Whether to display the color.
+ *  - fallback: [string] Optional path to fallback image.
+ *  - alt: [string] Optional alt text for fallback image.
+ *  - svg_other_classes [array]: Additional component classes.
+ */
+#}
+
+{% set svg_classes = svg_classes|default([])|merge([
+  'svg',
+  not colorOriginal ? 'svg--colorable' : '',
+  svg_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set svg_attributes = svg_attributes|default([])|merge([
+  'type="image/svg+xml"',
+  'data="' ~ path ~ '"',
+  svg_other_attributes
+]) | sort | join(' ') | trim %}
+
+{% if type == 'object' %}
+  <object class="{{ svg_classes }}" {{ svg_attributes }}>
+    {# fall back for IE 8 and earlier  #}
+    {% if fallback %}
+      <!--[if lte IE 8]><img src="{{ fallback }}" alt="{{ alt }}" /><![endif]-->
+    {% endif %}
+  </object>
+{% elseif type == 'picture' %}
+  <picture class="{{ svg_classes }}">
+    <source type="image/svg+xml" srcset="{{ path }}">
+    {% if fallback %}
+      <img src="{{ fallback }}" alt="{{ alt }}">
+    {% endif %}
+  </picture>
+{% else %}
+  <span class="{{ svg_classes }}">{{ source(path) }}</span>
+{% endif %}

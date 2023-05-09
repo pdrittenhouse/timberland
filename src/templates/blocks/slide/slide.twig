@@ -1,0 +1,110 @@
+{#
+/**
+ * Block Name:
+ *
+ * This is the template that displays the  block.
+ */
+#}
+
+{#{% if is_preview %}#}
+{#<p>Some editor instructions here.</p>#}
+{#{% endif %}#}
+
+{#{{ block['className'] }}#}
+{#{{ block['align'] ? 'align-' ~ block['align'] }}#}
+{#{{ block['align_text']}}#}
+{#{{ block['align_content'] }}#}
+{#{{ block['full_height'] }}#}
+
+{# Parent Block Data - ACF <= v.5.9 #}
+{#{% set parent = function('get_parent_block', block['id'], block['name']) %}#}
+{# Parent Block Data - ACF >= v.6.0 #}
+{#{{ parent_block_data['data'] }}#}
+{# Block Context #}
+{#{{ block_context['acf/fields'] }}#}
+{# ACF Options Fields #}
+{#{{ options }}#}
+{# ACF Fields #}
+{#{{ fields }}#}
+{# Site Data #}
+{#{{ site }}#}
+{# SASS Data #}
+{#{{ sass_data }}#}
+{# Post Data #}
+{#{{ block_post }}#}
+{# Query #}
+{#{{ query }}#}
+{# Query Posts #}
+{#{{ query_posts }}#}
+
+
+{# Slide Styles #}
+{% set bg_image = fields.bg_image['bg_image_type'] == 'file' and fields.bg_image['bg_image']['url'] ? "background-image: url('" ~ fields.bg_image['bg_image']['url'] ~ "');" : fields.bg_image['bg_image_type'] == 'url' and fields.bg_image['bg_image_url'] ? "background-image: url('" ~ fields.bg_image['bg_image_url'] ~ "');" %}
+{% set bg_image_size = fields.bg_image['bg_size'] == 'custom' and fields.bg_image['custom_bg_size'] ? 'background-size: ' ~ fields.bg_image['custom_bg_size'] ~ ';' : fields.bg_image['bg_size'] ? 'background-size: ' ~ fields.bg_image['bg_size'] ~ ';' %}
+{% set bg_hor_pos = fields.bg_image['bg_horizontal_position'] == 'custom' ? fields.bg_image['custom_bg_horizontal_position'] : fields.bg_image['bg_horizontal_position'] ? fields.bg_image['bg_horizontal_position'] %}
+{% set bg_ver_pos = fields.bg_image['bg_vertical_position'] == 'custom' ? fields.bg_image['custom_bg_vertical_position'] : fields.bg_image['bg_vertical_position'] ? fields.bg_image['bg_vertical_position'] %}
+{% set bg_position = bg_hor_pos or bg_ver_pos ? 'background-position: ' ~ bg_hor_pos ~ ' ' ~ bg_ver_pos ~ ';' %}
+{% set bg_repeat = fields.bg_image['bg_repeat'] ? 'background-repeat: ' ~ fields.bg_image['bg_repeat'] ~ ';' %}
+{% set bg_attachment = fields.bg_image['bg_attachment'] ? 'background-attachment: ' ~ fields.bg_image['bg_attachment'] ~ ';' %}
+{% set bg_color = fields.bg_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.bg_color['bg_custom_color'] ~ ';' %}
+{% set padding_top  = fields['padding']['padding']['top'] is not empty ? 'padding-top: ' ~ fields['padding']['padding']['top'] ~ 'px;' %}
+{% set padding_bottom = fields['padding']['padding']['bottom'] is not empty ? 'padding-bottom: ' ~ fields['padding']['padding']['bottom'] ~ 'px;' %}
+{% set padding_left = fields['padding']['padding']['left'] is not empty ? 'padding-left: ' ~ fields['padding']['padding']['left'] ~ 'px;' %}
+{% set padding_right = fields['padding']['padding']['right'] is not empty ? 'padding-right: ' ~ fields['padding']['padding']['right'] ~ 'px;' %}
+{% set border_top_width = fields['border']['top']['width'] is not empty ? 'border-top-width: ' ~ fields['border']['top']['width'] ~ 'px;' %}
+{% set border_top_style = fields['border']['top']['style'] ? 'border-top-style: ' ~ fields['border']['top']['style'] ~ ';' %}
+{% set border_top_color = fields['border']['top']['color'] == 'custom' and fields['border']['top']['custom_color'] ? 'border-top-color: ' ~ fields['border']['top']['custom_color'] ~ ';' : fields['border']['top']['color'] == 'palette' and fields['border']['top']['theme_color'] ? 'border-top-color: var(--' ~ fields['border']['top']['theme_color'] ~ ');' %}
+{% set border_bottom_width = fields['border']['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ fields['border']['bottom']['width'] ~ 'px;' %}
+{% set border_bottom_style = fields['border']['bottom']['style'] ? 'border-bottom-style: ' ~ fields['border']['bottom']['style'] ~ ';' %}
+{% set border_bottom_color = fields['border']['bottom']['color'] == 'custom' and fields['border']['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields['border']['bottom']['custom_color'] ~ ';' : fields['border']['bottom']['color'] == 'palette' and fields['border']['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields['border']['bottom']['theme_color'] ~ ');' %}
+{% set border_left_width = fields['border']['left']['width'] is not empty ? 'border-left-width: ' ~ fields['border']['left']['width'] ~ 'px;' %}
+{% set border_left_style = fields['border']['left']['style'] ? 'border-left-style: ' ~ fields['border']['left']['style'] ~ ';' %}
+{% set border_left_color = fields['border']['left']['color'] == 'custom' and fields['border']['left']['custom_color'] ? 'border-left-color: ' ~ fields['border']['left']['custom_color'] ~ ';' : fields['border']['left']['color'] == 'palette' and fields['border']['left']['theme_color'] ? 'border-left-color: var(--' ~ fields['border']['left']['theme_color'] ~ ');' %}
+{% set border_right_width = fields['border']['right']['width'] is not empty ? 'border-right-width: ' ~ fields['border']['right']['width'] ~ 'px;' %}
+{% set border_right_style = fields['border']['right']['style'] ? 'border-right-style: ' ~ fields['border']['right']['style'] ~ ';' %}
+{% set border_right_color = fields['border']['right']['color'] == 'custom' and fields['border']['right']['custom_color'] ? 'border-right-color: ' ~ fields['border']['right']['custom_color'] ~ ';' : fields['border']['right']['color'] == 'palette' and fields['border']['right']['theme_color'] ? 'border-right-color: var(--' ~ fields['border']['right']['theme_color'] ~ ');' %}
+{% set border_top_left_radius = fields['border_radius']['top_left'] is not empty ? 'border-top-left-radius: ' ~ fields['border_radius']['top_left'] ~ 'px;' %}
+{% set border_top_right_radius = fields['border_radius']['top_right'] is not empty ? 'border-top-right-radius: ' ~ fields['border_radius']['top_right'] ~ 'px;' %}
+{% set border_bottom_left_radius = fields['border_radius']['bottom_left'] is not empty ? 'border-bottom-left-radius: ' ~ fields['border_radius']['bottom_left'] ~ 'px;' %}
+{% set border_bottom_right_radius = fields['border_radius']['bottom_right'] is not empty ? 'border-bottom-right-radius: ' ~ fields['border_radius']['bottom_right'] ~ 'px;' %}
+{% set box_shadow_color = fields['box_shadow']['color']['color'] == 'palette' and fields['box_shadow']['color']['theme_color'] ? 'var(--' ~ fields['box_shadow']['color']['theme_color'] ~ ')' : fields['box_shadow']['color']['color'] == 'custom' and fields['box_shadow']['color']['custom_color'] ? fields['box_shadow']['color']['custom_color'] %}
+{% set box_shadow_inset = fields['box_shadow']['inset'] == true ? 'inset' %}
+{% set box_shadow = fields['box_shadow']['horizontal_offset'] is not empty or fields['box_shadow']['vertical_offset'] is not empty or fields['box_shadow']['blur'] is not empty or fields['box_shadow']['spread'] is not empty or box_shadow_color or box_shadow_inset == true ? 'box-shadow: ' ~ fields['box_shadow']['horizontal_offset'] ~ 'px ' ~ fields['box_shadow']['vertical_offset'] ~ 'px ' ~ fields['box_shadow']['blur'] ~ 'px ' ~ fields['box_shadow']['spread'] ~ 'px ' ~ box_shadow_color ~ ' ' ~ box_shadow_inset ~ ';' %}
+{% set margin_left = fields.margin['margin']['left'] is not empty ? 'margin-left: ' ~ fields.margin['margin']['left'] ~ 'px;' %}
+{% set margin_right = fields.margin['right'] is not empty ? 'margin-right: ' ~ fields.margin['right'] ~ 'px;' %}
+
+{% set block_classes = block_classes|default([])|merge([
+  block['className'],
+  'block-slide',
+  'slide',
+  parent_block_data['data']['slider'] == 'bootstrap' ? 'carousel-item',
+  parent_block_data['data']['slider'] == 'flickity' ? 'carousel-cell',
+  parent_block_data['data']['slider'] == 'bootstrap' and fields.active == true ? 'active',
+  fields.slide_layout.slide_layout != 'default' ? 'slide-' ~ fields.slide_layout.slide_layout,
+  fields.bg_color['bg_color'] == 'palette' and fields.bg_color['bg_theme_color'] ? 'bg-' ~ fields.bg_color['bg_theme_color'],
+]) | sort | join(' ') | trim %}
+
+{% set block_attributes = block_attributes|default([])|merge([
+  block_classes ? 'class="' ~ block_classes ~ '"',
+  bg_image or bg_image_size or bg_position or bg_repeat or bg_attachment or bg_color or padding_top or padding_bottom or padding_left or padding_right or border_top_width or border_top_style or border_top_color or border_bottom_width or border_bottom_style or border_bottom_color or border_left_width or border_left_style or border_left_color or border_right_width or border_right_style or border_right_color or border_top_left_radius or border_top_right_radius or border_bottom_left_radius or border_bottom_right_radius or box_shadow or margin_left or margin_right ? 'style="' ~ bg_image ~ bg_image_size ~ bg_position ~ bg_repeat ~ bg_attachment ~ bg_color ~ padding_top ~ padding_bottom ~ padding_left ~ padding_right ~ border_top_width ~ border_top_style ~ border_top_color ~ border_bottom_width ~ border_bottom_style ~ border_bottom_color ~ border_left_width ~ border_left_style ~ border_left_color ~ border_right_width ~ border_right_style ~ border_right_color ~ border_top_left_radius ~ border_top_right_radius ~ border_bottom_left_radius ~ border_bottom_right_radius ~ box_shadow ~ margin_left ~ margin_right ~ '"'
+]) | sort | join(' ') | trim %}
+
+<div {{ block_attributes }}>
+  <InnerBlocks template="{{ [
+    ['core/image', {
+      'url': 'https://picsum.photos/1600/900'
+    }],
+    ['core/group', {
+      'className': 'carousel-caption'
+    }, [
+      ['core/heading', {
+        'content': 'Slide Label',
+        'className': 'carousel--label'
+      }],
+      ['core/paragraph', {
+        'content': 'Slide Caption',
+        'className': 'carousel--caption'
+      }]
+    ]],
+  ] | json_encode() | escape('html_attr') }}" />
+</div>

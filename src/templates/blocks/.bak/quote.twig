@@ -1,0 +1,47 @@
+{#
+/**
+ * Block Name: Quote
+ *
+ * This is the template that displays the quote block.
+ */
+#}
+
+{# Set block data object for block registration: src/funcions/blocks.php #}
+{% set block_data = {
+  name: 'Quote',
+  description: 'A quote block',
+  category: 'dream',
+  icon: 'admin-comments',
+  keywords: '',
+  mode: 'auto',
+  post_types: true,
+  align: '',
+  align_text: '',
+  align_content: '',
+  enqueue_style: '',
+  enqueue_script: '',
+  supports_align: true,
+  supports_align_text: true,
+  supports_align_content: true,
+  supports_mode: true,
+  supports_multiple: true,
+  supports_anchor: true,
+  supports_className: true,
+  supports_full_height: true,
+  supports_jsx: false
+} %}
+
+{% if is_preview %}
+<p>Some editor instructions here.</p>
+{% endif %}
+
+{% include '@atoms/blockquote/_blockquote.tpl.twig' with {
+  quote: fields.quote,
+  citation: fields.citation,
+  citation_position: fields.citation_position,
+  blockquote_classes: [
+    'block-quote',
+    block['className'],
+    block['align'] ? 'align-' ~ block['align']
+  ]
+} %}

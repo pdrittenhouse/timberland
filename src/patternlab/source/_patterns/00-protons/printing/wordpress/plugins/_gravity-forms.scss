@@ -1,0 +1,218 @@
+.no-gf-layout {
+
+  .gform_wrapper {
+
+    &.gform_validation_error {
+
+      .validation_error {}
+
+      .gform_validation_errors {
+        border: none;
+        box-shadow: none;
+        background-color: transparent;
+
+        > h2 {
+          @include fontSize(14px);
+          text-align: left;
+        }
+
+        & > ol {
+
+          li {}
+
+          a {}
+        }
+      }
+
+      .gfield_error {
+
+        [aria-invalid=true] {}
+      }
+
+      .gform_body {
+
+        .gform_fields {
+
+          .gfield {
+
+            &.gfield_error {
+
+              .description,
+              .gfield_description,
+              .gsection_description,
+              .instruction {
+                @include font($font-stack-alternate, bold);
+                @include fontSize(12px);
+                padding-top: rem-calc(5px);
+                padding-bottom: 0;
+                padding-left: 0;
+                text-align: left;
+              }
+
+              .gfield_validation_message,
+              .validation_message {
+                border: none;
+                box-shadow: none;
+                background-color: transparent;
+                padding-top: rem-calc(5px);
+                padding-bottom: rem-calc(5px);
+                padding-left: 0;
+                margin-top: 0;
+              }
+
+              &:not(.gf_left_half):not(.gf_right_half) {}
+
+              input {
+
+                &:not([type=radio]):not([type=checkbox]):not([type=submit]):not([type=button]):not([type=image]):not([type=file]) {}
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .gfield_required {}
+
+    &.gravity-theme {
+
+      .gform_heading {
+
+        .gform_title {}
+
+        .gform_description {}
+      }
+
+      .gform-body {
+
+        // REMOVE DEFAULT GRAVITY FORMS LAYOUT STYLING
+        // This removes gravity forms default styling if active.
+        // Remove this if styling is disbaled in gravity forms settings
+        // or to enable the default gravity forms layout styles.
+        .gform_fields {
+          display: block;
+          grid-template-columns: unset;
+          grid-template-rows: unset;
+          grid-column-gap: unset;
+          grid-row-gap: unset;
+        }
+
+        .gfield {
+          grid-column: unset;
+
+          &.gfield--width-full,
+          &.gfield--width-half,
+          &.gfield--width-quarter,
+          &.gfield--width-third,
+          &.gfield--width-two-thirds,
+          &.gfield--width-three-quarter,
+          &.gfield--width-five-sixths,
+          &.gfield--width-five-twelfths,
+          &.gfield--width-seven-twelfths,
+          &.gfield--width-eleven-twetfths {
+            grid-column: unset;
+          }
+        }
+
+        .ginput_complex {
+          display: block;
+          flex-flow: unset;
+
+          span {
+            flex: unset;
+            display: block;
+            margin: 0;
+            padding: 0;
+          }
+
+          .ginput_full {
+
+            &:not(:last-of-type) {
+              margin-bottom: 0;
+            }
+          }
+
+          &.ginput_container_address {
+            margin-left: 0;
+            margin-right: 0;
+
+            span {
+              padding: 0;
+
+              &:not(.ginput_full):not(:last-of-type):not(:nth-last-of-type(2)) {
+                margin-bottom: 0;
+              }
+            }
+          }
+
+          &:not(.ginput_container_address) fieldset:not([style*="display:none"]):not(.ginput_full),
+          &:not(.ginput_container_address) span:not([style*="display:none"]):not(.ginput_full),
+          &:not(.ginput_container_address) fieldset:not([style*="display:none"]):not(.ginput_full)~span:not(.ginput_full),
+          &:not(.ginput_container_address) span:not([style*="display:none"]):not(.ginput_full)~span:not(.ginput_full) {
+            padding: 0;
+          }
+        }
+
+        input:not([type="submit"]),
+        input[type=color],
+        input[type=date],
+        input[type=datetime-local],
+        input[type=datetime],
+        input[type=email],
+        input[type=month],
+        input[type=number],
+        input[type=password],
+        input[type=search],
+        input[type=tel],
+        input[type=text],
+        input[type=time],
+        input[type=url],
+        input[type=week],
+        select,
+        textarea {
+          background-color: var(--input-background-color);
+          border: var(--input-border-color) var(--input-border-width) var(--input-border-style);
+          border-radius: var(--input-border-radius);
+          font-size: var(--input-font-size);
+          line-height: var(--input-line-height);
+          font-weight: var(--header-search-input-font-weight);
+          font-style: var(--header-search-input-font-style);
+          letter-spacing: var(--header-search-input-letter-spacing);
+          text-transform: var(--header-search-input-text-transform);
+          padding: var(--input-vertical-padding) var(--input-horizontal-padding);
+          vertical-align: middle;
+
+          &:hover,
+          &:focus {
+            background-color: var(--input-hover-background-color);
+            border-color: var(--input-hover-border-color);
+            padding-left: var(--input-hover-horizontal-padding);
+            padding-right: var(--input-hover-horizontal-padding);
+          }
+
+          &:not([type=radio]):not([type=checkbox]):not([type=image]):not([type=file]) {
+            line-height: var(--input-line-height);
+            min-height: 0;
+          }
+        }
+
+        select {
+          padding: calc(var(--input-vertical-padding) + 1px) var(--input-horizontal-padding);
+        }
+      }
+
+      .gform_footer {
+
+        .button {
+          @include button();
+        }
+      }
+    }
+  }
+
+  .gform_confirmation_wrapper {
+
+    .gform_confirmation_message {}
+  }
+
+}

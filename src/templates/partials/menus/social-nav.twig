@@ -1,0 +1,55 @@
+{% if menu %}
+  {% set nav_items = {} %}
+
+  {% for item in menu %}
+
+{#
+    {% set nav_item = {
+      item_other_classes: 'test-class',
+      label: item.title,
+      url: item.link,
+      icon: item.classes|join(' '),
+      icon_color: menu_icon_color,
+      icon_position: menu_icon_position,
+      icon_width: menu_icon_width,
+      icon_height: menu_icon_height
+    } %}
+#}
+
+    {# Set Icon Classes #}
+    {% set icon_classes = [] %}
+    {% set item_classes = [] %}
+    {% for class in item.classes %}
+      {% if not (class starts with 'menu-item') %}
+        {% set icon_classes = icon_classes|merge([class]) %}
+      {% else %}
+        {% set item_classes = item_classes|merge([class]) %}
+      {% endif %}
+    {% endfor %}
+
+    {% set nav_item = {
+      item_classes: item_classes,
+      url: item.link,
+      label: item.title,
+      icon: icon_classes|join(' '),
+      icon_color: menu_icon_color,
+      icon_position: menu_icon_position,
+      icon_width: menu_icon_width,
+      icon_height: menu_icon_height
+    } %}
+
+    {% set nav_items = nav_items|merge([nav_item]) %}
+  {% endfor %}
+
+  {% include '@molecules/social-nav/_social-nav.tpl.twig' with {
+    nav_id: menu_nav_id,
+    bullet_icon_position: menu_bullet_icon_position,
+    bullet_icon_size: menu_bullet_icon_size,
+    hide_labels: menu_hide_labels,
+    hide_icons: menu_hide_icons,
+    nav_direction: menu_icon_nav_direction,
+    social_nav_items: nav_items,
+    social_nav_classes: menu_nav_classes,
+    social_nav_other_classes: menu_nav_other_classes
+  } %}
+{% endif %}

@@ -1,0 +1,107 @@
+{#
+/**
+ * Block Name:
+ *
+ * This is the template that displays the  block.
+ */
+#}
+
+{#{% if is_preview %}#}
+{#<p>Some editor instructions here.</p>#}
+{#{% endif %}#}
+
+{#{{ block['className'] }}#}
+{#{{ block['align'] ? 'align-' ~ block['align'] }}#}
+{#{{ block['align_text']}}#}
+{#{{ block['align_content'] }}#}
+{#{{ block['full_height'] }}#}
+
+{# Parent Block Data - ACF <= v.5.9 #}
+{#{% set parent = function('get_parent_block', block['id'], block['name']) %}#}
+{# Parent Block Data - ACF >= v.6.0 #}
+{#{{ parent_block_data['data'] }}#}
+{# Block Context #}
+{#{{ block_context['acf/fields'] }}#}
+{# ACF Options Fields #}
+{#{{ options }}#}
+{# ACF Fields #}
+{#{{ fields }}#}
+{# Site Data #}
+{#{{ site }}#}
+{# SASS Data #}
+{#{{ sass_data }}#}
+{# Post Data #}
+{#{{ block_post }}#}
+
+{% set block_classes = block_classes|default([])|merge([
+  'pattern-block',
+  block['className']
+]) | sort | join(' ') | trim %}
+
+{% set block_attributes = block_attributes|default([])|merge([
+]) | sort | join(' ') | trim %}
+
+<div class="{{ block_classes }}" {{ block_attributes }}>
+
+  {# Set pattern and template #}
+  {% if fields.group == 'atoms' %}
+    {% set pattern = fields.atoms %}
+    {% set template = fields.template ? '_' ~ fields.template ~ '.tpl.twig' : fields.atoms %}
+  {% endif %}
+
+  {% if fields.group == 'molecules' %}
+    {% set pattern = fields.molecules %}
+    {% set template = fields.template ? fields.template : fields.molecules %}
+  {% endif %}
+
+  {% if fields.group == 'organisms' %}
+    {% set pattern = fields.organisms %}
+    {% set template = fields.template ? fields.template : fields.organisms %}
+  {% endif %}
+
+  {# Set 'with' object properties #}
+  {% set props = {} %}
+
+  {% for prop in fields.with %}
+    {% set key = prop.key %}
+
+    {% if (prop.value | trim | first == '{' and prop.value | trim | last == '}') %}
+      {% set value_props = prop.value | trim | trim('{') | trim('}') | split(',') %}
+      {% set properties = {} %}
+      {% for p in value_props %}
+        {% set attrs = p | split(': ') %}
+        {% set properties = properties|merge({
+          (attrs[0] | trim()) : attrs[1] | trim("'") | trim('"'),
+        }) %}
+      {% endfor %}
+      {% set value = properties %}
+    {% elseif (prop.value | trim | first == '[' and prop.value | trim | last == ']') %}
+      {% set value_props = prop.value | trim | trim('[') | trim(']') | split(',') %}
+      {% set properties = [] %}
+      {% for p in value_props %}
+        {% set properties = properties|merge([
+          p | trim | trim("'") | trim('"'),
+        ]) %}
+      {% endfor %}
+      {% set value = value_props %}
+    {% else %}
+      {% set value = prop.value %}
+    {% endif %}
+
+    {% set props = props|merge({
+      (key): value
+    }) %}
+  {% endfor %}
+
+  {# Add pattern classes and attributes to 'with' properties #}
+  {% set props = props|merge({
+      (fields.atoms ~ '_other_classes'): block_classes,
+      (fields.atoms ~ '_other_attributes'): block_attributes
+    }) %}
+
+  {# Render pattern #}
+  {% if template %}
+    {% include '@' ~ fields.group ~ '/' ~ pattern ~ '/_' ~ template ~ '.tpl.twig' with props %}
+  {% endif %}
+
+</div>

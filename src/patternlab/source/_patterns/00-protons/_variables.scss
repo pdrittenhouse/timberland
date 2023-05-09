@@ -1,0 +1,52 @@
+//
+// Global VARIABLES and HELPERS
+//
+// Place global config here like Bootstrap's _variables.scss.
+// This kind of config is often required prior to importing any libraries
+// (ie Bootstrap Sass), and does not produce any CSS, just variables and maps.
+//
+// This file is provided AUTOMATICALLY to every .scss file on the dependency
+// chain via the configuration of the sass-loader within webpack.config.js.
+// In other words, every .scss within Pattern Lab has `@import 00-protons/variables`
+// silently injected into the first line.
+//
+// As long as everything within this files DOES NOT PRINT CSS, there will be
+// no duplicated output. Again, for the people in the back:
+//
+// THIS FILE CONTAINS ONLY NON-PRINTING SASS, LIKE VARIABLES, MIXINS, & FUNCTIONS
+// NO PRINTING SASS SHOULD BE ADDED TO THIS FILE
+//
+
+// Custom non-printing tools
+@import 'non-printing/colors';
+@import 'non-printing/type';
+@import 'non-printing/animations';
+@import 'non-printing/zindex';
+
+// Import functions
+// Must go before libs to use the functions to override default bootstrap variables.
+@import 'non-printing/functions/all';
+
+// Custom Variables
+// Custom variables go after libs to override default bootstrap variables.
+@import "non-printing/custom-variables";
+
+// Non-printing Libraries
+@import 'non-printing/libs/all';
+
+// Import mixins
+// Must go after libs to use the bootstrap variables our custom mixins.
+@import 'non-printing/mixins/all';
+
+//Import custom functions, mixins & placeholders
+@import 'non-printing/custom-functions';
+@import 'non-printing/custom-mixins';
+@import 'non-printing/custom-placeholders';
+
+// Generated SVG icons and sprite mixins
+@import '01-atoms/svg/generated/icons-generated';
+
+// Export SASS data as JSON
+// Uses sassExportData in webpack.config.js
+// Imported into patternlab as demo data
+@import 'demo/export-data';

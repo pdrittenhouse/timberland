@@ -1,0 +1,35 @@
+<div class="sidebar-content">
+  {% if post.meta('page_sidebar') is not empty %}
+    {% if post.meta('page_sidebar') == 'primary' %}
+      <div class="dynamic-sidebar-primary">
+        {{ primary_sidebar }}
+      </div>
+    {% endif %}
+    {% if post.meta('page_sidebar') == 'secondary' %}
+      <div class="dynamic-sidebar-secondary">
+        {{ secondary_sidebar }}
+      </div>
+    {% endif %}
+    {% if post.meta('page_sidebar') == 'tertiary' %}
+      <div class="dynamic-sidebar-tertiary">
+        {{ tertiary_sidebar }}
+      </div>
+    {% endif %}
+  {% else %}
+    {% if selected_sidebar == 'primary' %}
+      <div class="dynamic-sidebar-primary">
+        {{ primary_sidebar }}
+      </div>
+    {% endif %}
+    {% if selected_sidebar == 'secondary' %}
+      <div class="dynamic-sidebar-secondary">
+        {{ secondary_sidebar }}
+      </div>
+    {% endif %}
+    {% if selected_sidebar == 'tertiary' %}
+      <div class="dynamic-sidebar-tertiary">
+        {{ tertiary_sidebar }}
+      </div>
+    {% endif %}
+  {% endif %}
+</div>

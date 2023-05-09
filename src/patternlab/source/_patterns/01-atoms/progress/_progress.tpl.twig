@@ -1,0 +1,129 @@
+{#
+/**
+ * @file
+ * progress
+ *
+ * Available variables for progress:
+ *  - progress_wrapper_classes [array]: Additional component classes.
+ *  - progress_wrapper_other_classes [string]: Additional component classes.
+ *  - progress_wrapper_attributes [array]: Additional component attributes.
+ *  - progress_wrapper_other_attributes [string]: Additional component attributes.
+ *  - progress_classes [array]: Additional component classes.
+ *  - progress_other_classes [string]: Additional component classes.
+ *  - progress_attributes [array]: Additional component attributes.
+ *  - progress_other_attributes [string]: Additional component attributes.
+ *  - bootstrap_progress [boolean]: Use bootstrap progress bar.
+ *  - show_label [boolean]: Show progress bar label if HTML5 progress bar is used.
+ *  - bar.progress_bar_label [string]: Progress bar label text.
+ *  - bar.progress_bar_id [string]: Unique identifier for the progress bar.
+ *  - bar.progress_bar_classes [array]: Additional component classes.
+ *  - bar.progress_bar_other_classes [string]: Additional component classes.
+ *  - bar.progress_bar_attributes [array]: Additional component attributes.
+ *  - bar.progress_bar_other_attributes [string]: Additional component attributes.
+ *  - bar.progress_bar_value [integer]: Progress bar value.
+ *  - bar.progress_bar_min [integer]: Progress bar minimum value.
+ *  - bar.progress_bar_max [integer]: Progress bar maximum value.
+ *  - bar.progress_bar_text [string]: Progress bar fallback text.
+ *  - bar.width [string]: Progress bar width.
+ *  - bar.height [string]: Progress bar height.
+ *  - bar.striped [boolean]: Adds striped gradient to the progress bar.
+ *  - bar.animate [boolean]: Apply animation to stripes.
+ */
+#}
+
+{% set progress_wrapper_classes = progress_wrapper_classes|default([])|merge([
+  'progress--wrapper',
+  progress_wrapper_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set progress_wrapper_attributes = progress_wrapper_attributes|default([])|merge([
+  progress_wrapper_other_attributes,
+]) | sort | join(' ') | trim %}
+
+{% set progress_classes = progress_classes|default([])|merge([
+  bootstrap_progress is defined and bootstrap_progress != true ? 'progress--container' : 'progress',
+  progress_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set progress_attributes = progress_attributes|default([])|merge([
+  height ? 'style="height:' ~ height ~ ';"',
+  progress_other_attributes,
+]) | sort | join(' ') | trim %}
+
+<div class="{{ progress_wrapper_classes }}" {{ progress_wrapper_attributes }}>
+  {% if bootstrap_progress is defined and bootstrap_progress != true %}
+    {% for bar in progress_bars %}
+      {% set progressBarId = [] %}
+      {% set alpha = 'abcdefghijklmnopqrstuvwxyz' %}
+      {% set num = '0123456789' %}
+      {% for i in 1..10 %}
+        {% set char = random(alpha ~ alpha|upper ~ num ~ '-_') %}
+        {% set progressBarId = progressBarId|merge([char]) %}
+      {% endfor %}
+      {% set progressBarId = 'progressBar_' ~ progressBarId|join %}
+
+      <div class="{{ progress_classes }}" {{ progress_attributes }}>
+        {% set progress_bar_classes = bar.progress_bar_classes|default([])|merge([
+          'progress--bar',
+          bar.progress_bar_other_classes,
+        ]) | sort | join(' ') | trim %}
+
+        {% set progress_bar_attributes = bar.progress_bar_attributes|default([])|merge([
+          bar.progress_bar_id ? 'id="' ~ bar.progress_bar_id ~ '"' : 'id="' ~ progressBarId ~ '"',
+          bar.progress_bar_id ? 'aria-labelledby="' ~ bar.progress_bar_id ~ '-label"' : 'aria-labelledby="' ~ progressBarId ~ '-label"',
+          'max="' ~ bar.progress_bar_max ~ '"',
+          'value="' ~ bar.progress_bar_value ~ '"',
+          bar.width or bar.height ? 'style="width:' ~ bar.width ~ '; height:' ~ bar.height ~ ';"',
+          bar.progress_bar_other_attributes,
+        ]) | sort | join(' ') | trim %}
+
+        {% if bar.show_label == true %}
+          {% block progress_label %}
+            <label class="progress--label" for="{{ bar.progress_bar_id ? bar.progress_bar_id : progressBarId }}" id="{{ bar.progress_bar_id ? bar.progress_bar_id ~ '-label' : progressBarId ~ '-label'  }}">{{ bar.progress_bar_label }}</label>
+          {% endblock progress_label %}
+        {% endif %}
+        <progress class="{{ progress_bar_classes }}" {{ progress_bar_attributes }}> {% block html_progress_content %}{{ bar.progress_bar_text }}{% endblock html_progress_content %} </progress>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="{{ progress_classes }}" {{ progress_attributes }}>
+      {% for bar in progress_bars %}
+        {% set progressBarId = [] %}
+        {% set alpha = 'abcdefghijklmnopqrstuvwxyz' %}
+        {% set num = '0123456789' %}
+        {% for i in 1..10 %}
+          {% set char = random(alpha ~ alpha|upper ~ num ~ '-_') %}
+          {% set progressBarId = progressBarId|merge([char]) %}
+        {% endfor %}
+        {% set progressBarId = 'progressBar_' ~ progressBarId|join %}
+
+        {% set progress_bar_classes = bar.progress_bar_classes|default([])|merge([
+          'progress-bar',
+          bar.color ? 'bg-' ~ bar.color,
+          bar.striped == true ? 'progress-bar-striped',
+          bar.striped == true and bar.animate == true ? 'progress-bar-animated',
+          bar.progress_bar_other_classes,
+        ]) | sort | join(' ') | trim %}
+
+        {% set progress_bar_attributes = bar.progress_bar_attributes|default([])|merge([
+          bar.progress_bar_id ? 'id="' ~ bar.progress_bar_id ~ '"' : 'id="' ~ progressBarId ~ '"',
+          'role="progressbar"',
+          'aria-valuenow="' ~ bar.progress_bar_value ~ '"',
+          'aria-valuemin="' ~ bar.progress_bar_min ~ '"',
+          'aria-valuemax="' ~ bar.progress_bar_max ~ '"',
+          'style="width: ' ~ bar.progress_bar_value ~ '%"',
+          bar.progress_bar_other_attributes,
+        ]) | sort | join(' ') | trim %}
+
+        <div class="{{ progress_bar_classes }}" {{ progress_bar_attributes }}>
+          {% block bs_progress_content %}
+            {{ bar.progress_bar_label ? bar.progress_bar_label : bar.progress_bar_text ? bar.progress_bar_text }}
+          {% endblock bs_progress_content %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+
+
+

@@ -1,0 +1,340 @@
+{
+    "key": "group_63af2706c20dc",
+    "title": "Block: Pattern",
+    "fields": [
+        {
+            "key": "field_63af2ba50ed12",
+            "label": "Pattern Group",
+            "name": "group",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "choices": {
+                "atoms": "Atom",
+                "molecules": "Molecule",
+                "organisms": "Organism"
+            },
+            "default_value": "atoms",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_63af2bf3f3ed5",
+            "label": "Pattern",
+            "name": "atoms",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_63af2ba50ed12",
+                        "operator": "==",
+                        "value": "atoms"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "choices": {
+                "alert": "Alert",
+                "badge": "Badge",
+                "blockquote": "Blockquote",
+                "branding": "Branding",
+                "breadcrumb": "Breadcrumb",
+                "button": "Button",
+                "collapse": "Collapse",
+                "figure": "Figure",
+                "form": "Form",
+                "grid": "Grid",
+                "image": "Image",
+                "list": "List",
+                "list-group": "List Group",
+                "progress": "Progress",
+                "skip-nav": "Skip Nav",
+                "spinner": "Spinner",
+                "svg": "SVG",
+                "video": "Video"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_63af2cdde139e",
+            "label": "Pattern",
+            "name": "molecules",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_63af2ba50ed12",
+                        "operator": "==",
+                        "value": "molecules"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "choices": {
+                "accordion": "Accordion",
+                "button-group": "Button Group",
+                "card": "Card",
+                "carousel": "Carousel",
+                "dropdown": "Dropdown",
+                "feature": "Feature",
+                "flickity-carousel": "Flickity Carousel",
+                "jumbotron": "Jumbotron",
+                "modal": "Modal",
+                "nav": "Nav",
+                "offcanvas": "Offcanvas",
+                "pagination": "Pagination",
+                "promo": "Promo",
+                "slick-carousel": "Slick Carousel",
+                "social-nav": "Social Nav",
+                "testimonial": "Testimonial",
+                "toast": "Toast",
+                "video-promo": "Video Promo"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_63af2dd3e13a0",
+            "label": "Pattern",
+            "name": "organisms",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_63af2ba50ed12",
+                        "operator": "==",
+                        "value": "organisms"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "choices": {
+                "card-grid": "Card Grid",
+                "footer": "Footer",
+                "header": "Header"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_63af40b9c8837",
+            "label": "Template",
+            "name": "template",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_63af2bf3f3ed5",
+                        "operator": "!=",
+                        "value": ""
+                    }
+                ],
+                [
+                    {
+                        "field": "field_63af2cdde139e",
+                        "operator": "!=",
+                        "value": ""
+                    }
+                ],
+                [
+                    {
+                        "field": "field_63af2dd3e13a0",
+                        "operator": "!=",
+                        "value": ""
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_63af2f8be684d",
+            "label": "With",
+            "name": "with",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_63af2ba50ed12",
+                        "operator": "==",
+                        "value": "atoms"
+                    },
+                    {
+                        "field": "field_63af2bf3f3ed5",
+                        "operator": "!=",
+                        "value": ""
+                    }
+                ],
+                [
+                    {
+                        "field": "field_63af2ba50ed12",
+                        "operator": "==",
+                        "value": "molecules"
+                    },
+                    {
+                        "field": "field_63af2cdde139e",
+                        "operator": "!=",
+                        "value": ""
+                    }
+                ],
+                [
+                    {
+                        "field": "field_63af2ba50ed12",
+                        "operator": "==",
+                        "value": "organisms"
+                    },
+                    {
+                        "field": "field_63af2dd3e13a0",
+                        "operator": "!=",
+                        "value": ""
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "layout": "table",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "Add Property",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_63af2fb4e684e",
+                    "label": "Key",
+                    "name": "key",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_63af2f8be684d"
+                },
+                {
+                    "key": "field_63af2fc3e684f",
+                    "label": "Value",
+                    "name": "value",
+                    "aria-label": "",
+                    "type": "textarea",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "default_value": "",
+                    "maxlength": "",
+                    "rows": 4,
+                    "placeholder": "",
+                    "new_lines": "",
+                    "parent_repeater": "field_63af2f8be684d"
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "block",
+                "operator": "==",
+                "value": "acf\/pattern"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1672849093
+}

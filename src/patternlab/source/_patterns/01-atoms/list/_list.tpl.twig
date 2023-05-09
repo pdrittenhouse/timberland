@@ -1,0 +1,129 @@
+{#
+/**
+ * @file
+ * list
+ *
+ * Available variables for list:
+ *  - parent_classes [array]: Classes applied to parent element.
+ *  - parent_other_classes [string]: Other classes applied to parent element.
+ *  - parent_element [string]: HTML elelment to use for list.
+ *  - list_id [string]: Unique ID for list.
+ *  - bullet_icons [bool]: Flag to use icons instead of bullets or numbers.
+ *  - bullet_icon_position [string: before | after]: Positions icon before or after text.
+ *  - bullet_icon_size [string]: Size of bullet icon.
+ *  - items [array]: Array of list items.
+ *  - items.item.item_icon [string]: Name of custom SVG or Font Awesome icon classes.
+ *  - items.item.icon_position [string: before | after]: Position of icon.  Can be overridden by bullet_icon_position.
+ *  - items.item.icon_color [string]: Icon color.
+ *  - items.item.icon_width [string]: Width of icon.  Can be overridden by bullet_icon_size.
+ *  - items.item.icon_height [string]: Height of icon.  Can be overridden by bullet_icon_size.
+ *  - items.item.item_text [string]: List item text.
+ *  - items.item.item_classes [array]: List item classes.
+ *  - items.item.item_other_classes [string]: List item classes.
+ *  - items.item.attributes [array]: List item attributes.
+ *  - items.item.item_other_attributes [string]: List item attributes.
+ */
+#}
+
+{% import _self as lists %}
+
+{{ lists.list(parent_classes, parent_other_classes, parent_element, list_id, bullet_icons, bullet_icon_position, bullet_icon_size, items, item_classes, item_other_classes, item_other_attributes, paths) }}
+
+{% macro list(parent_classes, parent_other_classes, parent_element, list_id, bullet_icons, bullet_icon_position, bullet_icon_size, items, item_classes, item_other_classes, item_other_attributes, paths) %}
+
+  {% import _self as lists %}
+
+  {% if items %}
+
+    {% set item_count = 0 %}
+
+    {% set parent_element = parent_element|default('ul') %}
+
+    {% if parent_element == 'ol' %}
+      {% set list_type = 'ordered' %}
+    {% elseif parent_element == 'ul' %}
+      {% set list_type = 'unordered' %}
+    {% endif %}
+
+    {% if bullet_icon_position == 'before' %}
+      {% set bullet_position_class = 'bullet-icons--before' %}
+    {% elseif bullet_icon_position == 'after' %}
+      {% set bullet_position_class = 'bullet-icons--after' %}
+    {% endif %}
+
+    {% set parent_classes = parent_classes|default([])|merge([
+      'list',
+      'list-id--' ~ list_id,
+      'list-type--' ~ list_type,
+      bullet_icons ? 'bullet-icons' : '',
+      bullet_position_class,
+      parent_other_classes,
+    ]) | sort | join(' ') | trim %}
+
+    <{{ parent_element }} id="{{ list_id }}" class="{{ parent_classes }}">
+    {% for item in items %}
+      {% set item_count = item_count + 1 %}
+
+      {% set element = item.item_element | default('li') %}
+
+      {% set item_classes = item.item_classes|default([])|merge([
+        'list-item',
+        'list-item--item-' ~ item_count,
+        item.item_other_classes,
+      ]) | sort | join(' ') | trim %}
+
+      {% set attributes = attributes|default([])|merge([
+        item.item_other_attributes,
+      ]) | sort | join(' ') | trim %}
+
+      {% set icon_position = item.icon_position | default('before') %}
+
+      {% if bullet_icons == true and bullet_icon_size %}
+        {% set width = bullet_icon_size %}
+        {% set height = bullet_icon_size %}
+        {% set line_height = bullet_icon_size %}
+      {% elseif item.icon_width or item.icon_height %}
+        {% set width = item.icon_width %}
+        {% set height = item.icon_height %}
+        {% set line_height = item.icon_height %}
+      {% else %}
+        {% set width = '1em' %}
+        {% set height = '1em' %}
+      {% endif %}
+
+      {# TODO: Fix conflict with inline style in social nav #}
+      <{{ element }} class="{{ item_classes }}" {{ line_height ? 'style="line-height:' ~ line_height ~ ';"' }} {{ attributes }}>
+      {% if (item.item_icon and icon_position == 'before' and bullet_icon_position != 'after') or (bullet_icons == true and bullet_icon_position == 'before') %}
+        {% if item.item_icon matches '/(fa[bdlrs] fa)/' %} {# FontAwesome Icon #}
+          <span class="icon" style="font-size: {{ width }};"><i class="{{ item.item_icon }} color-fill--{{ item.icon_color }}"></i></span>
+        {% else %} {# Custom SVG Icon #}
+          {% include '@atoms/svg/_svg~icon.tpl.twig' with {
+            name: item.item_icon,
+            fill: item.icon_color,
+            width: width,
+            height: height,
+          } %}
+        {% endif %}
+      {% endif %}
+      {{ item.item_text }}
+      {% if item.items %}
+        {{ lists.list(item.parent_classes, item.parent_other_classes, item.parent_element, item.list_id, item.bullet_icons, item.bullet_icon_position, item.bullet_icon_size, item.items, item.item_classes, item.item_other_classes, item.item_other_attributes, paths) }}
+      {% endif %}
+      {% if (item.item_icon and icon_position == 'after' and bullet_icon_position != 'before') or (bullet_icons == true and bullet_icon_position == 'after') %}
+        {% if item.item_icon matches '/(fa[bdlrs] fa)/' %} {# FontAwesome Icon #}
+          <span class="icon" style="font-size: {{ width }};"><i class="{{ item.item_icon }} color-fill--{{ item.icon_color }}"></i></span>
+        {% else %} {# Custom SVG Icon #}
+          {% include '@atoms/svg/_svg~icon.tpl.twig' with {
+            name: item.item_icon,
+            fill: item.icon_color,
+            width: width,
+            height: height,
+          } %}
+        {% endif %}
+      {% endif %}
+      </{{ element }}>
+    {% endfor %}
+    </{{ parent_element }}>
+
+  {% endif %}
+{% endmacro %}

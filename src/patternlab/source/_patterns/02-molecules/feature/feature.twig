@@ -1,0 +1,44 @@
+{% include '@molecules/feature/_feature.tpl.twig' with {
+  vertical: false,
+  link: 'http://beaconfire-red.com/',
+  linked: true,
+  target: '_self',
+  heading: 'Feature Heading',
+  title: 'Feature Title',
+  description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+  image: {
+    variant: 'aspect-ratio',
+    src: 'https://via.placeholder.com/800x800',
+    alt: 'A 1x1 image',
+    style: '',
+    placeholder: false,
+    width: '1',
+    height: '1'
+  },
+  image_right: false,
+  feature_other_classes: ''
+} %}
+
+{% include '@molecules/feature/_feature.tpl.twig' with {
+  vertical: true,
+  link: 'http://beaconfire-red.com/',
+  linked: false,
+  heading: 'Incididunt Adipiscing Magna Et',
+  title: 'Lorem ipsum dolor sit amet',
+  description: 'Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+  image: {
+    variant: 'aspect-ratio',
+    src: 'https://placeimg.com/800/800/people',
+    alt: 'A 1x1 image',
+    style: '',
+    placeholder: false,
+    width: '1',
+    height: '1'
+  },
+  button: {
+    button_text: 'More',
+    button_color: 'royal-blue',
+    button_element: 'a',
+    button_link: 'http://getbootstrap.com/docs/4.0/components/buttons/'
+  }
+} %}
