@@ -75,6 +75,8 @@
                 "quinary-senary-diagonal-up": "Diagonal Up - Quinary\/Senary",
                 "septenary-octonary-diagonal-down": "Diagonal Down - Septenary\/Octonary",
                 "nonary-denary-diagonal-down": "Diagonal Down - Nonary\/Denary",
+                "tertiary-primary-diagonal-down": "Diagonal Down - Tertiary\/Primary",
+                "quaternary-tertiary-diagonal-down": "Diagonal Down - Quaternary\/Tertiary",
                 "primary-secondary-radial": "Radial - Primary\/Secondary"
             },
             "default_value": "primary-secondary-horizontal",
@@ -104,5 +106,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1674431005
+    "modified": 1684015710
 }

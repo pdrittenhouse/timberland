@@ -198,35 +198,6 @@
             "append": ""
         },
         {
-            "key": "field_640b891061e2e",
-            "label": "Start Automatically",
-            "name": "auto_start",
-            "aria-label": "",
-            "type": "true_false",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_640ac128ac12f",
-                        "operator": "==",
-                        "value": "bootstrap"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "admin_only": 0,
-            "message": "",
-            "default_value": 0,
-            "ui_on_text": "",
-            "ui_off_text": "",
-            "ui": 1
-        },
-        {
             "key": "field_640ac58d304d5",
             "label": "Loop",
             "name": "loop",
@@ -1770,5 +1741,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1678768704
+    "modified": 1684013061
 }

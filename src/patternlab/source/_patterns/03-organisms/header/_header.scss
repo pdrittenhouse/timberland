@@ -984,6 +984,8 @@
       }
     }
 
+    .branding {}
+
     .site-header--navigation {
 
       @include media-breakpoint-up(lg) {
@@ -996,19 +998,26 @@
       .site-header--navbar-wrapper,
       .site-header--row {
 
-        /* stylelint-disable */
-        display: contents !important;
-        /* stylelint-enable */
+        @include media-breakpoint-up(lg) {
+          /* stylelint-disable */
+          display: contents !important;
+          /* stylelint-enable */
+        }
       }
     }
 
     .site-header--secondary-nav {
+      margin: 0;
 
       @include  media-breakpoint-up(lg) {
         grid-column-start: 3;
         grid-column-end: auto;
         grid-row-start: 1;
         grid-row-end: auto;
+      }
+
+      .navbar-nav {
+        margin: 0;
       }
     }
 

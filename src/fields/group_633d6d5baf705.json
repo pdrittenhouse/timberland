@@ -39,7 +39,9 @@
             "choices": {
                 "post": "post",
                 "page": "page",
-                "test-post-type": "test-post-type"
+                "test-post-type": "test-post-type",
+                "acf-post-type": "acf-post-type",
+                "acf-taxonomy": "acf-taxonomy"
             },
             "default_value": [
                 "post"
@@ -702,6 +704,7 @@
                             "collapsed": "",
                             "button_label": "Add Term",
                             "rows_per_page": 20,
+                            "parent_repeater": "field_63d61845d84bc",
                             "sub_fields": [
                                 {
                                     "key": "field_63d6e28176536",
@@ -725,8 +728,7 @@
                                     "append": "",
                                     "parent_repeater": "field_63d62f15d84c1"
                                 }
-                            ],
-                            "parent_repeater": "field_63d61845d84bc"
+                            ]
                         },
                         {
                             "key": "field_63d61aa1d84bf",
@@ -1436,6 +1438,7 @@
                                     },
                                     "admin_only": 0,
                                     "layout": "block",
+                                    "parent_repeater": "field_63d706ae9b13b",
                                     "sub_fields": [
                                         {
                                             "key": "field_63d71fd02296d",
@@ -1580,8 +1583,7 @@
                                             "prepend": "",
                                             "append": ""
                                         }
-                                    ],
-                                    "parent_repeater": "field_63d706ae9b13b"
+                                    ]
                                 },
                                 {
                                     "key": "field_63d721ce2296e",
@@ -1599,6 +1601,7 @@
                                     },
                                     "admin_only": 0,
                                     "layout": "block",
+                                    "parent_repeater": "field_63d706ae9b13b",
                                     "sub_fields": [
                                         {
                                             "key": "field_63d721ce2296f",
@@ -1743,8 +1746,7 @@
                                             "prepend": "",
                                             "append": ""
                                         }
-                                    ],
-                                    "parent_repeater": "field_63d706ae9b13b"
+                                    ]
                                 }
                             ]
                         }
@@ -2065,6 +2067,7 @@
                                     "collapsed": "",
                                     "button_label": "Add Value",
                                     "rows_per_page": 20,
+                                    "parent_repeater": "field_63df503968e03",
                                     "sub_fields": [
                                         {
                                             "key": "field_63e1bca03f5b8",
@@ -2088,8 +2091,7 @@
                                             "append": "",
                                             "parent_repeater": "field_63df510568e06"
                                         }
-                                    ],
-                                    "parent_repeater": "field_63df503968e03"
+                                    ]
                                 },
                                 {
                                     "key": "field_63df520968e0d",
@@ -3265,7 +3267,8 @@
                             "allow_custom": 0,
                             "layout": "vertical",
                             "toggle": 0,
-                            "save_custom": 0
+                            "save_custom": 0,
+                            "custom_choice_button_text": "Add new choice"
                         },
                         {
                             "key": "field_63f146cba87e2",
@@ -4133,7 +4136,8 @@
             "allow_custom": 0,
             "layout": "vertical",
             "toggle": 0,
-            "save_custom": 0
+            "save_custom": 0,
+            "custom_choice_button_text": "Add new choice"
         },
         {
             "key": "field_64016f099634a",
@@ -4276,7 +4280,8 @@
                     "allow_custom": 0,
                     "save_custom": 0,
                     "layout": "vertical",
-                    "toggle": 0
+                    "toggle": 0,
+                    "custom_choice_button_text": "Add new choice"
                 },
                 {
                     "key": "field_63f41f0de0098",
@@ -4599,7 +4604,8 @@
                     "allow_custom": 0,
                     "layout": "vertical",
                     "toggle": 0,
-                    "save_custom": 0
+                    "save_custom": 0,
+                    "custom_choice_button_text": "Add new choice"
                 },
                 {
                     "key": "field_63f3c20a0a93c",
@@ -6359,7 +6365,8 @@
                             "allow_custom": 0,
                             "layout": "",
                             "toggle": 0,
-                            "save_custom": 0
+                            "save_custom": 0,
+                            "custom_choice_button_text": "Add new choice"
                         },
                         {
                             "key": "field_64038bee79a75",
@@ -7613,7 +7620,8 @@
                             "allow_custom": 0,
                             "layout": "vertical",
                             "toggle": 0,
-                            "save_custom": 0
+                            "save_custom": 0,
+                            "custom_choice_button_text": "Add new choice"
                         },
                         {
                             "key": "field_64038c0079a9d",
@@ -8919,5 +8927,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1678768752
+    "modified": 1684013045
 }

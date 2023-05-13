@@ -1178,6 +1178,7 @@
   @include gradient(var(--septenary), var(--octonary), 'diagonal-down', 0%, 100%, false, 'septenary-octonary-diagonal-down' );
   @include gradient(var(--nonary), var(--denary), 'diagonal-down', 0%, 100%, false, 'nonary-denary-diagonal-down' );
   @include gradient(var(--primary), var(--secondary), 'radial', 0%, 100%, false, 'primary-secondary-radial' );
+  @include gradient(var(--tertiary), var(--primary), 'diagonal-down', 0%, 100%, false, 'tertiary-primary-diagonal-down' );
 
 }
 

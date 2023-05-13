@@ -52,7 +52,8 @@
             },
             "default_value": "",
             "exclude_colors": "",
-            "return_format": "slug"
+            "return_format": "slug",
+            "allowed_colors": []
         },
         {
             "key": "field_634653996c8e6",
@@ -100,5 +101,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1671746581
+    "modified": 1684014366
 }

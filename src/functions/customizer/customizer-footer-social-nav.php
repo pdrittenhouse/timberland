@@ -607,7 +607,7 @@ function theme_get_customizer_footer_social_nav() {
   if ( !empty( $footer_social_nav_text_align ) ) {
     ?>
     :root {
-    --footer-social-nav-text-align: <?php echo $footer_social_nav_text_align; ?>px;
+    --footer-social-nav-text-align: <?php echo $footer_social_nav_text_align; ?>;
     }
     <?php
   }
@@ -615,7 +615,7 @@ function theme_get_customizer_footer_social_nav() {
   if ( !empty( $footer_social_nav_flex_align ) ) {
     ?>
     :root {
-    --footer-social-nav-flex-align: <?php echo $footer_social_nav_flex_align; ?>px;
+    --footer-social-nav-flex-align: <?php echo $footer_social_nav_flex_align; ?>;
     }
     <?php
   }

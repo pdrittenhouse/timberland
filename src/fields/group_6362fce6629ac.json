@@ -221,6 +221,7 @@
             "max": 0,
             "layout": "row",
             "button_label": "Add Breakpoint",
+            "rows_per_page": 20,
             "sub_fields": [
                 {
                     "key": "field_6362fd2cd796c",
@@ -283,8 +284,7 @@
                     "placeholder": "",
                     "parent_repeater": "field_6362fd2cd796b"
                 }
-            ],
-            "rows_per_page": 20
+            ]
         },
         {
             "key": "field_6362fd2cd796a",
@@ -326,5 +326,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1671746540
+    "modified": 1684013303
 }

@@ -49,6 +49,7 @@
             "max": 0,
             "layout": "block",
             "button_label": "Add Width",
+            "rows_per_page": 20,
             "sub_fields": [
                 {
                     "key": "field_62394838a64ee",
@@ -111,8 +112,7 @@
                     "placeholder": "",
                     "parent_repeater": "field_62394838a64ed"
                 }
-            ],
-            "rows_per_page": 20
+            ]
         },
         {
             "key": "field_62394838a64f3",
@@ -141,6 +141,7 @@
             "max": 0,
             "layout": "block",
             "button_label": "Add Order",
+            "rows_per_page": 20,
             "sub_fields": [
                 {
                     "key": "field_62394838a64f4",
@@ -203,8 +204,7 @@
                     "placeholder": "",
                     "parent_repeater": "field_62394838a64f3"
                 }
-            ],
-            "rows_per_page": 20
+            ]
         },
         {
             "key": "field_62394838a64f6",
@@ -233,6 +233,7 @@
             "max": 0,
             "layout": "block",
             "button_label": "Add Offset",
+            "rows_per_page": 20,
             "sub_fields": [
                 {
                     "key": "field_62394838a64f7",
@@ -294,8 +295,7 @@
                     "placeholder": "",
                     "parent_repeater": "field_62394838a64f6"
                 }
-            ],
-            "rows_per_page": 20
+            ]
         },
         {
             "key": "field_6348c521a0827",
@@ -402,5 +402,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1671746538
+    "modified": 1684013205
 }

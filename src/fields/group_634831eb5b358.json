@@ -21,6 +21,7 @@
             "max": 0,
             "layout": "table",
             "button_label": "Add Alignment",
+            "rows_per_page": 20,
             "sub_fields": [
                 {
                     "key": "field_6348a4b87f1ed",
@@ -76,8 +77,7 @@
                     "placeholder": "",
                     "parent_repeater": "field_63483c51d0bd6"
                 }
-            ],
-            "rows_per_page": 20
+            ]
         }
     ],
     "location": [
@@ -98,5 +98,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1671746665
+    "modified": 1684013188
 }

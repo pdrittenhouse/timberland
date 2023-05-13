@@ -21,6 +21,7 @@
             "max": 0,
             "layout": "table",
             "button_label": "Add Gutter",
+            "rows_per_page": 20,
             "sub_fields": [
                 {
                     "key": "field_63487193cbe7d",
@@ -68,8 +69,7 @@
                     "step": 1,
                     "parent_repeater": "field_63487193cbe7c"
                 }
-            ],
-            "rows_per_page": 20
+            ]
         }
     ],
     "location": [
@@ -90,5 +90,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1671746633
+    "modified": 1684013267
 }
