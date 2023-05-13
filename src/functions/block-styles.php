@@ -107,6 +107,41 @@ function dream_register_block_styles() {
         'label' => __( 'Short' ),
       )
     );
+
+    /**
+     * Headings
+     */
+    register_block_style(
+      'core/heading',
+      array(
+        'name'  => 'base',
+        'label' => __( 'Base Font Family' ),
+      )
+    );
+
+    register_block_style(
+      'core/heading',
+      array(
+        'name'  => 'alternate',
+        'label' => __( 'Alternate Font Family' ),
+      )
+    );
+
+    register_block_style(
+      'core/heading',
+      array(
+        'name'  => 'serif',
+        'label' => __( 'Serif Font Family' ),
+      )
+    );
+
+    register_block_style(
+      'core/heading',
+      array(
+        'name'  => 'sansserif',
+        'label' => __( 'Sans Serif Font Family' ),
+      )
+    );
   }
 }
 add_action( 'after_setup_theme', 'dream_register_block_styles' );

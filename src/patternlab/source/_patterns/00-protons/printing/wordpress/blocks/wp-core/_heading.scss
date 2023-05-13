@@ -1,0 +1,18 @@
+.wp-block-heading {
+
+  &.is-style-base {
+    @include font($font-stack-base);
+  }
+
+  &.is-style-alternate {
+    @include font($font-stack-alternate);
+  }
+
+  &.is-style-serif {
+    @include font($font-stack-serif);
+  }
+
+  &.is-style-sansserif {
+    @include font($font-stack-sans-serif);
+  }
+}
