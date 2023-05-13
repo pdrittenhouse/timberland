@@ -72,7 +72,7 @@
 {% set block_classes = block_classes|default([])|merge([
   ((fields.jumbotron_image['image_type'] == 'file' and fields.jumbotron_image['image']['url'] is empty) or (fields.jumbotron_image['image_type'] == 'url' and fields.jumbotron_image['image_url'] is empty)) and fields.innerblocks_location == 'image' ? 'has-image',
   fields.layout.jumbotron_layout != 'default' ? 'jumbotron-' ~ fields.layout.jumbotron_layout,
-  fields.layout.jumbotron_layout == 'gradient-overlay-left' or fields.layout.jumbotron_layout == 'gradient-overlay-right' ? 'gradient-' ~ fields.layout.gradient,
+  fields.layout.jumbotron_layout == fields.layout.jumbotron_layout == 'gradient-overlay-center' or 'gradient-overlay-left' or fields.layout.jumbotron_layout == 'gradient-overlay-right' ? 'gradient-' ~ fields.layout.gradient,
   fields.bg_video != true and fields.jumbotron_bg_color['bg_color'] == 'palette' and fields.jumbotron_bg_color['bg_theme_color'] ? 'bg-' ~ fields.jumbotron_bg_color['bg_theme_color'],
   fields.jumbotron_text_color['color'] == 'palette' and fields.jumbotron_text_color['theme_color'] ? 'text-' ~ fields.jumbotron_text_color['theme_color'],
   block['className']

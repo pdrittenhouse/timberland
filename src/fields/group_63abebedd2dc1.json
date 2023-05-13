@@ -25,6 +25,7 @@
                 "full-height-centered": "Full Height Centered",
                 "content-overlap-left": "Content Overlap Left",
                 "content-overlap-right": "Content Overlap Right",
+                "gradient-overlay-center": "Gradient Overlay Center",
                 "gradient-overlay-left": "Gradient Overlay Left",
                 "gradient-overlay-right": "Gradient Overlay Right",
                 "angles-right": "Angles Right",
@@ -48,6 +49,13 @@
             "instructions": "",
             "required": 0,
             "conditional_logic": [
+                [
+                    {
+                        "field": "field_63abebeef2080",
+                        "operator": "==",
+                        "value": "gradient-overlay-center"
+                    }
+                ],
                 [
                     {
                         "field": "field_63abebeef2080",
@@ -106,5 +114,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1684015710
+    "modified": 1684016554
 }
