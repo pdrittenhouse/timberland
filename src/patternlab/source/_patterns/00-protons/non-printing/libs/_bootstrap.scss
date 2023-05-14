@@ -1,6 +1,9 @@
 // Bootstrap variable customization
 // See all variables available at: ~bootstrap/scss/_variables.scss
 
+// Enable negative margins
+$enable-negative-margins: true;
+
 // Spacing
 // Bootstrap Spacers use $spacer var of 1rem and assumes browser 16px default.
 // Updating the values in $spacers list adds the value to Bootstrap's utility spacers.
