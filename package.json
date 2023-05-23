@@ -104,6 +104,7 @@
     "jquery": "^3.5.1",
     "jquery-bridget": "^3.0.0",
     "lottie-web": "^5.9.6",
+    "responsive-tabs": "^1.6.3",
     "simplelightbox": "^2.8.1",
     "slick-carousel": "^1.8.1",
     "svg4everybody": "^2.1.9",

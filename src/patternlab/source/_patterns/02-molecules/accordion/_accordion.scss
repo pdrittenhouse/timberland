@@ -16,7 +16,19 @@
     .accordion-button {
 
       &:not(.navbar-toggler) {
-        display: flex;
+        @include button(
+          $border-top-left-radius: 0,
+          $border-top-right-radius: 0,
+          $border-bottom-left-radius: 0,
+          $border-bottom-right-radius: 0,
+          $border-top-left-radius-hover: 0,
+          $border-top-right-radius-hover: 0,
+          $border-bottom-left-radius-hover: 0,
+          $border-bottom-right-radius-hover: 0,
+        );
+        @include flexbox;
+        @include justify-content(space-between);
+        text-align: left;
       }
     }
   }

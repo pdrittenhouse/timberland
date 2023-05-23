@@ -10,104 +10,104 @@
 #}
 
 {% if is_preview %}
-{# <p>Some editor instructions here.</p> #}
+  {# <p>Some editor instructions here.</p> #}
 {% endif %}
 
 {# Column Width #}
 {% if fields.col_width %}
-	{% set column_widths = [] %}
-	{% for cw in fields.col_width %}
-		{% if cw.breakpoint %}
-			{% set bp = '-' ~ cw.breakpoint %}
+  {% set column_widths = [] %}
+  {% for cw in fields.col_width %}
+    {% if cw.breakpoint %}
+      {% set bp = '-' ~ cw.breakpoint %}
     {% else %}
       {% set bp = '' %}
-		{% endif %}
-		{% if cw.width %}
-			{% set width = '-' ~ cw.width %}
+    {% endif %}
+    {% if cw.width %}
+      {% set width = '-' ~ cw.width %}
     {% else %}
       {% set width = '' %}
-		{% endif %}
-		{% if bp or width %}
-			{% set column_widths = column_widths|default([])|merge([
-          'col' ~ bp ~ width
+    {% endif %}
+    {% if bp or width %}
+      {% set column_widths = column_widths|default([])|merge([
+        'col' ~ bp ~ width
       ]) %}
-		{% endif %}
-	{% endfor %}
+    {% endif %}
+  {% endfor %}
 {% endif %}
 
 {# Column Alignment #}
 {% if fields.col_align %}
-	{% set column_aligns = [] %}
-	{% for align in fields.col_align %}
-		{% if align.breakpoint %}
-			{% set bp = '-' ~ align.breakpoint %}
+  {% set column_aligns = [] %}
+  {% for align in fields.col_align %}
+    {% if align.breakpoint %}
+      {% set bp = '-' ~ align.breakpoint %}
     {% else %}
       {% set bp = '' %}
-		{% endif %}
-		{% if align.alignment %}
-			{% set alignment = '-' ~ align.alignment %}
+    {% endif %}
+    {% if align.alignment %}
+      {% set alignment = '-' ~ align.alignment %}
     {% else %}
       {% set alignment = '' %}
-		{% endif %}
-		{% if alignment %}
-			{% set column_aligns = column_aligns|default([])|merge([
-          'align-self' ~ bp ~ alignment
+    {% endif %}
+    {% if alignment %}
+      {% set column_aligns = column_aligns|default([])|merge([
+        'align-self' ~ bp ~ alignment
       ]) %}
-		{% endif %}
-	{% endfor %}
+    {% endif %}
+  {% endfor %}
 {% endif %}
 
 {# Column Order #}
 {% if fields.col_order %}
-	{% set column_order = [] %}
-	{% for order in fields.col_order %}
-		{% if order.breakpoint %}
-			{% set bp = '-' ~ order.breakpoint %}
+  {% set column_order = [] %}
+  {% for order in fields.col_order %}
+    {% if order.breakpoint %}
+      {% set bp = '-' ~ order.breakpoint %}
     {% else %}
       {% set bp = '' %}
-		{% endif %}
-		{% if order.order != null %}
-			{% set col_order = '-' ~ order.order %}
+    {% endif %}
+    {% if order.order != null %}
+      {% set col_order = '-' ~ order.order %}
     {% else %}
       {% set col_order = '' %}
-		{% endif %}
-		{% if col_order %}
-			{% set column_order = column_order|default([])|merge([
-          'order' ~ bp ~ col_order
+    {% endif %}
+    {% if col_order %}
+      {% set column_order = column_order|default([])|merge([
+        'order' ~ bp ~ col_order
       ]) %}
-		{% endif %}
-	{% endfor %}
+    {% endif %}
+  {% endfor %}
 {% endif %}
 
 {# Column Offset #}
 {% if fields.col_offset %}
-	{% set column_offset = [] %}
-	{% for col_off in fields.col_offset %}
-		{% if col_off.breakpoint %}
-			{% set bp = '-' ~ col_off.breakpoint %}
+  {% set column_offset = [] %}
+  {% for col_off in fields.col_offset %}
+    {% if col_off.breakpoint %}
+      {% set bp = '-' ~ col_off.breakpoint %}
     {% else %}
       {% set bp = '' %}
-		{% endif %}
-		{% if col_off.offset %}
-			{% set offset = '-' ~ col_off.offset %}
+    {% endif %}
+    {% if col_off.offset %}
+      {% set offset = '-' ~ col_off.offset %}
     {% else %}
       {% set offset = '' %}
-		{% endif %}
-		{% if offset %}
-			{% set column_offset = column_offset|default([])|merge([
-          'offset' ~ bp ~ offset
+    {% endif %}
+    {% if offset %}
+      {% set column_offset = column_offset|default([])|merge([
+        'offset' ~ bp ~ offset
       ]) %}
-		{% endif %}
-	{% endfor %}
+    {% endif %}
+  {% endfor %}
 {% endif %}
 
 {# Column Classes #}
 {% set column_classes = [
   block['className'],
-  fields.col_break == true ? 'w-100' : column_widths|length is not empty ? [column_widths]|sort|join(' ')|trim : 'col',
-  column_aligns|length is not empty ? [column_aligns]|sort|join(' ')|trim,
-  column_order|length is not empty ? [column_order]|sort|join(' ')|trim,
-  column_offset|length is not empty ? [column_offset]|sort|join(' ')|trim,
+  fields.col_break == true ? 'w-100' : column_widths|length > 0 ? column_widths|sort|join(' ')|trim : 'col',
+  column_aligns|length > 0 ? column_aligns|sort|join(' ')|trim,
+  column_order|length > 0 ? column_order|sort|join(' ')|trim,
+  column_offset|length > 0 ? column_offset|sort|join(' ')|trim,
   fields.bg_color == 'palette' and fields.bg_theme_color ? 'bg-' ~ fields.bg_theme_color,
   fields.color == 'palette' and fields.theme_color ? 'text-' ~ fields.theme_color,
   fields.col_classes
@@ -128,8 +128,8 @@
 ]|sort|join(' ')|trim %}
 
 <div class="{{ column_classes }}" {{ column_attributes }}>
-	{% if fields.col_break != true %}
+  {% if fields.col_break != true %}
     <InnerBlocks/>
-	{% endif %}
+  {% endif %}
 </div>
 

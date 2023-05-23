@@ -1,0 +1,123 @@
+{#
+/**
+ * @file
+ * tabs
+ *
+ * Available variables for tabs:
+ *  - tabs_id [string]: Component ID.
+ *  - tabs_classes [array]: Additional component classes.
+ *  - tabs_other_classes [string]: Additional component classes.
+ *  - tabs_styles [array]: Additional component styles.
+ *  - tabs_other_styles [string]: Additional component styles.
+ *  - tabs_attributes [array]: Additional component attributes.
+ *  - tabs_other_attributes [string]: Additional component attributes.
+ *  - collapsible (string): Responsive tabs option to indicate whether tabs collapsible.
+ *  - startCollapsed (string): Responsive tabs option to indicate whether tabs should start open or collapsed.
+ *  - disabledTabs (string): Responsive tabs option indicate which tabs should be disabled.
+ *  - activeTab (integer): Responsive tabs option to indicate if tab is active.
+ *  - accordionTabElement (string): Responsive tabs option to set a HTML element template in which the accordion tab will be wrapped..
+ *  - setHash (string): Responsive tabs option to set a reference to the tab in the URL hash.
+ *  - rotate (string): Responsive tabs option to rotate through tabs.
+ *  - event (string): Responsive tabs option to specify an event to activate a tab.
+ *  - animation (string): Responsive tabs option to set a "fade" or "slide" animation on a tab.
+ *  - animationQueue (string): Responsive tabs option to enable/disable the queueing of the animation.
+ *  - duration (integer): Responsive tabs option set animation duration.
+ *  - fluidHeight (string): Responsive tabs option to set adaptive height on tabs (I think....not seeing this in the docs now.  Where did I get this from?).
+ *  - scrollToAccordion (string): Responsive tabs option to scroll to the accordion when opened.
+ *  - scrollToAccordionOnLoad (string): Responsive tabs option to scroll to the accordion/tabs on page load.
+ *  - scrollToAccordionOffset (string): Responsive tabs option to set an offest for the scroll feature.
+ *  - vertical (boolean): Indicates whether the tabs should be vertical or horizontal.
+ *  - tabs (array): Array of objects to define tabs.
+ */
+#}
+
+{#
+Responsive Tabs options in the json file should include string or integer values only. The disabledTabs option can be a comma deliniated string of integers that refer to the index of the tab. Be sure to set a unique tabs_id each tabs group on a page.
+#}
+
+{% import _self as tabs_lists %}
+
+{{ tabs_lists.tabs_list(tabs_wrapper_classes, tabs_wrapper_other_classes, tabs_wrapper_styles, tabs_wrapper_other_styles, tabs_wrapper_attributes, tabs_wrapper_other_attributes, tabs, tabs_classes, tabs_other_classes, tabs_styles, tabs_other_styles, tabs_attributes, tabs_other_attributes, tabs_id, vertical, collapsible, startCollapsed, disabledTabs, activeTab, accordionTabElement, setHash, rotate, event, animation, animationQueue, duration, fluidHeight, scrollToAccordion, scrollToAccordionOnLoad, scrollToAccordionOffset) }}
+
+{% macro tabs_list(tabs_wrapper_classes, tabs_wrapper_other_classes, tabs_wrapper_styles, tabs_wrapper_other_styles, tabs_wrapper_attributes, tabs_wrapper_other_attributes, tabs, tabs_classes, tabs_other_classes, tabs_styles, tabs_other_styles, tabs_attributes, tabs_other_attributes, tabs_id, vertical, collapsible, startCollapsed, disabledTabs, activeTab, accordionTabElement, setHash, rotate, event, animation, animationQueue, duration, fluidHeight, scrollToAccordion, scrollToAccordionOnLoad, scrollToAccordionOffset) %}
+
+  {% import _self as tabs_lists %}
+
+  {% set tabs_wrapper_classes = tabs_wrapper_classes|default([])|merge([
+    'tabs-wrapper',
+    vertical == true ? 'vertical',
+    tabs_wrapper_other_classes,
+  ]) | sort | join(' ') | trim %}
+
+  {% set tabs_wrapper_styles = tabs_wrapper_styles|default([])|merge([
+    tabs_wrapper_other_styles,
+  ]) | sort | join(' ') | trim %}
+
+  {% set tabs_wrapper_attributes = tabs_wrapper_attributes|default([])|merge([
+    tabs_id ? 'id="' ~ tabs_id ~ '"',
+    tabs_wrapper_classes ? 'class="' ~ tabs_wrapper_classes ~ '"',
+    tabs_wrapper_styles ? 'style="' ~ tabs_wrapper_styles ~ '"',
+    collapsible ? 'data-collapsible="' ~ collapsible ~ '"',
+    startCollapsed ? 'data-startcollapsed="' ~ startCollapsed ~ '"',
+    disabledTabs ? 'data-disabledtabs="' ~ disabledTabs ~ '"',
+    activeTab ? 'data-activetab="' ~ activeTab ~ '"',
+    accordionTabElement ? 'data-accordiontabelement="' ~ accordionTabElement ~ '"',
+    setHash ? 'data-sethash="' ~ setHash ~ '"',
+    rotate ? 'data-rotate="' ~ rotate ~ '"',
+    event ? 'data-event="' ~ event ~ '"',
+    animation ? 'data-animation="' ~ animation ~ '"',
+    animationQueue ? 'data-animationqueue="' ~ animationQueue ~ '"',
+    duration ? 'data-duration="' ~ duration ~ '"',
+    fluidHeight ? 'data-fluidheight="' ~ fluidHeight ~ '"',
+    scrollToAccordion ? 'data-scrolltoaccordion="' ~ scrollToAccordion ~ '"',
+    scrollToAccordionOnLoad ? 'data-scrolltoaccordiononload="' ~ scrollToAccordionOnLoad ~ '"',
+    scrollToAccordionOffset ? 'data-scrolltoaccordionoffset="' ~ scrollToAccordionOffset ~ '"',
+    tabs_wrapper_other_attributes,
+  ]) | sort | join(' ') | trim %}
+
+  {% set tabs_classes = tabs_classes|default([])|merge([
+    'tabs',
+    'clearfix',
+    vertical == true ? 'vertical',
+    tabs_other_classes,
+  ]) | sort | join(' ') | trim %}
+
+  {% set tabs_styles = tabs_styles|default([])|merge([
+    tabs_other_styles,
+  ]) | sort | join(' ') | trim %}
+
+  {% set tabs_attributes = tabs_attributes|default([])|merge([
+    tabs_classes ? 'class="' ~ tabs_classes ~ '"',
+    tabs_styles ? 'style="' ~ tabs_styles ~ '"',
+    tabs_other_attributes,
+  ]) | sort | join(' ') | trim %}
+
+  <div {{ tabs_wrapper_attributes }}>
+  {% block tabs_list %}
+    {% set i = 0 %}
+    <ul {{ tabs_attributes }}>
+      {% for tab in tabs %}
+        {% set i = i + 1 %}
+        <li class="tabs__tab">
+          <a href="#{{ tabs_id }}--tab-{{ i }}" class="tabs__tab-link">{{ tab.label }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endblock %}
+  {% block tabs_content %}
+    {% set i = 0 %}
+    {% set i = 0 %}
+    {% for tab in tabs %}
+      {% set i = i + 1 %}
+      <div class="tabs__content-wrapper" id="{{ tabs_id }}--tab-{{ i }}">
+        <div class="tabs__content">
+          {{ tab.content }}
+          {% if tab.tabs %}
+            {{ tabs_lists.tabs_list(tab.tabs_wrapper_classes, tab.tabs_wrapper_other_classes, tab.tabs_wrapper_styles, tab.tabs_wrapper_other_styles, tab.tabs_wrapper_attributes, tab.tabs_wrapper_other_attributes, tab.tabs, tab.tabs_classes, tab.tabs_other_classes, tab.tabs_styles, tab.tabs_other_styles, tab.tabs_attributes, tab.tabs_other_attributes, tab.tabs_id, tab.vertical, tab.collapsible, tab.startCollapsed, tab.disabledTabs, tab.activeTab, tab.accordionTabElement, tab.setHash, tab.rotate, tab.event, tab.animation, tab.animationQueue, tab.duration, tab.fluidHeight, tab.scrollToAccordion, tab.scrollToAccordionOnLoad, tab.scrollToAccordionOffset) }}
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  {% endblock %}
+  </div>
+{% endmacro %}

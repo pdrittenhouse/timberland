@@ -58,6 +58,7 @@
   format ? 'video-format--' ~ format : '',
   aspect_ratio == 'wide' ? aspect_ratio : aspect_ratio ? 'aspect-ratio--' ~ aspect_ratio,
   controls ? 'has-controls' : '',
+  autoplay == true ? 'has-autoplay' : '',
   format == 'youtube' and suggested != true ? 'hide-suggested',
   video_other_classes,
 ]) | sort | join(' ') | trim %}

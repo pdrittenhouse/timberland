@@ -1,0 +1,281 @@
+// Custom styles for tabs
+
+// The non-printing variables, functions, and mixins of 00-protons/variables
+// are provided to this file via:
+//   webpack.config.js: sass-loader.data|includePaths
+
+.tabs-wrapper {
+  margin: rem-calc(20px 0);
+
+  &.vertical {
+    @include media-breakpoint-up(lg) {
+      @include flexbox;
+      @include flex-flow(row nowrap);
+    }
+
+    > .tabs {
+      @include media-breakpoint-up(lg) {
+        @include flex(0 0 30%);
+        display: block;
+        z-index: 1;
+      }
+
+      .tabs__tab {
+        @include media-breakpoint-up(lg) {
+          display: block;
+          border-left: rem-calc(1px) solid var(--gray-dark);
+          border-bottom: none;
+        }
+
+        &:last-child {
+          @include media-breakpoint-up(lg) {
+            border-bottom: rem-calc(1px) solid var(--gray-dark);
+          }
+
+          &.r-tabs-state-active {
+            @include media-breakpoint-up(lg) {
+              border-bottom: rem-calc(1px) solid var(--gray-dark);
+            }
+          }
+        }
+
+        &.r-tabs-state-active {
+          @include media-breakpoint-up(lg) {
+            //border-bottom: rem-calc(1px) solid var(--gray);
+            border-right: rem-calc(1px) solid transparent;
+          }
+        }
+      }
+    }
+
+    > .tabs__content-wrapper {
+
+      @include media-breakpoint-up(lg) {
+        @include flex(0 0 70%);
+      }
+
+      &.r-tabs-panel {
+
+        @include media-breakpoint-up(lg) {
+          margin-left: rem-calc(-1px);
+          margin-top: 0;
+        }
+      }
+    }
+
+    > .tabs__content {}
+  }
+}
+
+.tabs {
+  margin: rem-calc(8px 0);
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+
+  @include media-breakpoint-up(lg) {
+    flex-direction: row;
+  }
+
+  .typeset & {
+    margin-bottom: 0;
+  }
+
+  &__tab {
+    width: 100%;
+    overflow: auto;
+    border-bottom: rem-calc(1px) solid var(--gray-dark);
+    border-right: rem-calc(1px) solid var(--gray-dark);
+    border-top: rem-calc(1px) solid var(--gray-dark);
+    background: var(--gray-light);
+
+    &:hover,
+    &:focus {
+      background: var(--white);
+    }
+
+    &.r-tabs-state-active {
+      border: rem-calc(1px) solid var(--gray-dark);
+      border-bottom: rem-calc(1px) solid transparent;
+      border-left: 0;
+      background: var(--white);
+
+      .tabs__tab-link {
+        color: var(--black);
+      }
+    }
+
+    &:first-child {
+      border-left: rem-calc(1px) solid var(--gray-dark);
+    }
+
+    &.r-tabs-state-disabled {
+      background-color: var(--gray-light);
+
+      &:hover {
+        cursor: not-allowed;
+      }
+
+      .tabs__tab-link {
+        color: var(--gray);
+        pointer-events: none;
+      }
+    }
+
+    @include media-breakpoint-up(lg) {
+      display: inline-block;
+      width: auto;
+    }
+  }
+
+  &__tab-link {
+    //@include sans;
+    @include fontSize(14px);
+
+    padding: rem-calc(5px 16px);
+    color: var(--gray);
+    text-transform: uppercase;
+
+    display: inline-block;
+    width: 100%;
+
+    &:hover,
+    &:focus {
+      color: var(--black);
+    }
+  }
+
+  &--secondary {
+    width: 100%;
+
+    .tabs__tab {
+      margin: var(8px 8px 8px 0);
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+
+      &.r-tabs-state-active {
+        background: var(--black);
+
+        .tabs__tab-link {}
+      }
+    }
+
+    .tabs__tab-link {}
+
+    ~ .tabs__content-wrapper {
+      border: none;
+      margin-top: 0;
+    }
+  }
+
+  &__content-wrapper {
+    border-left: rem-calc(1px) solid var(--gray-dark);
+    border-right: rem-calc(1px) solid var(--gray-dark);
+
+    @include media-breakpoint-up(lg) {
+      border: rem-calc(1px) solid var(--gray-dark);
+    }
+
+    &.r-tabs-panel {
+      margin-top: rem-calc(-1px);
+      padding: 0;
+    }
+  }
+
+  &__content {
+    padding: rem-calc(20px);
+  }
+}
+
+.r-tabs-accordion-title {
+  border-bottom: rem-calc(1px) solid var(--white);
+
+  .tabs + & {
+
+    .r-tabs-anchor {
+      border-top-left-radius: rem-calc(4px);
+      border-top-right-radius: rem-calc(4px);
+
+      @include media-breakpoint-up(lg) {
+        border-radius: 0;
+      }
+    }
+  }
+
+  &:nth-last-child(2) {
+
+    .r-tabs-anchor {
+      border-bottom-left-radius: rem-calc(4px);
+      border-bottom-right-radius: rem-calc(4px);
+
+      @include media-breakpoint-up(lg) {
+        border-radius: 0;
+      }
+    }
+
+    + .tabs__content-wrapper {
+      border-bottom-left-radius: rem-calc(4px);
+      border-bottom-right-radius: rem-calc(4px);
+      border-bottom: rem-calc(1px) solid var(--gray-dark);
+
+      @include media-breakpoint-up(lg) {
+        border-radius: 0;
+      }
+    }
+  }
+
+  &.r-tabs-state-active {
+
+    &:nth-last-child(2) {
+
+      .r-tabs-anchor {
+        border-radius: 0;
+      }
+    }
+
+    .r-tabs-anchor {
+      background-color: var(--gray-dark);
+
+      &:after {
+        content: '\e817';
+      }
+    }
+  }
+
+  &.r-tabs-state-disabled {
+    &:hover {
+      cursor: not-allowed;
+    }
+
+    .r-tabs-anchor {
+      color: var(--gray);
+      background-color: var(--gray-light);
+      pointer-events: none;
+    }
+  }
+
+  .r-tabs-anchor {
+    @include fontSize(14px);
+    padding: rem-calc(10px 50px 10px 20px);
+    display: block;
+    color: var(--white);
+    background-color: var(--black);
+    position: relative;
+    transition-property: background-color, border-bottom-left-radius, border-bottom-right-radius;
+    transition-duration: $transition-duration;
+    transition-timing-function: $transition-timing-function;
+
+    &:hover {
+      background-color: var(--gray-dark);
+    }
+
+    &:after {
+      @include absolute-center(false, true, true);
+      //@include icons;
+      right: rem-calc(20px);
+      content: '\e815';
+    }
+  }
+}

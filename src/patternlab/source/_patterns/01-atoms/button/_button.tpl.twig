@@ -68,7 +68,7 @@
   contextual_content is empty and button_toggle ? 'data-bs-toggle="' ~ button_toggle ~ '"',
   button_element == 'a' and button_link ? 'href=' ~ button_link|e,
   button_target and button_element == 'a' ? 'target="' ~ button_target ~ '"',
-  button_target and (button_element == 'button' or button_toggle == modal or button_toggle == 'collapse' or button_toggle == 'dropdown') ? 'data-bs-target="' ~ button_target ~ '"',
+  button_target and (button_element == 'button' or button_toggle == 'modal' or button_toggle == 'collapse' or button_toggle == 'dropdown') ? 'data-bs-target="' ~ button_target ~ '"',
   button_value ? 'value="' ~ button_value ~ '"',
   button_id ? 'id="' ~ button_id ~ '"',
   button_disabled ? 'disabled',
