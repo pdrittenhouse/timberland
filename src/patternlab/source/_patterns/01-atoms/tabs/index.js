@@ -5,7 +5,7 @@
 import $ from 'jquery';
 
 import 'responsive-tabs/css/responsive-tabs.css';
-import 'responsive-tabs/css/style.css';
+// import 'responsive-tabs/css/style.css';
 
 // Module styles
 import './_tabs.scss';

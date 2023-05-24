@@ -6,8 +6,11 @@
 
 .tabs-wrapper {
   margin: rem-calc(20px 0);
+  background-color: transparent;
+  border: none;
 
   &.vertical {
+
     @include media-breakpoint-up(lg) {
       @include flexbox;
       @include flex-flow(row nowrap);
@@ -88,7 +91,7 @@
     border-bottom: rem-calc(1px) solid var(--gray-dark);
     border-right: rem-calc(1px) solid var(--gray-dark);
     border-top: rem-calc(1px) solid var(--gray-dark);
-    background: var(--gray-light);
+    background: var(--gray-ultralight);
 
     &:hover,
     &:focus {
@@ -111,14 +114,14 @@
     }
 
     &.r-tabs-state-disabled {
-      background-color: var(--gray-light);
+      background-color: var(--gray-ultralight);
 
       &:hover {
         cursor: not-allowed;
       }
 
       .tabs__tab-link {
-        color: var(--gray);
+        color: var(--gray-dark);
         pointer-events: none;
       }
     }
@@ -130,11 +133,11 @@
   }
 
   &__tab-link {
-    //@include sans;
+    @include font($font-stack-headings);
     @include fontSize(14px);
 
     padding: rem-calc(5px 16px);
-    color: var(--gray);
+    color: var(--black);
     text-transform: uppercase;
 
     display: inline-block;
@@ -143,6 +146,7 @@
     &:hover,
     &:focus {
       color: var(--black);
+      text-decoration: none;
     }
   }
 
@@ -150,7 +154,7 @@
     width: 100%;
 
     .tabs__tab {
-      margin: var(8px 8px 8px 0);
+      margin: rem-calc(8px 8px 8px 0);
       border: 0;
       border-radius: 0;
       background: transparent;
