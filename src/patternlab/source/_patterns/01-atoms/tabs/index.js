@@ -743,23 +743,25 @@ const initTabs = () => {
       // ------------------------------------------------------------------------------------------------
 
 
+      /* eslint-disable */
       const $tabs = $(this);
-      const $collapsible = $tabs.data('collapsible');
-      const $startCollapsed = $tabs.data('startcollapsed');
+      const $collapsible = $tabs.data('collapsible') === 'true' ? true : $tabs.data('collapsible') === 'false' ? false : $tabs.data('collapsible');
+      const $startCollapsed = $tabs.data('startcollapsed') === 'true' ? true : $tabs.data('startcollapsed') === 'false' ? false : $tabs.data('startcollapsed');
       const $disabledTabs = $tabs.data('disabledtabs');
       const $disabledTabsInt = [];
       const $activeTab = $tabs.data('activetab');
       const $accordionTabElement = $tabs.data('accordiontabelement');
-      const $setHash = $tabs.data('sethash');
-      const $rotate = $tabs.data('rotate');
+      const $setHash = $tabs.data('sethash') === 'true' ? true : false;
+      const $rotate = $tabs.data('rotate') === 'true' ? true : false;
       const $event = $tabs.data('event');
-      const $animation = $tabs.data('animation');
+      const $animation = $tabs.data('animation') === 'true' ? true : $tabs.data('animation') === 'false' ? false : $tabs.data('animation');
       const $animationQueue = $tabs.data('animationqueue');
       const $duration = $tabs.data('duration');
       const $fluidHeight = $tabs.data('fluidheight');
-      const $scrollToAccordion = $tabs.data('scrolltoaccordion');
-      const $scrollToAccordionOnLoad = $tabs.data('scrolltoaccordiononload');
-      const $scrollToAccordionOffset = $tabs.data('scrolltoaccordionoffset');
+      const $scrollToAccordion = $tabs.data('scrolltoaccordion') === 'true' ? true : false;
+      const $scrollToAccordionOnLoad = $tabs.data('scrolltoaccordiononload') === 'true' ? true : false;
+      const $scrollToAccordionOffset = $tabs.data('scrolltoaccordionoffset') === 'true' ? true : false;
+      /* eslint-enable */
 
       // Convert disabled tabs string array to integer array
       if ($disabledTabs.length) {
