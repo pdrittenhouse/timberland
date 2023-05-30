@@ -78,6 +78,8 @@
 }
 
 .tabs {
+  @include flexbox;
+  @include flex-flow(column, nowrap);
   margin: rem-calc(8px 0);
   padding: 0;
   list-style-type: none;
@@ -85,7 +87,7 @@
   flex-direction: column;
 
   @include media-breakpoint-up(lg) {
-    flex-direction: row;
+    @include flex-flow(row, nowrap);
   }
 
   .typeset & {
