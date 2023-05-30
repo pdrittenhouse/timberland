@@ -1,0 +1,110 @@
+{#
+/**
+ * Block Name:
+ *
+ * This is the template that displays the  block.
+ */
+#}
+
+{#{% if is_preview %}#}
+{#<p>Some editor instructions here.</p>#}
+{#{% endif %}#}
+
+{#{{ block['className'] }}#}
+{#{{ block['align'] ? 'align-' ~ block['align'] }}#}
+{#{{ block['align_text']}}#}
+{#{{ block['align_content'] }}#}
+{#{{ block['full_height'] }}#}
+
+{# Parent Block Data - ACF <= v.5.9 #}
+{#{% set parent = function('get_parent_block', block['id'], block['name']) %}#}
+{# Parent Block Data - ACF >= v.6.0 #}
+{#{{ parent_block_data['data'] }}#}
+{# Block Context #}
+{#{{ block_context['acf/fields'] }}#}
+{# ACF Options Fields #}
+{#{{ options }}#}
+{# ACF Fields #}
+{#{{ fields }}#}
+{# Site Data #}
+{#{{ site }}#}
+{# SASS Data #}
+{#{{ sass_data }}#}
+{# Post Data #}
+{#{{ block_post }}#}
+{# Query #}
+{#{{ query }}#}
+{# Query Posts #}
+{#{{ query_posts }}#}
+
+
+
+{% set block_classes = block_classes|default([])|merge([
+  block['className'],
+  'block-tabs',
+]) | sort | join(' ') | trim %}
+
+{% set block_attributes = block_attributes|default([])|merge([
+]) | sort | join(' ') | trim %}
+
+{% set disabled = [] %}
+
+{% for tab in fields.disabled_tabs  %}
+  {% set disabled = disabled | merge([tab.tab_index]) %}
+{% endfor %}
+
+{#{{ function('print_r', '<pre>') }}#}
+{#{{ function('print_r', fields.tabs_id) }}#}
+{#{{ function('print_r', '</pre>') }}#}
+
+{% embed '@atoms/tabs/_tabs.tpl.twig' with {
+  tabs_id: fields.tabs_id['id'] ? fields.tabs_id['id'] : fields.tabs_id['id_gen'] ? 'tabs' ~ fields.tabs_id['id_gen'],
+  collapsible: fields.collapsible,
+  startCollapsed: fields.start_collapsed,
+  disabledTabs: disabled|sort|join(',')|trim,
+  activeTab: fields.active_tab,
+  accordionTabElement: fields.accordion_tab_element|e,
+  setHash: fields.set_hash,
+  rotate: fields.rotate,
+  event: fields.event|default('click'),
+  animation: fields.animation,
+  animationQueue: fields.animation_queue,
+  duration: fields.duration,
+  fluidHeight: fields.fluid_height,
+  scrollToAccordion: fields.scroll_to_accordion,
+  scrollToAccordionOnLoad: fields.scroll_to_accordion_on_load,
+  scrollToAccordionOffset: fields.scroll_to_accordion_offset,
+  vertical: fields.vertical,
+  tabs_wrapper_classes: [
+    block_classes
+  ],
+  tabs_wrapper_attributes: [
+    block_attributes
+  ]
+} %}
+  {% block tabs_list %}
+{#    <InnerBlocks allowedBlocks="{{ ['acf/tab'] | json_encode() | escape('html_attr') }}" template="{{ [['acf/tab'], ['acf/tab']] | json_encode() | escape('html_attr') }}" />#}
+  {% endblock %}
+  {% block tabs_content %}
+    <InnerBlocks allowedBlocks="{{ ['acf/tab'] | json_encode() | escape('html_attr') }}" template="{{ [
+      ['acf/tab', {
+        'data' : {
+          'field_6473c039589e6': {
+            'field_63464e81933f7': 'custom',
+            'field_63464e8a933f9': 'tabOne',
+          },
+          'field_6473c0ad589e7': 'Tab 1'
+        }
+      }],
+      ['acf/tab', {
+        'data' : {
+          'field_6473c039589e6': {
+            'field_63464e81933f7': 'custom',
+            'field_63464e8a933f9': 'tabTwo',
+          },
+          'field_6473c0ad589e7': 'Tab 2'
+        }
+      }]
+    ] | json_encode() | escape('html_attr') }}" />
+  {% endblock %}
+{% endembed %}

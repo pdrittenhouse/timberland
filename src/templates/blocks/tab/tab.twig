@@ -1,0 +1,62 @@
+{#
+/**
+ * Block Name:
+ *
+ * This is the template that displays the  block.
+ */
+#}
+
+{#{% if is_preview %}#}
+{#<p>Some editor instructions here.</p>#}
+{#{% endif %}#}
+
+{#{{ block['className'] }}#}
+{#{{ block['align'] ? 'align-' ~ block['align'] }}#}
+{#{{ block['align_text']}}#}
+{#{{ block['align_content'] }}#}
+{#{{ block['full_height'] }}#}
+
+{# Parent Block Data - ACF <= v.5.9 #}
+{#{% set parent = function('get_parent_block', block['id'], block['name']) %}#}
+{# Parent Block Data - ACF >= v.6.0 #}
+{#{{ parent_block_data['data'] }}#}
+{# Block Context #}
+{#{{ block_context['acf/fields'] }}#}
+{# ACF Options Fields #}
+{#{{ options }}#}
+{# ACF Fields #}
+{#{{ fields }}#}
+{# Site Data #}
+{#{{ site }}#}
+{# SASS Data #}
+{#{{ sass_data }}#}
+{# Post Data #}
+{#{{ block_post }}#}
+{# Query #}
+{#{{ query }}#}
+{# Query Posts #}
+{#{{ query_posts }}#}
+
+
+{#{{ function('print_r', '<pre>') }}#}
+{#{{ function('print_r', parent_block_data['data'] ) }}#}
+{#{{ function('print_r', fields ) }}#}
+{#{{ function('print_r', '</pre>') }}#}
+
+
+{% set block_classes = block_classes|default([])|merge([
+  block['className']
+]) | sort | join(' ') | trim %}
+
+{% set block_attributes = block_attributes|default([])|merge([
+]) | sort | join(' ') | trim %}
+
+{#<li class="tabs__tab">#}
+{#  <a href="#{{ parent_block_data['data'].tabs_id_id ? parent_block_data['data'].tabs_id_id : parent_block_data['data'].tabs_id_id_gen ? 'tabs' ~ parent_block_data['data'].tabs_id_id_gen }}--tab-{{ fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'tab' ~ fields.id['id_gen'] }}" class="tabs__tab-link">{{ fields.tab_label }}</a>#}
+{#</li>#}
+
+<div class="tabs__content-wrapper" data-label="{{ fields.tab_label|default('Tab Label') }}" id="{{ parent_block_data['data'].tabs_id_id ? parent_block_data['data'].tabs_id_id : parent_block_data['data'].tabs_id_id_gen ? 'tabs' ~ parent_block_data['data'].tabs_id_id_gen }}--tab-{{ fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? fields.id['id_gen'] }}">
+  <div class="tabs__content">
+    <InnerBlocks template="{{ [['core/paragraph', {content: 'Tab content'}]] | json_encode() | escape('html_attr') }}" />
+  </div>
+</div>

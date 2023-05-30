@@ -95,3 +95,32 @@ function dream_acf_block_editor_style()
 if (is_admin()) {
   add_action('enqueue_block_assets', 'dream_acf_block_editor_style');
 }
+
+
+/**
+ * Block Styles
+ * @link https://jasonyingling.me/enqueueing-scripts-and-styles-for-gutenberg-blocks/
+ */
+
+function dream_enqueue_block_styles() {
+  $blocks_path = dirname(__DIR__) . '/templates/blocks';
+  $blocks = array_filter(scandir($blocks_path), 'filter_block_dir');
+  foreach ($blocks as $block) {
+    if ( file_exists( $blocks_path . '/' . $block . '/style.css' ) ) {
+      wp_enqueue_style('blocks_css_' . $block, get_template_directory_uri() . '/src/templates/blocks/' . $block . '/style.css', array(), wp_get_theme()->get( 'Version' ), 'all');
+    }
+  }
+}
+add_action( 'enqueue_block_assets', 'dream_enqueue_block_styles' );
+
+function dream_enqueue_block_admin_styles() {
+  $blocks_path = dirname(__DIR__) . '/templates/blocks';
+  $blocks = array_filter(scandir($blocks_path), 'filter_block_dir');
+  foreach ($blocks as $block) {
+    if ( file_exists( $blocks_path . '/' . $block . '/index.css' ) ) {
+      wp_enqueue_style('blocks_css_' . $block, get_template_directory_uri() . '/src/templates/blocks/' . $block . '/index.css', array(), wp_get_theme()->get( 'Version' ), 'all');
+    }
+  }
+
+}
+add_action( 'enqueue_block_editor_assets', 'dream_enqueue_block_admin_styles' );

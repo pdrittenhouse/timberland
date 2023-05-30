@@ -9,6 +9,13 @@
   background-color: transparent;
   border: none;
 
+  .tabs__tab {
+    @include remove;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
   &.vertical {
 
     @include media-breakpoint-up(lg) {
@@ -85,9 +92,15 @@
     margin-bottom: 0;
   }
 
-  &__tab {
-    width: 100%;
+  > .tabs__tab {
+    @include replace(inline-block);
+    width: auto;
+    height: auto;
     overflow: auto;
+  }
+
+  &__tab {
+    @include flex(0 0 auto);
     border-bottom: rem-calc(1px) solid var(--gray-dark);
     border-right: rem-calc(1px) solid var(--gray-dark);
     border-top: rem-calc(1px) solid var(--gray-dark);
@@ -132,16 +145,25 @@
     }
   }
 
+  .tabs__tab-link {
+    @include replace(block);
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+  }
+
   &__tab-link {
     @include font($font-stack-headings);
     @include fontSize(14px);
-
+    @include remove;
     padding: rem-calc(5px 16px);
     color: var(--black);
     text-transform: uppercase;
-
-    display: inline-block;
-    width: 100%;
+    //display: inline-block;
+    //width: 100%;
+    width: 0;
+    height: 0;
+    overflow: hidden;
 
     &:hover,
     &:focus {
@@ -173,6 +195,13 @@
       margin-top: 0;
     }
   }
+
+  //> .tabs__content-wrapper {
+  //  @include remove;
+  //  width: 0;
+  //  height: 0;
+  //  overflow: hidden;
+  //}
 
   &__content-wrapper {
     border-left: rem-calc(1px) solid var(--gray-dark);
