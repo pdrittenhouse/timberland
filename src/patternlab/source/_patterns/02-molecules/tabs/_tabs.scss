@@ -274,7 +274,7 @@
       background-color: var(--gray-dark);
 
       &:after {
-        content: '\e817';
+        @include sprite('chevron-up');
       }
     }
   }
@@ -307,10 +307,13 @@
     }
 
     &:after {
+      @include sprite('chevron-down');
       @include absolute-center(false, true, true);
-      //@include icons;
       right: rem-calc(20px);
-      content: '\e815';
+      width: rem-calc(16px);
+      height: rem-calc(16px);
+      content: "";
+      display: block;
     }
   }
 }

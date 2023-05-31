@@ -57,7 +57,7 @@
 {#{{ function('print_r', fields.tabs_id) }}#}
 {#{{ function('print_r', '</pre>') }}#}
 
-{% embed '@atoms/tabs/_tabs.tpl.twig' with {
+{% embed '@molecules/tabs/_tabs.tpl.twig' with {
   tabs_id: fields.tabs_id['id'] ? fields.tabs_id['id'] : fields.tabs_id['id_gen'] ? 'tabs' ~ fields.tabs_id['id_gen'],
   collapsible: fields.collapsible,
   startCollapsed: fields.start_collapsed,
@@ -72,8 +72,8 @@
   duration: fields.duration,
   fluidHeight: fields.fluid_height,
   scrollToAccordion: fields.scroll_to_accordion,
-  scrollToAccordionOnLoad: fields.scroll_to_accordion_on_load,
-  scrollToAccordionOffset: fields.scroll_to_accordion_offset,
+  scrollToAccordionOnLoad: fields.scroll_to_accordion == true ? fields.scroll_to_accordion_on_load,
+  scrollToAccordionOffset: fields.scroll_to_accordion == true ? fields.scroll_to_accordion_offset,
   vertical: fields.vertical,
   tabs_wrapper_classes: [
     block_classes

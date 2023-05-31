@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         tabs.innerHTML += link;
       });
     });
-
   }
+
 });
 

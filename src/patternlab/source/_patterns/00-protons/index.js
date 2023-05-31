@@ -42,7 +42,7 @@ const smoothScroll = () => {
   }
 
   // Add smooth scrolling to links
-  const links = [].slice.call(document.querySelectorAll(`a[href*="#"]:not([href="#0"])`));
+  const links = [].slice.call(document.querySelectorAll(`a[href*="#"]:not([href="#0"]):not(.tabs__tab-link)`));
   if (links !== null) {
     links.forEach(link => {
       link.addEventListener('click', (e) => {

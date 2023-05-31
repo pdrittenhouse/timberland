@@ -184,7 +184,15 @@
             "type": "text",
             "instructions": "",
             "required": 0,
-            "conditional_logic": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_6472abeb6670f",
+                        "operator": "!=",
+                        "value": ""
+                    }
+                ]
+            ],
             "wrapper": {
                 "width": "",
                 "class": "",
@@ -464,5 +472,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1685237928
+    "modified": 1685493190
 }

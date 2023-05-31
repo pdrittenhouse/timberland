@@ -39,13 +39,3 @@
 
 // Import print styles
 @import 'printing/print';
-
-.test-icon {
-  @include sprite('close', (color: c(torch-red)));
-  @include rem-calc('width', 20px, true);
-  height: rem-calc(20px);
-  display: inline-block;
-  fill: c(torch-red);
-  z-index: z(modal);
-  background-size: contain !important;
-}
