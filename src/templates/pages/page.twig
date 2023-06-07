@@ -15,30 +15,6 @@
             <div class="article-content--row">
               <div class="article-content--column">
                 <div class="article-body">
-                  {{ function('print_r', '<pre>') }}
-                  {{ function('print_r', function('get_breadcrumb') ) }}
-                  {{ function('print_r', '<pre>') }}
-{#                  {% include '@atoms/breadcrumb/_breadcrumb.tpl.twig' with  {#}
-{#                    breadcrumb_divider: '&#187;',#}
-{#                    breadcrumb: [#}
-{#                      {#}
-{#                        text: 'Home',#}
-{#                        url: '/'#}
-{#                      },#}
-{#                      {#}
-{#                        text: 'About Us',#}
-{#                        url: '/path'#}
-{#                      },#}
-{#                      {#}
-{#                        text: 'Our Staff',#}
-{#                        url: '/path'#}
-{#                      },#}
-{#                      {#}
-{#                        text: 'Current'#}
-{#                      },#}
-{#                    ]#}
-{#                  } %}#}
-
                   {{post.content}}
                 </div>
               </div>
