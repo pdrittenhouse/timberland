@@ -190,8 +190,8 @@ function get_breadcrumb($showCategory = false, $home = 'Home', $error = '404' ) 
   $homeLink = home_url();
 
   $homeLink = (object) [
-    'text' => $homeLink,
-    'url' => $home
+    'text' => $home,
+    'url' => $homeLink
   ];
 
   $breadcrumbList = [$homeLink];
