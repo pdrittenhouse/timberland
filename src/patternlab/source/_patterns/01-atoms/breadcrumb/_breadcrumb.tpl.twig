@@ -7,6 +7,7 @@
  * - breadcrumb_items: [array] A list of breadcrumbs to render
  * - breadcrumb_divider: [string] A divider to separate each item
  * - breadcrumb_label: [string] The label for the breadcrumb current item
+ * - breadcrumb_text: [string] The text for the breadcrumb item
  * - breadcrumb_url: [string] The URL of the breadcrumb item
  *
  * @see https://www.w3.org/TR/wai-aria-practices/#breadcrumb
@@ -19,9 +20,18 @@
   breadcrumb_other_classes,
 ]) | sort | join(' ') | trim %}
 
+{% set breadcrumb_styles = breadcrumb_styles|default([])|merge([
+  breadcrumb_other_styles,
+]) | sort | join(' ') | trim %}
+
+{% set breadcrumb_attributes = breadcrumb_attributes|default([])|merge([
+  breadcrumb_classes ? 'class="' ~ breadcrumb_classes ~ '"',
+  breadcrumb_styles ? 'style="' ~ breadcrumb_styles ~ '"',
+  breadcrumb_other_attributes,
+]) | sort | join(' ') | trim %}
 
 <nav {{ breadcrumb_divider ? 'style="--bs-breadcrumb-divider: \'' ~ breadcrumb_divider ~ '\';"' }} aria-label="breadcrumb" role="navigation">
-  <ol class="{{ breadcrumb_classes }}">
+  <ol {{ breadcrumb_attributes }}>
     {% for item in breadcrumb %}
       {% if loop.last %}
         <li class="breadcrumb-item active is-active" aria-current="page">{{ breadcrumb_label ? breadcrumb_label ~ ' ' }}{{ item.text }}</li>
