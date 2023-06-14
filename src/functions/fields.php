@@ -278,3 +278,17 @@ function  add_default_layouts($value, $post_id, $field) {
 //
 //  return $value;
 //}
+
+/**
+ * Add menu select options
+ */
+add_filter('acf/load_field/name=menu', 'acf_load_menus');
+
+function acf_load_menus($field) {
+  $menus = get_registered_nav_menus();
+  unset($menus['social']);
+  $field['choices'] = $menus;
+
+  // return the field
+  return $field;
+}

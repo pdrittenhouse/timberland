@@ -12,6 +12,28 @@
   background-color: var(--social-nav-bg);
   overflow: visible;
 
+  &:not(.custom-colors) {
+
+    .social-nav-item {
+
+      &:hover,
+      &:focus {
+
+        .icon,
+        .svg--icon,
+        svg {
+          color: var(--social-nav-item-hover);
+        }
+      }
+
+      .icon,
+      .svg--icon,
+      svg {
+        color: var(--social-nav-item);
+      }
+    }
+  }
+
   &-item {
     text-align: center;
     transition-property: background-color $transition-duration $transition-timing-function;
@@ -31,14 +53,14 @@
       .svg--icon,
       svg {
         transition-property: color $transition-duration $transition-timing-function;
-        color: var(--social-nav-item-hover);
+        //color: var(--social-nav-item-hover);
       }
     }
 
     .icon,
     .svg--icon,
     svg {
-      color: var(--social-nav-item);
+      //color: var(--social-nav-item);
       transition: color $transition-duration $transition-timing-function;
       will-change: color;
     }
@@ -94,8 +116,12 @@
 
   &.hide-labels {
 
-    .social-nav-item {
-      position: relative;
+    > .list-item {
+
+      > .icon,
+      > .svg {
+        @include absolute-center(true, false, true);
+      }
     }
 
     .label {

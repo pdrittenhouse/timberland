@@ -1,0 +1,158 @@
+{#
+/**
+ * Block Name:
+ *
+ * This is the template that displays the  block.
+ */
+#}
+
+{#{% if is_preview %}#}
+{#<p>Some editor instructions here.</p>#}
+{#{% endif %}#}
+
+{#{{ block['className'] }}#}
+{#{{ block['align'] ? 'align-' ~ block['align'] }}#}
+{#{{ block['align_text']}}#}
+{#{{ block['align_content'] }}#}
+{#{{ block['full_height'] }}#}
+
+{# Parent Block Data - ACF <= v.5.9 #}
+{#{% set parent = function('get_parent_block', block['id'], block['name']) %}#}
+{# Parent Block Data - ACF >= v.6.0 #}
+{#{{ parent_block_data['data'] }}#}
+{# Block Context #}
+{#{{ block_context['acf/fields'] }}#}
+{# ACF Options Fields #}
+{#{{ options }}#}
+{# ACF Fields #}
+{#{{ fields }}#}
+{# Site Data #}
+{#{{ site }}#}
+{# SASS Data #}
+{#{{ sass_data }}#}
+{# Post Data #}
+{#{{ block_post }}#}
+{# Query #}
+{#{{ query }}#}
+{# Query Posts #}
+{#{{ query_posts }}#}
+
+{% set block_classes = block_classes|default([])|merge([
+  block['className'],
+  'block-menu'
+]) | sort | join(' ') | trim %}
+
+{% set block_attributes = block_attributes|default([])|merge([
+]) | sort | join(' ') | trim %}
+
+{% if fields.type == 'menu' %}
+
+  {% include "partials/menus/menu.twig" with {
+    'menu': menu_primary.get_items,
+    'navbar_id': fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'menu' ~ fields.id['id_gen'],
+    'nav_id': fields.nav_id['id'] ? fields.nav_id['id'] : fields.nav_id['id_gen'] ? 'menu' ~ fields.nav_id['id_gen'],
+    'nav_element': fields.nav_element,
+    'hover_dropdown': fields.hover_dropdown,
+    'navbar_breakpoint': fields.breakpoint.breakpoint|default('xs'),
+    'breakpoints': sass_data['scssBreakpoints'],
+    'nav_classes': [
+      block_classes
+    ]
+  } %}
+
+{% elseif fields.type == 'social' %}
+
+  {% if fields.use_social_menu_items == true %}
+    {% include "partials/menus/social-nav.twig" with {
+      'menu':  menu_social.get_items,
+      'menu_icon_color': header_social_icon_color ? header_social_icon_color : 'primary',
+      'menu_icon_position': fields.icon_position|default('before'),
+      'menu_icon_width': fields.icon_width ? fields.icon_width|default('18') ~ 'px',
+      'menu_icon_height': fields.icon_height ? fields.icon_height|default('18') ~ 'px',
+      'menu_nav_id': fields.nav_id['id'] ? fields.nav_id['id'] : fields.nav_id['id_gen'] ? 'menu' ~ fields.nav_id['id_gen'],
+      'menu_bullet_icon_position': fields.icon_position('before'),
+      'menu_bullet_icon_size': fields.icon_width ? fields.icon_width|default('18px') ~ 'px',
+      'menu_hide_labels': fields.hide_labels,
+      'menu_hide_icons': fields.hide_icons,
+      'menu_icon_nav_direction': fields.nav_direction|default('horizontal'),
+      'menu_nav_classes': [
+        block_classes
+      ]
+    } %}
+  {% else %}
+    {% set items = [] %}
+
+    {% for item in fields.social_nav_items %}
+      {% set items = items|merge([{
+        item_classes: [item.item_classes],
+        url: item.item_link.url,
+        target: item.item_link.target,
+        label: item.item_link.title,
+        icon: item.icon_name,
+        icon_color: fields.use_global_colors != true ? item.icon_color.theme_color|default('primary'),
+        icon_position: fields.icon_position|default('before'),
+        icon_width: fields.icon_width ? fields.icon_width|default('18') ~ 'px',
+        icon_height: fields.icon_height ? fields.icon_height|default('18') ~ 'px'
+      }]) %}
+    {% endfor %}
+
+    {% include '@molecules/social-nav/_social-nav.tpl.twig' with {
+      nav_id: fields.nav_id['id'] ? fields.nav_id['id'] : fields.nav_id['id_gen'] ? 'menu' ~ fields.nav_id['id_gen'],
+      bullet_icon_position: fields.icon_position('before'),
+      bullet_icon_size: fields.icon_width ? fields.icon_width|default('18px') ~ 'px',
+      hide_labels: fields.hide_labels,
+      hide_icons: fields.hide_icons,
+      nav_direction: fields.nav_direction|default('horizontal'),
+      social_nav_items: items,
+      social_nav_classes: [
+        block_classes,
+        fields.use_global_colors != true ? 'custom-colors'
+      ]
+    } %}
+  {% endif %}
+
+{% elseif fields.type == 'custom' %}
+
+  {% set items = [] %}
+
+  {% for item in fields.items %}
+
+    {% if item.subnav == true and item.items|length > 0 %}
+
+      {% set subitems = [] %}
+
+      {% for subitem in item.items %}
+
+        {% set subitems = subitems|merge([{
+          title: subitem.link.title,
+          url: subitem.link.url,
+          link_target: subitem.link.target
+        }]) %}
+      {% endfor %}
+
+    {% endif %}
+
+    {% set items = items|merge([{
+      title: item.link.title,
+      url: item.link.url,
+      link_target: item.link.target,
+      parent_element: item.subnav == true ? item.element,
+      nav_id: item.subnav == true and item.subnav_id['id'] ? item.subnav_id['id'] : item.subnav == true and item.subnav_id['id_gen'] ? 'menu' ~ item.subnav_id['id_gen'],
+      nav_other_classes: item.subnav == true ? '',
+      items: item.subnav == true and item.items|length > 0 ? subitems
+    }]) %}
+  {% endfor %}
+
+  {% include '@molecules/nav/_nav.tpl.twig' with {
+    nav_element: fields.nav_element,
+    nav_id: fields.nav_id['id'] ? fields.nav_id['id'] : fields.nav_id['id_gen'] ? 'menu' ~ fields.nav_id['id_gen'],
+    hover_dropdown: fields.hover_dropdown,
+    nav_classes: [
+      block_classes
+    ],
+    navbar_breakpoint: fields.breakpoint.breakpoint|default('xs'),
+    breakpoints: sass_data['scssBreakpoints'],
+    items: items
+  } %}
+
+{% endif %}

@@ -58,20 +58,22 @@
     "xs": 0,
     "sm": "24.375em",
     "md": "33.75em",
-    "lg": "62em",
-    "xl": "64em",
-    "xxl": "87.5em",
-    "xxxl": "106.75em",
-    "xxxxl": "143.75em"
+    "lg": "48em",
+    "xl": "62em",
+    "xxl": "64em",
+    "xxxl": "87.5em",
+    "xxxxl": "106.75em",
+    "xxxxxl": "143.75em"
   },
   "contentWidths": {
     "sm": "23.125rem",
     "md": "36rem",
-    "lg": "60rem",
-    "xl": "73.25rem",
-    "xxl": "90rem",
-    "xxxl": "111.25rem",
-    "xxxxl": "150rem"
+    "lg": "46.25rem",
+    "xl": "60rem",
+    "xxl": "73.25rem",
+    "xxxl": "90rem",
+    "xxxxl": "111.25rem",
+    "xxxxxl": "150rem"
   },
   "scssSpacing": {
     "0": 0,
