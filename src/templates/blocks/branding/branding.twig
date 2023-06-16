@@ -1,0 +1,122 @@
+{#
+/**
+ * Block Name: Branding
+ *
+ * This is the template that displays the  block.
+ */
+#}
+
+{#{% if is_preview %}#}
+{#<p>Some editor instructions here.</p>#}
+{#{% endif %}#}
+
+{#{{ block['className'] }}#}
+{#{{ block['align'] ? 'align-' ~ block['align'] }}#}
+{#{{ block['align_text']}}#}
+{#{{ block['align_content'] }}#}
+{#{{ block['full_height'] }}#}
+
+{# Parent Block Data - ACF <= v.5.9 #}
+{#{% set parent = function('get_parent_block', block['id'], block['name']) %}#}
+{# Parent Block Data - ACF >= v.6.0 #}
+{#{{ parent_block_data['data'] }}#}
+{# Block Context #}
+{#{{ block_context['acf/fields'] }}#}
+{# ACF Options Fields #}
+{#{{ options }}#}
+{# ACF Fields #}
+{#{{ fields }}#}
+{# Site Data #}
+{#{{ site }}#}
+{# SASS Data #}
+{#{{ sass_data }}#}
+{# Post Data #}
+{#{{ block_post }}#}
+{# Query #}
+{#{{ query }}#}
+{# Query Posts #}
+{#{{ query_posts }}#}
+
+{% set block_classes = block_classes|default([])|merge([
+  block['className'],
+  fields.alignment.text_align ? 'text-' ~ fields.alignment.text_align,
+  'block-branding'
+]) | sort | join(' ') | trim %}
+
+{% set block_attributes = block_attributes|default([])|merge([
+]) | sort | join(' ') | trim %}
+
+{% if fields.branding_image.url and (fields.branding_image.url ends with '.svg') %}
+  {% include "@atoms/branding/_branding.tpl.twig" with {
+    url: fields.branding_link,
+    target: fields.open_in_new_window == true ? '_blank',
+    logo_svg_inline: fields.branding_image.url|replace({(site.url ~ '/wp-content/uploads/'): ''}),
+    colorOriginal: fields.svg_options.use_original_color,
+    site_name: fields.branding_name,
+    site_slogan: fields.branding_slogan,
+    branding_classes: [
+      block_classes
+    ],
+    branding_styles: [
+      fields.branding_wrapper_width['width']['width']['value'] is not empty ? 'width: ' ~ fields.branding_wrapper_width['width']['width']['value']  ~ fields.branding_wrapper_width['width']['width']['unit'] ~  ';',
+      fields.branding_wrapper_width['width']['min_width'] is not empty ? 'min-width: ' ~ fields.branding_wrapper_width['width']['min_width']  ~ 'px;',
+      fields.branding_wrapper_width['width']['max_width'] is not empty ? 'max-width: ' ~ fields.branding_wrapper_width['width']['max_width']  ~ 'px;',
+      fields.branding_wrapper_height['height']['height']['value'] is not empty ? 'height: ' ~ fields.branding_wrapper_height['height']['height']['value']  ~ fields.branding_wrapper_height['height']['height']['unit'] ~  ';',
+      fields.branding_wrapper_height['height']['min_height'] is not empty ? 'min-height: ' ~ fields.branding_wrapper_height['height']['min_height']  ~ 'px;',
+      fields.branding_wrapper_height['height']['max_height'] is not empty ? 'max-height: ' ~ fields.branding_wrapper_height['height']['max_height']  ~ 'px;',
+      fields.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['top']['top'] is not empty ? 'margin-top: ' ~ fields.margin['margin']['top']['top'] ~ 'px;',
+      fields.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ fields.margin['margin']['bottom']['bottom'] ~ 'px;',
+      fields.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['left']['left'] is not empty ? 'margin-left: ' ~ fields.margin['margin']['left']['left'] ~ 'px;',
+      fields.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['right']['right'] is not empty ? 'margin-right: ' ~ fields.margin['margin']['right']['right'] ~ 'px;',
+    ],
+    branding_link_classes: [
+      fields.color['color'] == 'palette' and fields.color['theme_color'] ? 'text-' ~ fields.color['theme_color'],
+    ],
+    branding_link_styles: [
+      fields.color['color'] == 'custom' and fields.color['custom_color'] ? 'color: ' ~ fields.color['custom_color'] ~ ';',
+    ]
+  } %}
+{% elseif site_logo %}
+  {% if fields.non_svg_options.use_bg_image == true %}
+    {% set image_key = 'logo_bg_img_src' %}
+  {% else %}
+    {% set image_key = 'logo_img_src' %}
+  {% endif %}
+  {% include "@atoms/branding/_branding.tpl.twig" with {
+    url: fields.branding_link,
+    target: fields.open_in_new_window == true ? '_blank',
+    (image_key): fields.branding_image.url,
+    site_name: fields.branding_name,
+    site_slogan: fields.branding_slogan,
+    height: fields.non_svg_options.branding_height ? fields.non_svg_options.branding_height ~ 'px',
+    width: fields.non_svg_options.branding_width ? fields.non_svg_options.branding_width ~ 'px',
+    branding_classes: [
+      block_classes
+    ],
+    branding_link_classes: [
+      fields.color['color'] == 'palette' and fields.color['theme_color'] ? 'text-' ~ fields.color['theme_color'],
+    ],
+    branding_styles: [
+      fields.branding_wrapper_width['width']['width']['value'] is not empty ? 'width: ' ~ fields.branding_wrapper_width['width']['width']['value']  ~ fields.branding_wrapper_width['width']['width']['unit'] ~  ';',
+      fields.branding_wrapper_width['width']['min_width'] is not empty ? 'min-width: ' ~ fields.branding_wrapper_width['width']['min_width']  ~ 'px;',
+      fields.branding_wrapper_width['width']['max_width'] is not empty ? 'max-width: ' ~ fields.branding_wrapper_width['width']['max_width']  ~ 'px;',
+      fields.branding_wrapper_height['height']['height']['value'] is not empty ? 'height: ' ~ fields.branding_wrapper_height['height']['height']['value']  ~ fields.branding_wrapper_height['height']['height']['unit'] ~  ';',
+      fields.branding_wrapper_height['height']['min_height'] is not empty ? 'min-height: ' ~ fields.branding_wrapper_height['height']['min_height']  ~ 'px;',
+      fields.branding_wrapper_height['height']['max_height'] is not empty ? 'max-height: ' ~ fields.branding_wrapper_height['height']['max_height']  ~ 'px;',
+      fields.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['top']['top'] is not empty ? 'margin-top: ' ~ fields.margin['margin']['top']['top'] ~ 'px;',
+      fields.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ fields.margin['margin']['bottom']['bottom'] ~ 'px;',
+      fields.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['left']['left'] is not empty ? 'margin-left: ' ~ fields.margin['margin']['left']['left'] ~ 'px;',
+      fields.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['right']['right'] is not empty ? 'margin-right: ' ~ fields.margin['margin']['right']['right'] ~ 'px;',
+    ],
+    branding_link_styles: [
+      fields.color['color'] == 'custom' and fields.color['custom_color'] ? 'color: ' ~ fields.color['custom_color'] ~ ';',
+    ]
+  } %}
+{% elseif display_header_text == true %}
+  <div class="site-header--brand-name">
+    <a href="{{ site.url }}" class="branding--link">
+      <h1 class="branding--site-name">{{ site.name }}</h1>
+      <h2 class="branding--site-slogan">{{ site.description }}</h2>
+    </a>
+  </div>
+{% endif %}

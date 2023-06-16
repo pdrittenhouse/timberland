@@ -20,11 +20,40 @@
   branding_other_classes,
 ]) | sort | join(' ') | trim %}
 
+{% set branding_styles = branding_styles|default([])|merge([
+  branding_other_styles,
+]) | sort | join(' ') | trim %}
+
+{% set branding_attributes = branding_attributes|default([])|merge([
+  branding_classes ? 'class="' ~ branding_classes ~ '"',
+  branding_styles ? 'style="' ~ branding_styles ~ '"',
+  branding_other_attributes,
+]) | sort | join(' ') | trim %}
+
+{% set branding_link_classes = branding_link_classes|default([])|merge([
+  branding_link_other_classes,
+]) | sort | join(' ') | trim %}
+
+{% set branding_link_styles = branding_link_styles|default([])|merge([
+  branding_link_other_styles,
+]) | sort | join(' ') | trim %}
+
+{% set branding_link_attributes = branding_link_attributes|default([])|merge([
+  branding_link_classes ? 'class="' ~ branding_link_classes ~ '"',
+  branding_link_styles ? 'style="' ~ branding_link_styles ~ '"',
+  url ? 'href="' ~ url ~ '"',
+  target ? 'target="' ~ target|default('_self') ~ '"',
+  'rel="home"',
+  branding_link_other_attributes,
+]) | sort | join(' ') | trim %}
+
 {% set alt_text = site_name ~ ': ' ~ site_slogan %}
 
-<div class="{{ branding_classes }}">
+{% set link_element = url ? 'a' : 'span' %}
+
+<div {{ branding_attributes }}>
   <div class="branding--site-logo">
-    <a href="{{ url }}" title="{{ site_name }}" rel="home">
+    <{{ link_element}} title="{{ site_name }}" {{ branding_link_attributes }}>
       {% if logo_svg_inline %}
         {% include '@atoms/svg/_svg.tpl.twig' with {
           path: logo_svg_inline,
@@ -39,6 +68,8 @@
           alt: alt_text,
           placeholder: false,
           image_other_classes: 'branding--logo-img',
+          width: width,
+          height: height,
         } %}
       {% elseif logo_img_src %}
         {% include "@atoms/image/_image.tpl.twig" with {
@@ -47,18 +78,20 @@
           alt: alt_text,
           placeholder: false,
           image_other_classes: 'branding--logo-img',
+          width: width,
+          height: height,
         } %}
       {% endif %}
-    </a>
+    </{{ link_element }}>
   </div>
 
   {% if site_name %}
   <{{ name_element ? name_element : 'h1' }} class="branding--site-name">
-    <a href="{{ url }}" title="{{ 'Home' }}" rel="home">{{ site_name }}</a>
+    <a title="{{ 'Home' }}" {{ branding_link_attributes }}>{{ site_name }}</a>
   </{{ name_element ? name_element : 'h1' }}>
   {% endif %}
 
   {% if site_slogan %}
-    <p class="lead branding--site-slogan">{{ site_slogan }}</p>
+    <p class="lead branding--site-slogan" style="{{ branding_link_styles }}">{{ site_slogan }}</p>
   {% endif %}
 </div>

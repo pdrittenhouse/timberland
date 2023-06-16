@@ -6,6 +6,21 @@
 
 .branding {
 
+  &.text-center {
+
+    .branding--logo-img {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  &.text-right {
+
+    .branding--logo-img {
+      margin-left: auto;
+    }
+  }
+
   &.hide-text {
 
     .branding--site-name,

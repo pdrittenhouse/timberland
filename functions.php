@@ -42,6 +42,7 @@ Timber::$locations = array(
   get_template_directory() . '/src/templates/',
   get_template_directory() . '/src/patternlab/source/_patterns/',
   get_template_directory() . '/dist/wp/img/',
+  dirname(__DIR__, 2) . '/uploads/',
   dirname(__DIR__, 3),
 );
 
@@ -72,7 +73,8 @@ $dream_includes = array(
   "block-patterns.php",
   "block-templates.php",
   "woocommerce.php",
-  "breadcrumb.php"
+  "breadcrumb.php",
+  "svg.php"
 );
 
 foreach($dream_includes as $inc){
