@@ -4,6 +4,9 @@
  * tabs
  *
  * Available variables for tabs:
+ *  - tabs_type [string | 'bootstrap', 'jquery']: Tabs javascript library.
+ *  - nav_pills [bool]: Use bootstrap pills.
+ *  - fill_justify [string | 'fill', 'justified']: Set tab fill.
  *  - tabs_id [string]: Component ID.
  *  - tabs_classes [array]: Additional component classes.
  *  - tabs_other_classes [string]: Additional component classes.
@@ -37,11 +40,13 @@ Responsive Tabs options in the json file should include string or integer values
 
 {% import _self as tabs_lists %}
 
-{{ tabs_lists.tabs_list(tabs_wrapper_classes, tabs_wrapper_other_classes, tabs_wrapper_styles, tabs_wrapper_other_styles, tabs_wrapper_attributes, tabs_wrapper_other_attributes, tabs, tabs_classes, tabs_other_classes, tabs_styles, tabs_other_styles, tabs_attributes, tabs_other_attributes, tabs_id, tabsId, vertical, collapsible, startCollapsed, disabledTabs, activeTab, accordionTabElement, setHash, rotate, event, animation, animationQueue, duration, fluidHeight, scrollToAccordion, scrollToAccordionOnLoad, scrollToAccordionOffset) }}
+{{ tabs_lists.tabs_list(tabs_type, btn_id, btn_target, nav_pills, fill_justify, tabs_wrapper_classes, tabs_wrapper_other_classes, tabs_wrapper_styles, tabs_wrapper_other_styles, tabs_wrapper_attributes, tabs_wrapper_other_attributes, tabs, tabs_classes, tabs_other_classes, tabs_styles, tabs_other_styles, tabs_attributes, tabs_other_attributes, tabs_id, tabsId, vertical, collapsible, startCollapsed, disabledTabs, activeTab, accordionTabElement, setHash, rotate, event, animation, animationQueue, duration, fluidHeight, scrollToAccordion, scrollToAccordionOnLoad, scrollToAccordionOffset) }}
 
-{% macro tabs_list(tabs_wrapper_classes, tabs_wrapper_other_classes, tabs_wrapper_styles, tabs_wrapper_other_styles, tabs_wrapper_attributes, tabs_wrapper_other_attributes, tabs, tabs_classes, tabs_other_classes, tabs_styles, tabs_other_styles, tabs_attributes, tabs_other_attributes, tabs_id, tabsId, vertical, collapsible, startCollapsed, disabledTabs, activeTab, accordionTabElement, setHash, rotate, event, animation, animationQueue, duration, fluidHeight, scrollToAccordion, scrollToAccordionOnLoad, scrollToAccordionOffset) %}
+{% macro tabs_list(tabs_type, btn_id, btn_target, nav_pills, fill_justify, tabs_wrapper_classes, tabs_wrapper_other_classes, tabs_wrapper_styles, tabs_wrapper_other_styles, tabs_wrapper_attributes, tabs_wrapper_other_attributes, tabs, tabs_classes, tabs_other_classes, tabs_styles, tabs_other_styles, tabs_attributes, tabs_other_attributes, tabs_id, tabsId, vertical, collapsible, startCollapsed, disabledTabs, activeTab, accordionTabElement, setHash, rotate, event, animation, animationQueue, duration, fluidHeight, scrollToAccordion, scrollToAccordionOnLoad, scrollToAccordionOffset) %}
 
   {% import _self as tabs_lists %}
+
+  {% set tabs_type = tabs_type|default('bootstrap') %}
 
   {% set tabsId = [] %}
   {% set alpha = 'abcdefghijklmnopqrstuvwxyz' %}
@@ -55,6 +60,7 @@ Responsive Tabs options in the json file should include string or integer values
   {% set tabs_wrapper_classes = tabs_wrapper_classes|default([])|merge([
     'tabs-wrapper',
     vertical == true ? 'vertical',
+    tabs_type,
     tabs_wrapper_other_classes,
   ]) | sort | join(' ') | trim %}
 
@@ -66,28 +72,31 @@ Responsive Tabs options in the json file should include string or integer values
     tabs_id ? 'id="' ~ tabs_id ~ '"' : 'id="' ~ tabsId ~ '"',
     tabs_wrapper_classes ? 'class="' ~ tabs_wrapper_classes ~ '"',
     tabs_wrapper_styles ? 'style="' ~ tabs_wrapper_styles ~ '"',
-    collapsible ? 'data-collapsible="' ~ collapsible ~ '"',
-    startCollapsed ? 'data-startcollapsed="' ~ startCollapsed ~ '"',
     disabledTabs ? 'data-disabledtabs="' ~ disabledTabs ~ '"',
-    activeTab is not empty ? 'data-activetab="' ~ activeTab|default(0) ~ '"',
-    accordionTabElement ? 'data-accordiontabelement="' ~ accordionTabElement ~ '"',
-    setHash ? 'data-sethash="' ~ setHash ~ '"',
-    rotate ? 'data-rotate="' ~ rotate ~ '"',
-    event ? 'data-event="' ~ event ~ '"',
-    animation ? 'data-animation="' ~ animation ~ '"',
-    animationQueue ? 'data-animationqueue="' ~ animationQueue ~ '"',
-    duration is not empty ? 'data-duration="' ~ duration|default(500) ~ '"',
-    fluidHeight ? 'data-fluidheight="' ~ fluidHeight ~ '"',
-    scrollToAccordion ? 'data-scrolltoaccordion="' ~ scrollToAccordion ~ '"',
-    scrollToAccordionOnLoad ? 'data-scrolltoaccordiononload="' ~ scrollToAccordionOnLoad ~ '"',
-    scrollToAccordionOffset ? 'data-scrolltoaccordionoffset="' ~ scrollToAccordionOffset ~ '"',
+    tabs_type == 'jquery' and collapsible ? 'data-collapsible="' ~ collapsible ~ '"',
+    tabs_type == 'jquery' and startCollapsed ? 'data-startcollapsed="' ~ startCollapsed ~ '"',
+    tabs_type == 'jquery' and activeTab is not empty ? 'data-activetab="' ~ activeTab|default(0) ~ '"',
+    tabs_type == 'jquery' and accordionTabElement ? 'data-accordiontabelement="' ~ accordionTabElement ~ '"',
+    tabs_type == 'jquery' and setHash ? 'data-sethash="' ~ setHash ~ '"',
+    tabs_type == 'jquery' and rotate ? 'data-rotate="' ~ rotate ~ '"',
+    tabs_type == 'jquery' and event ? 'data-event="' ~ event ~ '"',
+    tabs_type == 'jquery' and animation ? 'data-animation="' ~ animation ~ '"',
+    tabs_type == 'jquery' and animationQueue ? 'data-animationqueue="' ~ animationQueue ~ '"',
+    tabs_type == 'jquery' and duration is not empty ? 'data-duration="' ~ duration|default(500) ~ '"',
+    tabs_type == 'jquery' and fluidHeight ? 'data-fluidheight="' ~ fluidHeight ~ '"',
+    tabs_type == 'jquery' and scrollToAccordion ? 'data-scrolltoaccordion="' ~ scrollToAccordion ~ '"',
+    tabs_type == 'jquery' and scrollToAccordionOnLoad ? 'data-scrolltoaccordiononload="' ~ scrollToAccordionOnLoad ~ '"',
+    tabs_type == 'jquery' and scrollToAccordionOffset ? 'data-scrolltoaccordionoffset="' ~ scrollToAccordionOffset ~ '"',
     tabs_wrapper_other_attributes,
   ]) | sort | join(' ') | trim %}
 
   {% set tabs_classes = tabs_classes|default([])|merge([
-    'tabs',
-    'clearfix',
-    vertical == true ? 'vertical',
+    tabs_type == 'jquery' ? 'tabs',
+    tabs_type == 'jquery' ? 'clearfix',
+    tabs_type == 'jquery' and vertical == true ? 'vertical' : tabs_type == 'bootstrap' and vertical ? 'flex-column',
+    tabs_type == 'bootstrap' ? 'nav',
+    tabs_type == 'bootstrap' and nav_pills == true ? 'nav-pills' : tabs_type == 'bootstrap' ? 'nav-tabs',
+    tabs_type == 'bootstrap' and fill_justify ? 'nav-' ~ fill_justify,
     tabs_other_classes,
   ]) | sort | join(' ') | trim %}
 
@@ -98,34 +107,64 @@ Responsive Tabs options in the json file should include string or integer values
   {% set tabs_attributes = tabs_attributes|default([])|merge([
     tabs_classes ? 'class="' ~ tabs_classes ~ '"',
     tabs_styles ? 'style="' ~ tabs_styles ~ '"',
+    tabs_type == 'bootstrap' ? 'role="tablist"',
     tabs_other_attributes,
   ]) | sort | join(' ') | trim %}
 
   <div {{ tabs_wrapper_attributes }}>
   {% block tabs_list %}
     {% set i = 0 %}
-    <ul {{ tabs_attributes }}>
-      {% for tab in tabs %}
-        {% set i = i + 1 %}
-        <li class="tabs__tab">
-          <a href="#{{ tabs_id ? tabs_id : tabsId }}--tab-{{ i }}" class="tabs__tab-link">{{ tab.label }}</a>
-        </li>
-      {% endfor %}
-    </ul>
+    {% if tabs_type == 'bootstrap' %}
+      <nav>
+    {% endif %}
+      <{{ tabs_type == 'jquery' ? 'ul' : 'div'}} {{ tabs_attributes }}>
+        {% for tab in tabs %}
+          {% set i = i + 1 %}
+          {% if tabs_type == 'bootstrap' %}
+            {% set btn_id = tabs_id ? tabs_id ~ '--tab-' ~ i ~ '-link' : tabsId ~ '--tab-' ~ i ~ '-link' %}
+            {% set btn_target = tabs_id ? tabs_id ~ '--tab-' ~ i : tabsId ~ '--tab-' ~ i %}
+            {% include '@atoms/button/_button.tpl.twig' with {
+              button_color: 'primary',
+              button_text: tab.label,
+              button_classes: [
+                'nav-link',
+                i == 1 ? 'active'
+              ],
+              button_id: btn_id,
+              button_toggle: 'tab',
+              button_target: '#' ~ btn_target,
+              button_role: 'tab',
+              button_controls: btn_target,
+            } %}
+          {% elseif tabs_type == 'jquery' %}
+            <li class="tabs__tab">
+              <a href="#{{ tabs_id ? tabs_id : tabsId }}--tab-{{ i }}" class="tabs__tab-link">{{ tab.label }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </{{ tabs_type == 'jquery' ? 'ul' : 'div' }}>
+    {% if tabs_type == 'bootstrap' %}
+      </nav>
+    {% endif %}
   {% endblock %}
   {% block tabs_content %}
     {% set i = 0 %}
-    {% for tab in tabs %}
-      {% set i = i + 1 %}
-      <div class="tabs__content-wrapper" id="{{ tabs_id ? tabs_id : tabsId }}--tab-{{ i }}">
-        <div class="tabs__content">
-          {{ tab.content }}
-          {% if tab.tabs %}
-            {{ tabs_lists.tabs_list(tab.tabs_wrapper_classes, tab.tabs_wrapper_other_classes, tab.tabs_wrapper_styles, tab.tabs_wrapper_other_styles, tab.tabs_wrapper_attributes, tab.tabs_wrapper_other_attributes, tab.tabs, tab.tabs_classes, tab.tabs_other_classes, tab.tabs_styles, tab.tabs_other_styles, tab.tabs_attributes, tab.tabs_other_attributes, tab.tabs_id, tab.tabsId, tab.vertical, tab.collapsible, tab.startCollapsed, tab.disabledTabs, tab.activeTab, tab.accordionTabElement, tab.setHash, tab.rotate, tab.event, tab.animation, tab.animationQueue, tab.duration, tab.fluidHeight, tab.scrollToAccordion, tab.scrollToAccordionOnLoad, tab.scrollToAccordionOffset) }}
-          {% endif %}
+    {% if tabs_type == 'bootstrap' %}<div class="tab-content">{% endif %}
+      {% for tab in tabs %}
+        {% set i = i + 1 %}
+        {% if tabs_type == 'bootstrap' %}
+          {% set btn_id = tabs_id ? tabs_id ~ '--tab-' ~ i ~ '-link' : tabsId ~ '--tab-' ~ i ~ '-link' %}
+        {% endif %}
+        <div class="{{ tabs_type == 'bootstrap' ? 'tab-pane fade' : tabs_type == 'jquery' ? 'tabs__content-wrapper' }} {{ tabs_type == 'bootstrap' and i == 1 ? 'show active' }}" {{ tabs_type == 'bootstrap'? 'role="tabpanel" aria-labelledby="' ~ btn_id ~ '"' }} id="{{ tabs_id ? tabs_id : tabsId }}--tab-{{ i }}">
+          <div class="{{ tabs_type == 'bootstrap' ? 'tab-pane-inner' : tabs_type == 'jquery' ? 'tabs__content' }}">
+            {{ tab.content }}
+            {% if tab.tabs %}
+              {{ tabs_lists.tabs_list(tab.tabs_type, tab.btn_id, tab.btn_target, tab.nav_pills, tab.fill_justify, tab.tabs_wrapper_classes, tab.tabs_wrapper_other_classes, tab.tabs_wrapper_styles, tab.tabs_wrapper_other_styles, tab.tabs_wrapper_attributes, tab.tabs_wrapper_other_attributes, tab.tabs, tab.tabs_classes, tab.tabs_other_classes, tab.tabs_styles, tab.tabs_other_styles, tab.tabs_attributes, tab.tabs_other_attributes, tab.tabs_id, tab.tabsId, tab.vertical, tab.collapsible, tab.startCollapsed, tab.disabledTabs, tab.activeTab, tab.accordionTabElement, tab.setHash, tab.rotate, tab.event, tab.animation, tab.animationQueue, tab.duration, tab.fluidHeight, tab.scrollToAccordion, tab.scrollToAccordionOnLoad, tab.scrollToAccordionOffset) }}
+            {% endif %}
+          </div>
         </div>
-      </div>
-    {% endfor %}
+      {% endfor %}
+    {% if tabs_type == 'bootstrap' %}</div>{% endif %}
   {% endblock %}
   </div>
 {% endmacro %}

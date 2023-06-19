@@ -58,6 +58,9 @@
 {#{{ function('print_r', '</pre>') }}#}
 
 {% embed '@molecules/tabs/_tabs.tpl.twig' with {
+  nav_pills: fields.pills,
+  tabs_type: fields.type|default('jquery'),
+  fill_justify: fields.fill,
   tabs_id: fields.tabs_id['id'] ? fields.tabs_id['id'] : fields.tabs_id['id_gen'] ? 'tabs' ~ fields.tabs_id['id_gen'],
   collapsible: fields.collapsible,
   startCollapsed: fields.start_collapsed,
@@ -80,6 +83,9 @@
   ],
   tabs_wrapper_attributes: [
     block_attributes
+  ],
+  tabs_classes: [
+    fields.alignment ? 'justify-content-' ~ fields.alignment
   ]
 } %}
   {% block tabs_list %}

@@ -29,7 +29,7 @@ const tabsEnable = () => {
 };
 
 const initTabs = () => {
-  const $tabsWrapper = $('.tabs-wrapper');
+  const $tabsWrapper = $('.tabs-wrapper.jquery');
 
   if ($tabsWrapper.length) {
     $tabsWrapper.each(function () {
@@ -795,9 +795,34 @@ const initTabs = () => {
   }
 };
 
+const bsDisabledTabs = () => {
+  const tabsWrapper = [].slice.call(document.querySelectorAll('.tabs-wrapper.bootstrap'));
+
+  tabsWrapper.forEach(tabs => {
+    const disabledTabs = tabs.dataset.disabledtabs;
+
+    if (disabledTabs.length) {
+      let disabledTabsList = disabledTabs.split(',');
+      disabledTabsList = disabledTabsList.map(tab => {
+        return tab.trim();
+      });
+      const buttons = [].slice.call(tabs.querySelectorAll('.nav .nav-link'));
+
+      disabledTabsList.forEach(tab => {
+        buttons[tab].classList.add('disabled');
+      });
+
+      console.log(buttons);
+    }
+
+
+  });
+};
+
 $(document).ready(() => {
   tabsEnable();
   initTabs();
+  bsDisabledTabs();
 });
 
 export default tabsEnable;

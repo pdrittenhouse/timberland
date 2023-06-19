@@ -1,4 +1,107 @@
 {% include '@molecules/tabs/_tabs~macro.tpl.twig' with {
+  nav_pills: false,
+  fill_justify: 'fill',
+  tabs_type: 'bootstrap',
+  tabs_id: 'tabs-example',
+  collapsible: 'accordion',
+  startCollapsed: 'false',
+  disabledTabs: '1, 2',
+  activeTab: 0,
+  accordionTabElement: '<div></div>',
+  setHash: 'false',
+  rotate: 'false',
+  event: 'click',
+  animation: 'false',
+  animationQueue: 'false',
+  duration: 500,
+  fluidHeight: 'true',
+  scrollToAccordion: 'false',
+  scrollToAccordionOnLoad: 'false',
+  scrollToAccordionOffset: 'false',
+  vertical: false,
+  tabs_other_classes: '',
+  tabs: [
+    {
+      label: 'Tab 1',
+      content:  'Tab 1 content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    },
+    {
+      label: 'Tab 2 (Disabled)',
+      content:  'Tab 2 content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    },
+    {
+      label: 'Tab 3 (Disabled)',
+      content:  'Tab 3 content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    },
+    {
+      label: 'Tab 4 (Nested Tabs)',
+      content:  'Tab 4 content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      tabs_type: 'jquery',
+      tabs_id: 'subtabs-1',
+      collapsible: 'false',
+      startCollapsed: 'false',
+      disabledTabs: 'false',
+      activeTab: 0,
+      accordionTabElement: '<div></div>',
+      setHash: 'false',
+      rotate: 'false',
+      event: 'click',
+      animation: 'false',
+      animationQueue: 'false',
+      duration: 500,
+      fluidHeight: 'true',
+      scrollToAccordion: 'false',
+      scrollToAccordionOnLoad: 'false',
+      scrollToAccordionOffset: 'false',
+      vertical: false,
+      tabs: [
+      {
+        label: 'Sub 1 Tab 1',
+        content:  'Tab 1 content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      },
+      {
+        label: 'Sub 1 Tab 2',
+        content:  'Tab 2 content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      }
+    ]
+    },
+    {
+      label: 'Tab 5 (Nested Vertical Tabs)',
+      content:  'Tab 5 content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      tabs_type: 'jquery',
+      tabs_id: 'subtabs-2',
+      collapsible: 'false',
+      startCollapsed: 'false',
+      disabledTabs: 'false',
+      activeTab: 0,
+      accordionTabElement: '<div></div>',
+      setHash: 'false',
+      rotate: 'false',
+      event: 'click',
+      animation: 'false',
+      animationQueue: 'false',
+      duration: 500,
+      fluidHeight: 'true',
+      scrollToAccordion: 'false',
+      scrollToAccordionOnLoad: 'false',
+      scrollToAccordionOffset: 'false',
+      vertical: true,
+      tabs: [
+      {
+        label: 'Sub 2 Tab 1',
+        content:  'Tab 1 content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+      },
+      {
+        label: 'Sub 2 Tab 2',
+        content:  'Tab 2 content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+      }
+    ]
+    }
+  ]
+} %}
+
+{% include '@molecules/tabs/_tabs~macro.tpl.twig' with {
+  tabs_type: 'jquery',
   tabs_id: 'tabs-1',
   collapsible: 'accordion',
   startCollapsed: 'false',
@@ -33,6 +136,7 @@
     {
       label: 'Tab 4 (Nested Tabs)',
       content:  'Tab 4 content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      tabs_type: 'jquery',
       tabs_id: 'subtabs-1',
       collapsible: 'false',
       startCollapsed: 'false',
@@ -64,6 +168,7 @@
     {
       label: 'Tab 5 (Nested Vertical Tabs)',
       content:  'Tab 5 content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      tabs_type: 'jquery',
       tabs_id: 'subtabs-2',
       collapsible: 'false',
       startCollapsed: 'false',
@@ -97,6 +202,7 @@
 
 
 {% include '@molecules/tabs/_tabs~macro.tpl.twig' with {
+  tabs_type: 'jquery',
   tabs_id: "vertical-tabs-1",
   collapsible: "accordion",
   startCollapsed: "false",
@@ -130,6 +236,7 @@
     {
       label: "Tab 4 (Nested Tabs)",
       content: "Tab 4 content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      tabs_type: 'jquery',
       tabs_id: "vertical-subtabs-1",
       collapsible: "false",
       startCollapsed: "false",
@@ -161,6 +268,7 @@
     {
       label: "Tab 5 (Nested Vertical Tabs)",
       content: "Tab 5 content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      tabs_type: 'jquery',
       tabs_id: "vertical-subtabs-2",
       collapsible: "false",
       startCollapsed: "false",
