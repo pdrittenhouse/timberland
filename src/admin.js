@@ -105,6 +105,10 @@ const scopedBlocks = [
     block: 'acf/slide',
     parent: 'acf/slider',
   },
+  {
+    block: 'acf/tab',
+    parent: 'acf/tabs',
+  },
 ];
 
 let blocks = [];

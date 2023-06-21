@@ -26,9 +26,9 @@
 {% for item in social_nav_items %}
   {# TODO: Fix conflict with inline style in list pattern #}
   {% if hide_icons == true %}
-    {%  set nav_item_text = '<a href="' ~ item.url ~ '" class="social-nav-link" target="' ~ item.target|default('_self') ~ '" target="' ~ target|default('_self') ~ '" title="' ~ item.label ~ '"><span class="label">' ~ item.label ~'</span></a>' %}
+    {%  set nav_item_text = '<a href="' ~ item.url ~ '" class="social-nav-link" target="' ~ item.target|default('_self') ~ '" title="' ~ item.label ~ '"><span class="label">' ~ item.label ~'</span></a>' %}
   {% else %}
-    {%  set nav_item_text = '<a href="' ~ item.url ~ '" class="social-nav-link" target="' ~ item.target|default('_self') ~ '" target="' ~ target|default('_self') ~ '" style="padding-top:' ~ bullet_icon_size ~ '; min-width:' ~ bullet_icon_size ~ ';" title="' ~ item.label ~ '"><span class="label">' ~ item.label ~'</span></a>' %}
+    {%  set nav_item_text = '<a href="' ~ item.url ~ '" class="social-nav-link" target="' ~ item.target|default('_self') ~ '" style="padding-top:' ~ bullet_icon_size ~ '; min-width:' ~ bullet_icon_size ~ ';" title="' ~ item.label ~ '"><span class="label">' ~ item.label ~'</span></a>' %}
   {% endif %}
   {% set item_classes = item.item_classes|default([])|merge([
     'social-nav-item',

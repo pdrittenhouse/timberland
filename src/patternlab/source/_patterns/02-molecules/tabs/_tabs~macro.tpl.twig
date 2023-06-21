@@ -131,7 +131,7 @@ Responsive Tabs options in the json file should include string or integer values
                 i == 1 ? 'active'
               ],
               button_id: btn_id,
-              button_toggle: 'tab',
+              button_toggle: nav_pills == true ? 'pill' : 'tab',
               button_target: '#' ~ btn_target,
               button_role: 'tab',
               button_controls: btn_target,

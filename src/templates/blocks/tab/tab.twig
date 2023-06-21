@@ -55,8 +55,21 @@
 {#  <a href="#{{ parent_block_data['data'].tabs_id_id ? parent_block_data['data'].tabs_id_id : parent_block_data['data'].tabs_id_id_gen ? 'tabs' ~ parent_block_data['data'].tabs_id_id_gen }}--tab-{{ fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'tab' ~ fields.id['id_gen'] }}" class="tabs__tab-link">{{ fields.tab_label }}</a>#}
 {#</li>#}
 
-<div class="tabs__content-wrapper" data-label="{{ fields.tab_label|default('Tab Label') }}" id="{{ parent_block_data['data'].tabs_id_id ? parent_block_data['data'].tabs_id_id : parent_block_data['data'].tabs_id_id_gen ? 'tabs' ~ parent_block_data['data'].tabs_id_id_gen }}--tab-{{ fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? fields.id['id_gen'] }}">
-  <div class="tabs__content">
+{#<div class="tabs__content-wrapper" data-label="{{ fields.tab_label|default('Tab Label') }}" id="{{ parent_block_data['data'].tabs_id_id ? parent_block_data['data'].tabs_id_id : parent_block_data['data'].tabs_id_id_gen ? 'tabs' ~ parent_block_data['data'].tabs_id_id_gen }}--tab-{{ fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? fields.id['id_gen'] }}">#}
+{#  <div class="tabs__content">#}
+{#    <InnerBlocks template="{{ [['core/paragraph', {content: 'Tab content'}]] | json_encode() | escape('html_attr') }}" />#}
+{#  </div>#}
+{#</div>#}
+
+{% set field_id = fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? fields.id['id_gen'] %}
+{% set block_id = parent_block_data['data'].tabs_id_id ? parent_block_data['data'].tabs_id_id : parent_block_data['data'].tabs_id_id_gen ? 'tabs' ~ parent_block_data['data'].tabs_id_id_gen ~ '--tab-' ~ field_id  %}
+
+<div class="{{ parent_block_data['data']['type'] == 'bootstrap' ? 'tab-pane fade' : parent_block_data['data']['type'] == 'jquery' ? 'tabs__content-wrapper' }}" {{ parent_block_data['data']['type'] == 'bootstrap' and fields.active == true ? 'data-active="show"' }} {{ parent_block_data['data']['type'] == 'bootstrap'? 'role="tabpanel" aria-labelledby="' ~ block_id ~ '--link"' }} data-label="{{ fields.tab_label|default('Tab Label') }}" id="{{ block_id }}">
+  <div class="{{ parent_block_data['data']['type'] == 'bootstrap' ? 'tab-pane-inner' : parent_block_data['data']['type'] == 'jquery' ? 'tabs__content' }}">
     <InnerBlocks template="{{ [['core/paragraph', {content: 'Tab content'}]] | json_encode() | escape('html_attr') }}" />
   </div>
 </div>
+
+
+
+

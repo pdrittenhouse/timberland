@@ -92,25 +92,32 @@
 {#    <InnerBlocks allowedBlocks="{{ ['acf/tab'] | json_encode() | escape('html_attr') }}" template="{{ [['acf/tab'], ['acf/tab']] | json_encode() | escape('html_attr') }}" />#}
   {% endblock %}
   {% block tabs_content %}
-    <InnerBlocks allowedBlocks="{{ ['acf/tab'] | json_encode() | escape('html_attr') }}" template="{{ [
-      ['acf/tab', {
-        'data' : {
-          'field_6473c039589e6': {
-            'field_63464e81933f7': 'custom',
-            'field_63464e8a933f9': 'tabOne',
-          },
-          'field_6473c0ad589e7': 'Tab 1'
-        }
-      }],
-      ['acf/tab', {
-        'data' : {
-          'field_6473c039589e6': {
-            'field_63464e81933f7': 'custom',
-            'field_63464e8a933f9': 'tabTwo',
-          },
-          'field_6473c0ad589e7': 'Tab 2'
-        }
-      }]
-    ] | json_encode() | escape('html_attr') }}" />
+    {% if fields.type == 'bootstrap' %}
+      <div class="tab-content">
+    {% endif %}
+      <InnerBlocks allowedBlocks="{{ ['acf/tab'] | json_encode() | escape('html_attr') }}" template="{{ [
+        ['acf/tab', {
+          'data' : {
+            'field_6473c039589e6': {
+              'field_63464e81933f7': 'custom',
+              'field_63464e8a933f9': 'tabOne',
+            },
+            'field_6473c0ad589e7': 'Tab 1',
+            'field_64924cbf14823' : 'true'
+          }
+        }],
+        ['acf/tab', {
+          'data' : {
+            'field_6473c039589e6': {
+              'field_63464e81933f7': 'custom',
+              'field_63464e8a933f9': 'tabTwo',
+            },
+            'field_6473c0ad589e7': 'Tab 2'
+          }
+        }]
+      ] | json_encode() | escape('html_attr') }}" />
+    {% if fields.type == 'bootstrap' %}
+      </div>
+    {% endif %}
   {% endblock %}
 {% endembed %}
