@@ -95,3 +95,18 @@ input {
 
 //Placeholders
 @include placeholder {}
+
+.form {
+
+  &.placeholder-black {
+    @include placeholder {
+      color: var(--black);
+    }
+  }
+
+  &.placeholder-white {
+    @include placeholder {
+      color: var(--white);
+    }
+  }
+}

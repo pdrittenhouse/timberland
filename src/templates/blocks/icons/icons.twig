@@ -78,7 +78,7 @@
           icon: icon.icon.icon.fa_icon_style ~ ' fa-' ~ icon.icon.icon.fa_icon,
           fill: icon.icon.icon.color == 'palette' ? icon.icon.icon.theme_color,
           svg_link_other_classes: 'icon',
-          svg_link_other_attributes: color or offset ? 'style="' ~ color ~ '; ' ~ offset ~ '"'
+          svg_link_other_attributes: color or offset ? 'style="' ~ color ~ ' ' ~ offset ~ '"'
         } %}
       {% else %}
         {% set color = icon.icon.icon.color == 'palette' ? 'color: var(--' ~ icon.icon.icon.theme_color ~ ');' : icon.icon.icon.color == 'custom' ? 'color: ' ~ icon.icon.icon.custom_color ~ ';' %}

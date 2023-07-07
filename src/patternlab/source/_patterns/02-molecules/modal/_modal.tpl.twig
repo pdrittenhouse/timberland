@@ -9,6 +9,8 @@
  *  - modal_attributes [array]: Additional component attributes.
  *  - modal_other_attributes [string]: Additional component attributes.
  *  - animate [bool]: Show modal animation.
+ *  - backdrop [bool]: Modal backdrop.
+ *  - backdrop_static [bool]: Modal static backdrop.
  *  - backdrop_color [string]: Modal backdrop color.
  *  - modal_dialog_classes [array]: Additional component classes.
  *  - modal_dialog_other_classes [string]: Additional component classes.
@@ -67,6 +69,7 @@
   'role="dialog"',
   modal_id ? 'aria-labelledby="' ~ modal_id ~ 'Label"' : 'aria-labelledby="' ~ modalId ~ 'Label"',
   'aria-hidden="true"',
+  backdrop == true  and backdrop_static == true ? 'data-bs-backdrop="statie"' : backdrop == true ? 'data-bs-backdrop="true"' : 'data-bs-backdrop="false"',
   modal_other_attributes,
 ]) | sort | join(' ') | trim %}
 

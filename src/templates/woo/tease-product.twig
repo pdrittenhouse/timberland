@@ -29,9 +29,14 @@
           format: card_image.format
         } %}
       {% else %}
+{#        {% include '@atoms/image/_image.tpl.twig' with {#}
+{#          variant: 'primary',#}
+{#          src: post.thumbnail.src|resize(post_thumb_size[0], post_thumb_size[1]),#}
+{#          alt: post.title#}
+{#        } %}#}
         {% include '@atoms/image/_image.tpl.twig' with {
           variant: 'primary',
-          src: post.thumbnail.src|resize(post_thumb_size[0], post_thumb_size[1]),
+          src: post.thumbnail.src,
           alt: post.title
         } %}
       {% endif %}

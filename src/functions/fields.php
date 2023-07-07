@@ -292,3 +292,20 @@ function acf_load_menus($field) {
   // return the field
   return $field;
 }
+
+/**
+ * Sidebars
+ */
+add_filter('acf/load_field/name=sidebar', 'acf_load_sidebars');
+
+function acf_load_sidebars($field)
+{
+  global $wp_registered_sidebars;
+
+  foreach($wp_registered_sidebars as $sidebar) {
+    $field['choices'][$sidebar['id']] = $sidebar['name'];
+  }
+
+  // return the field
+  return $field;
+}

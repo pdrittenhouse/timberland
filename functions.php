@@ -74,7 +74,8 @@ $dream_includes = array(
   "block-templates.php",
   "woocommerce.php",
   "breadcrumb.php",
-  "svg.php"
+  "svg.php",
+  "load-more.php"
 );
 
 foreach($dream_includes as $inc){

@@ -12,3 +12,6 @@ fonts/
 
 # Ignore SVG spritemap
 _icons-generated.scss
+
+# Ignore block template directories
+src/templates

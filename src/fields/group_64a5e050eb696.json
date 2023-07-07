@@ -1,0 +1,55 @@
+{
+    "key": "group_64a5e050eb696",
+    "title": "Block: Sidebar",
+    "fields": [
+        {
+            "key": "field_64a5e051ffaf8",
+            "label": "Sidebar",
+            "name": "sidebar",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "choices": {
+                "header_widget_area": "Header",
+                "primary_sidebar": "Primary",
+                "secondary_sidebar": "Secondary",
+                "tertiary_sidebar": "Territory",
+                "footer_widget_area": "Footer"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "block",
+                "operator": "==",
+                "value": "acf\/sidebar"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1688748059
+}

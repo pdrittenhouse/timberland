@@ -10,30 +10,49 @@
   novalidate: '',
   target: '',
   form_classes: [
-    'searchform'
+    'searchform',
+    placeholder_color ? 'placeholder-' ~ placeholder_color
   ]
 } %}
   {% block form_content %}
     <div>
-      <label class="screen-reader-text" for="s">Search for:</label>
-      <input type="text" value="{{ function('get_search_query') }}" name="s" id="s" class="search-field" />
+      <label class="{{ show_label == true ? '' : 'screen-reader-text' }} {{ label_classes ? label_classes | sort | join(' ') | trim }}" for="s" {{ label_attributes ? label_attributes | sort | join(' ') | trim }}>{{ label | default('Search for:') }}</label>
+      {% if post_type %}<input type="hidden" name="post_type" value="{{ post_type }}" />{% endif %}
+      <input type="text" value="{{ function('get_search_query') }}" name="s" id="s" class="search-field {{ input_classes ? input_classes | sort | join(' ') | trim }}" placeholder="{{ placeholder }}" {{ input_attributes ? input_attributes | sort | join(' ') | trim }} />
       {% embed '@atoms/button/_button.tpl.twig' with {
         button_element: 'button',
-        button_color: 'link',
-        button_text: '',
+        button_color: button_color|default('link'),
+        button_text: button_text,
         button_type: 'submit',
         button_id: 'searchsubmit',
         button_value: 'Search',
-        button_other_classes: 'search-submit'
+        button_classes: button_classes,
+        button_other_classes: 'search-submit',
+        button_attributes: button_attributes,
+        button_other_attributes: button_other_attributes,
+        button_size: button_size,
+        button_outline: button_outline,
+        button_block: button_block,
+        nowrap: button_nowrap,
+        button_title: button_text,
+        hide_label: hide_button_label
       } %}
         {% block left %}
-          {% include '@atoms/svg/_svg~icon.tpl.twig' with {
-            svg_other_classes: 'test-svg-class',
-            width: '30px',
-            height: '30px',
-            name: 'search',
-            fill: 'white'
-          } %}
+          {% if hide_icon != true %}
+            {% include '@atoms/svg/_svg~icon.tpl.twig' with {
+              svg_other_classes: 'search-icon',
+              svg_classes: icon_classes,
+              svg_attributes: icon_other_attributes,
+              svg_other_attributes: icon_other_attributes,
+              svg_styles: icon_styles,
+              svg_link_attributes: icon_link_attributes,
+              svg_link_other_attributes: svg_link_other_attributes,
+              width: icon_width|default('30px'),
+              height: icon_height|default('30px'),
+              name: icon_name|default('search'),
+              fill: icon_color|default('black'),
+            } %}
+          {% endif %}
         {% endblock left %}
       {% endembed %}
     </div>

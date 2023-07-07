@@ -1,0 +1,198 @@
+{#
+/**
+ * Block Name:
+ *
+ * This is the template that displays the  block.
+ */
+#}
+
+{#{% if is_preview %}#}
+{#<p>Some editor instructions here.</p>#}
+{#{% endif %}#}
+
+{#{{ block['className'] }}#}
+{#{{ block['align'] ? 'align-' ~ block['align'] }}#}
+{#{{ block['align_text']}}#}
+{#{{ block['align_content'] }}#}
+{#{{ block['full_height'] }}#}
+
+{# Parent Block Data - ACF <= v.5.9 #}
+{#{% set parent = function('get_parent_block', block['id'], block['name']) %}#}
+{# Parent Block Data - ACF >= v.6.0 #}
+{#{{ parent_block_data['data'] }}#}
+{# Block Context #}
+{#{{ block_context['acf/fields'] }}#}
+{# ACF Options Fields #}
+{#{{ options }}#}
+{# ACF Fields #}
+{#{{ fields }}#}
+{# Site Data #}
+{#{{ site }}#}
+{# SASS Data #}
+{#{{ sass_data }}#}
+{# Post Data #}
+{#{{ block_post }}#}
+
+{# Set label styles #}
+{% set label_text_color = fields.label_color['color'] == 'custom' ? 'color: ' ~ fields.label_color['custom_color'] ~ ';' %}
+
+{# Set wrapper styles #}
+{% set wrapper_bg_color = fields.wrapper_background_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.wrapper_background_color['bg_custom_color'] ~ ';' %}
+{% set wrapper_border_top_width = fields.wrapper_border['top']['width'] >= 0 ? 'border-top-width: ' ~ fields.wrapper_border['top']['width'] ~ 'px;' %}
+{% set wrapper_border_top_style = fields.wrapper_border['top']['style'] ? 'border-top-style: ' ~ fields.wrapper_border['top']['style'] ~ ';' %}
+{% set wrapper_border_top_color = fields.wrapper_border['top']['color'] == 'custom' and fields.wrapper_border['top']['custom_color'] ? 'border-top-color: ' ~ fields.wrapper_border['top']['custom_color'] ~ ';' : fields.wrapper_border['top']['color'] == 'palette' and fields.wrapper_border['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.wrapper_border['top']['theme_color'] ~ ');' %}
+{% set wrapper_border_bottom_width = fields.wrapper_border['bottom']['width'] >= 0 ? 'border-bottom-width: ' ~ fields.wrapper_border['bottom']['width'] ~ 'px;' %}
+{% set wrapper_border_bottom_style = fields.wrapper_border['bottom']['style'] ? 'border-bottom-style: ' ~ fields.wrapper_border['bottom']['style'] ~ ';' %}
+{% set wrapper_border_bottom_color = fields.wrapper_border['bottom']['color'] == 'custom' and fields.wrapper_border['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.wrapper_border['bottom']['custom_color'] ~ ';' : fields.wrapper_border['bottom']['color'] == 'palette' and fields.wrapper_border['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.wrapper_border['bottom']['theme_color'] ~ ');' %}
+{% set wrapper_border_left_width = fields.wrapper_border['left']['width'] >= 0 ? 'border-left-width: ' ~ fields.wrapper_border['left']['width'] ~ 'px;' %}
+{% set wrapper_border_left_style = fields.wrapper_border['left']['style'] ? 'border-left-style: ' ~ fields.wrapper_border['left']['style'] ~ ';' %}
+{% set wrapper_border_left_color = fields.wrapper_border['left']['color'] == 'custom' and fields.wrapper_border['left']['custom_color'] ? 'border-left-color: ' ~ fields.wrapper_border['left']['custom_color'] ~ ';' : fields.wrapper_border['left']['color'] == 'palette' and fields.wrapper_border['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.wrapper_border['left']['theme_color'] ~ ');' %}
+{% set wrapper_border_right_width = fields.wrapper_border['right']['width'] >= 0 ? 'border-right-width: ' ~ fields.wrapper_border['right']['width'] ~ 'px;' %}
+{% set wrapper_border_right_style = fields.wrapper_border['right']['style'] ? 'border-right-style: ' ~ fields.wrapper_border['right']['style'] ~ ';' %}
+{% set wrapper_border_right_color = fields.wrapper_border['right']['color'] == 'custom' and fields.wrapper_border['right']['custom_color'] ? 'border-right-color: ' ~ fields.wrapper_border['right']['custom_color'] ~ ';' : fields.wrapper_border['right']['color'] == 'palette' and fields.wrapper_border['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.wrapper_border['right']['theme_color'] ~ ');' %}
+{% set wrapper_border_top_left_radius = fields.wrapper_border_radius['top_left'] >= 0 ? 'border-top-left-radius: ' ~ fields.wrapper_border_radius['top_left'] ~ 'px;' %}
+{% set wrapper_border_top_right_radius = fields.wrapper_border_radius['top_right'] >= 0 ? 'border-top-right-radius: ' ~ fields.wrapper_border_radius['top_right'] ~ 'px;' %}
+{% set wrapper_border_bottom_left_radius = fields.wrapper_border_radius['bottom_left'] >= 0 ? 'border-bottom-left-radius: ' ~ fields.wrapper_border_radius['bottom_left'] ~ 'px;' %}
+{% set wrapper_border_bottom_right_radius = fields.wrapper_border_radius['bottom_right'] >= 0 ? 'border-bottom-right-radius: ' ~ fields.wrapper_border_radius['bottom_right'] ~ 'px;' %}
+{% set wrapper_width = fields.width.width['width']['value'] >= 0 ? 'width: ' ~ fields.width.width['width']['value']  ~ fields.width.width['width']['unit'] ~  ';' %}
+{% set wrapper_min_width = fields.width.width['min_width'] >= 0 ? 'min-width: ' ~ fields.width.width['min_width']  ~ 'px;' %}
+{% set wrapper_max_width = fields.width.width['max_width'] >= 0 ? 'max-width: ' ~ fields.width.width['max_width']  ~ 'px;' %}
+{% set wrapper_margin_top = fields.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['top']['top'] >= 0 ? 'margin-top: ' ~ fields.margin['margin']['top']['top'] ~ 'px;' %}
+{% set wrapper_margin_bottom = fields.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.margin['margin']['bottom']['bottom'] ~ 'px;' %}
+{% set wrapper_margin_left = fields.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.margin['margin']['left']['left'] ~ 'px;' %}
+{% set wrapper_margin_right = fields.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.margin['margin']['right']['right'] ~ 'px;' %}
+
+{# Set input styles #}
+{% set input_bg_color = fields.input_background_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.input_background_color['bg_custom_color'] ~ ';' %}
+{% set input_text_color = fields.input_color['color'] == 'custom' ? 'color: ' ~ fields.input_color['custom_color'] ~ ';' %}
+{% set input_border_top_width = fields.input_border['top']['width'] >= 0 ? 'border-top-width: ' ~ fields.input_border['top']['width'] ~ 'px;' %}
+{% set input_border_top_style = fields.input_border['top']['style'] ? 'border-top-style: ' ~ fields.input_border['top']['style'] ~ ';' %}
+{% set input_border_top_color = fields.input_border['top']['color'] == 'custom' and fields.input_border['top']['custom_color'] ? 'border-top-color: ' ~ fields.input_border['top']['custom_color'] ~ ';' : fields.input_border['top']['color'] == 'palette' and fields.input_border['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.input_border['top']['theme_color'] ~ ');' %}
+{% set input_border_bottom_width = fields.input_border['bottom']['width'] >= 0 ? 'border-bottom-width: ' ~ fields.input_border['bottom']['width'] ~ 'px;' %}
+{% set input_border_bottom_style = fields.input_border['bottom']['style'] ? 'border-bottom-style: ' ~ fields.input_border['bottom']['style'] ~ ';' %}
+{% set input_border_bottom_color = fields.input_border['bottom']['color'] == 'custom' and fields.input_border['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.input_border['bottom']['custom_color'] ~ ';' : fields.input_border['bottom']['color'] == 'palette' and fields.input_border['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.input_border['bottom']['theme_color'] ~ ');' %}
+{% set input_border_left_width = fields.input_border['left']['width'] >= 0 ? 'border-left-width: ' ~ fields.input_border['left']['width'] ~ 'px;' %}
+{% set input_border_left_style = fields.input_border['left']['style'] ? 'border-left-style: ' ~ fields.input_border['left']['style'] ~ ';' %}
+{% set input_border_left_color = fields.input_border['left']['color'] == 'custom' and fields.input_border['left']['custom_color'] ? 'border-left-color: ' ~ fields.input_border['left']['custom_color'] ~ ';' : fields.input_border['left']['color'] == 'palette' and fields.input_border['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.input_border['left']['theme_color'] ~ ');' %}
+{% set input_border_right_width = fields.input_border['right']['width'] >= 0 ? 'border-right-width: ' ~ fields.input_border['right']['width'] ~ 'px;' %}
+{% set input_border_right_style = fields.input_border['right']['style'] ? 'border-right-style: ' ~ fields.input_border['right']['style'] ~ ';' %}
+{% set input_border_right_color = fields.input_border['right']['color'] == 'custom' and fields.input_border['right']['custom_color'] ? 'border-right-color: ' ~ fields.input_border['right']['custom_color'] ~ ';' : fields.input_border['right']['color'] == 'palette' and fields.input_border['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.input_border['right']['theme_color'] ~ ');' %}
+{% set input_border_top_left_radius = fields.input_border_radius['top_left'] >= 0 ? 'border-top-left-radius: ' ~ fields.input_border_radius['top_left'] ~ 'px;' %}
+{% set input_border_top_right_radius = fields.input_border_radius['top_right'] >= 0 ? 'border-top-right-radius: ' ~ fields.input_border_radius['top_right'] ~ 'px;' %}
+{% set input_border_bottom_left_radius = fields.input_border_radius['bottom_left'] >= 0 ? 'border-bottom-left-radius: ' ~ fields.input_border_radius['bottom_left'] ~ 'px;' %}
+{% set input_border_bottom_right_radius = fields.input_border_radius['bottom_right'] >= 0 ? 'border-bottom-right-radius: ' ~ fields.input_border_radius['bottom_right'] ~ 'px;' %}
+{% set input_padding_top  = fields.input_padding.padding['top'] >= 0 ? 'padding-top: ' ~ fields.input_padding.padding['top'] ~ 'px;' %}
+{% set input_padding_bottom = fields.input_padding.padding['bottom'] >= 0 ? 'padding-bottom: ' ~ fields.input_padding.padding['bottom'] ~ 'px;' %}
+{% set input_padding_left = fields.input_padding.padding['left'] >= 0 ? 'padding-left: ' ~ fields.input_padding.padding['left'] ~ 'px;' %}
+{% set input_padding_right = fields.input_padding.padding['right'] >= 0 ? 'padding-right: ' ~ fields.input_padding.padding['right'] ~ 'px;' %}
+{% set input_width = fields.input_width.width['width']['value'] >= 0 ? 'width: ' ~ fields.input_width.width['width']['value']  ~ fields.input_width.width['width']['unit'] ~  ';' %}
+{% set input_min_width = fields.input_width.width['min_width'] >= 0 ? 'min-width: ' ~ fields.input_width.width['min_width']  ~ 'px;' %}
+{% set input_max_width = fields.input_width.width['max_width'] >= 0 ? 'max-width: ' ~ fields.input_width.width['max_width']  ~ 'px;' %}
+
+{{ function('print_r', '<pre>') }}
+{{ function('print_r', input_padding_top) }}
+{{ function('print_r', '</pre>') }}
+
+{# Set custom button styles #}
+{% if fields.button.style == 'custom' %}
+	{% set btn_bg_color = fields.button.background_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.button.background_color['bg_custom_color'] ~ ';' %}
+	{% set btn_text_color = fields.button.text_color['color'] == 'custom' ? 'color: ' ~ fields.button.text_color['custom_color'] ~ ';' %}
+	{% set btn_transform = fields.button['text_transform']['text_transform'] ? 'text-transform: ' ~ fields.button['text_transform']['text_transform'] ~ ';' %}
+	{% set btn_padding_top  = fields.button['padding']['padding']['top'] >= 0 ? 'padding-top: ' ~ fields.button['padding']['padding']['top'] ~ 'px;' %}
+	{% set btn_padding_bottom = fields.button['padding']['padding']['bottom'] >= 0 ? 'padding-bottom: ' ~ fields.button['padding']['padding']['bottom'] ~ 'px;' %}
+	{% set btn_padding_left = fields.button['padding']['padding']['left'] >= 0 ? 'padding-left: ' ~ fields.button['padding']['padding']['left'] ~ 'px;' %}
+	{% set btn_padding_right = fields.button['padding']['padding']['right'] >= 0 ? 'padding-right: ' ~ fields.button['padding']['padding']['right'] ~ 'px;' %}
+	{% set btn_border_top_width = fields.button['border']['top']['width'] >= 0 ? 'border-top-width: ' ~ fields.button['border']['top']['width'] ~ 'px;' %}
+	{% set btn_border_top_style = fields.button['border']['top']['style'] ? 'border-top-style: ' ~ fields.button['border']['top']['style'] ~ ';' %}
+	{% set btn_border_top_color = fields.button['border']['top']['color'] == 'custom' and fields.button['border']['top']['custom_color'] ? 'border-top-color: ' ~ fields.button['border']['top']['custom_color'] ~ ';' : fields.button['border']['top']['color'] == 'palette' and fields.button['border']['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.button['border']['top']['theme_color'] ~ ');' %}
+	{% set btn_border_bottom_width = fields.button['border']['bottom']['width'] >= 0 ? 'border-bottom-width: ' ~ fields.button['border']['bottom']['width'] ~ 'px;' %}
+	{% set btn_border_bottom_style = fields.button['border']['bottom']['style'] ? 'border-bottom-style: ' ~ fields.button['border']['bottom']['style'] ~ ';' %}
+	{% set btn_border_bottom_color = fields.button['border']['bottom']['color'] == 'custom' and fields.button['border']['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.button['border']['bottom']['custom_color'] ~ ';' : fields.button['border']['bottom']['color'] == 'palette' and fields.button['border']['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.button['border']['bottom']['theme_color'] ~ ');' %}
+	{% set btn_border_left_width = fields.button['border']['left']['width'] >= 0 ? 'border-left-width: ' ~ fields.button['border']['left']['width'] ~ 'px;' %}
+	{% set btn_border_left_style = fields.button['border']['left']['style'] ? 'border-left-style: ' ~ fields.button['border']['left']['style'] ~ ';' %}
+	{% set btn_border_left_color = fields.button['border']['left']['color'] == 'custom' and fields.button['border']['left']['custom_color'] ? 'border-left-color: ' ~ fields.button['border']['left']['custom_color'] ~ ';' : fields.button['border']['left']['color'] == 'palette' and fields.button['border']['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.button['border']['left']['theme_color'] ~ ');' %}
+	{% set btn_border_right_width = fields.button['border']['right']['width'] >= 0 ? 'border-right-width: ' ~ fields.button['border']['right']['width'] ~ 'px;' %}
+	{% set btn_border_right_style = fields.button['border']['right']['style'] ? 'border-right-style: ' ~ fields.button['border']['right']['style'] ~ ';' %}
+	{% set btn_border_right_color = fields.button['border']['right']['color'] == 'custom' and fields.button['border']['right']['custom_color'] ? 'border-right-color: ' ~ fields.button['border']['right']['custom_color'] ~ ';' : fields.button['border']['right']['color'] == 'palette' and fields.button['border']['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.button['border']['right']['theme_color'] ~ ');' %}
+	{% set btn_border_top_left_radius = fields.button['border_radius']['top_left'] >= 0 ? 'border-top-left-radius: ' ~ fields.button['border_radius']['top_left'] ~ 'px;' %}
+	{% set btn_border_top_right_radius = fields.button['border_radius']['top_right'] >= 0 ? 'border-top-right-radius: ' ~ fields.button['border_radius']['top_right'] ~ 'px;' %}
+	{% set btn_border_bottom_left_radius = fields.button['border_radius']['bottom_left'] >= 0 ? 'border-bottom-left-radius: ' ~ fields.button['border_radius']['bottom_left'] ~ 'px;' %}
+	{% set btn_border_bottom_right_radius = fields.button['border_radius']['bottom_right'] >= 0 ? 'border-bottom-right-radius: ' ~ fields.button['border_radius']['bottom_right'] ~ 'px;' %}
+	{% set box_shadow_color = fields.button['box_shadow']['color']['color'] == 'palette' and fields.button['box_shadow']['color']['theme_color'] ? 'var(--' ~ fields.button['box_shadow']['color']['theme_color'] ~ ')' : fields.button['box_shadow']['color']['color'] == 'custom' and fields.button['box_shadow']['color']['custom_color'] ? fields.button['box_shadow']['color']['custom_color'] %}
+	{% set box_shadow_inset = fields.button['box_shadow']['inset'] == true ? 'inset' %}
+	{% set btn_box_shadow = fields.button['box_shadow']['horizontal_offset'] >= 0 or fields.button['box_shadow']['vertical_offset'] >= 0 or fields.button['box_shadow']['blur'] >= 0 or fields.button['box_shadow']['spread'] >= 0 or box_shadow_color or box_shadow_inset == true ? 'box-shadow: ' ~ fields.button['box_shadow']['horizontal_offset'] ~ 'px ' ~ fields.button['box_shadow']['vertical_offset'] ~ 'px ' ~ fields.button['box_shadow']['blur'] ~ 'px ' ~ fields.button['box_shadow']['spread'] ~ 'px ' ~ box_shadow_color ~ ' ' ~ box_shadow_inset ~ ';' %}
+	{% set text_shadow_color = fields.button['text_shadow']['color']['color'] == 'palette' and fields.button['text_shadow']['color']['theme_color'] ? 'var(--' ~ fields.button['text_shadow']['color']['theme_color'] ~ ')' : fields.button['text_shadow']['color']['color'] == 'custom' and fields.button['text_shadow']['color']['custom_color'] ? fields.button['text_shadow']['color']['custom_color'] %}
+	{% set btn_text_shadow = fields.button['text_shadow']['horizontal_offset'] >= 0 or fields.button['text_shadow']['vertical_offset'] >= 0 or fields.button['text_shadow']['blur'] >= 0 or text_shadow_color ? 'text-shadow: ' ~ fields.button['text_shadow']['horizontal_offset'] ~ 'px ' ~ fields.button['text_shadow']['vertical_offset'] ~ 'px ' ~ fields.button['text_shadow']['blur'] ~ 'px ' ~ text_shadow_color ~ ';' %}
+{% endif %}
+{% set btn_fontsize = fields.button['font_size']['font_size']['value'] >= 0 ? 'font-size: ' ~ fields.button['font_size']['font_size']['value'] ~ fields.button['font_size']['font_size']['unit'] ~ ';' %}
+{% set btn_width = fields.button.width['width']['value'] >= 0 ? 'width: ' ~ fields.button.width['width']['value']  ~ fields.button.width['width']['unit'] ~  ';' %}
+{% set btn_min_width = fields.button.width['min_width'] >= 0 ? 'min-width: ' ~ fields.button.width['min_width']  ~ 'px;' %}
+{% set btn_max_width = fields.button.width['max_width'] >= 0 ? 'max-width: ' ~ fields.button.width['max_width']  ~ 'px;' %}
+{% set btn_margin_top = fields.button.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : parent_block_data['name'] != 'acf/group' and fields.button.margin['margin']['top']['top'] >= 0 ? 'margin-top: ' ~ fields.button.margin['margin']['top']['top'] ~ 'px;' %}
+{% set btn_margin_bottom = fields.button.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : parent_block_data['name'] != 'acf/group' and fields.button.margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.button.margin['margin']['bottom']['bottom'] ~ 'px;' %}
+{% set btn_margin_left = fields.button.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : parent_block_data['name'] != 'acf/group' and fields.button.margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.button.margin['margin']['left']['left'] ~ 'px;' %}
+{% set btn_margin_right = fields.button.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : parent_block_data['name'] != 'acf/group' and fields.button.margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.button.margin['margin']['right']['right'] ~ 'px;' %}
+
+{# Set icon styles #}
+{% set icon_color = fields.icon.icon_color.custom_color ? 'color: ' ~ fields.icon.icon_color.custom_color ~ ';'  %}
+
+{% set block_classes = block_classes|default([])|merge([
+  'block-search',
+  fields.wrapper_background_color['bg_color'] == 'palette' and fields.wrapper_background_color['bg_theme_color'] ? 'bg-' ~ fields.wrapper_background_color['bg_theme_color'],
+  block['className']
+]) | sort | join(' ') | trim %}
+
+{% set block_attributes = block_attributes|default([])|merge([
+  wrapper_bg_color or wrapper_border_top_width or wrapper_border_top_style or wrapper_border_top_color or wrapper_border_bottom_width or wrapper_border_bottom_style or wrapper_border_bottom_color or wrapper_border_left_width or wrapper_border_left_style or wrapper_border_left_color or wrapper_border_right_width or wrapper_border_right_style or wrapper_border_right_color or wrapper_border_top_left_radius or wrapper_border_top_right_radius or wrapper_border_bottom_left_radius or wrapper_border_bottom_right_radius or wrapper_width or wrapper_min_width or wrapper_max_width or wrapper_margin_top or wrapper_margin_bottom or wrapper_margin_left or wrapper_margin_right ? 'style="' ~ wrapper_bg_color ~ wrapper_border_top_width ~ wrapper_border_top_style ~ wrapper_border_top_color ~ wrapper_border_bottom_width ~ wrapper_border_bottom_style ~ wrapper_border_bottom_color ~ wrapper_border_left_width ~ wrapper_border_left_style ~ wrapper_border_left_color ~ wrapper_border_right_width ~ wrapper_border_right_style ~ wrapper_border_right_color ~ wrapper_border_top_left_radius ~ wrapper_border_top_right_radius ~ wrapper_border_bottom_left_radius ~ wrapper_border_bottom_right_radius ~ wrapper_width ~ wrapper_min_width ~ wrapper_max_width ~ wrapper_margin_top ~ wrapper_margin_bottom ~ wrapper_margin_left ~ wrapper_margin_right ~ '"'
+]) | sort | join(' ') | trim %}
+
+<div class="{{ block_classes }}" {{ block_attributes }}>
+  {# {{ function('get_search_form') }} #}
+  {% include "partials/content/searchform.twig" with {
+    post_type: fields.post_type ? fields.post_type,
+    show_label: fields.show_label,
+    label: fields.label,
+    label_classes: [
+      fields.label_color['color'] == 'palette' and fields.label_color['theme_color'] ? 'text-' ~ fields.label_color['theme_color']
+    ],
+    label_attributes: [
+      label_text_color ? 'style="' ~ label_text_color ~ '"'
+    ],
+    placeholder: fields.placeholder,
+    placeholder_color: fields.placeholder_color,
+    form_classes: [
+      fields.placeholder_color ? fields.placeholder_color,
+    ],
+    input_classes: [
+      fields.input_background_color['bg_color'] == 'palette' and fields.input_background_color['bg_theme_color'] ? 'bg-' ~ fields.input_background_color['bg_theme_color'],
+      fields.input_color['color'] == 'palette' and fields.input_color['theme_color'] ? 'text-' ~ fields.input_color['theme_color'],
+    ],
+    input_attributes: [
+      input_bg_color or input_text_color or input_border_top_width or input_border_top_style or input_border_top_color or input_border_bottom_width or input_border_bottom_style or input_border_bottom_color or input_border_left_width or input_border_left_style or input_border_left_color or input_border_right_width or input_border_right_style or input_border_right_color or input_border_top_left_radius or input_border_top_right_radius or input_border_bottom_left_radius or input_border_bottom_right_radius or input_padding_top or input_padding_bottom or input_padding_left or input_padding_right or input_width or input_max_width or input_min_width ? 'style="' ~ input_bg_color ~ input_text_color ~ input_border_top_width ~ input_border_top_style ~ input_border_top_color ~ input_border_bottom_width ~ input_border_bottom_style ~ input_border_bottom_color ~ input_border_left_width ~ input_border_left_style ~ input_border_left_color ~ input_border_right_width ~ input_border_right_style ~ input_border_right_color ~ input_border_top_left_radius ~ input_border_top_right_radius ~ input_border_bottom_left_radius ~ input_border_bottom_right_radius ~ input_padding_top ~ input_padding_bottom ~ input_padding_left ~ input_padding_right ~ input_width ~ input_max_width ~ input_min_width ~ '"'
+    ],
+    button_text: fields.button_text,
+    button_color: fields.button.style != 'custom' ? fields.button.style | default('link'),
+    button_size: fields.button.size,
+    button_outline: fields.button.outline,
+    button_block: fields.button.full_width,
+    button_nowrap: fields.button.nowrap,
+    hide_button_label: fields.button.hide_label,
+    button_classes: [
+      fields.button.background_color['bg_color'] == 'palette' and fields.button.background_color['bg_theme_color'] ? 'bg-' ~ fields.button.background_color['bg_theme_color'],
+      fields.button.text_color['color'] == 'palette' and fields.button.text_color['theme_color'] ? 'text-' ~ fields.button.text_color['theme_color'],
+      fields.button.full_width != true and fields.button.display['display'] is not null ? fields.button.display['display']
+    ],
+    button_attributes: [
+      btn_bg_color or btn_text_color or btn_transform or btn_padding_top or btn_padding_bottom or btn_padding_left or btn_padding_right or btn_border_top_width or btn_border_top_style or btn_border_top_color or btn_border_bottom_width or btn_border_bottom_style or btn_border_bottom_color or btn_border_left_width or btn_border_left_style or btn_border_left_color or btn_border_right_width or btn_border_right_style or btn_border_right_color or btn_border_top_left_radius or btn_border_top_right_radius or btn_border_bottom_left_radius or btn_border_bottom_right_radius or btn_box_shadow or btn_text_shadow or btn_fontsize or btn_width or btn_min_width or btn_max_width or btn_margin_top or btn_margin_bottom or btn_margin_left or btn_margin_right ? 'style="' ~ btn_bg_color ~ btn_text_color ~ btn_fontsize ~ btn_transform ~ btn_padding_top ~ btn_padding_bottom ~ btn_padding_left ~ btn_padding_right ~ btn_border_top_width ~ btn_border_top_style ~ btn_border_top_color ~ btn_border_bottom_width ~ btn_border_bottom_style ~ btn_border_bottom_color ~ btn_border_left_width ~ btn_border_left_style ~ btn_border_left_color ~ btn_border_right_width ~ btn_border_right_style ~ btn_border_right_color ~ btn_border_top_left_radius ~ btn_border_top_right_radius ~ btn_border_bottom_left_radius ~ btn_border_bottom_right_radius ~ btn_box_shadow ~ btn_text_shadow ~ btn_width ~ btn_min_width ~ btn_max_width ~ btn_margin_top ~ btn_margin_bottom ~ btn_margin_left ~ btn_margin_right ~ '"'
+    ],
+    svg_other_classes: 'search-icon',
+    hide_icon: fields.hide_icon,
+    icon_width: fields.icon.size ? fields.icon.size ~ 'px' : '16px',
+    icon_height: fields.icon.size ? fields.icon.size ~ 'px' : '16px',
+    icon_name: fields.icon.icon|default('search'),
+    icon_color: fields.icon.icon_color.theme_color ? fields.icon.icon_color.theme_color,
+    icon_styles: [
+      icon_color ? icon_color
+    ]
+  } %}
+</div>

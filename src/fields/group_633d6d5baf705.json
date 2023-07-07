@@ -40,8 +40,17 @@
                 "post": "post",
                 "page": "page",
                 "test-post-type": "test-post-type",
+                "frm_styles": "frm_styles",
+                "frm_form_actions": "frm_form_actions",
                 "acf-post-type": "acf-post-type",
-                "acf-taxonomy": "acf-taxonomy"
+                "acf-taxonomy": "acf-taxonomy",
+                "product": "product",
+                "product_variation": "product_variation",
+                "shop_order": "shop_order",
+                "shop_order_refund": "shop_order_refund",
+                "shop_coupon": "shop_coupon",
+                "shop_order_placehold": "shop_order_placehold",
+                "gpb_portfolio": "gpb_portfolio"
             },
             "default_value": [
                 "post"
@@ -94,11 +103,6 @@
                         "field": "field_633d6d636cac6",
                         "operator": "==",
                         "value": "query"
-                    },
-                    {
-                        "field": "field_633d6d636cac6",
-                        "operator": "==",
-                        "value": "select"
                     }
                 ]
             ],
@@ -642,7 +646,13 @@
                             "admin_only": 0,
                             "choices": {
                                 "test_tax": "test_tax",
-                                "another-taxonomy": "another-taxonomy"
+                                "another-taxonomy": "another-taxonomy",
+                                "product_type": "product_type",
+                                "product_visibility": "product_visibility",
+                                "product_cat": "product_cat",
+                                "product_tag": "product_tag",
+                                "product_shipping_class": "product_shipping_class",
+                                "gpb_portfolio_type": "gpb_portfolio_type"
                             },
                             "default_value": false,
                             "return_format": "value",
@@ -2737,7 +2747,15 @@
             "type": "true_false",
             "instructions": "",
             "required": 0,
-            "conditional_logic": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_64a37484f220e",
+                        "operator": "!=",
+                        "value": "1"
+                    }
+                ]
+            ],
             "wrapper": {
                 "width": "",
                 "class": "",
@@ -2745,10 +2763,186 @@
             },
             "admin_only": 0,
             "message": "",
-            "default_value": 1,
+            "default_value": 0,
             "ui_on_text": "",
             "ui_off_text": "",
             "ui": 1
+        },
+        {
+            "key": "field_64a37484f220e",
+            "label": "Include Load More",
+            "name": "include_load_more",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_63efe2d23dfb7",
+                        "operator": "!=",
+                        "value": "1"
+                    },
+                    {
+                        "field": "field_63f012c2a5230",
+                        "operator": "==",
+                        "value": "card-grid"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "message": "",
+            "default_value": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_64a3759ef2210",
+            "label": "Load More",
+            "name": "load_more",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_63efe2d23dfb7",
+                        "operator": "!=",
+                        "value": "1"
+                    },
+                    {
+                        "field": "field_63f012c2a5230",
+                        "operator": "==",
+                        "value": "card-grid"
+                    },
+                    {
+                        "field": "field_64a37484f220e",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_64a37fc19ec08",
+                    "label": "Load More Button Text",
+                    "name": "load_more_button_text",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "default_value": "Load More",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_64a388341a7b3",
+                    "label": "Number of Posts to Load",
+                    "name": "number_of_posts",
+                    "aria-label": "",
+                    "type": "number",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "default_value": "",
+                    "min": 0,
+                    "max": "",
+                    "placeholder": "",
+                    "step": 1,
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_64a380369ec09",
+                    "label": "Alignment",
+                    "name": "load_more_alignment",
+                    "aria-label": "",
+                    "type": "clone",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "clone": [
+                        "group_634831eb5b358"
+                    ],
+                    "display": "group",
+                    "layout": "block",
+                    "prefix_label": 0,
+                    "prefix_name": 1
+                },
+                {
+                    "key": "field_64a377c29ec07",
+                    "label": "Load More Button",
+                    "name": "load_more_button",
+                    "aria-label": "",
+                    "type": "clone",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "clone": [
+                        "field_634b9262e0f6d",
+                        "field_634b9262e0f6e",
+                        "field_634b9262e0f6f",
+                        "field_634dca232b6dd",
+                        "field_634dca5c2b6de",
+                        "field_63766afd9f3fa",
+                        "field_634dcab72b6df",
+                        "field_634dcb8c637ec",
+                        "field_634dcaf72b6e0",
+                        "field_634dcb292b6e1",
+                        "field_634dc9c42b6dc",
+                        "field_634b9262e0f72",
+                        "field_634b9262e0f73",
+                        "field_634b9262e0f74",
+                        "field_634b9262e0f75",
+                        "field_634b9262e0f7f"
+                    ],
+                    "display": "group",
+                    "layout": "block",
+                    "prefix_label": 0,
+                    "prefix_name": 1
+                }
+            ]
         },
         {
             "key": "field_63f054fcb7a23",
@@ -3809,7 +4003,13 @@
                             "admin_only": 0,
                             "choices": {
                                 "test_tax": "test_tax",
-                                "another-taxonomy": "another-taxonomy"
+                                "another-taxonomy": "another-taxonomy",
+                                "product_type": "product_type",
+                                "product_visibility": "product_visibility",
+                                "product_cat": "product_cat",
+                                "product_tag": "product_tag",
+                                "product_shipping_class": "product_shipping_class",
+                                "gpb_portfolio_type": "gpb_portfolio_type"
                             },
                             "default_value": false,
                             "return_format": "value",
@@ -5502,7 +5702,13 @@
                     "admin_only": 0,
                     "choices": {
                         "test_tax": "test_tax",
-                        "another-taxonomy": "another-taxonomy"
+                        "another-taxonomy": "another-taxonomy",
+                        "product_type": "product_type",
+                        "product_visibility": "product_visibility",
+                        "product_cat": "product_cat",
+                        "product_tag": "product_tag",
+                        "product_shipping_class": "product_shipping_class",
+                        "gpb_portfolio_type": "gpb_portfolio_type"
                     },
                     "default_value": false,
                     "return_format": "value",
@@ -5899,6 +6105,18 @@
                         "field": "field_63f012c2a5230",
                         "operator": "==",
                         "value": "card-grid"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_63f012c2a5230",
+                        "operator": "==",
+                        "value": "carousel"
+                    },
+                    {
+                        "field": "field_640e9797e2043",
+                        "operator": "==",
+                        "value": "1"
                     }
                 ]
             ],
@@ -6907,7 +7125,13 @@
                             "admin_only": 0,
                             "choices": {
                                 "test_tax": "test_tax",
-                                "another-taxonomy": "another-taxonomy"
+                                "another-taxonomy": "another-taxonomy",
+                                "product_type": "product_type",
+                                "product_visibility": "product_visibility",
+                                "product_cat": "product_cat",
+                                "product_tag": "product_tag",
+                                "product_shipping_class": "product_shipping_class",
+                                "gpb_portfolio_type": "gpb_portfolio_type"
                             },
                             "default_value": false,
                             "return_format": "",
@@ -7154,6 +7378,18 @@
                         "field": "field_63f012c2a5230",
                         "operator": "==",
                         "value": "card-grid"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_63f012c2a5230",
+                        "operator": "==",
+                        "value": "carousel"
+                    },
+                    {
+                        "field": "field_640e9797e2043",
+                        "operator": "==",
+                        "value": "1"
                     }
                 ]
             ],
@@ -8162,7 +8398,13 @@
                             "admin_only": 0,
                             "choices": {
                                 "test_tax": "test_tax",
-                                "another-taxonomy": "another-taxonomy"
+                                "another-taxonomy": "another-taxonomy",
+                                "product_type": "product_type",
+                                "product_visibility": "product_visibility",
+                                "product_cat": "product_cat",
+                                "product_tag": "product_tag",
+                                "product_shipping_class": "product_shipping_class",
+                                "gpb_portfolio_type": "gpb_portfolio_type"
                             },
                             "default_value": false,
                             "return_format": "value",
@@ -8535,7 +8777,8 @@
                 "field_640ad6fd31bbf",
                 "field_640ad70931bc0",
                 "field_640e56fa6fe96",
-                "field_640e57316fe97"
+                "field_640e57316fe97",
+                "field_64a498a83f16d"
             ],
             "display": "group",
             "layout": "block",
@@ -8927,5 +9170,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1684013045
+    "modified": 1688748066
 }

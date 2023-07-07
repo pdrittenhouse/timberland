@@ -41,13 +41,19 @@ const modalVideoControl = () => {
 
   if (modals !== null) {
     modals.forEach(modal => {
+      const videoWrapper = modal.querySelector('.video');
       const video = modal.querySelector('video');
       const youtube = modal.querySelector('.video-format--youtube iframe');
       const vimeo = modal.querySelector('.video-format--vimeo iframe');
 
       if (video !== null) {
+        if (videoWrapper.classList.contains('has-autoplay')) {
+          video.pause();
+        }
         $(modal).on('shown.bs.modal', function () {
-          video.play();
+          if (videoWrapper.classList.contains('has-autoplay')) {
+            video.play();
+          };
         });
         $(modal).on('hide.bs.modal', function () {
           video.pause();
@@ -55,8 +61,13 @@ const modalVideoControl = () => {
       }
 
       if (youtube !== null) {
+        if (videoWrapper.classList.contains('has-autoplay')) {
+          youtube.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+        }
         $(modal).on('shown.bs.modal', function () {
-          youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+          if (videoWrapper.classList.contains('has-autoplay')) {
+            youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+          };
         });
         $(modal).on('hide.bs.modal', function () {
           youtube.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
@@ -64,8 +75,13 @@ const modalVideoControl = () => {
       }
 
       if (vimeo !== null) {
+        if (videoWrapper.classList.contains('has-autoplay')) {
+          vimeo.contentWindow.postMessage('{"method":"pause"}', '*');
+        }
         $(modal).on('shown.bs.modal', function () {
-          vimeo.contentWindow.postMessage('{"method":"play"}', '*');
+          if (videoWrapper.classList.contains('has-autoplay')) {
+            vimeo.contentWindow.postMessage('{"method":"play"}', '*');
+          };
         });
         $(modal).on('hide.bs.modal', function () {
           vimeo.contentWindow.postMessage('{"method":"pause"}', '*');

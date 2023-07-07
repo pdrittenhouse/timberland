@@ -51,9 +51,13 @@
 {% set margin_bottom = fields.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.margin['margin']['bottom']['bottom'] ~ 'px;' %}
 {% set margin_left = fields.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.margin['margin']['left']['left'] ~ 'px;' %}
 {% set margin_right = fields.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : parent_block_data['name'] != 'acf/group' and fields.margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.margin['margin']['right']['right'] ~ 'px;' %}
+{% set padding_top  = fields.padding['padding']['top'] >= 0 ? 'padding-top: ' ~ fields.padding['padding']['top'] ~ 'px;' %}
+{% set padding_bottom = fields.padding['padding']['bottom'] >= 0 ? 'padding-bottom: ' ~ fields.padding['padding']['bottom'] ~ 'px;' %}
+{% set padding_left = fields.padding['padding']['left'] >= 0 ? 'padding-left: ' ~ fields.padding['padding']['left'] ~ 'px;' %}
+{% set padding_right = fields.padding['padding']['right'] >= 0 ? 'padding-right: ' ~ fields.padding['padding']['right'] ~ 'px;' %}
 
 {% set block_attributes = block_attributes|default([])|merge([
-  width or min_width or max_width or margin_top or margin_bottom or margin_left or margin_right ? 'style="' ~ width ~ min_width ~ max_width ~ margin_top ~ margin_bottom ~ margin_left ~ margin_right ~ '"'
+  width or min_width or max_width or margin_top or margin_bottom or margin_left or margin_right or padding_top or padding_bottom or padding_left or padding_right ? 'style="' ~ width ~ min_width ~ max_width ~ margin_top ~ margin_bottom ~ margin_left ~ margin_right ~ padding_top ~ padding_bottom ~ padding_left ~ padding_right ~ '"'
 ]) | sort | join(' ') | trim %}
 
 {# TODO: Retrieve innerBlock count and replace slideCount #}

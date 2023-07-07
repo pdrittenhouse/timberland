@@ -44,7 +44,8 @@
       <div class="container">
         <div class="row">
           <div class="col detailed-info">
-            {% do action('woocommerce_after_single_product_summary') %}
+{#            {% do action('woocommerce_after_single_product_summary') %}#}
+            {{ function('do_action', 'woocommerce_after_single_product_summary') }}
             <meta itemprop="url" content="{{ post.link }}" />
           </div>
         </div>
@@ -65,7 +66,7 @@
       <div class="row">
         <div class="col grid-cols-4 related-products">
           {% for post in related_products %}
-            {% include ["woo/tease-product.twig"] %}
+            {% include ["woo/tease-product.twig"] with {card_other_classes: 'post-grid--item'} %}
           {% endfor %}
           <span class="placecard"></span>
         </div>

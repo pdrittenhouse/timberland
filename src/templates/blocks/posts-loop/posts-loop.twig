@@ -1,6 +1,6 @@
 {#
 /**
- * Block Name: Posts Loop
+ * Block Name:
  *
  * This is the template that displays the  block.
  */
@@ -37,12 +37,199 @@
 {# Query Posts #}
 {#{{ query_posts }}#}
 
+{# if ( $data['selection_type'] == 'query' && !empty($data['authors']['author']) && $data['authors']['include_author'] === 'inc' ) {
+      $queryArgs['author__in'] = $data['authors']['author'];
+    }
+    if ( $data['selection_type'] == 'query' && !empty($data['authors']['author']) && $data['authors']['include_author'] === 'exc' ) {
+      $queryArgs['author__not_in'] = $data['authors']['author'];
+    }
+ #}
+
 {% set block_classes = block_classes|default([])|merge([
   'posts-loop',
   block['className']
 ]) | sort | join(' ') | trim %}
 
+{% if fields.date.date_query.date_query is not empty %}
+  {% set dateQueryArr = {} %}
+  {% set dateQueryArgs = {} %}
+	{% for date_query in fields.date.date_query.date_query %}
+		{% if date_query.year is not empty %}
+			{% set dateQueryArgs = dateQueryArgs|merge({ 'year': date_query.year|e }) %}
+		{% endif %}
+    {% if date_query.month is not empty %}
+      {% set dateQueryArgs = dateQueryArgs|merge({ 'monthnum': date_query.month|e }) %}
+    {% endif %}
+    {% if date_query.week is not empty %}
+      {% set dateQueryArgs = dateQueryArgs|merge({ 'w': date_query.week|e }) %}
+    {% endif %}
+    {% if date_query.day is not empty %}
+      {% set dateQueryArgs = dateQueryArgs|merge({ 'day': date_query.day|e }) %}
+    {% endif %}
+    {% if date_query.hour is not empty %}
+      {% set dateQueryArgs = dateQueryArgs|merge({ 'hour': date_query.hour|e }) %}
+    {% endif %}
+    {% if date_query.minute is not empty %}
+      {% set dateQueryArgs = dateQueryArgs|merge({ 'minute': date_query.minute|e }) %}
+    {% endif %}
+    {% if date_query.second is not empty %}
+      {% set dateQueryArgs = dateQueryArgs|merge({ 'second': date_query.second|e }) %}
+    {% endif %}
+
+		{% if date_query.after.type %}
+			{% set dateQueryArgs = dateQueryArgs|merge({ 'after': date_query.after.after }) %}
+		{% else %}
+			{% set dateQueryAfterArgs = {} %}
+			{% if date_query.after.year is not empty %}
+				{% set dateQueryAfterArgs = dateQueryAfterArgs|merge({ 'year': date_query.after.year }) %}
+			{% endif %}
+      {% if date_query.after.month is not empty %}
+				{% set dateQueryAfterArgs = dateQueryAfterArgs|merge({ 'month': date_query.after.month }) %}
+			{% endif %}
+      {% if date_query.after.day is not empty %}
+				{% set dateQueryAfterArgs = dateQueryAfterArgs|merge({ 'day': date_query.after.day }) %}
+			{% endif %}
+			{% if date_query.after.year or date_query.after.month or date_query.after.day %}
+				{% set dateQueryArgs = dateQueryArgs|merge({'after': dateQueryAfterArgs}) %}
+			{% endif %}
+		{% endif %}
+
+		{% if date_query.before.type %}
+			{% set dateQueryArgs = dateQueryArgs|merge({ 'before': date_query.before.before }) %}
+		{% else %}
+			{% set dateQueryBeforeArgs = {} %}
+			{% if date_query.before.year is not empty %}
+				{% set dateQueryBeforeArgs = dateQueryBeforeArgs|merge({ 'year': date_query.before.year }) %}
+			{% endif %}
+      {% if date_query.before.month is not empty %}
+				{% set dateQueryBeforeArgs = dateQueryBeforeArgs|merge({ 'month': date_query.before.month }) %}
+			{% endif %}
+      {% if date_query.before.day is not empty %}
+				{% set dateQueryBeforeArgs = dateQueryBeforeArgs|merge({ 'day': date_query.before.day }) %}
+			{% endif %}
+			{% if date_query.before.year or date_query.before.month or date_query.before.day %}
+				{% set dateQueryArgs = dateQueryArgs|merge({'before': dateQueryBeforeArgs}) %}
+			{% endif %}
+		{% endif %}
+
+		{% set dateQueryArr = dateQueryArr|merge([dateQueryArgs]) %}
+	{% endfor %}
+
+	{% if fields.date.date_query.relation %}
+		{% set dateQueryArr = dateQueryArr|merge({ 'relation': fields.date.date_query.relation }) %}
+	{% endif %}
+	{% if fields.date.date_query.compare %}
+		{% set dateQueryArr = dateQueryArr|merge({ 'compare': fields.date.date_query.compare }) %}
+	{% endif %}
+	{% if fields.date.date_query.column %}
+		{% set dateQueryArr = dateQueryArr|merge({ 'column': fields.date.date_query.column }) %}
+	{% endif %}
+	{% if fields.date.date_query.inclusive %}
+		{% set dateQueryArr = dateQueryArr|merge({ 'inclusive': fields.date.date_query.inclusive }) %}
+	{% endif %}
+{% endif %}
+
+{% if fields.custom_fields.meta_query.meta_query is not empty %}
+
+  {% set metaQueryArr = {} %}
+  {% set metaQueryArgs = {} %}
+
+  {% for meta_query in fields.custom_fields.meta_query.meta_query %}
+    {% if meta_query.key is not empty %}
+      {% set metaQueryArgs = metaQueryArgs|merge({'key': meta_query.key}) %}
+    {% endif %}
+    {% if meta_query.type is not empty %}
+      {% set metaQueryArgs = metaQueryArgs|merge({'type': meta_query.type}) %}
+    {% endif %}
+    {% if meta_query.compare is not empty %}
+      {% set metaQueryArgs = metaQueryArgs|merge({'compare': meta_query.compare}) %}
+    {% endif %}
+    {% if meta_query.compare in ['IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN'] and meta_query.values is not empty %}
+      {% set values = [] %}
+      {% for value in meta_query.values %}
+        {% set values = values|merge([value]) %}
+      {% endfor %}
+      {% set metaQueryArgs = metaQueryArgs|merge({'value': values}) %}
+    {% elseif meta_query.value is not empty %}
+      {% set metaQueryArgs = metaQueryArgs|merge({'value': meta_query.value}) %}
+    {% endif %}
+  {% endfor %}
+  {% if fields.custom_fields.meta_query.relation is not empty %}
+    {% set metaQueryArr = metaQueryArr|merge({'relation':fields.custom_fields.meta_query.relation}) %}
+  {% endif %}
+{% endif %}
+
+{% if fields.comment_count.value %}
+	{% set comment_count = {
+    'value': fields.comment_count.value,
+    'compare': fields.comment_count.compare
+  } %}
+{% endif %}
+
 {% set block_attributes = block_attributes|default([])|merge([
+  'data-pattern="' ~ fields.pattern ~ '"',
+  parent_block_data is not empty ? 'data-parent="' ~ parent_block_data|json_encode()|replace({'"': "'"}) ~ '"',
+  fields.include_load_more == true and fields.load_more.number_of_posts ? 'data-load-posts="' ~ fields.load_more.number_of_posts ~ '"',
+  (fields.pattern == 'card' or fields.pattern == 'card-grid' or fields.pattern == 'carousel') ? 'data-pattern-path="@molecules/card/"',
+  (fields.pattern == 'card' or fields.pattern == 'card-grid' or fields.pattern == 'carousel') and fields.card is not empty ? 'data-card="' ~ fields.card|json_encode()|replace({'"': "'"}) ~ '"',
+  (fields.pattern == 'card' or fields.pattern == 'card-grid' or fields.pattern == 'carousel') and fields.link_items is not empty ? 'data-link-items="' ~ fields.link_items ~ '"',
+  (fields.pattern == 'card' or fields.pattern == 'card-grid' or fields.pattern == 'carousel') and fields.elements is not empty ? 'data-elements="' ~ fields.elements|json_encode()|replace({'"': "'"}) ~ '"',
+  (fields.pattern == 'card' or fields.pattern == 'card-grid' or fields.pattern == 'carousel') and fields.element_excerpt == true ? 'data-element-excerpt="true"',
+  (fields.pattern == 'card' or fields.pattern == 'card-grid' or fields.pattern == 'carousel') and fields.element_author == true ? 'data-element-author="true"',
+  (fields.pattern == 'card' or fields.pattern == 'card-grid' or fields.pattern == 'carousel') and fields.element_date == true ? 'data-element-date="true"',
+  (fields.pattern == 'card' or fields.pattern == 'card-grid' or fields.pattern == 'carousel') and fields.element_modified == true ? 'data-element-modified="true"',
+  (fields.pattern == 'card' or fields.pattern == 'card-grid' or fields.pattern == 'carousel') and fields.element_post_parent == true ? 'data-element-post-parent="true"',
+  (fields.pattern == 'card' or fields.pattern == 'card-grid' or fields.pattern == 'carousel') and fields.element_children == true ? 'data-element-children="true"',
+  (fields.pattern == 'card' or fields.pattern == 'card-grid' or fields.pattern == 'carousel') and fields.element_post_type == true ? 'data-element-post-type="true"',
+  (fields.pattern == 'card' or fields.pattern == 'card-grid' or fields.pattern == 'carousel') and fields.element_comment_count == true ? 'data-element-comment-count="true"',
+  (fields.pattern == 'card' or fields.pattern == 'card-grid' or fields.pattern == 'carousel') and fields.element_link == true ? 'data-element-link="true"',
+  (fields.pattern == 'card' or fields.pattern == 'card-grid' or fields.pattern == 'carousel') and fields.element_terms == true ? 'data-element-terms="true"',
+  (fields.pattern == 'card' or fields.pattern == 'card-grid' or fields.pattern == 'carousel') and fields.element_categories == true ? 'data-element-categories="true"',
+  (fields.pattern == 'card' or fields.pattern == 'card-grid' or fields.pattern == 'carousel') and fields.element_tags == true ? 'data-element-tags="true"',
+  (fields.pattern == 'card' or fields.pattern == 'card-grid' or fields.pattern == 'carousel') and fields.card_footer_layout != false ? 'data-card-footer-layout="' ~ fields.card_footer_layout|json_encode()|replace({'"': "'"}) ~ '"',
+  (fields.pattern == 'card' or fields.pattern == 'card-grid' or fields.pattern == 'carousel') and fields.card_back_layout != false ? 'data-card-back-layout="' ~ fields.card_back_layout|json_encode()|replace({'"': "'"}) ~ '"',
+  (fields.pattern == 'card' or fields.pattern == 'card-grid' or fields.pattern == 'carousel') and fields.card_featured_image ? 'data-card-featured-image="' ~ fields.card_featured_image ~ '"',
+  fields.selection_type == 'query' and fields.post_type is not empty ? 'data-post-type="' ~ fields.post_type|json_encode()|replace({'"': "'"}) ~ '"',
+  fields.selection_type == 'query' and fields.sort_order is not empty ? 'data-order="' ~ fields.sort_order.order ~ '"',
+  fields.selection_type == 'query' and fields.sort_order is not empty ? 'data-order-by="' ~ fields.sort_order.order_by ~ '"',
+  fields.selection_type == 'query' and fields.ignore_sticky_posts == true ? 'data-ignore-sticky-posts="true"' : 'data-ignore-sticky-posts="false"', 
+  fields.selection_type == 'query' and not function('is_archive') and fields.pagination is not empty ? 'data-posts-per-page="' ~ fields.pagination.posts_per_page ~ '"' : fields.pagination is not empty ? 'data-posts-per-archive-page="' ~ fields.pagination.posts_per_page ~ '"',
+  fields.selection_type == 'query' and fields.pagination is not empty and fields.pagination.nopaging == true ? 'data-nopaging="true"' : 'data-nopaging="false"',
+  fields.selection_type == 'query' and fields.pagination is not empty and fields.pagination.offset is not empty ? 'data-offset="' ~ fields.pagination.offset ~ '"',
+  fields.pagination and fields.pagination.page is not empty and not function('is_page') ? 'data-paged="1"' : 'data-paged="' ~ fields.pagination.page ~ '"',
+  fields.selection_type == 'query' and fields.post_parent.parent is not empty and fields.post_parent.include_parent == 'inc' ? 'data-post-parent-in="' ~ fields.post_parent.parent|json_encode()|replace({'"': "'"}) ~ '"',
+  fields.selection_type == 'query' and fields.post_parent.parent is not empty and fields.post_parent.include_parent == 'exc' ? 'data-post-parent-not-in="' ~ fields.post_parent.parent|json_encode()|replace({'"': "'"}) ~ '"',
+  fields.selection_type == 'query' and fields.date.year is not empty ? 'data-year="' ~ fields.date.year ~ '"',
+  fields.selection_type == 'query' and fields.date.monthnum is not empty ? 'data-monthnum="' ~ fields.date.monthnum ~ '"',
+  fields.selection_type == 'query' and fields.date.w is not empty ? 'data-w="' ~ fields.date.w ~ '"',
+  fields.selection_type == 'query' and fields.date.day is not empty ? 'data-day="' ~ fields.date.day ~ '"',
+  fields.selection_type == 'query' and fields.date.hour is not empty ? 'data-hour="' ~ fields.date.hour ~ '"',
+  fields.selection_type == 'query' and fields.date.minute is not empty ? 'data-minute="' ~ fields.date.minute ~ '"',
+  fields.selection_type == 'query' and fields.date.second is not empty ? 'data-second="' ~ fields.date.second ~ '"',
+  fields.selection_type == 'query' and fields.date.m is not empty ? 'data-m="' ~ fields.date.m ~ '"',
+  fields.selection_type == 'query' and dateQueryArr is not empty ? 'data-date-query="' ~ dateQueryArr|json_encode()|replace({'"': "'"}) ~ '"',
+  fields.selection_type == 'query' and fields.custom_fields.meta_key is not empty ? 'data-meta-key="' ~ fields.custom_fields.meta_key ~ '"' : '',
+  fields.selection_type == 'query' and fields.custom_fields.meta_value is not empty ? 'data-meta-value="' ~ fields.custom_fields.meta_value ~ '"' : '',
+  fields.selection_type == 'query' and fields.custom_fields.meta_value_num is not empty ? 'data-meta-value-num="' ~ fields.custom_fields.meta_value_num ~ '"' : '',
+  fields.selection_type == 'query' and fields.custom_fields.meta_key is not empty and fields.custom_fields.meta_compare is not empty ? 'data-meta-compare="' ~ fields.custom_fields.meta_compare ~ '"' : '',
+  fields.selection_type == 'query' and fields.custom_fields.meta_query.meta_query is not empty ? 'data-meta-query="' ~ metaQueryArgs|json_encode()|replace({'"': "'"}) ~ '"',
+  fields.selection_type == 'query' and fields.taxonomies.taxonomies is not empty ? 'data-tax-query="' ~ fields.taxonomies.taxonomies|json_encode()|replace({'"': "'"}) ~ '"' : '',
+  fields.selection_type == 'query' and fields.categories.category is not empty and fields.categories.include_cats == 'inc' ? 'data-category-in="' ~ fields.categories.category|json_encode()|replace({'"': "'"}) ~ '"' : '',
+  fields.selection_type == 'query' and fields.categories.category is not empty and fields.categories.include_cats == 'exc' ? 'data-category-not-in="' ~ fields.categories.category|json_encode()|replace({'"': "'"}) ~ '"' : '',
+  fields.selection_type == 'query' and fields.tags.tags is not empty and fields.tags.include_tags == 'inc' ? 'data-tag-in="' ~ fields.tags.tags|json_encode()|replace({'"': "'"}) ~ '"' : '',
+  fields.selection_type == 'query' and fields.tags.tags is not empty and fields.tags.include_tags == 'exc' ? 'data-tag-not-in="' ~ fields.tags.tags|json_encode()|replace({'"': "'"}) ~ '"' : '',
+  fields.selection_type == 'query' and fields.authors.author is not empty and fields.authors.include_author == 'inc' ? 'data-author-in="' ~ fields.authors.author|json_encode()|replace({'"': "'"}) ~ '"' : '',
+  fields.selection_type == 'query' and fields.authors.author is not empty and fields.authors.include_author == 'exc' ? 'data-author-not-in="' ~ fields.authors.author|json_encode()|replace({'"': "'"}) ~ '"' : '',
+  fields.selection_type == 'query' and fields.comment_count.value ? 'data-comment-count="' ~ comment_count|json_encode()|replace({'"': "'"}) ~ '"',
+  fields.selection_type == 'query' and fields.post_status is not empty and fields.post_status.all == true ? 'data-post-status="any"' : fields.selection_type == 'query' and fields.post_status.status is not empty ? 'data-post-status="' ~ fields.post_status.status|json_encode()|replace({'"': "'"}) ~ '"' : '',
+  fields.selection_type == 'query' and fields.password is not empty and fields.password.has_password == true ? 'data-has-password="true"' : '',
+  fields.selection_type == 'query' and fields.password.post_password is not empty ? 'data-post-password="' ~ fields.password.post_password ~ '"' : '',
+  fields.selection_type == 'query' and fields.post_mime_type is not empty ? 'data-post-mime-type="' ~ fields.post_mime_type|json_encode()|replace({'"': "'"}) ~ '"' : '',
+  fields.selection_type == 'query' and fields.permissions is not null ? 'data-perm="' ~ fields.permissions ~ '"' : '',
+  fields.selection_type == 'query' and fields.search is not empty and fields.search.s == true ? 'data-s="' ~ function('get_search_query') ~ '"' : '',
+  fields.selection_type == 'query' and fields.search is not empty and fields.search.exact == true ? 'data-exact="true"' : '',
+  fields.selection_type == 'query' and fields.search is not empty and fields.search.sentence == true ? 'data-sentence="true"' : '',
+  fields.selection_type == 'select' ? 'data-post-in="' ~ fields.select_posts|json_encode()|replace({'"': "'"}) ~ '"' : '',
 ]) | sort | join(' ') | trim %}
 
 <div class="{{ block_classes }}" {{ block_attributes }}>
@@ -457,7 +644,7 @@
               fields.card.card_icon['icon_color']['color']  == 'custom' and fields.card.card_icon['icon_color']['custom_color'] ? 'color: ' ~ fields.card.card_icon['icon_color']['custom_color'] ~ ';',
             ]
           },
-          card_label: (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') ? true,
+          card_label: (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') ? true,
           card_title: function('in_array', 'post_title', fields.elements) ? post.title,
           card_linked: fields.link_items,
           card_link: fields.link_items ? post.link,
@@ -469,8 +656,8 @@
           card_image_overlay_text: '',
           card_image: {
             variant: 'primary',
-            src: fields.card_featured_image == 'inline' and function('get_the_post_thumbnail_url', post.ID) ? function('get_the_post_thumbnail_url', post.ID) : fields.image['image_type'] == 'file' and fields.image['image']['url'] ? fields.image['image']['url'] : fields.image['image_type'] == 'url' and fields.image['image_url'] ? fields.image['image_url'],
-            alt: fields.card_featured_image == 'inline' and function('get_the_post_thumbnail_url', post.ID) and post.post_title ? post.post_title : fields.image['image_type'] == 'file' and fields.image['image']['alt'] ? fields.image['image']['alt']
+            src: fields.card_featured_image == 'inline' and function('get_the_post_thumbnail_url', post.ID) ? function('get_the_post_thumbnail_url', post.ID) : fields.card.image['image_type'] == 'file' and fields.card.image['image']['url'] ? fields.card.image['image']['url'] : fields.card.image['image_type'] == 'url' and fields.card.image['image_url'] ? fields.card.image['image_url'],
+            alt: fields.card_featured_image == 'inline' and function('get_the_post_thumbnail_url', post.ID) and post.post_title ? post.post_title : fields.card.image['image_type'] == 'file' and fields.card.image['image']['alt'] ? fields.card.image['image']['alt']
           },
           card_footer: fields.card_footer_layout ? true,
           card_classes: [
@@ -558,7 +745,7 @@
           ]
         } %}
           {% block card_label %}
-            {% if (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') %}
+            {% if (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') %}
               <span class="card-label {{ inherit_color == true ? 'text-reset' }}">
                 {# Post Author #}
                 {% if function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label' %}
@@ -726,7 +913,7 @@
                 {% endif %}
 
                 {# Terms #}
-                {% if function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'label' %}
+                {% if function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'label' %}
                   <div class="posts-loop--terms--wrapper">
                     {% if fields.element_terms.label %}
                       <span class="posts-loop--terms--label">{{ fields.element_terms.label }}</span>
@@ -818,12 +1005,12 @@
           {% endblock card_label %}
 
           {% block card_intro %}
-            {% if card_title or (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'subtitle') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'subtitle') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'subtitle') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'subtitle') or (function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'subtitle') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'subtitle') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'subtitle') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'subtitle') %}
+            {% if card_title or (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'subtitle') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'subtitle') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'subtitle') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'subtitle') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'subtitle') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'subtitle') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'subtitle') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'subtitle') %}
               <div class="card-intro {{ no_body_padding == true ? 'p-0' }}">
                 {% if card_title %}
                   <h4 class="card-title {{ inherit_color == true ? 'text-reset' }}">{{ card_title }}</h4>
                 {% endif %}
-                {% if (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'subtitle') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'subtitle') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'subtitle') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'subtitle') or (function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'subtitle') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'subtitle') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'subtitle') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'subtitle') %}
+                {% if (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'subtitle') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'subtitle') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'subtitle') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'subtitle') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'subtitle') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'subtitle') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'subtitle') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'subtitle') %}
                   <h6 class="card-subtitle {{ inherit_color == true ? 'text-reset' }}">
                     {# Post Author #}
                     {% if function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle' %}
@@ -991,7 +1178,7 @@
                     {% endif %}
 
                     {# Terms #}
-                    {% if function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'subtitle' %}
+                    {% if function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'subtitle' %}
                       <div class="posts-loop--terms--wrapper">
                         {% if fields.element_terms.label %}
                           <span class="posts-loop--terms--label">{{ fields.element_terms.label }}</span>
@@ -1427,7 +1614,7 @@
           {% endblock card_footer %}
 
           {% block back %}
-            {% if fields.card_back_layout %}
+            {% if fields.card_back_layout and fields.card.flip_card == true %}
               <div class="card-back-content">
                 {% for element in fields.card_back_layout %}
                     {% if element.acf_fc_layout == 'featured_image' and post.thumbnail.src %}
@@ -1908,6 +2095,7 @@
         {% block card_grid_cards %}
 
           {% for post in posts %}
+
             {# Set custom card styles #}
             {% set card_bg_color = fields.card.card_bg_color['bg_color'] == 'custom' and fields.card.card_bg_color['bg_custom_color'] ? 'background-color: ' ~ fields.card.card_bg_color['bg_custom_color'] ~ ';' %}
             {% set card_border_color = fields.card.card_border_color['color'] == 'custom' and fields.card.card_border_color['custom_color'] ? 'border-color: ' ~ fields.card.card_border_color['custom_color'] ~ ';' %}
@@ -2016,7 +2204,7 @@
                   fields.card.card_icon['icon_color']['color']  == 'custom' and fields.card.card_icon['icon_color']['custom_color'] ? 'color: ' ~ fields.card.card_icon['icon_color']['custom_color'] ~ ';',
                 ]
               },
-              card_label: (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') ? true,
+              card_label: (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') ? true,
               card_title: function('in_array', 'post_title', fields.elements) ? post.title,
               card_linked: fields.link_items,
               card_link: fields.link_items ? post.link,
@@ -2028,8 +2216,8 @@
               card_image_overlay_text: '',
               card_image: {
                 variant: 'primary',
-                src: fields.card_featured_image == 'inline' and function('get_the_post_thumbnail_url', post.ID) ? function('get_the_post_thumbnail_url', post.ID) : fields.image['image_type'] == 'file' and fields.image['image']['url'] ? fields.image['image']['url'] : fields.image['image_type'] == 'url' and fields.image['image_url'] ? fields.image['image_url'],
-                alt: fields.card_featured_image == 'inline' and function('get_the_post_thumbnail_url', post.ID) and post.post_title ? post.post_title : fields.image['image_type'] == 'file' and fields.image['image']['alt'] ? fields.image['image']['alt']
+                src: fields.card_featured_image == 'inline' and function('get_the_post_thumbnail_url', post.ID) ? function('get_the_post_thumbnail_url', post.ID) : fields.card.image['image_type'] == 'file' and fields.card.image['image']['url'] ? fields.card.image['image']['url'] : fields.card.image['image_type'] == 'url' and fields.card.image['image_url'] ? fields.card.image['image_url'],
+                alt: fields.card_featured_image == 'inline' and function('get_the_post_thumbnail_url', post.ID) and post.post_title ? post.post_title : fields.card.image['image_type'] == 'file' and fields.card.image['image']['alt'] ? fields.card.image['image']['alt']
               },
               card_footer: fields.card_footer_layout ? true,
               card_classes: [
@@ -2117,7 +2305,7 @@
               ]
             } %}
               {% block card_label %}
-                {% if (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') %}
+                {% if (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') %}
                   <span class="card-label {{ inherit_color == true ? 'text-reset' }}">
                     {# Post Author #}
                     {% if function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label' %}
@@ -2285,7 +2473,7 @@
                     {% endif %}
 
                     {# Terms #}
-                    {% if function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'label' %}
+                    {% if function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'label' %}
                       <div class="posts-loop--terms--wrapper">
                         {% if fields.element_terms.label %}
                           <span class="posts-loop--terms--label">{{ fields.element_terms.label }}</span>
@@ -2377,12 +2565,12 @@
               {% endblock card_label %}
 
               {% block card_intro %}
-                {% if card_title or (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'subtitle') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'subtitle') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'subtitle') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'subtitle') or (function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'subtitle') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'subtitle') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'subtitle') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'subtitle') %}
+                {% if card_title or (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'subtitle') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'subtitle') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'subtitle') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'subtitle') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'subtitle') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'subtitle') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'subtitle') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'subtitle') %}
                   <div class="card-intro {{ no_body_padding == true ? 'p-0' }}">
                     {% if card_title %}
                       <h4 class="card-title {{ inherit_color == true ? 'text-reset' }}">{{ card_title }}</h4>
                     {% endif %}
-                    {% if (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'subtitle') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'subtitle') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'subtitle') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'subtitle') or (function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'subtitle') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'subtitle') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'subtitle') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'subtitle') %}
+                    {% if (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'subtitle') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'subtitle') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'subtitle') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'subtitle') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'subtitle') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'subtitle') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'subtitle') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'subtitle') %}
                       <h6 class="card-subtitle {{ inherit_color == true ? 'text-reset' }}">
                         {# Post Author #}
                         {% if function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle' %}
@@ -2550,7 +2738,7 @@
                         {% endif %}
 
                         {# Terms #}
-                        {% if function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'subtitle' %}
+                        {% if function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'subtitle' %}
                           <div class="posts-loop--terms--wrapper">
                             {% if fields.element_terms.label %}
                               <span class="posts-loop--terms--label">{{ fields.element_terms.label }}</span>
@@ -2986,7 +3174,7 @@
               {% endblock card_footer %}
 
               {% block back %}
-                {% if fields.card_back_layout %}
+                {% if fields.card_back_layout and fields.card.flip_card == true %}
                   <div class="card-back-content">
                     {% for element in fields.card_back_layout %}
                         {% if element.acf_fc_layout == 'featured_image' and post.thumbnail.src %}
@@ -3277,6 +3465,9 @@
         {% endblock %}
       {% endembed %}
 
+
+
+
     {% endif %}
 
     {# Carousel #}
@@ -3290,6 +3481,10 @@
       {% set slider_margin_bottom = fields.slider.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : parent_block_data['name'] != 'acf/group' and fields.slider.margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.slider.margin['margin']['bottom']['bottom'] ~ 'px;' %}
       {% set slider_margin_left = fields.slider.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : parent_block_data['name'] != 'acf/group' and fields.slider.margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.slider.margin['margin']['left']['left'] ~ 'px;' %}
       {% set slider_margin_right = fields.slider.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : parent_block_data['name'] != 'acf/group' and fields.slider.margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.slider.margin['margin']['right']['right'] ~ 'px;' %}
+      {% set slider_padding_top  = fields.slider.padding['padding']['top'] >= 0 ? 'padding-top: ' ~ fields.slider.padding['padding']['top'] ~ 'px;' %}
+      {% set slider_padding_bottom = fields.slider.padding['padding']['bottom'] >= 0 ? 'padding-bottom: ' ~ fields.slider.padding['padding']['bottom'] ~ 'px;' %}
+      {% set slider_padding_left = fields.slider.padding['padding']['left'] >= 0 ? 'padding-left: ' ~ fields.slider.padding['padding']['left'] ~ 'px;' %}
+      {% set slider_padding_right = fields.slider.padding['padding']['right'] >= 0 ? 'padding-right: ' ~ fields.slider.padding['padding']['right'] ~ 'px;' %}
 
       {% set slider_classes = slider_classes|default([])|merge([
         'posts-loop--slider',
@@ -3364,7 +3559,7 @@
               slider_classes
             ],
             carousel_attributes: [
-              slider_width or slider_min_width or slider_max_width or slider_margin_top or slider_margin_bottom or slider_margin_left or slider_margin_right ? 'style="' ~ slider_width ~ slider_min_width ~ slider_max_width ~ slider_margin_top ~ slider_margin_bottom ~ slider_margin_left ~ slider_margin_right ~ '"'
+              slider_width or slider_min_width or slider_max_width or slider_margin_top or slider_margin_bottom or slider_margin_left or slider_margin_right or slider_padding_top or slider_padding_bottom or slider_padding_left or slider_padding_right ? 'style="' ~ slider_width ~ slider_min_width ~ slider_max_width ~ slider_margin_top ~ slider_margin_bottom ~ slider_margin_left ~ slider_margin_right ~ slider_padding_top ~ slider_padding_bottom ~ slider_padding_left ~ slider_padding_right ~ '"'
             ],
             arrows: fields.slider.arrows,
             indicators: fields.slider.dots,
@@ -3490,7 +3685,7 @@
                         fields.card.card_icon['icon_color']['color']  == 'custom' and fields.card.card_icon['icon_color']['custom_color'] ? 'color: ' ~ fields.card.card_icon['icon_color']['custom_color'] ~ ';',
                       ]
                     },
-                    card_label: (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') ? true,
+                    card_label: (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') ? true,
                     card_title: function('in_array', 'post_title', fields.elements) ? post.title,
                     card_linked: fields.link_items,
                     card_link: fields.link_items ? post.link,
@@ -3502,8 +3697,8 @@
                     card_image_overlay_text: '',
                     card_image: {
                       variant: 'primary',
-                      src: fields.card_featured_image == 'inline' and function('get_the_post_thumbnail_url', post.ID) ? function('get_the_post_thumbnail_url', post.ID) : fields.image['image_type'] == 'file' and fields.image['image']['url'] ? fields.image['image']['url'] : fields.image['image_type'] == 'url' and fields.image['image_url'] ? fields.image['image_url'],
-                      alt: fields.card_featured_image == 'inline' and function('get_the_post_thumbnail_url', post.ID) and post.post_title ? post.post_title : fields.image['image_type'] == 'file' and fields.image['image']['alt'] ? fields.image['image']['alt']
+                      src: fields.card_featured_image == 'inline' and function('get_the_post_thumbnail_url', post.ID) ? function('get_the_post_thumbnail_url', post.ID) : fields.card.image['image_type'] == 'file' and fields.card.image['image']['url'] ? fields.card.image['image']['url'] : fields.card.image['image_type'] == 'url' and fields.card.image['image_url'] ? fields.card.image['image_url'],
+                      alt: fields.card_featured_image == 'inline' and function('get_the_post_thumbnail_url', post.ID) and post.post_title ? post.post_title : fields.card.image['image_type'] == 'file' and fields.card.image['image']['alt'] ? fields.card.image['image']['alt']
                     },
                     card_footer: fields.card_footer_layout ? true,
                     card_classes: [
@@ -3591,7 +3786,7 @@
                     ]
                   } %}
                     {% block card_label %}
-                      {% if (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') %}
+                      {% if (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') %}
                         <span class="card-label {{ inherit_color == true ? 'text-reset' }}">
                           {# Post Author #}
                           {% if function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label' %}
@@ -3759,7 +3954,7 @@
                           {% endif %}
 
                           {# Terms #}
-                          {% if function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'label' %}
+                          {% if function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'label' %}
                             <div class="posts-loop--terms--wrapper">
                               {% if fields.element_terms.label %}
                                 <span class="posts-loop--terms--label">{{ fields.element_terms.label }}</span>
@@ -3851,12 +4046,12 @@
                     {% endblock card_label %}
 
                     {% block card_intro %}
-                      {% if card_title or (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'subtitle') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'subtitle') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'subtitle') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'subtitle') or (function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'subtitle') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'subtitle') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'subtitle') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'subtitle') %}
+                      {% if card_title or (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'subtitle') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'subtitle') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'subtitle') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'subtitle') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'subtitle') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'subtitle') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'subtitle') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'subtitle') %}
                         <div class="card-intro {{ no_body_padding == true ? 'p-0' }}">
                           {% if card_title %}
                             <h4 class="card-title {{ inherit_color == true ? 'text-reset' }}">{{ card_title }}</h4>
                           {% endif %}
-                          {% if (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'subtitle') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'subtitle') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'subtitle') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'subtitle') or (function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'subtitle') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'subtitle') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'subtitle') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'subtitle') %}
+                          {% if (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'subtitle') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'subtitle') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'subtitle') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'subtitle') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'subtitle') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'subtitle') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'subtitle') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'subtitle') %}
                             <h6 class="card-subtitle {{ inherit_color == true ? 'text-reset' }}">
                               {# Post Author #}
                               {% if function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle' %}
@@ -4024,7 +4219,7 @@
                               {% endif %}
 
                               {# Terms #}
-                              {% if function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'subtitle' %}
+                              {% if function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'subtitle' %}
                                 <div class="posts-loop--terms--wrapper">
                                   {% if fields.element_terms.label %}
                                     <span class="posts-loop--terms--label">{{ fields.element_terms.label }}</span>
@@ -4460,7 +4655,7 @@
                     {% endblock card_footer %}
 
                     {% block back %}
-                      {% if fields.card_back_layout %}
+                      {% if fields.card_back_layout and fields.card.flip_card == true %}
                         <div class="card-back-content">
                           {% for element in fields.card_back_layout %}
                               {% if element.acf_fc_layout == 'featured_image' and post.thumbnail.src %}
@@ -4784,7 +4979,7 @@
               slider_classes
             ],
             flickity_carousel_attributes: [
-              width or min_width or max_width or margin_top or margin_bottom or margin_left or margin_right ? 'style="' ~ width ~ min_width ~ max_width ~ margin_top ~ margin_bottom ~ margin_left ~ margin_right ~ '"'
+              slider_width or slider_min_width or slider_max_width or slider_margin_top or slider_margin_bottom or slider_margin_left or slider_margin_right or slider_padding_top or slider_padding_bottom or slider_padding_left or slider_padding_right ? 'style="' ~ slider_width ~ slider_min_width ~ slider_max_width ~ slider_margin_top ~ slider_margin_bottom ~ slider_margin_left ~ slider_margin_right ~ slider_padding_top ~ slider_padding_bottom ~ slider_padding_left ~ slider_padding_right ~ '"'
             ]
           } %}
             {% block slides %}
@@ -4898,7 +5093,7 @@
                         fields.card.card_icon['icon_color']['color']  == 'custom' and fields.card.card_icon['icon_color']['custom_color'] ? 'color: ' ~ fields.card.card_icon['icon_color']['custom_color'] ~ ';',
                       ]
                     },
-                    card_label: (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') ? true,
+                    card_label: (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') ? true,
                     card_title: function('in_array', 'post_title', fields.elements) ? post.title,
                     card_linked: fields.link_items,
                     card_link: fields.link_items ? post.link,
@@ -4910,8 +5105,8 @@
                     card_image_overlay_text: '',
                     card_image: {
                       variant: 'primary',
-                      src: fields.card_featured_image == 'inline' and function('get_the_post_thumbnail_url', post.ID) ? function('get_the_post_thumbnail_url', post.ID) : fields.image['image_type'] == 'file' and fields.image['image']['url'] ? fields.image['image']['url'] : fields.image['image_type'] == 'url' and fields.image['image_url'] ? fields.image['image_url'],
-                      alt: fields.card_featured_image == 'inline' and function('get_the_post_thumbnail_url', post.ID) and post.post_title ? post.post_title : fields.image['image_type'] == 'file' and fields.image['image']['alt'] ? fields.image['image']['alt']
+                      src: fields.card_featured_image == 'inline' and function('get_the_post_thumbnail_url', post.ID) ? function('get_the_post_thumbnail_url', post.ID) : fields.card.image['image_type'] == 'file' and fields.card.image['image']['url'] ? fields.card.image['image']['url'] : fields.card.image['image_type'] == 'url' and fields.card.image['image_url'] ? fields.card.image['image_url'],
+                      alt: fields.card_featured_image == 'inline' and function('get_the_post_thumbnail_url', post.ID) and post.post_title ? post.post_title : fields.card.image['image_type'] == 'file' and fields.card.image['image']['alt'] ? fields.card.image['image']['alt']
                     },
                     card_footer: fields.card_footer_layout ? true,
                     card_classes: [
@@ -4999,7 +5194,7 @@
                     ]
                   } %}
                     {% block card_label %}
-                      {% if (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') %}
+                      {% if (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') %}
                         <span class="card-label {{ inherit_color == true ? 'text-reset' }}">
                           {# Post Author #}
                           {% if function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label' %}
@@ -5167,7 +5362,7 @@
                           {% endif %}
 
                           {# Terms #}
-                          {% if function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'label' %}
+                          {% if function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'label' %}
                             <div class="posts-loop--terms--wrapper">
                               {% if fields.element_terms.label %}
                                 <span class="posts-loop--terms--label">{{ fields.element_terms.label }}</span>
@@ -5259,12 +5454,12 @@
                     {% endblock card_label %}
 
                     {% block card_intro %}
-                      {% if card_title or (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'subtitle') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'subtitle') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'subtitle') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'subtitle') or (function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'subtitle') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'subtitle') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'subtitle') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'subtitle') %}
+                      {% if card_title or (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'subtitle') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'subtitle') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'subtitle') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'subtitle') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'subtitle') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'subtitle') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'subtitle') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'subtitle') %}
                         <div class="card-intro {{ no_body_padding == true ? 'p-0' }}">
                           {% if card_title %}
                             <h4 class="card-title {{ inherit_color == true ? 'text-reset' }}">{{ card_title }}</h4>
                           {% endif %}
-                          {% if (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'subtitle') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'subtitle') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'subtitle') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'subtitle') or (function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'subtitle') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'subtitle') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'subtitle') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'subtitle') %}
+                          {% if (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'subtitle') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'subtitle') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'subtitle') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'subtitle') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'subtitle') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'subtitle') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'subtitle') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'subtitle') %}
                             <h6 class="card-subtitle {{ inherit_color == true ? 'text-reset' }}">
                               {# Post Author #}
                               {% if function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle' %}
@@ -5432,7 +5627,7 @@
                               {% endif %}
 
                               {# Terms #}
-                              {% if function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'subtitle' %}
+                              {% if function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'subtitle' %}
                                 <div class="posts-loop--terms--wrapper">
                                   {% if fields.element_terms.label %}
                                     <span class="posts-loop--terms--label">{{ fields.element_terms.label }}</span>
@@ -5868,7 +6063,7 @@
                     {% endblock card_footer %}
 
                     {% block back %}
-                      {% if fields.card_back_layout %}
+                      {% if fields.card_back_layout and fields.card.flip_card == true %}
                         <div class="card-back-content">
                           {% for element in fields.card_back_layout %}
                               {% if element.acf_fc_layout == 'featured_image' and post.thumbnail.src %}
@@ -6198,7 +6393,7 @@
               slider_classes
             ],
             slick_carousel_attributes: [
-              width or min_width or max_width or margin_top or margin_bottom or margin_left or margin_right ? 'style="' ~ width ~ min_width ~ max_width ~ margin_top ~ margin_bottom ~ margin_left ~ margin_right ~ '"'
+              slider_width or slider_min_width or slider_max_width or slider_margin_top or slider_margin_bottom or slider_margin_left or slider_margin_right or slider_padding_top or slider_padding_bottom or slider_padding_left or slider_padding_right ? 'style="' ~ slider_width ~ slider_min_width ~ slider_max_width ~ slider_margin_top ~ slider_margin_bottom ~ slider_margin_left ~ slider_margin_right ~ slider_padding_top ~ slider_padding_bottom ~ slider_padding_left ~ slider_padding_right ~ '"'
             ]
           } %}
             {% block slides %}
@@ -6312,7 +6507,7 @@
                         fields.card.card_icon['icon_color']['color']  == 'custom' and fields.card.card_icon['icon_color']['custom_color'] ? 'color: ' ~ fields.card.card_icon['icon_color']['custom_color'] ~ ';',
                       ]
                     },
-                    card_label: (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') ? true,
+                    card_label: (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') ? true,
                     card_title: function('in_array', 'post_title', fields.elements) ? post.title,
                     card_linked: fields.link_items,
                     card_link: fields.link_items ? post.link,
@@ -6324,8 +6519,8 @@
                     card_image_overlay_text: '',
                     card_image: {
                       variant: 'primary',
-                      src: fields.card_featured_image == 'inline' and function('get_the_post_thumbnail_url', post.ID) ? function('get_the_post_thumbnail_url', post.ID) : fields.image['image_type'] == 'file' and fields.image['image']['url'] ? fields.image['image']['url'] : fields.image['image_type'] == 'url' and fields.image['image_url'] ? fields.image['image_url'],
-                      alt: fields.card_featured_image == 'inline' and function('get_the_post_thumbnail_url', post.ID) and post.post_title ? post.post_title : fields.image['image_type'] == 'file' and fields.image['image']['alt'] ? fields.image['image']['alt']
+                      src: fields.card_featured_image == 'inline' and function('get_the_post_thumbnail_url', post.ID) ? function('get_the_post_thumbnail_url', post.ID) : fields.card.image['image_type'] == 'file' and fields.card.image['image']['url'] ? fields.card.image['image']['url'] : fields.card.image['image_type'] == 'url' and fields.card.image['image_url'] ? fields.card.image['image_url'],
+                      alt: fields.card_featured_image == 'inline' and function('get_the_post_thumbnail_url', post.ID) and post.post_title ? post.post_title : fields.card.image['image_type'] == 'file' and fields.card.image['image']['alt'] ? fields.card.image['image']['alt']
                     },
                     card_footer: fields.card_footer_layout ? true,
                     card_classes: [
@@ -6413,7 +6608,7 @@
                     ]
                   } %}
                     {% block card_label %}
-                      {% if (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') %}
+                      {% if (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') %}
                         <span class="card-label {{ inherit_color == true ? 'text-reset' }}">
                           {# Post Author #}
                           {% if function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label' %}
@@ -6581,7 +6776,7 @@
                           {% endif %}
 
                           {# Terms #}
-                          {% if function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'label' %}
+                          {% if function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'label' %}
                             <div class="posts-loop--terms--wrapper">
                               {% if fields.element_terms.label %}
                                 <span class="posts-loop--terms--label">{{ fields.element_terms.label }}</span>
@@ -6673,12 +6868,12 @@
                     {% endblock card_label %}
 
                     {% block card_intro %}
-                      {% if card_title or (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'subtitle') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'subtitle') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'subtitle') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'subtitle') or (function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'subtitle') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'subtitle') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'subtitle') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'subtitle') %}
+                      {% if card_title or (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'subtitle') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'subtitle') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'subtitle') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'subtitle') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'subtitle') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'subtitle') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'subtitle') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'subtitle') %}
                         <div class="card-intro {{ no_body_padding == true ? 'p-0' }}">
                           {% if card_title %}
                             <h4 class="card-title {{ inherit_color == true ? 'text-reset' }}">{{ card_title }}</h4>
                           {% endif %}
-                          {% if (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'subtitle') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'subtitle') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'subtitle') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'subtitle') or (function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'subtitle') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'subtitle') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'subtitle') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'subtitle') %}
+                          {% if (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'subtitle') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'subtitle') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'subtitle') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'subtitle') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'subtitle') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_terms_location == 'subtitle') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'subtitle') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'subtitle') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'subtitle') %}
                             <h6 class="card-subtitle {{ inherit_color == true ? 'text-reset' }}">
                               {# Post Author #}
                               {% if function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'subtitle' %}
@@ -6846,7 +7041,7 @@
                               {% endif %}
 
                               {# Terms #}
-                              {% if function('in_array', 'terms', fields.elements) and post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) and fields.element_terms.card_terms_location == 'subtitle' %}
+                              {% if function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'subtitle' %}
                                 <div class="posts-loop--terms--wrapper">
                                   {% if fields.element_terms.label %}
                                     <span class="posts-loop--terms--label">{{ fields.element_terms.label }}</span>
@@ -7282,7 +7477,7 @@
                     {% endblock card_footer %}
 
                     {% block back %}
-                      {% if fields.card_back_layout %}
+                      {% if fields.card_back_layout and fields.card.flip_card == true %}
                         <div class="card-back-content">
                           {% for element in fields.card_back_layout %}
                               {% if element.acf_fc_layout == 'featured_image' and post.thumbnail.src %}
@@ -8896,9 +9091,107 @@
     {% endif %}
   </div>
 
-  {% if fields.include_pagination == true %}
+  {% if fields.include_load_more == true and fields.include_pagination != true %}
+    {# Alignment #}
+    {% if fields.load_more.load_more_alignment['hor_align'] %}
+      {% set load_more_btn_alignment = [] %}
+      {% for align in fields.load_more.load_more_alignment['hor_align'] %}
+        {% if align.breakpoint %}
+          {% set bp = '-' ~ align.breakpoint %}
+        {% else %}
+          {% set bp = '' %}
+        {% endif %}
+        {% if align.alignment %}
+          {% set talign = '-' ~ align.alignment %}
+        {% else %}
+          {% set talign = '' %}
+        {% endif %}
+        {% if talign %}
+          {% set load_more_btn_alignment = load_more_btn_alignment|default([])|merge([
+            'justify-content' ~ bp ~ talign
+          ]) %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    {# Set custom button styles #}
+    {% if fields.load_more.load_more_button.style == 'custom' %}
+      {% set load_more_btn_bg_color = fields.load_more.load_more_button.background_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.load_more.load_more_button.background_color['bg_custom_color'] ~ ';' %}
+      {% set load_more_btn_text_color = fields.load_more.load_more_button.text_color['color'] == 'custom' ? 'color: ' ~ fields.load_more.load_more_button.text_color['custom_color'] ~ ';' %}
+      {% set load_more_btn_transform = fields.load_more.load_more_button['text_transform']['text_transform'] ? 'text-transform: ' ~ fields.load_more.load_more_button['text_transform']['text_transform'] ~ ';' %}
+      {% set load_more_btn_padding_top  = fields.load_more.load_more_button['padding']['padding']['top'] is not empty ? 'padding-top: ' ~ fields.load_more.load_more_button['padding']['padding']['top'] ~ 'px;' %}
+      {% set load_more_btn_padding_bottom = fields.load_more.load_more_button['padding']['padding']['bottom'] is not empty ? 'padding-bottom: ' ~ fields.load_more.load_more_button['padding']['padding']['bottom'] ~ 'px;' %}
+      {% set load_more_btn_padding_left = fields.load_more.load_more_button['padding']['padding']['left'] is not empty ? 'padding-left: ' ~ fields.load_more.load_more_button['padding']['padding']['left'] ~ 'px;' %}
+      {% set load_more_btn_padding_right = fields.load_more.load_more_button['padding']['padding']['right'] is not empty ? 'padding-right: ' ~ fields.load_more.load_more_button['padding']['padding']['right'] ~ 'px;' %}
+      {% set load_more_btn_border_top_width = fields.load_more.load_more_button['border']['top']['width'] is not empty ? 'border-top-width: ' ~ fields.load_more.load_more_button['border']['top']['width'] ~ 'px;' %}
+      {% set load_more_btn_border_top_style = fields.load_more.load_more_button['border']['top']['style'] ? 'border-top-style: ' ~ fields.load_more.load_more_button['border']['top']['style'] ~ ';' %}
+      {% set load_more_btn_border_top_color = fields.load_more.load_more_button['border']['top']['color'] == 'custom' and fields.load_more.load_more_button['border']['top']['custom_color'] ? 'border-top-color: ' ~ fields.load_more.load_more_button['border']['top']['custom_color'] ~ ';' : fields.load_more.load_more_button['border']['top']['color'] == 'palette' and fields.load_more.load_more_button['border']['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.load_more.load_more_button['border']['top']['theme_color'] ~ ');' %}
+      {% set load_more_btn_border_bottom_width = fields.load_more.load_more_button['border']['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ fields.load_more.load_more_button['border']['bottom']['width'] ~ 'px;' %}
+      {% set load_more_btn_border_bottom_style = fields.load_more.load_more_button['border']['bottom']['style'] ? 'border-bottom-style: ' ~ fields.load_more.load_more_button['border']['bottom']['style'] ~ ';' %}
+      {% set load_more_btn_border_bottom_color = fields.load_more.load_more_button['border']['bottom']['color'] == 'custom' and fields.load_more.load_more_button['border']['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.load_more.load_more_button['border']['bottom']['custom_color'] ~ ';' : fields.load_more.load_more_button['border']['bottom']['color'] == 'palette' and fields.load_more.load_more_button['border']['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.load_more.load_more_button['border']['bottom']['theme_color'] ~ ');' %}
+      {% set load_more_btn_border_left_width = fields.load_more.load_more_button['border']['left']['width'] is not empty ? 'border-left-width: ' ~ fields.load_more.load_more_button['border']['left']['width'] ~ 'px;' %}
+      {% set load_more_btn_border_left_style = fields.load_more.load_more_button['border']['left']['style'] ? 'border-left-style: ' ~ fields.load_more.load_more_button['border']['left']['style'] ~ ';' %}
+      {% set load_more_btn_border_left_color = fields.load_more.load_more_button['border']['left']['color'] == 'custom' and fields.load_more.load_more_button['border']['left']['custom_color'] ? 'border-left-color: ' ~ fields.load_more.load_more_button['border']['left']['custom_color'] ~ ';' : fields.load_more.load_more_button['border']['left']['color'] == 'palette' and fields.load_more.load_more_button['border']['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.load_more.load_more_button['border']['left']['theme_color'] ~ ');' %}
+      {% set load_more_btn_border_right_width = fields.load_more.load_more_button['border']['right']['width'] is not empty ? 'border-right-width: ' ~ fields.load_more.load_more_button['border']['right']['width'] ~ 'px;' %}
+      {% set load_more_btn_border_right_style = fields.load_more.load_more_button['border']['right']['style'] ? 'border-right-style: ' ~ fields.load_more.load_more_button['border']['right']['style'] ~ ';' %}
+      {% set load_more_btn_border_right_color = fields.load_more.load_more_button['border']['right']['color'] == 'custom' and fields.load_more.load_more_button['border']['right']['custom_color'] ? 'border-right-color: ' ~ fields.load_more.load_more_button['border']['right']['custom_color'] ~ ';' : fields.load_more.load_more_button['border']['right']['color'] == 'palette' and fields.load_more.load_more_button['border']['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.load_more.load_more_button['border']['right']['theme_color'] ~ ');' %}
+      {% set load_more_btn_border_top_left_radius = fields.load_more.load_more_button['border_radius']['top_left'] is not empty ? 'border-top-left-radius: ' ~ fields.load_more.load_more_button['border_radius']['top_left'] ~ 'px;' %}
+      {% set load_more_btn_border_top_right_radius = fields.load_more.load_more_button['border_radius']['top_right'] is not empty ? 'border-top-right-radius: ' ~ fields.load_more.load_more_button['border_radius']['top_right'] ~ 'px;' %}
+      {% set load_more_btn_border_bottom_left_radius = fields.load_more.load_more_button['border_radius']['bottom_left'] is not empty ? 'border-bottom-left-radius: ' ~ fields.load_more.load_more_button['border_radius']['bottom_left'] ~ 'px;' %}
+      {% set load_more_btn_border_bottom_right_radius = fields.load_more.load_more_button['border_radius']['bottom_right'] is not empty ? 'border-bottom-right-radius: ' ~ fields.load_more.load_more_button['border_radius']['bottom_right'] ~ 'px;' %}
+      {% set load_more_btn_box_shadow_color = fields.load_more.load_more_button['box_shadow']['color']['color'] == 'palette' and fields.load_more.load_more_button['box_shadow']['color']['theme_color'] ? 'var(--' ~ fields.load_more.load_more_button['box_shadow']['color']['theme_color'] ~ ')' : fields.load_more.load_more_button['box_shadow']['color']['color'] == 'custom' and fields.load_more.load_more_button['box_shadow']['color']['custom_color'] ? fields.load_more.load_more_button['box_shadow']['color']['custom_color'] %}
+      {% set load_more_btn_box_shadow_inset = fields.load_more.load_more_button['box_shadow']['inset'] == true ? 'inset' %}
+      {% set load_more_btn_box_shadow = fields.load_more.load_more_button['box_shadow']['horizontal_offset'] is not empty or fields.load_more.load_more_button['box_shadow']['vertical_offset'] is not empty or fields.load_more.load_more_button['box_shadow']['blur'] is not empty or fields.load_more.load_more_button['box_shadow']['spread'] is not empty or btn_box_shadow_color or btn_box_shadow_inset ? 'box-shadow: ' ~ fields.load_more.load_more_button['box_shadow']['horizontal_offset'] ~ 'px ' ~ fields.load_more.load_more_button['box_shadow']['vertical_offset'] ~ 'px ' ~ fields.load_more.load_more_button['box_shadow']['blur'] ~ 'px ' ~ fields.load_more.load_more_button['box_shadow']['spread'] ~ 'px ' ~ btn_box_shadow_color ~ ' ' ~ btn_box_shadow_inset ~ ';' %}
+      {% set load_more_btn_text_shadow_color = fields.load_more.load_more_button['text_shadow']['color']['color'] == 'palette' and fields.load_more.load_more_button['text_shadow']['color']['theme_color'] ? 'var(--' ~ fields.load_more.load_more_button['text_shadow']['color']['theme_color'] ~ ')' : fields.load_more.load_more_button['text_shadow']['color']['color'] == 'custom' and fields.load_more.load_more_button['text_shadow']['color']['custom_color'] ? fields.load_more.load_more_button['text_shadow']['color']['custom_color'] %}
+      {% set load_more_btn_text_shadow = fields.load_more.load_more_button['text_shadow']['horizontal_offset'] is not empty or fields.load_more.load_more_button['text_shadow']['vertical_offset'] is not empty or fields.load_more.load_more_button['text_shadow']['blur'] is not empty or btn_text_shadow_color ? 'text-shadow: ' ~ fields.load_more.load_more_button['text_shadow']['horizontal_offset'] ~ 'px ' ~ fields.load_more.load_more_button['text_shadow']['vertical_offset'] ~ 'px ' ~ fields.load_more.load_more_button['text_shadow']['blur'] ~ 'px ' ~ btn_text_shadow_color ~ ';' %}
+    {% endif %}
+    {% set load_more_btn_fontsize = fields.load_more.load_more_button['font_size']['font_size']['value'] is not empty ? 'font-size: ' ~ fields.load_more.load_more_button['font_size']['font_size']['value'] ~ fields.load_more.load_more_button['font_size']['font_size']['unit'] ~ ';' %}
+    {% set load_more_btn_width = fields.load_more.load_more_button.button_width.width['width']['value'] is not empty ? 'width: ' ~ fields.load_more.load_more_button.button_width.width['width']['value']  ~ fields.load_more.load_more_button.button_width.width['width']['unit'] ~  ';' %}
+    {% set load_more_btn_min_width = fields.load_more.load_more_button.button_width.width['min_width'] is not empty ? 'min-width: ' ~ fields.load_more.load_more_button.button_width.width['min_width']  ~ 'px;' %}
+    {% set load_more_btn_max_width = fields.load_more.load_more_button.button_width.width['max_width'] is not empty ? 'max-width: ' ~ fields.load_more.load_more_button.button_width.width['max_width']  ~ 'px;' %}
+    {% set load_more_btn_margin_top = fields.load_more.load_more_button.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : fields.load_more.load_more_button.margin['margin']['top']['top'] is not empty ? 'margin-top: ' ~ fields.load_more.load_more_button.margin['margin']['top']['top'] ~ 'px;' %}
+    {% set load_more_btn_margin_bottom = fields.load_more.load_more_button.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.load_more.load_more_button.margin['margin']['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ fields.load_more.load_more_button.margin['margin']['bottom']['bottom'] ~ 'px;' %}
+    {% set load_more_btn_margin_left = fields.load_more.load_more_button.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : fields.load_more.load_more_button.margin['margin']['left']['left'] is not empty ? 'margin-left: ' ~ fields.load_more.load_more_button.margin['margin']['left']['left'] ~ 'px;' %}
+    {% set load_more_btn_margin_right = fields.load_more.load_more_button.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : fields.load_more.load_more_button.margin['margin']['right']['right'] is not empty ? 'margin-right: ' ~ fields.load_more.load_more_button.margin['margin']['right']['right'] ~ 'px;' %}
+
+    
+
+
+    {# {{ function('print_r', '<pre>') }}
+    {{ function('print_r', fields.load_more.load_more_button) }}
+    {{ function('print_r', '</pre>') }} #}
+
+    <div class="load-more--wrapper {{ load_more_btn_alignment|length > 0 ? load_more_btn_alignment|sort|join(' ')|trim }}">
+      {% include '@atoms/button/_button.tpl.twig' with {
+        button_text: fields.load_more.load_more_button_text|default('Load More'),
+        button_color: fields.load_more.load_more_button.style != 'custom' ? fields.load_more.load_more_button.style | default('default'),
+        button_size: fields.load_more.load_more_button.size,
+        button_outline: fields.load_more.load_more_button.outline,
+        button_block: fields.load_more.load_more_button.full_width,
+        nowrap: fields.load_more.load_more_button.nowrap,
+        title: fields.load_more.load_more_button_text|default('Load More'),
+        button_classes: [
+          'load-more--button',
+          fields.load_more.load_more_button.background_color['bg_color'] == 'palette' and fields.load_more.load_more_button.background_color['bg_theme_color'] ? 'bg-' ~ fields.load_more.load_more_button.background_color['bg_theme_color'],
+          fields.load_more.load_more_button.text_color['color'] == 'palette' and fields.load_more.load_more_button.text_color['theme_color'] ? 'text-' ~ fields.load_more.load_more_button.text_color['theme_color'],
+          fields.load_more.load_more_button.full_width != true and fields.load_more.load_more_button.display['display'] is not null ? fields.load_more.load_more_button.display['display']
+        ],
+        button_attributes: [
+          load_more_btn_bg_color or load_more_btn_text_color or load_more_btn_transform or load_more_btn_btn_padding_top or load_more_btn_padding_bottom or load_more_btn_padding_left or load_more_btn_padding_right or load_more_btn_border_top_width or load_more_btn_border_top_style or load_more_btn_border_top_color or load_more_btn_border_bottom_width or load_more_btn_border_bottom_style or load_more_btn_border_bottom_color or load_more_btn_border_left_width or load_more_btn_border_left_style or load_more_btn_border_left_color or load_more_btn_border_right_width or load_more_btn_border_right_style or load_more_btn_border_right_color or load_more_btn_border_top_left_radius or load_more_btn_border_top_right_radius or load_more_btn_border_bottom_left_radius or load_more_btn_border_bottom_right_radius or load_more_btn_box_shadow or load_more_btn_text_shadow or load_more_btn_fontsize or load_more_btn_width or min_width or load_more_btn_max_width or load_more_btn_margin_top or load_more_btn_margin_bottom or load_more_btn_margin_left or load_more_btn_margin_right ? 'style="' ~ load_more_btn_bg_color ~ load_more_btn_text_color ~ load_more_btn_fontsize ~ load_more_btn_transform ~ load_more_btn_padding_top ~ load_more_btn_padding_bottom ~ load_more_btn_padding_left ~ load_more_btn_padding_right ~ load_more_btn_border_top_width ~ load_more_btn_border_top_style ~ load_more_btn_border_top_color ~ load_more_btn_border_bottom_width ~ load_more_btn_border_bottom_style ~ load_more_btn_border_bottom_color ~ load_more_btn_border_left_width ~ load_more_btn_border_left_style ~ load_more_btn_border_left_color ~ load_more_btn_border_right_width ~ load_more_btn_border_right_style ~ load_more_btn_border_right_color ~ load_more_btn_border_top_left_radius ~ load_more_btn_border_top_right_radius ~ load_more_btn_border_bottom_left_radius ~ load_more_btn_border_bottom_right_radius ~ load_more_btn_box_shadow ~ load_more_btn_text_shadow ~ load_more_btn_width ~ load_more_btn_min_width ~ load_more_btn_max_width ~ load_more_btn_margin_top ~ load_more_btn_margin_bottom ~ load_more_btn_margin_left ~ load_more_btn_margin_right ~ '"'
+        ]
+      } %}
+
+      {# {% include '@atoms/button/_button.tpl.twig' with {
+        button_color: 'primary',
+        button_text: fields.load_more.load_more_button_text|default('Load More'),
+        button_other_classes: 'load-more--button',
+      } %} #}
+    </div>
+  {% endif %}
+
+  {% if fields.include_pagination == true and fields.include_load_more != true %}
     <div class="posts-loop--pagination">
-    {% include 'partials/menus/pagination.twig' with { posts: posts, pagination: posts.pagination({show_all: false, mid_size: 3, end_size: 2}) } %}
+      {% include 'partials/menus/pagination.twig' with { posts: posts, pagination: posts.pagination({show_all: false, mid_size: 3, end_size: 2}) } %}
     </div>
   {% endif %}
 
