@@ -106,8 +106,8 @@
         block['align'] ? 'align-' ~ block['align']
     ],
     card_attributes: [
-        fields.link_card == true and fields.trigger_modal == true ? 'data-toggle="modal"',
-        fields.link_card == true and fields.trigger_modal == true ? 'data-target="#' ~ fields.modal_id ~ '"',
+        fields.link_card == true and fields.trigger_modal == true ? 'data-bs-toggle="modal"',
+        fields.link_card == true and fields.trigger_modal == true ? 'data-bs-target="#' ~ fields.modal_id ~ '"',
         width or min_width or max_width or margin_top or margin_bottom or margin_left or margin_right ? 'style="' ~ width ~ min_width ~ max_width ~ margin_top ~ margin_bottom ~ margin_left ~ margin_right ~ '"'
     ]
 } %}

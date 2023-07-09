@@ -10,6 +10,10 @@
   z-index: z(modal);
   z-index: 1051; // Needed for modals not in footer
 
+  &-backdrop {
+    z-index: 0;
+  }
+
   &-dialog {
 
     &:not(.modal-fullscreen) {

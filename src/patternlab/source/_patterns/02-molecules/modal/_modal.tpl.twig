@@ -69,7 +69,7 @@
   'role="dialog"',
   modal_id ? 'aria-labelledby="' ~ modal_id ~ 'Label"' : 'aria-labelledby="' ~ modalId ~ 'Label"',
   'aria-hidden="true"',
-  backdrop == true  and backdrop_static == true ? 'data-bs-backdrop="statie"' : backdrop == true ? 'data-bs-backdrop="true"' : 'data-bs-backdrop="false"',
+  backdrop == true  and backdrop_static == true ? 'data-bs-backdrop="static"' : backdrop == true ? 'data-bs-backdrop="true"' : 'data-bs-backdrop="false"',
   modal_other_attributes,
 ]) | sort | join(' ') | trim %}
 
@@ -201,7 +201,8 @@
                 button_classes: header_close_classes,
                 button_other_classes: modal_close_header_button.button_other_classes,
                 button_attributes: header_close_attributes,
-                button_other_attributes: modal_close_header_button.button_other_attributes
+                button_other_attributes: modal_close_header_button.button_other_attributes,
+                hide_label: modal_close_header_button.hide_label,
               } %}
             {% endif %}
           </div>

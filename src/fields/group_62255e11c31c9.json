@@ -227,6 +227,56 @@
             "prefix_name": 0
         },
         {
+            "key": "field_64aa0771f6ee4",
+            "label": "Backdrop",
+            "name": "backdrop",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "message": "",
+            "default_value": 1,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_64a9f7dad18fc",
+            "label": "Static Backdrop",
+            "name": "static_backdrop",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_64aa0771f6ee4",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "message": "",
+            "default_value": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
             "key": "field_630b020dcf660",
             "label": "Backdrop Color",
             "name": "backdrop_color",
@@ -240,6 +290,7 @@
                 "class": "",
                 "id": ""
             },
+            "admin_only": 0,
             "clone": [
                 "group_634653996a829"
             ],
@@ -630,5 +681,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1684013347
+    "modified": 1688865080
 }
