@@ -497,6 +497,29 @@
             "prefix_name": 1
         },
         {
+            "key": "field_64b816c498794",
+            "label": "Footer Layout",
+            "name": "site_footer_layout",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "clone": [
+                "group_64b8161ed1eda"
+            ],
+            "display": "group",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1
+        },
+        {
             "key": "field_63a89cf5fd5c8",
             "label": "Disable Header Container",
             "name": "remove_header_container",
@@ -887,5 +910,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1689783892
+    "modified": 1689786168
 }

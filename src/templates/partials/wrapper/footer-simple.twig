@@ -173,7 +173,7 @@
       footer_two_cols ? 'two-cols',
       footer_reverse_cols ? 'reverse-cols',
       footer_reverse_meta ? 'reverse-meta',
-      options.site_footer_layout != 'default' ? 'site-footer-' ~ options.site_footer_layout,
+      post.meta('site_footer_layout').footer_layout != 'default' ? 'site-footer-' ~ post.meta('site_footer_layout').footer_layout : options.site_footer_layout.footer_layout != 'default' ? 'site-footer-' ~ options.site_footer_layout.footer_layout,
       'p-0'
     ],
     footer_other_classes: ''
@@ -195,7 +195,7 @@
       footer_two_cols ? 'two-cols',
       footer_reverse_cols ? 'reverse-cols',
       footer_reverse_meta ? 'reverse-meta',
-      options.site_footer_layout != 'default' ? 'site-footer-' ~ options.site_footer_layout
+      post.meta('site_footer_layout').footer_layout != 'default' ? 'site-footer-' ~ post.meta('site_footer_layout').footer_layout : options.site_footer_layout.footer_layout != 'default' ? 'site-footer-' ~ options.site_footer_layout.footer_layout
     ],
     footer_other_classes: ''
   } %}
