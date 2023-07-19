@@ -33,7 +33,7 @@
       align_to_content ? 'align-to-content',
       full_screen ? 'full-screen-mobile-nav',
       center_mobile_nav ? 'center-mobile-nav-content',
-      options.site_header_layout != 'default' ? 'site-header-' ~ options.site_header_layout,
+      post.meta('site_header_layout') != 'default' ? 'site-header-' ~ post.meta('site_header_layout') : options.site_header_layout != 'default' ? 'site-header-' ~ options.site_header_layout,
       'd-block'
     ],
     header_other_classes: ''
@@ -149,7 +149,7 @@
       align_to_content ? 'align-to-content',
       full_screen ? 'full-screen-mobile-nav',
       center_mobile_nav ? 'center-mobile-nav-content',
-      options.site_header_layout != 'default' ? 'site-header-' ~ options.site_header_layout
+    post.meta('site_header_layout') != 'default' ? 'site-header-' ~ post.meta('site_header_layout') : options.site_header_layout != 'default' ? 'site-header-' ~ options.site_header_layout,
     ],
     header_other_classes: ''
   } %}

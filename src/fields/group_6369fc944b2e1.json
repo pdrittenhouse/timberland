@@ -45,7 +45,7 @@
             "label": "Header Layout",
             "name": "site_header_layout",
             "aria-label": "",
-            "type": "select",
+            "type": "clone",
             "instructions": "",
             "required": 0,
             "conditional_logic": 0,
@@ -55,19 +55,13 @@
                 "id": ""
             },
             "admin_only": 0,
-            "choices": {
-                "default": "Default",
-                "inline-social": "Inline Social Nav",
-                "angles": "Angles",
-                "bars": "Bars"
-            },
-            "default_value": "default",
-            "return_format": "value",
-            "multiple": 0,
-            "allow_null": 0,
-            "ui": 0,
-            "ajax": 0,
-            "placeholder": ""
+            "clone": [
+                "group_64b809bf194d9"
+            ],
+            "display": "group",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1
         },
         {
             "key": "field_63bb38d96a600",
@@ -487,5 +481,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1684013032
+    "modified": 1689783171
 }
