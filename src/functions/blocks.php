@@ -126,7 +126,7 @@ function dream_block_render($block, $content = '', $is_preview = false, $post_id
   $context['block'] = $block;
 
   // Store field values.
-  $context['fields'] = get_fields();
+  $context['fields'] = get_fields($block['id']);
 
   // Store $is_preview value.
   $context['is_preview'] = $is_preview;

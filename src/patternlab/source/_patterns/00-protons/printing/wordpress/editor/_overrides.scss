@@ -7,6 +7,14 @@
     &.wp-block-paragraph {
       margin-bottom: 1em;
     }
+
+    &.wp-block-image,
+    &.wp-block-post-featured-image {
+
+      &:before {
+        content: none;
+      }
+    }
   }
 
   .block-modal {

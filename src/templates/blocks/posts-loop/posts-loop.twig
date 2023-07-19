@@ -1279,7 +1279,10 @@
                   {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
                     <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>
                   {% elseif function('in_array', 'post_excerpt', fields.elements) %}
-                    <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format) }}</div>
+                    <div class="posts-loop--post-excerpt">
+                        <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>
+                        {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}
+                      </div>
                   {% endif %}
                   {% if function('in_array', 'post_content', fields.elements) %}
                     <div class="posts-loop--post-content">{{ post.content }}</div>
@@ -2839,7 +2842,10 @@
                       {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
                         <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>
                       {% elseif function('in_array', 'post_excerpt', fields.elements) %}
-                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format) }}</div>
+                        <div class="posts-loop--post-excerpt">
+                          <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>
+                          {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}
+                        </div>
                       {% endif %}
                       {% if function('in_array', 'post_content', fields.elements) %}
                         <div class="posts-loop--post-content">{{ post.content }}</div>
@@ -4320,7 +4326,10 @@
                             {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
                               <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>
                             {% elseif function('in_array', 'post_excerpt', fields.elements) %}
-                              <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format) }}</div>
+                              <div class="posts-loop--post-excerpt">
+                                <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>
+                                {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}
+                              </div>
                             {% endif %}
                             {% if function('in_array', 'post_content', fields.elements) %}
                               <div class="posts-loop--post-content">{{ post.content }}</div>
@@ -5728,7 +5737,10 @@
                             {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
                               <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>
                             {% elseif function('in_array', 'post_excerpt', fields.elements) %}
-                              <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format) }}</div>
+                              <div class="posts-loop--post-excerpt">
+                                <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>
+                                {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}
+                              </div>
                             {% endif %}
                             {% if function('in_array', 'post_content', fields.elements) %}
                               <div class="posts-loop--post-content">{{ post.content }}</div>
@@ -7142,7 +7154,10 @@
                             {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
                               <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>
                             {% elseif function('in_array', 'post_excerpt', fields.elements) %}
-                              <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format) }}</div>
+                              <div class="posts-loop--post-excerpt">
+                                <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>
+                                {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}
+                              </div>
                             {% endif %}
                             {% if function('in_array', 'post_content', fields.elements) %}
                               <div class="posts-loop--post-content">{{ post.content }}</div>
@@ -9933,7 +9948,19 @@
 
   {% if fields.include_pagination == true and fields.include_load_more != true %}
     <div class="posts-loop--pagination">
-      {% include 'partials/menus/pagination.twig' with { posts: posts, pagination: posts.pagination({show_all: false, mid_size: 3, end_size: 2}) } %}
+      {% include 'partials/menus/pagination.twig' with {
+        posts: posts,
+        pagination: posts.pagination({show_all: false, mid_size: 3, end_size: 2}),
+        hide_first: fields.pagination_display.hide_first,
+        hide_last: fields.pagination_display.hide_last,
+        hide_next: fields.pagination_display.hide_next,
+        hide_previous: fields.pagination_display.hide_previous,
+        hide_pages: fields.pagination_display.hide_pages,
+        first_label: fields.pagination_display.first_label,
+        last_label: fields.pagination_display.last_label,
+        next_label: fields.pagination_display.next_label,
+        previous_label: fields.pagination_display.previous_label
+      } %}
     </div>
   {% endif %}
 

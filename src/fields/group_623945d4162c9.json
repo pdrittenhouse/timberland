@@ -272,26 +272,28 @@
                         "class": "",
                         "id": ""
                     },
-                    "choices": {
-                        "1": "1",
-                        "2": "2",
-                        "3": "3",
-                        "4": "4",
-                        "5": "5",
-                        "6": "6",
-                        "7": "7",
-                        "8": "8",
-                        "9": "9",
-                        "10": "10",
-                        "11": "11",
-                        "12": "12"
-                    },
+                    "admin_only": 0,
+                    "choices": [
+                        "0",
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12"
+                    ],
                     "default_value": "null",
-                    "allow_null": 1,
+                    "return_format": "value",
                     "multiple": 0,
+                    "allow_null": 1,
                     "ui": 0,
                     "ajax": 0,
-                    "return_format": "value",
                     "placeholder": "",
                     "parent_repeater": "field_62394838a64f6"
                 }
@@ -402,5 +404,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1684013205
+    "modified": 1689348514
 }

@@ -1,0 +1,108 @@
+.wp-block-post-featured-image {
+
+    .wp-post-image {}
+
+    &:not(.is-style-rounded) {
+
+        .wp-post-image {}
+    }
+
+    &.is-style-full-width {
+
+        .wp-post-image {
+            @include cover-image-max();
+        }
+    }
+
+    &.is-style-full-height {
+        height: 100%;
+
+        .wp-post-image {
+            @include cover-image-max();
+        }
+    }
+
+    &.is-style-circle {
+        @include aspect-ratio(1, 1, '.wp-post-image');
+        border-radius: 50%;
+        overflow: hidden;
+
+        .wp-post-image {
+            @include cover-image-max();
+        }
+    }
+
+
+    &.is-style-ar-1-1 {
+        @include aspect-ratio(1, 1, '.wp-post-image');
+        overflow: hidden;
+
+        .wp-post-image {
+            @include cover-image-max();
+        }
+    }
+
+    &.is-style-ar-2-3 {
+        @include aspect-ratio(2, 3, '.wp-post-image');
+        overflow: hidden;
+
+        .wp-post-image {
+            @include cover-image-max();
+        }
+    }
+
+    &.is-style-ar-3-2 {
+        @include aspect-ratio(3, 2, '.wp-post-image');
+        overflow: hidden;
+
+        .wp-post-image {
+            @include cover-image-max();
+        }
+    }
+
+    &.is-style-ar-3-4 {
+        @include aspect-ratio(3, 4, '.wp-post-image');
+        overflow: hidden;
+
+        .wp-post-image {
+            @include cover-image-max();
+        }
+    }
+
+    &.is-style-ar-4-3 {
+        @include aspect-ratio(4, 3, '.wp-post-image');
+        overflow: hidden;
+
+        .wp-post-image {
+            @include cover-image-max();
+        }
+    }
+
+    &.is-style-ar-5-7 {
+        @include aspect-ratio(5, 7, '.wp-post-image');
+        overflow: hidden;
+
+        .wp-post-image {
+            @include cover-image-max();
+        }
+    }
+
+    &.is-style-ar-16-9 {
+        @include aspect-ratio(16, 9, '.wp-post-image');
+        overflow: hidden;
+
+        .wp-post-image {
+            @include cover-image-max();
+        }
+    }
+
+    &.is-style-ar-21-9 {
+        @include aspect-ratio(21, 9, '.wp-post-image');
+        overflow: hidden;
+
+        .wp-post-image {
+            @include cover-image-max();
+        }
+    }
+
+}

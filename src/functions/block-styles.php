@@ -98,6 +98,105 @@ function dream_register_block_styles() {
     );
 
     /**
+     * Featured Image
+     */
+    register_block_style(
+      'core/post-featured-image',
+      array(
+        'name'  => 'rounded',
+        'label' => __('Rounded'),
+      )
+    );
+
+    register_block_style(
+      'core/post-featured-image',
+      array(
+        'name'  => 'circle',
+        'label' => __('Circle'),
+      )
+    );
+
+    register_block_style(
+      'core/post-featured-image',
+      array(
+        'name'  => 'full-width',
+        'label' => __('Full Width'),
+      )
+    );
+
+    register_block_style(
+      'core/post-featured-image',
+      array(
+        'name'  => 'full-height',
+        'label' => __('Full Height'),
+      )
+    );
+
+    register_block_style(
+      'core/post-featured-image',
+      array(
+        'name'  => 'ar-1-1',
+        'label' => __('1:1 Aspect Ratio'),
+      )
+    );
+
+    register_block_style(
+      'core/post-featured-image',
+      array(
+        'name'  => 'ar-2-3',
+        'label' => __('2:3 Aspect Ratio'),
+      )
+    );
+
+    register_block_style(
+      'core/post-featured-image',
+      array(
+        'name'  => 'ar-3-2',
+        'label' => __('3:2 Aspect Ratio'),
+      )
+    );
+
+    register_block_style(
+      'core/post-featured-image',
+      array(
+        'name'  => 'ar-3-4',
+        'label' => __('3:4 Aspect Ratio'),
+      )
+    );
+
+    register_block_style(
+      'core/post-featured-image',
+      array(
+        'name'  => 'ar-4-3',
+        'label' => __('4:3 Aspect Ratio'),
+      )
+    );
+
+    register_block_style(
+      'core/post-featured-image',
+      array(
+        'name'  => 'ar-5-7',
+        'label' => __('5:7 Aspect Ratio'),
+      )
+    );
+
+    register_block_style(
+      'core/post-featured-image',
+      array(
+        'name'  => 'ar-16-9',
+        'label' => __('16:9 Aspect Ratio'),
+      )
+    );
+
+    register_block_style(
+      'core/post-featured-image',
+      array(
+        'name'  => 'ar-21-9',
+        'label' => __('21:9 Aspect Ratio'),
+      )
+    );
+
+    /**
      * Separator
      */
     register_block_style(

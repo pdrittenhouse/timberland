@@ -88,7 +88,7 @@
     {% else %}
       {% set bp = '' %}
     {% endif %}
-    {% if col_off.offset %}
+    {% if col_off.offset is not empty %}
       {% set offset = '-' ~ col_off.offset %}
     {% else %}
       {% set offset = '' %}

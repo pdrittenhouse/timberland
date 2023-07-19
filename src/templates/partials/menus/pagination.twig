@@ -1,64 +1,58 @@
-{#{{ function('print_r', '<pre>') }}#}
-{#      {{ function('print_r', posts.pagination.pages) }}#}
-{#      {{ function('print_r', '</pre>') }}#}
-
 {% if posts.pagination.pages is not empty %}
-    <nav class="pagination-block">
-        <ul class="pagination">
-            {% if pagination.pages|first and pagination.pages|first.current != true %}
-                <li class="first btn">
-                    <a href="{{ pagination.pages|first.link }}">First</a>
-                </li>
-            {% else %}
-                <li class="first btn disabled">
-                    <button disabled>First</button>
-                </li>
-            {% endif %}
+  <nav class="pagination-block">
+    <ul class="pagination">
+      {% if pagination.pages|first and pagination.pages|first.current != true and hide_first != true %}
+        <li class="first btn">
+          <a href="{{ pagination.pages|first.link }}">{{ first_label | default('First') }}</a>
+        </li>
+      {% elseif hide_first != true %}
+        <li class="first btn disabled">
+          <button disabled>{{ first_label | default('First') }}</button>
+        </li>
+      {% endif %}
 
-            {% if pagination.prev %}
-                <li class="prev btn">
-                    <a href="{{ pagination.prev.link }}">Previous</a>
-                </li>
-            {% else %}
-                <li class="prev btn disabled">
-                    <button disabled>Previous</button>
-                </li>
-            {% endif %}
+      {% if pagination.prev and hide_previous != true %}
+        <li class="prev btn">
+          <a href="{{ pagination.prev.link }}">{{ previous_label | default('Previous') }}</a>
+        </li>
+      {% elseif hide_previous != true %}
+        <li class="prev btn disabled">
+          <button disabled>{{ previous_label | default('Previous') }}</button>
+        </li>
+      {% endif %}
 
-            {% for page in pagination.pages %}
-                {% if page.link %}
-                    <li>
-                        <a href="{{ page.link }}" class="{{ page.class }}">{{ page.title }}</a>
-                    </li>
-                {% else %}
-                    <li class="current">
-                        <span class="{{ page.class }}">{{ page.title }}</span>
-                    </li>
-                {% endif %}
-            {% endfor %}
+      {% if hide_pages != true %}
+        {% for page in pagination.pages %}
+          {% if page.link %}
+            <li>
+              <a href="{{ page.link }}" class="{{ page.class }}">{{ page.title }}</a>
+            </li>
+          {% else %}
+            <li class="current">
+              <span class="{{ page.class }}">{{ page.title }}</span>
+            </li>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
 
-            {% if pagination.next %}
-                <li class="next btn">
-                    <a href="{{ pagination.next.link }}">
-                        Next
-                    </a>
-                </li>
-            {% else %}
-                <li class="next btn disabled">
-                    <button disabled>
-                        Next
-                    </button>
-                </li>
-            {% endif %}
-            {% if pagination.pages|last and pagination.pages|last.current != true %}
-                <li class="last btn">
-                    <a href="{{ pagination.pages|last.link }}">Last</a>
-                </li>
-            {% else %}
-                <li class="last btn disabled">
-                    <button disabled>Last</button>
-                </li>
-            {% endif %}
-        </ul>
-    </nav>
+      {% if pagination.next and hide_next != true %}
+        <li class="next btn">
+          <a href="{{ pagination.next.link }}">{{ next_label | default('Next') }}</a>
+        </li>
+      {% elseif hide_next != true %}
+        <li class="next btn disabled">
+          <button disabled>{{ next_label | default('Next') }}</button>
+        </li>
+      {% endif %}
+      {% if pagination.pages|last and pagination.pages|last.current != true and hide_last != true %}
+        <li class="last btn">
+          <a href="{{ pagination.pages|last.link }}">{{ last_label | default('Last') }}</a>
+        </li>
+      {% elseif hide_last != true %}
+        <li class="last btn disabled">
+          <button disabled>{{ last_label | default('Last') }}</button>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
 {% endif %}

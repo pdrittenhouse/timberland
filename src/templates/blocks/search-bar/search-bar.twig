@@ -89,10 +89,6 @@
 {% set input_min_width = fields.input_width.width['min_width'] >= 0 ? 'min-width: ' ~ fields.input_width.width['min_width']  ~ 'px;' %}
 {% set input_max_width = fields.input_width.width['max_width'] >= 0 ? 'max-width: ' ~ fields.input_width.width['max_width']  ~ 'px;' %}
 
-{{ function('print_r', '<pre>') }}
-{{ function('print_r', input_padding_top) }}
-{{ function('print_r', '</pre>') }}
-
 {# Set custom button styles #}
 {% if fields.button.style == 'custom' %}
 	{% set btn_bg_color = fields.button.background_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.button.background_color['bg_custom_color'] ~ ';' %}

@@ -72,14 +72,25 @@
   {% set default_padding = 'var(--grid-column-padding)' %}
 {% endif %}
 
+{#{% set wrapper_styles = [#}
+{#  fields.height.height['height']['value'] is not empty ? 'height: ' ~ fields.height.height['height']['value'] ~ fields.height.height['height']['unit'] ~ ';',#}
+{#  fields.height.height['min_height'] is not empty ? 'min-height: ' ~ fields.height.height['min_height'] ~ 'px;',#}
+{#  fields.height.height['max_height'] is not empty ? 'max-height: ' ~ fields.height.height['max_height'] ~ 'px;',#}
+{#  fields.container != true and options.remove_content_containers != true and block_post.custom['remove_content_container'] != true and block_context['acf/fields']['container'] == true and fields.padding['padding']['top'] is not empty ? 'padding-top: ' ~ fields.padding['padding']['top'] ~ 'px;',#}
+{#  fields.container != true and options.remove_content_containers != true and block_post.custom['remove_content_container'] != true and block_context['acf/fields']['container'] == true and fields.padding['padding']['bottom'] is not empty ? 'padding-bottom: ' ~ fields.padding['padding']['bottom'] ~ 'px;',#}
+{#  fields.container != true and options.remove_content_containers != true and block_post.custom['remove_content_container'] != true and block_context['acf/fields']['container'] == true and fields.padding['padding']['left'] is not empty ? 'padding-left: ' ~ fields.padding['padding']['left'] | default(default_padding) ~ 'px;',#}
+{#  fields.container != true and options.remove_content_containers != true and block_post.custom['remove_content_container'] != true and block_context['acf/fields']['container'] == true and fields.padding['padding']['right'] is not empty ? 'padding-right: ' ~ fields.padding['padding']['right'] | default(default_padding) ~ 'px;',#}
+{#  fields.col_gap['value'] ? 'column-gap: ' ~ fields.col_gap['value'] ~ fields.col_gap['unit'] ~ ';',#}
+{#] | sort | join(' ') | trim %}#}
+
 {% set wrapper_styles = [
   fields.height.height['height']['value'] is not empty ? 'height: ' ~ fields.height.height['height']['value'] ~ fields.height.height['height']['unit'] ~ ';',
   fields.height.height['min_height'] is not empty ? 'min-height: ' ~ fields.height.height['min_height'] ~ 'px;',
   fields.height.height['max_height'] is not empty ? 'max-height: ' ~ fields.height.height['max_height'] ~ 'px;',
-  fields.container != true and options.remove_content_containers != true and block_post.custom['remove_content_container'] != true and block_context['acf/fields']['container'] == true and fields.padding['padding']['top'] is not empty ? 'padding-top: ' ~ fields.padding['padding']['top'] ~ 'px;',
-  fields.container != true and options.remove_content_containers != true and block_post.custom['remove_content_container'] != true and block_context['acf/fields']['container'] == true and fields.padding['padding']['bottom'] is not empty ? 'padding-bottom: ' ~ fields.padding['padding']['bottom'] ~ 'px;',
-  fields.container != true and options.remove_content_containers != true and block_post.custom['remove_content_container'] != true and block_context['acf/fields']['container'] == true and fields.padding['padding']['left'] is not empty ? 'padding-left: ' ~ fields.padding['padding']['left'] | default(default_padding) ~ 'px;',
-  fields.container != true and options.remove_content_containers != true and block_post.custom['remove_content_container'] != true and block_context['acf/fields']['container'] == true and fields.padding['padding']['right'] is not empty ? 'padding-right: ' ~ fields.padding['padding']['right'] | default(default_padding) ~ 'px;',
+  fields.container != true or  block_context['acf/fields']['container'] == true and (options.remove_content_containers == true or block_post.custom['remove_content_container'] == true) and fields.padding['padding']['top'] is not empty ? 'padding-top: ' ~ fields.padding['padding']['top'] ~ 'px;',
+  fields.container != true or  block_context['acf/fields']['container'] == true and (options.remove_content_containers == true or block_post.custom['remove_content_container'] == true) and fields.padding['padding']['bottom'] is not empty ? 'padding-bottom: ' ~ fields.padding['padding']['bottom'] ~ 'px;',
+  fields.container != true or  block_context['acf/fields']['container'] == true and (options.remove_content_containers == true or block_post.custom['remove_content_container'] == true) and fields.padding['padding']['left'] is not empty ? 'padding-left: ' ~ fields.padding['padding']['left'] | default(default_padding) ~ 'px;',
+  fields.container != true or  block_context['acf/fields']['container'] == true and (options.remove_content_containers == true or block_post.custom['remove_content_container'] == true) and fields.padding['padding']['right'] is not empty ? 'padding-right: ' ~ fields.padding['padding']['right'] | default(default_padding) ~ 'px;',
   fields.col_gap['value'] ? 'column-gap: ' ~ fields.col_gap['value'] ~ fields.col_gap['unit'] ~ ';',
 ] | sort | join(' ') | trim %}
 
