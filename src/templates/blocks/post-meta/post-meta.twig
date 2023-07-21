@@ -1,0 +1,171 @@
+{#
+/**
+ * Block Name: Post Meta
+ *
+ * This is the template that displays the  block.
+ */
+#}
+
+{#{% if is_preview %}#}
+{#<p>Some editor instructions here.</p>#}
+{#{% endif %}#}
+
+{#{{ block['className'] }}#}
+{#{{ block['align'] ? 'align-' ~ block['align'] }}#}
+{#{{ block['align_text']}}#}
+{#{{ block['align_content'] }}#}
+{#{{ block['full_height'] }}#}
+
+{# Parent Block Data - ACF <= v.5.9 #}
+{#{% set parent = function('get_parent_block', block['id'], block['name']) %}#}
+{# Parent Block Data - ACF >= v.6.0 #}
+{#{{ parent_block_data['data'] }}#}
+{# Block Context #}
+{#{{ block_context['acf/fields'] }}#}
+{# ACF Options Fields #}
+{#{{ options }}#}
+{# ACF Fields #}
+{#{{ fields }}#}
+{# Site Data #}
+{#{{ site }}#}
+{# SASS Data #}
+{#{{ sass_data }}#}
+{# Post Data #}
+{#{{ block_post }}#}
+
+{% set block_classes = block_classes|default([])|merge([
+  'post-meta',
+  fields.hide_author == true ? 'author-hidden',
+  fields.hide_gravatar != true ? 'has-author-image',
+  fields.coauthor_options.hide_gravatar != true ? 'has-coauthor-image',
+  block['className']
+]) | sort | join(' ') | trim %}
+
+{% set block_attributes = block_attributes|default([])|merge([
+]) | sort | join(' ') | trim %}
+
+<div class="{{ block_classes }}" {{ block_attributes }}>
+  {% if fields.hide_author != true %}
+    <div class="post-meta--wrapper">
+      {% if fields.hide_gravatar != true %}
+        <div class="post-meta--author-image">
+          {% include "@atoms/image/_image.tpl.twig" with {
+            variant: 'primary',
+            src: function('get_avatar_url', function('get_the_author_meta', 'ID')),
+            alt: function('get_the_author_meta', 'display_name'),
+            placeholder: false,
+            image_classes: [
+              'post-meta--gravatar'
+            ]
+          } %}
+        </div>
+      {% endif %}
+      {% if fields.hide_author_name != true or fields.hide_author_email != true or fields.hide_date != true or fields.hide_modified_date != true or fields.hide_author_bio != true or fields.hide_edit_link != true %}
+        <div class="post-meta--content">
+          {% if fields.hide_author_name != true or fields.hide_author_email != true %}
+            <div class="post-meta--author">
+              {% if fields.hide_author_name != true %}
+                {% if fields.link_author == true %}
+                  {{ fields.byline ? '<span class="post-meta--byline">' ~ fields.byline ~ '</span>'}}<a class="post-meta--author-name" href="{{ function('get_author_posts_url', function('get_the_author_meta')) ~ function('get_the_author_meta', 'user_nicename') }}">{{ function('get_the_author_meta', 'display_name') }}</a>
+                {% else %}
+                  {{ fields.byline ? '<span class="post-meta--byline">' ~ fields.byline ~ '</span>'}}<span class="post-meta--author-name">{{ function('get_the_author_meta', 'display_name') }}</span>
+                {% endif %}
+              {% endif %}
+              {% if fields.hide_author_email != true %}
+                {% if fields.link_author_email == true %}
+                  <a class="post-meta--author-email" href="mailto:{{ function('get_the_author_meta', 'user_email') }}">{{ function('get_the_author_meta', 'user_email') }}</a>
+                {% else %}
+                  <span class="post-meta--author-email">{{ function('get_the_author_meta', 'user_email') }}</span>
+                {% endif %}
+              {% endif %}
+            </div>
+          {% endif %}
+          {% if fields.hide_date != true or fields.hide_modified_date != true %}
+            <div class="post-meta--date">
+              {% if fields.hide_date != true %}
+                <span class="post-meta--author-date">{{ function('get_the_date', fields.date_format|default('F, j Y')) }}</span>
+              {% endif %}
+              {% if fields.hide_modified_date != true %}
+                <span class="post-meta--author-modified-date">{{ function('get_the_modified_date',  fields.modified_date_format|default('F, j Y')) }}</span>
+              {% endif %}
+            </div>
+          {% endif %}
+          {% if fields.hide_author_bio != true or (function('is_user_logged_in') and fields.hide_edit_link != true) %}
+            <div class="post-meta--description">
+              {% if fields.hide_author_bio != true %}
+                <span class="post-meta--bio">{{ function('get_the_author_meta', 'description') }}</span>
+              {% endif %}
+              {% if function('is_user_logged_in') and fields.hide_edit_link != true %}
+                <a class="post-meta--edit" href="{{ function('get_edit_post_link') }}">Edit</a>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if function('function_exists', 'coauthors_posts_links') and fields.hide_coauthors != true %}
+    <div class="post-meta--coauthors">
+      {% for author in function('get_coauthors') %}
+        <div class="post-meta--coauthor">
+          {% if fields.coauthor_options.hide_gravatar != true %}
+            <div class="post-meta--author-image">
+              {% include "@atoms/image/_image.tpl.twig" with {
+                variant: 'primary',
+                src:  function('get_avatar_url', author.ID),
+                alt: author.display_name,
+                placeholder: false,
+                image_classes: [
+                  'post-meta--gravatar'
+                ]
+              } %}
+            </div>
+          {% endif %}
+          {% if fields.coauthor_options.hide_author_name != true or fields.coauthor_options.hide_author_email != true or fields.coauthor_options.hide_author_bio != true %}
+            <div class="post-meta--content">
+              {% if fields.coauthor_options.hide_author_name != true or fields.coauthor_options.hide_author_email != true %}
+                <div class="post-meta--author">
+                  {% if fields.coauthor_options.hide_author_name != true %}
+                    {% if fields.coauthor_options.link_author == true %}
+                      {{ fields.coauthor_options.byline ? '<span class="post-meta--byline">' ~ fields.coauthor_options.byline ~ '</span>'}}<a class="post-meta--author-name" href="{{ function('get_author_posts_url', author.ID, author.user_nicename) }}">{{ author.display_name }}</a>
+                    {% else %}
+                      {{ fields.coauthor_options.byline ? '<span class="post-meta--byline">' ~ fields.coauthor_options.byline ~ '</span>'}}<span class="post-meta--author-name">{{ author.display_name }}</span>
+                    {% endif %}
+                  {% endif %}
+                  {% if fields.coauthor_options.hide_author_email != true %}
+                    {% if fields.coauthor_options.link_author_email == true %}
+                      <a class="post-meta--author-email" href="mailto:{{ author.user_email }}">{{ author.user_email }}</a>
+                    {% else %}
+                      <span class="post-meta--author-email">{{ author.user_email }}</span>
+                    {% endif %}
+                  {% endif %}
+                </div>
+              {% endif %}
+              {% if fields.hide_author == true and (fields.hide_date != true or fields.hide_modified_date != true) %}
+                <div class="post-meta--date">
+                  {% if fields.hide_date != true %}
+                    <span class="post-meta--author-date">{{ function('get_the_date', fields.date_format|default('F, j Y')) }}</span>
+                  {% endif %}
+                  {% if fields.hide_modified_date != true %}
+                    <span class="post-meta--author-modified-date">{{ function('get_the_modified_date',  fields.modified_date_format|default('F, j Y')) }}</span>
+                  {% endif %}
+                </div>
+              {% endif %}
+              {% if fields.coauthor_options.hide_author_bio != true or (fields.hide_author == true and function('is_user_logged_in') and fields.hide_edit_link != true) %}
+                <div class="post-meta--description">
+                  <span class="post-meta--bio">{{ author.description }}</span>
+                  {% if fields.hide_author == true and function('is_user_logged_in') and fields.hide_edit_link != true %}
+                    <a class="post-meta--edit" href="{{ function('get_edit_post_link') }}">Edit</a>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  
+</div>
