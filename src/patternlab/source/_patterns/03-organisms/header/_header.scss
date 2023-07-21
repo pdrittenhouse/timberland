@@ -1790,6 +1790,43 @@
           text-decoration: var(--primary-nav-link-hover-decoration-line) var(--primary-nav-link-hover-decoration-style) var(--primary-nav-link-hover-decoration-color);
         }
       }
+
+      &.dropdown {
+
+        > .dropdown-toggle {}
+
+        > .dropdown-menu {
+
+          > dropdown-item {
+
+            > .nav-link {
+              letter-spacing: var(--primary-nav-letter-spacing-mobile);
+              text-transform: var(--primary-nav-text-transform);
+              color: var(--primary-nav-link-color);
+              font-family: var(--primary-nav-font-family);
+              font-size: var(--primary-nav-font-size-mobile);
+              font-weight: var(--primary-nav-font-weight);
+              font-style: var(--primary-nav-font-style);
+              line-height: var(--primary-nav-line-height-mobile);
+              text-decoration: var(--primary-nav-link-decoration-line) var(--primary-nav-link-decoration-style) var(--primary-nav-link-decoration-color);
+              padding: var(--primary-nav-item-mobile-vertical-padding) var(--primary-nav-item-mobile-horizontal-padding);
+
+              @include media-breakpoint-up(lg) {
+                letter-spacing: var(--primary-nav-letter-spacing);
+                font-size: var(--primary-nav-font-size);
+                line-height: var(--primary-nav-line-height);
+                padding: var(--primary-nav-item-vertical-padding) var(--primary-nav-item-horizontal-padding);
+              }
+
+              &:hover,
+              &:focus {
+                color: var(--primary-nav-link-hover-color);
+                text-decoration: var(--primary-nav-link-hover-decoration-line) var(--primary-nav-link-hover-decoration-style) var(--primary-nav-link-hover-decoration-color);
+              }
+            }
+          }
+        }
+      }
     }
   }
 
