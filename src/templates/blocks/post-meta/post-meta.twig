@@ -83,10 +83,10 @@
           {% if fields.hide_date != true or fields.hide_modified_date != true %}
             <div class="post-meta--date">
               {% if fields.hide_date != true %}
-                <span class="post-meta--author-date">{{ function('get_the_date', fields.date_format|default('F, j Y')) }}</span>
+                <div class="post-meta--author-date">{% if fields.show_date_label == true %}<span class="date-label">{{ fields.date_label }}</span> {% endif %}<span class="date">{{ function('get_the_date', fields.date_format|default('F, j Y')) }}</span></div>
               {% endif %}
               {% if fields.hide_modified_date != true %}
-                <span class="post-meta--author-modified-date">{{ function('get_the_modified_date',  fields.modified_date_format|default('F, j Y')) }}</span>
+                <div class="post-meta--author-modified-date">{% if fields.show_modified_date_label == true %}<span class="modified-date-label">{{ fields.modified_date_label }}</span> {% endif %}<span class="modified-date">{{ function('get_the_modified_date',  fields.modified_date_format|default('F, j Y')) }}</span></div>
               {% endif %}
             </div>
           {% endif %}
@@ -145,10 +145,10 @@
               {% if fields.hide_author == true and (fields.hide_date != true or fields.hide_modified_date != true) %}
                 <div class="post-meta--date">
                   {% if fields.hide_date != true %}
-                    <span class="post-meta--author-date">{{ function('get_the_date', fields.date_format|default('F, j Y')) }}</span>
+                    <div class="post-meta--author-date">{% if fields.show_date_label == true %}<span class="date-label">{{ fields.date_label }}</span> {% endif %}<span class="date">{{ function('get_the_date', fields.date_format|default('F, j Y')) }}</span></div>
                   {% endif %}
                   {% if fields.hide_modified_date != true %}
-                    <span class="post-meta--author-modified-date">{{ function('get_the_modified_date',  fields.modified_date_format|default('F, j Y')) }}</span>
+                    <div class="post-meta--author-modified-date">{% if fields.show_modified_date_label == true %}<span class="modified-date-label">{{ fields.modified_date_label }}</span> {% endif %}<span class="modified-date">{{ function('get_the_modified_date',  fields.modified_date_format|default('F, j Y')) }}</span></div>
                   {% endif %}
                 </div>
               {% endif %}
@@ -167,5 +167,5 @@
     </div>
   {% endif %}
 
-  
+
 </div>

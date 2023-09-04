@@ -22,6 +22,27 @@
             "endpoint": 0
         },
         {
+            "key": "field_64bb60afcaef4",
+            "label": "Body Classes",
+            "name": "body_classes",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_636f2b6f5c65c",
             "label": "Layout",
             "name": "",
@@ -970,5 +991,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1684013067
+    "modified": 1690001618
 }

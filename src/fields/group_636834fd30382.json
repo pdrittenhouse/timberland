@@ -474,6 +474,27 @@
             "endpoint": 0
         },
         {
+            "key": "field_64bb60dc28d81",
+            "label": "Page Classes",
+            "name": "page_classes",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_64b80e2400ca7",
             "label": "Header Layout",
             "name": "site_header_layout",
@@ -910,5 +931,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1689786168
+    "modified": 1690001665
 }

@@ -348,3 +348,12 @@ add_filter( 'rest_prepare_taxonomy', function( $response, $taxonomy, $request ){
 
   return $response;
 }, 10, 3 );
+
+/**
+ * Remove Excerpt Ellipsis
+ * @link: https://www.ronvangorp.com/how-to-change-wordpress-excerpt-ellipsis/
+ */
+function new_excerpt_more($more) {
+  return '';
+}
+add_filter('excerpt_more', 'new_excerpt_more');

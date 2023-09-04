@@ -83,6 +83,8 @@
   options.max_width_fluid_containers == true ? 'max-width-fluid-containers',
   options.header_position is not null ? options.header_position ~ '-header-enabled',
   options.shrink_header == true ? 'shrink-header-enabled',
+  options.body_classes,
+  post.meta('page_classes'),
   options.disable_gf_layout == true ? 'no-gf-layout'
 ]) | sort | join(' ') | trim %}
 

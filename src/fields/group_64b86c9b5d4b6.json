@@ -284,6 +284,69 @@
             "append": ""
         },
         {
+            "key": "field_64dd335ce179c",
+            "label": "Show Date Label",
+            "name": "show_date_label",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_64b8c17d60574",
+                        "operator": "!=",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "message": "",
+            "default_value": 1,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_64dd334ee179b",
+            "label": "Date Label",
+            "name": "date_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_64b8c17d60574",
+                        "operator": "!=",
+                        "value": "1"
+                    },
+                    {
+                        "field": "field_64dd335ce179c",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "default_value": "Published:",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_64b8c21f60575",
             "label": "Hide Modified Date",
             "name": "hide_modified_date",
@@ -328,6 +391,69 @@
             },
             "admin_only": 0,
             "default_value": "F, j Y",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_64dd33b2e179f",
+            "label": "Show Modified Date Label",
+            "name": "show_modified_date_label",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_64b8c21f60575",
+                        "operator": "!=",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "message": "Modified:",
+            "default_value": 1,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_64dd337fe179e",
+            "label": "Modified Date Label",
+            "name": "modified_date_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_64b8c21f60575",
+                        "operator": "!=",
+                        "value": "1"
+                    },
+                    {
+                        "field": "field_64dd33b2e179f",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "default_value": "Modified:",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -592,5 +718,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1689914205
+    "modified": 1693859547
 }

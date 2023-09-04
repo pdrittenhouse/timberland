@@ -2,6 +2,12 @@
 
 {% block content %}
   <section class="content-wrapper">
+    {% if post.title or post.thumbnail.src %}
+      {% include "partials/content/page-header.twig" with {
+        title: post.title,
+        thumbnail: post.thumbnail
+      } %}
+    {% endif %}
 
     <div class="{{ options.post_display }}">
       <div class="container">

@@ -40,7 +40,15 @@
 {% set section_box_shadow_color = fields['section_box_shadow']['color']['color'] == 'palette' and fields['section_box_shadow']['color']['theme_color'] ? 'var(--' ~ fields['section_box_shadow']['color']['theme_color'] ~ ')' : fields['section_box_shadow']['color']['color'] == 'custom' and fields['section_box_shadow']['color']['custom_color'] ? fields['section_box_shadow']['color']['custom_color'] %}
 {% set section_box_shadow_inset = fields['section_box_shadow']['inset'] == true ? 'inset' %}
 
+{% set bg_hor_pos = fields.bg_image['bg_horizontal_position'] == 'custom' ? fields.bg_image['custom_bg_horizontal_position'] : fields.bg_image['bg_horizontal_position'] ? fields.bg_image['bg_horizontal_position'] %}
+{% set bg_ver_pos = fields.bg_image['bg_vertical_position'] == 'custom' ? fields.bg_image['custom_bg_vertical_position'] : fields.bg_image['bg_vertical_position'] ? fields.bg_image['bg_vertical_position'] %}
+
 {% set section_styles = [
+  fields.bg_image['bg_image_type'] == 'file' and fields.bg_image['bg_image']['url'] ? 'background-image: url(\'' ~ fields.bg_image['bg_image']['url'] ~ '\');' : fields.bg_image['bg_image_type'] == 'url' and fields.bg_image['bg_image_url'] ? 'background-image: url(\'' ~ fields.bg_image['bg_image_url'] ~ '\');',
+  fields.bg_image['bg_size'] == 'custom' and fields.bg_image['custom_bg_size'] ? 'background-size: ' ~ fields.bg_image['custom_bg_size'] ~ ';' : fields.bg_image['bg_size'] ? 'background-size: ' ~ fields.bg_image['bg_size'] ~ ';',
+  bg_hor_pos or bg_ver_pos ? 'background-position: ' ~ bg_hor_pos ~ ' ' ~ bg_ver_pos ~ ';',
+  fields.bg_image['bg_repeat'] ? 'background-repeat: ' ~ fields.bg_image['bg_repeat'] ~ ';',
+  fields.bg_image['bg_attachment'] ? 'background-attachment: ' ~ fields.bg_image['bg_attachment'] ~ ';',
   fields.section_bg_color['bg_color'] == 'custom' ? 'background-color:' ~ fields.section_bg_color['bg_custom_color'] ~ ';',
   fields.margin['top']['auto'] == true ? 'margin-top: auto;' : fields.margin['top']['top'] is not empty ? 'margin-top: ' ~ fields.margin['top']['top'] ~ 'px;',
   fields.margin['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.margin['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ fields.margin['bottom']['bottom'] ~ 'px;',
@@ -71,17 +79,6 @@
 {% if options.remove_content_containers != true %}
   {% set default_padding = 'var(--grid-column-padding)' %}
 {% endif %}
-
-{#{% set wrapper_styles = [#}
-{#  fields.height.height['height']['value'] is not empty ? 'height: ' ~ fields.height.height['height']['value'] ~ fields.height.height['height']['unit'] ~ ';',#}
-{#  fields.height.height['min_height'] is not empty ? 'min-height: ' ~ fields.height.height['min_height'] ~ 'px;',#}
-{#  fields.height.height['max_height'] is not empty ? 'max-height: ' ~ fields.height.height['max_height'] ~ 'px;',#}
-{#  fields.container != true and options.remove_content_containers != true and block_post.custom['remove_content_container'] != true and block_context['acf/fields']['container'] == true and fields.padding['padding']['top'] is not empty ? 'padding-top: ' ~ fields.padding['padding']['top'] ~ 'px;',#}
-{#  fields.container != true and options.remove_content_containers != true and block_post.custom['remove_content_container'] != true and block_context['acf/fields']['container'] == true and fields.padding['padding']['bottom'] is not empty ? 'padding-bottom: ' ~ fields.padding['padding']['bottom'] ~ 'px;',#}
-{#  fields.container != true and options.remove_content_containers != true and block_post.custom['remove_content_container'] != true and block_context['acf/fields']['container'] == true and fields.padding['padding']['left'] is not empty ? 'padding-left: ' ~ fields.padding['padding']['left'] | default(default_padding) ~ 'px;',#}
-{#  fields.container != true and options.remove_content_containers != true and block_post.custom['remove_content_container'] != true and block_context['acf/fields']['container'] == true and fields.padding['padding']['right'] is not empty ? 'padding-right: ' ~ fields.padding['padding']['right'] | default(default_padding) ~ 'px;',#}
-{#  fields.col_gap['value'] ? 'column-gap: ' ~ fields.col_gap['value'] ~ fields.col_gap['unit'] ~ ';',#}
-{#] | sort | join(' ') | trim %}#}
 
 {% set wrapper_styles = [
   fields.height.height['height']['value'] is not empty ? 'height: ' ~ fields.height.height['height']['value'] ~ fields.height.height['height']['unit'] ~ ';',

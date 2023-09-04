@@ -77,12 +77,20 @@
             padding-left: rem-calc(10px);
         }
 
+        .date {}
+
+        .date-label {}
+
         .post-meta--author-modified-date {
             @include flex(0 0 auto);
             border-left: rem-calc(1px) solid var(--black);
             margin-left: rem-calc(10px);
             padding-left: rem-calc(10px);
         }
+
+        .modified-date {}
+
+        .modified-date-label {}
 
         .post-meta--description {
             @include flex(0 0 100%);
@@ -162,12 +170,20 @@
             padding-left: rem-calc(10px);
         }
 
+        .date {}
+
+        .date-label {}
+
         .post-meta--author-modified-date {
             @include flex(0 0 auto);
             border-left: rem-calc(1px) solid var(--black);
             margin-left: rem-calc(10px);
             padding-left: rem-calc(10px);
         }
+
+        .modified-date {}
+
+        .modified-date-label {}
 
         .post-meta--author-email {
             @include flex(0 0 auto);
@@ -207,7 +223,15 @@
 
     &--author-date {}
 
+    .date {}
+
+    .date-label {}
+
     &--author-modified-date {}
+
+    .modified-date {}
+
+    .modified-date-label {}
 
     &--description {}
 

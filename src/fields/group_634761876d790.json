@@ -25,6 +25,29 @@
             "prefix_name": 1
         },
         {
+            "key": "field_64bb864ad7906",
+            "label": "Section Background Image",
+            "name": "bg_image",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "clone": [
+                "group_636871db82c48"
+            ],
+            "display": "group",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1
+        },
+        {
             "key": "field_634825d13b706",
             "label": "Section Height",
             "name": "height",
@@ -376,5 +399,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1684014387
+    "modified": 1690011234
 }

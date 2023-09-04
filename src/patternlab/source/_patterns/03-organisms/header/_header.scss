@@ -1797,7 +1797,8 @@
 
         > .dropdown-menu {
 
-          > dropdown-item {
+          > .dropdown-item {
+            padding: 0;
 
             > .nav-link {
               letter-spacing: var(--primary-nav-letter-spacing-mobile);

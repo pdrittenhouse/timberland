@@ -20,6 +20,9 @@
 {% set width = fields.width.width['width']['value'] is not empty ? 'width: ' ~ fields.width.width['width']['value']  ~ fields.width.width['width']['unit'] ~  ';' %}
 {% set min_width = fields.width.width['min_width'] is not empty ? 'min-width: ' ~ fields.width.width['min_width']  ~ 'px;' %}
 {% set max_width = fields.width.width['max_width'] is not empty ? 'max-width: ' ~ fields.width.width['max_width']  ~ 'px;' %}
+{% set width = fields.width.width['width']['value'] is not empty ? 'width: ' ~ fields.width.width['width']['value']  ~ fields.width.width['width']['unit'] ~  ';' %}
+{% set min_width = fields.width.width['min_width'] is not empty ? 'min-width: ' ~ fields.width.width['min_width']  ~ 'px;' %}
+{% set max_width = fields.width.width['max_width'] is not empty ? 'max-width: ' ~ fields.width.width['max_width']  ~ 'px;' %}
 {% set margin_top = parent_block_data['name'] != 'acf/card-grid' and fields.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.margin['margin']['top']['top'] is not empty ? 'margin-top: ' ~ fields.margin['margin']['top']['top'] ~ 'px;' %}
 {% set margin_bottom = parent_block_data['name'] != 'acf/card-grid' and fields.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.margin['margin']['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ fields.margin['margin']['bottom']['bottom'] ~ 'px;' %}
 {% set margin_left = parent_block_data['name'] != 'acf/card-grid' and fields.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.margin['margin']['left']['left'] is not empty ? 'margin-left: ' ~ fields.margin['margin']['left']['left'] ~ 'px;' %}
@@ -166,6 +169,9 @@
     width,
     min_width,
     max_width,
+    height,
+    min_height,
+    max_height,
     margin_top,
     margin_bottom,
     margin_left,

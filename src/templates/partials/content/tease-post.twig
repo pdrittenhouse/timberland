@@ -15,6 +15,10 @@
       height: '2',
     },
     card_linked: true,
-    card_link: post.link
+    card_link: post.link,
+    card_classes: [
+      'tease',
+      'tease-' ~ post.post_type
+    ],
   } %}
 {% endblock %}

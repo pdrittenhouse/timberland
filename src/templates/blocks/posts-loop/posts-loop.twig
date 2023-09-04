@@ -1,6 +1,6 @@
 {#
 /**
- * Block Name:
+ * Block Name: Posts Loop
  *
  * This is the template that displays the  block.
  */
@@ -238,10 +238,18 @@
     {% if fields.pattern == 'none' %}
       {% for post in posts %}
 
+        {# Categories #}
+        {% if post.categories %}
+          {% set catArr = [] %}
+          {% for category in post.categories %}
+            {% set catArr = catArr | merge([category.name]) %}
+          {% endfor %}
+        {% endif %}
+
         {% if fields.link_items == true %}
-          <a class="posts-loop--post" href="{{ post.link }}">
+          <a class="posts-loop--post" href="{{ post.link }}" {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
         {% else %}
-          <div class="posts-loop--post">
+          <div class="posts-loop--post"  {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
         {% endif %}
 
           {% for element in fields.posts_query_layout %}
@@ -274,12 +282,17 @@
             {% elseif element.acf_fc_layout == 'post_excerpt' and (post.preview or function('get_the_excerpt')) %}
               {# Post Excerpt #}
               <div class="posts-loop--post-excerpt--wrapper">
-                {% if post.post_type == 'page' %}
-                  <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
-                {% elseif fields.link_items != true %}
-                  <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>
+{#                {% if post.post_type == 'page' %}#}
+{#                  <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
+{#                {% elseif fields.link_items != true %}#}
+{#                  <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>#}
+{#                {% else %}#}
+{#                  <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>#}
+{#                {% endif %}#}
+                {% if fields.link_items != true %}
+                  <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
                 {% else %}
-                  <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>
+                  <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
                 {% endif %}
               </div>
             {% elseif element.acf_fc_layout == 'post_content' and post.content %}
@@ -536,6 +549,14 @@
     {# Card #}
     {% if fields.pattern == 'card' %}
       {% for post in posts %}
+        {# Categories #}
+        {% if post.categories %}
+          {% set catArr = [] %}
+          {% for category in post.categories %}
+            {% set catArr = catArr | merge([category.name]) %}
+          {% endfor %}
+        {% endif %}
+
         {# Set custom card styles #}
         {% set card_bg_color = fields.card.card_bg_color['bg_color'] == 'custom' and fields.card.card_bg_color['bg_custom_color'] ? 'background-color: ' ~ fields.card.card_bg_color['bg_custom_color'] ~ ';' %}
         {% set card_border_color = fields.card.card_border_color['color'] == 'custom' and fields.card.card_border_color['custom_color'] ? 'border-color: ' ~ fields.card.card_border_color['custom_color'] ~ ';' %}
@@ -693,7 +714,8 @@
           ],
           card_attributes: [
             fields.include_modals == true ? 'data-bs-toggle="modal"',
-            fields.include_modals == true ? 'data-bs-target="#' ~ post.slug ~ '"'
+            fields.include_modals == true ? 'data-bs-target="#' ~ post.slug ~ '"',
+            catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"'
           ],
           background_image: card_bg_image,
           card_front_classes: [
@@ -1274,16 +1296,23 @@
             <div class="card-body {{ no_body_padding == true ? 'p-0' }}">
               {% block card_text %}
                 <div class="card-text">
-                  {% if function('in_array', 'post_excerpt', fields.elements) and post.post_type == 'page' %}
-                    <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
-                  {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
-                    <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>
-                  {% elseif function('in_array', 'post_excerpt', fields.elements) %}
-                    <div class="posts-loop--post-excerpt">
-                        <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>
-                        {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}
-                      </div>
-                  {% endif %}
+{#                  {% if function('in_array', 'post_excerpt', fields.elements) and post.post_type == 'page' %}#}
+{#                    <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
+{#                  {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}#}
+{#                    <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>#}
+{#                  {% elseif function('in_array', 'post_excerpt', fields.elements) %}#}
+{#                    <div class="posts-loop--post-excerpt">#}
+{#                        <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>#}
+{#                        {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}#}
+{#                      </div>#}
+{#                  {% endif %}#}
+
+                    {% if function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
+                      <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ fields.element_excerpt.element_read_more_label }}</a>{% endif %}</div>
+                    {% elseif function('in_array', 'post_excerpt', fields.elements) %}
+                      <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}</div>
+                    {% endif %}
+
                   {% if function('in_array', 'post_content', fields.elements) %}
                     <div class="posts-loop--post-content">{{ post.content }}</div>
                   {% endif %}
@@ -2098,6 +2127,13 @@
         {% block card_grid_cards %}
 
           {% for post in posts %}
+            {# Categories #}
+            {% if post.categories %}
+              {% set catArr = [] %}
+              {% for category in post.categories %}
+                {% set catArr = catArr | merge([category.name]) %}
+              {% endfor %}
+            {% endif %}
 
             {# Set custom card styles #}
             {% set card_bg_color = fields.card.card_bg_color['bg_color'] == 'custom' and fields.card.card_bg_color['bg_custom_color'] ? 'background-color: ' ~ fields.card.card_bg_color['bg_custom_color'] ~ ';' %}
@@ -2256,7 +2292,8 @@
               ],
               card_attributes: [
                 fields.include_modals == true ? 'data-bs-toggle="modal"',
-                fields.include_modals == true ? 'data-bs-target="#' ~ post.slug ~ '"'
+                fields.include_modals == true ? 'data-bs-target="#' ~ post.slug ~ '"',
+                catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"'
               ],
               background_image: card_bg_image,
               card_front_classes: [
@@ -2837,16 +2874,23 @@
                 <div class="card-body {{ no_body_padding == true ? 'p-0' }}">
                   {% block card_text %}
                     <div class="card-text">
-                      {% if function('in_array', 'post_excerpt', fields.elements) and post.post_type == 'page' %}
-                        <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
-                      {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
-                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>
-                      {% elseif function('in_array', 'post_excerpt', fields.elements) %}
-                        <div class="posts-loop--post-excerpt">
-                          <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>
-                          {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}
-                        </div>
-                      {% endif %}
+{#                      {% if function('in_array', 'post_excerpt', fields.elements) and post.post_type == 'page' %}#}
+{#                        <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
+{#                      {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}#}
+{#                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>#}
+{#                      {% elseif function('in_array', 'post_excerpt', fields.elements) %}#}
+{#                        <div class="posts-loop--post-excerpt">#}
+{#                          <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>#}
+{#                          {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}#}
+{#                        </div>#}
+{#                      {% endif %}#}
+
+                       {% if function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
+                          <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ fields.element_excerpt.element_read_more_label }}</a>{% endif %}</div>
+                        {% elseif function('in_array', 'post_excerpt', fields.elements) %}
+                          <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}</div>
+                        {% endif %}
+
                       {% if function('in_array', 'post_content', fields.elements) %}
                         <div class="posts-loop--post-content">{{ post.content }}</div>
                       {% endif %}
@@ -3582,7 +3626,15 @@
             {% block carousel_slides %}
 
               {% for post in posts %}
-                <div class="{{ slide_classes }} {{ fields.slider.initial_slide == loop.index0 ? 'active' }}" {{ slide_attributes }}>
+                {# Categories #}
+                {% if post.categories %}
+                  {% set catArr = [] %}
+                  {% for category in post.categories %}
+                    {% set catArr = catArr | merge([category.name]) %}
+                  {% endfor %}
+                {% endif %}
+
+                <div class="{{ slide_classes }} {{ fields.slider.initial_slide == loop.index0 ? 'active' }}" {{ slide_attributes }} {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
                   {# Set custom card styles #}
                   {% set card_bg_color = fields.card.card_bg_color['bg_color'] == 'custom' and fields.card.card_bg_color['bg_custom_color'] ? 'background-color: ' ~ fields.card.card_bg_color['bg_custom_color'] ~ ';' %}
                   {% set card_border_color = fields.card.card_border_color['color'] == 'custom' and fields.card.card_border_color['custom_color'] ? 'border-color: ' ~ fields.card.card_border_color['custom_color'] ~ ';' %}
@@ -4321,16 +4373,23 @@
                       <div class="card-body {{ no_body_padding == true ? 'p-0' }}">
                         {% block card_text %}
                           <div class="card-text">
-                            {% if function('in_array', 'post_excerpt', fields.elements) and post.post_type == 'page' %}
-                              <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
-                            {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
-                              <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>
-                            {% elseif function('in_array', 'post_excerpt', fields.elements) %}
-                              <div class="posts-loop--post-excerpt">
-                                <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>
-                                {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}
-                              </div>
-                            {% endif %}
+{#                            {% if function('in_array', 'post_excerpt', fields.elements) and post.post_type == 'page' %}#}
+{#                              <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
+{#                            {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}#}
+{#                              <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>#}
+{#                            {% elseif function('in_array', 'post_excerpt', fields.elements) %}#}
+{#                              <div class="posts-loop--post-excerpt">#}
+{#                                <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>#}
+{#                                {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}#}
+{#                              </div>#}
+{#                            {% endif %}#}
+
+                              {% if function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
+                                <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ fields.element_excerpt.element_read_more_label }}</a>{% endif %}</div>
+                              {% elseif function('in_array', 'post_excerpt', fields.elements) %}
+                                <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}</div>
+                              {% endif %}
+
                             {% if function('in_array', 'post_content', fields.elements) %}
                               <div class="posts-loop--post-content">{{ post.content }}</div>
                             {% endif %}
@@ -4993,7 +5052,15 @@
           } %}
             {% block slides %}
               {% for post in posts %}
-                <div class="{{ slide_classes }}" {{ slide_attributes }}>
+                {# Categories #}
+                {% if post.categories %}
+                  {% set catArr = [] %}
+                  {% for category in post.categories %}
+                    {% set catArr = catArr | merge([category.name]) %}
+                  {% endfor %}
+                {% endif %}
+
+                <div class="{{ slide_classes }}" {{ slide_attributes }} {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
                   {# Set custom card styles #}
                   {% set card_bg_color = fields.card.card_bg_color['bg_color'] == 'custom' and fields.card.card_bg_color['bg_custom_color'] ? 'background-color: ' ~ fields.card.card_bg_color['bg_custom_color'] ~ ';' %}
                   {% set card_border_color = fields.card.card_border_color['color'] == 'custom' and fields.card.card_border_color['custom_color'] ? 'border-color: ' ~ fields.card.card_border_color['custom_color'] ~ ';' %}
@@ -5732,16 +5799,23 @@
                       <div class="card-body {{ no_body_padding == true ? 'p-0' }}">
                         {% block card_text %}
                           <div class="card-text">
-                            {% if function('in_array', 'post_excerpt', fields.elements) and post.post_type == 'page' %}
-                              <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
-                            {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
-                              <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>
-                            {% elseif function('in_array', 'post_excerpt', fields.elements) %}
-                              <div class="posts-loop--post-excerpt">
-                                <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>
-                                {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}
-                              </div>
-                            {% endif %}
+{#                            {% if function('in_array', 'post_excerpt', fields.elements) and post.post_type == 'page' %}#}
+{#                              <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
+{#                            {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}#}
+{#                              <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>#}
+{#                            {% elseif function('in_array', 'post_excerpt', fields.elements) %}#}
+{#                              <div class="posts-loop--post-excerpt">#}
+{#                                <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>#}
+{#                                {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}#}
+{#                              </div>#}
+{#                            {% endif %}#}
+
+                             {% if function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
+                                <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ fields.element_excerpt.element_read_more_label }}</a>{% endif %}</div>
+                              {% elseif function('in_array', 'post_excerpt', fields.elements) %}
+                                <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}</div>
+                              {% endif %}
+
                             {% if function('in_array', 'post_content', fields.elements) %}
                               <div class="posts-loop--post-content">{{ post.content }}</div>
                             {% endif %}
@@ -6410,7 +6484,15 @@
           } %}
             {% block slides %}
               {% for post in posts %}
-                <div class="{{ slide_classes }}" {{ slide_attributes }}>
+                {# Categories #}
+                {% if post.categories %}
+                  {% set catArr = [] %}
+                  {% for category in post.categories %}
+                    {% set catArr = catArr | merge([category.name]) %}
+                  {% endfor %}
+                {% endif %}
+
+                <div class="{{ slide_classes }}" {{ slide_attributes }} {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
                   {# Set custom card styles #}
                   {% set card_bg_color = fields.card.card_bg_color['bg_color'] == 'custom' and fields.card.card_bg_color['bg_custom_color'] ? 'background-color: ' ~ fields.card.card_bg_color['bg_custom_color'] ~ ';' %}
                   {% set card_border_color = fields.card.card_border_color['color'] == 'custom' and fields.card.card_border_color['custom_color'] ? 'border-color: ' ~ fields.card.card_border_color['custom_color'] ~ ';' %}
@@ -7149,16 +7231,23 @@
                       <div class="card-body {{ no_body_padding == true ? 'p-0' }}">
                         {% block card_text %}
                           <div class="card-text">
-                            {% if function('in_array', 'post_excerpt', fields.elements) and post.post_type == 'page' %}
-                              <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
-                            {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
-                              <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>
-                            {% elseif function('in_array', 'post_excerpt', fields.elements) %}
-                              <div class="posts-loop--post-excerpt">
-                                <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>
-                                {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}
-                              </div>
-                            {% endif %}
+{#                            {% if function('in_array', 'post_excerpt', fields.elements) and post.post_type == 'page' %}#}
+{#                              <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
+{#                            {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}#}
+{#                              <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>#}
+{#                            {% elseif function('in_array', 'post_excerpt', fields.elements) %}#}
+{#                              <div class="posts-loop--post-excerpt">#}
+{#                                <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>#}
+{#                                {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}#}
+{#                              </div>#}
+{#                            {% endif %}#}
+
+                             {% if function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
+                                <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ fields.element_excerpt.element_read_more_label }}</a>{% endif %}</div>
+                              {% elseif function('in_array', 'post_excerpt', fields.elements) %}
+                                <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}</div>
+                              {% endif %}
+
                             {% if function('in_array', 'post_content', fields.elements) %}
                               <div class="posts-loop--post-content">{{ post.content }}</div>
                             {% endif %}
@@ -7808,7 +7897,15 @@
           } %}
             {% block carousel_slides %}
               {% for post in posts %}
-                <div class="{{ slide_classes }} {{ fields.slider.initial_slide == loop.index0 ? 'active' }}" {{ slide_attributes }}>
+                {# Categories #}
+                {% if post.categories %}
+                  {% set catArr = [] %}
+                  {% for category in post.categories %}
+                    {% set catArr = catArr | merge([category.name]) %}
+                  {% endfor %}
+                {% endif %}
+
+                <div class="{{ slide_classes }} {{ fields.slider.initial_slide == loop.index0 ? 'active' }}" {{ slide_attributes }} {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
                   {% if fields.link_items == true %}
                     <a class="posts-loop--post" href="{{ post.link }}">
                   {% else %}
@@ -7845,12 +7942,17 @@
                       {% elseif element.acf_fc_layout == 'post_excerpt' and (post.preview or function('get_the_excerpt')) %}
                         {# Post Excerpt #}
                         <div class="posts-loop--post-excerpt--wrapper">
-                          {% if post.post_type == 'page' %}
-                            <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
-                          {% elseif fields.link_items != true %}
-                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>
+{#                          {% if post.post_type == 'page' %}#}
+{#                            <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
+{#                          {% elseif fields.link_items != true %}#}
+{#                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>#}
+{#                          {% else %}#}
+{#                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>#}
+{#                          {% endif %}#}
+                          {% if fields.link_items != true %}
+                            <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
                           {% else %}
-                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>
+                            <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
                           {% endif %}
                         </div>
                       {% elseif element.acf_fc_layout == 'post_content' and post.content %}
@@ -8142,7 +8244,15 @@
           } %}
             {% block slides %}
               {% for post in posts %}
-                <div class="{{ slide_classes }}" {{ slide_attributes }}>
+                {# Categories #}
+                {% if post.categories %}
+                  {% set catArr = [] %}
+                  {% for category in post.categories %}
+                    {% set catArr = catArr | merge([category.name]) %}
+                  {% endfor %}
+                {% endif %}
+
+                <div class="{{ slide_classes }}" {{ slide_attributes }} {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
                   {% if fields.link_items == true %}
                     <a class="posts-loop--post" href="{{ post.link }}">
                   {% else %}
@@ -8179,12 +8289,17 @@
                       {% elseif element.acf_fc_layout == 'post_excerpt' and (post.preview or function('get_the_excerpt')) %}
                         {# Post Excerpt #}
                         <div class="posts-loop--post-excerpt--wrapper">
-                          {% if post.post_type == 'page' %}
-                            <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
-                          {% elseif fields.link_items != true %}
-                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>
+{#                          {% if post.post_type == 'page' %}#}
+{#                            <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
+{#                          {% elseif fields.link_items != true %}#}
+{#                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>#}
+{#                          {% else %}#}
+{#                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>#}
+{#                          {% endif %}#}
+                          {% if fields.link_items != true %}
+                            <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
                           {% else %}
-                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>
+                            <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
                           {% endif %}
                         </div>
                       {% elseif element.acf_fc_layout == 'post_content' and post.content %}
@@ -8484,7 +8599,14 @@
           } %}
             {% block slides %}
               {% for post in posts %}
-                <div class="{{ slide_classes }}" {{ slide_attributes }}>
+                {# Categories #}
+                {% if post.categories %}
+                  {% set catArr = [] %}
+                  {% for category in post.categories %}
+                    {% set catArr = catArr | merge([category.name]) %}
+                  {% endfor %}
+                {% endif %}
+                <div class="{{ slide_classes }}" {{ slide_attributes }} {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
                   {% if fields.link_items == true %}
                     <a class="posts-loop--post" href="{{ post.link }}">
                   {% else %}
@@ -8521,12 +8643,17 @@
                       {% elseif element.acf_fc_layout == 'post_excerpt' and (post.preview or function('get_the_excerpt')) %}
                         {# Post Excerpt #}
                         <div class="posts-loop--post-excerpt--wrapper">
-                          {% if post.post_type == 'page' %}
-                            <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
-                          {% elseif fields.link_items != true %}
-                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>
+{#                          {% if post.post_type == 'page' %}#}
+{#                            <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
+{#                          {% elseif fields.link_items != true %}#}
+{#                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>#}
+{#                          {% else %}#}
+{#                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>#}
+{#                          {% endif %}#}
+                          {% if fields.link_items != true %}
+                            <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
                           {% else %}
-                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>
+                            <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
                           {% endif %}
                         </div>
                       {% elseif element.acf_fc_layout == 'post_content' and post.content %}
@@ -8805,7 +8932,15 @@
     {% if fields.pattern == 'list' %}
       <{{ fields.list_parent_element|default('ul') }} class="posts-loop--post-list">
         {% for post in posts %}
-          <li class="posts-loop--post-list--item">
+          {# Categories #}
+          {% if post.categories %}
+            {% set catArr = [] %}
+            {% for category in post.categories %}
+              {% set catArr = catArr | merge([category.name]) %}
+            {% endfor %}
+          {% endif %}
+
+          <li class="posts-loop--post-list--item" {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
 
             {% if fields.link_items == true %}
             <a class="posts-loop--post" href="{{ post.link }}">
@@ -8843,12 +8978,17 @@
           {% elseif element.acf_fc_layout == 'post_excerpt' and (post.preview or function('get_the_excerpt')) %}
             {# Post Excerpt #}
             <div class="posts-loop--post-excerpt--wrapper">
-              {% if post.post_type == 'page' %}
-                <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
-              {% elseif fields.link_items != true %}
-                <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>
+{#              {% if post.post_type == 'page' %}#}
+{#                <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
+{#              {% elseif fields.link_items != true %}#}
+{#                <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>#}
+{#              {% else %}#}
+{#                <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>#}
+{#              {% endif %}#}
+              {% if fields.link_items != true %}
+                <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
               {% else %}
-                <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>
+                <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
               {% endif %}
             </div>
           {% elseif element.acf_fc_layout == 'post_content' and post.content %}
@@ -9279,7 +9419,7 @@
         } %}
           {% block modal_body %}
             {% if fields.modal_body_layout %}
-              <div class="card-back-content">
+              <div class="modal-content">
                 {% for element in fields.modal_body_layout %}
                   {% if element.acf_fc_layout == 'featured_image' and post.thumbnail.src %}
                     {# Featured Image #}
@@ -9310,12 +9450,18 @@
                   {% elseif element.acf_fc_layout == 'post_excerpt' and (post.preview or function('get_the_excerpt')) %}
                     {# Post Excerpt #}
                     <div class="posts-loop--post-excerpt--wrapper">
-                      {% if post.post_type == 'page' %}
-                        <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
-                      {% elseif fields.link_items != true %}
-                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>
+{#                      {% if post.post_type == 'page' %}#}
+{#                        <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
+{#                      {% elseif fields.link_items != true %}#}
+{#                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>#}
+{#                      {% else %}#}
+{#                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>#}
+{#                      {% endif %}#}
+
+                      {% if fields.link_items != true %}
+                        <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
                       {% else %}
-                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>
+                        <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
                       {% endif %}
                     </div>
                   {% elseif element.acf_fc_layout == 'post_content' and post.content %}
@@ -9595,12 +9741,18 @@
                   {% elseif element.acf_fc_layout == 'post_excerpt' and (post.preview or function('get_the_excerpt')) %}
                     {# Post Excerpt #}
                     <div class="posts-loop--post-excerpt--wrapper">
-                      {% if post.post_type == 'page' %}
-                        <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
-                      {% elseif fields.link_items != true %}
-                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>
+{#                      {% if post.post_type == 'page' %}#}
+{#                        <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
+{#                      {% elseif fields.link_items != true %}#}
+{#                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>#}
+{#                      {% else %}#}
+{#                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>#}
+{#                      {% endif %}#}
+
+                      {% if fields.link_items != true %}
+                        <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
                       {% else %}
-                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>
+                        <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
                       {% endif %}
                     </div>
                   {% elseif element.acf_fc_layout == 'link' and post.link %}
@@ -9918,7 +10070,7 @@
     {{ function('print_r', fields.load_more.load_more_button) }}
     {{ function('print_r', '</pre>') }} #}
 
-    <div class="load-more--wrapper {{ load_more_btn_alignment|length > 0 ? load_more_btn_alignment|sort|join(' ')|trim }}">
+    <div class="load-more--wrapper d-flex {{ load_more_btn_alignment|length > 0 ? load_more_btn_alignment|sort|join(' ')|trim }}">
       {% include '@atoms/button/_button.tpl.twig' with {
         button_text: fields.load_more.load_more_button_text|default('Load More'),
         button_color: fields.load_more.load_more_button.style != 'custom' ? fields.load_more.load_more_button.style | default('default'),
