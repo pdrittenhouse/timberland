@@ -126,9 +126,9 @@
       {% endif %}
 
       {% if muted == true %}
-        {% set muted = '&mute=1' %}
+        {% set muted = '&mute=1&muted=1' %}
       {% else %}
-        {% set muted = '&mute=0' %}
+        {% set muted = '&mute=0&muted=0' %}
       {% endif %}
 
       {% if playsinline == true %}

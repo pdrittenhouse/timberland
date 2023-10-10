@@ -47,6 +47,7 @@
 
 {% set button_classes = button_classes|default([])|merge([
   'button',
+  button_disabled ? 'disabled',
   buttonless_dropdown ? '' : 'btn',
   (button_color and not button_outline) ? 'btn-' ~ button_color,
   button_outline ? 'btn-outline-' ~ button_color,

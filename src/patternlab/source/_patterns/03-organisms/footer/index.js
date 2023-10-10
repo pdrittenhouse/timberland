@@ -6,6 +6,7 @@ import $ from 'jquery';
 
 import 'waypoints/lib/jquery.waypoints.min';
 import 'waypoints/lib/shortcuts/inview.min';
+import 'waypoints/lib/shortcuts/sticky.min';
 
 // Module styles
 import './_footer.scss';

@@ -7,6 +7,9 @@ wp-block-image {
       //height: auto;
     }
   }
+  &.is-style-inline {
+    display: inline-block;
+  }
   &.is-style-full-width {
     img {
       @include cover-image-max();

@@ -233,11 +233,11 @@
   {% set phone = phone_label or phone_number ? phone_label ~ phone_number %}
 
   {% set email_label = options.footer_contact_email.email_label ? '<strong>' ~ options.footer_contact_email.email_label ~ '</strong> ' %}
-  {% set email_address = options.footer_contact_email.email_address ? '<a href="tel:' ~ options.footer_contact_email.email_address ~ '">' ~ options.footer_contact_email.email_address ~ '</a>' %}
+  {% set email_address = options.footer_contact_email.email_address ? '<a href="mailto:' ~ options.footer_contact_email.email_address ~ '">' ~ options.footer_contact_email.email_address ~ '</a>' %}
   {% set email = email_label or email_address ? email_label ~ email_address %}
 
   {% set address_label = options.footer_contact_address.address_label ? '<strong>' ~ options.footer_contact_address.address_label ~ '</strong> ' %}
-  {% set address_loc = options.footer_contact_address.address ? '<a href="tel:' ~ options.footer_contact_address.address ~ '">' ~ options.footer_contact_address.address ~ '</a>' %}
+  {% set address_loc = options.footer_contact_address.address ? '<span>' ~ options.footer_contact_address.address ~ '</span>' %}
   {% set address = address_label or address_loc ? address_label ~ address_loc %}
 
   {% set contact_information = [phone, email, address] %}

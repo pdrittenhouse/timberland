@@ -87,6 +87,19 @@ const smoothScroll = () => {
   }
 };
 
+// Global function to limit input fields to numbers only
+// used in /src/functions/forms/
+// @link: https://www.geeksforgeeks.org/how-to-force-input-field-to-enter-numbers-only-using-javascript/
+global.onlyNumberKey = evt => {
+  // Only ASCII character in that range allowed
+  const ASCIICode = (evt.which) ? evt.which : evt.keyCode
+  if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57)) {
+    return false;
+  }
+  return true;
+};
+
+
 $(document).ready(() => {
   bodyLoaded();
   smoothScroll();

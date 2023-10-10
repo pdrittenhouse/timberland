@@ -12,6 +12,14 @@ function dream_register_block_styles() {
     register_block_style(
       'core/image',
       array(
+        'name'  => 'inline',
+        'label' => __('Inline'),
+      )
+    );
+
+    register_block_style(
+      'core/image',
+      array(
         'name'  => 'circle',
         'label' => __( 'Circle' ),
       )
@@ -239,6 +247,25 @@ function dream_register_block_styles() {
       array(
         'name'  => 'sansserif',
         'label' => __( 'Sans Serif Font Family' ),
+      )
+    );
+
+    /**
+     * Group
+     */
+    register_block_style(
+      'core/group',
+      array(
+        'name'  => 'align-center',
+        'label' => __('Align Center'),
+      )
+    );
+
+    register_block_style(
+      'core/group',
+      array(
+        'name'  => 'align-right',
+        'label' => __('Align Right'),
       )
     );
   }

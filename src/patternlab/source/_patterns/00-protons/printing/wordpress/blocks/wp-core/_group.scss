@@ -1,0 +1,12 @@
+.wp-block-group {
+
+  &.is-style-align-center {
+    text-align: center;
+  }
+
+  &.is-style-align-right {
+    text-align: right;
+  }
+
+  .wp-block-group__inner-container {}
+}
