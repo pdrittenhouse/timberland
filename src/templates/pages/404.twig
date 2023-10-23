@@ -7,7 +7,11 @@
       <div class="article-content--row">
         <div class="article-content--column">
           <div class="article-body">
-            {{post.content|default('<p>Sorry, we couldn't find what you're looking for.</p>')}}
+            {% if post %}
+              {{post.content}}
+            {% else %}
+              <p>Sorry, we couldn't find what you're looking for.</p>
+            {% endif %}
           </div>
         </div>
       </div>
