@@ -75,7 +75,10 @@ $dream_includes = array(
   "woocommerce.php",
   "breadcrumb.php",
   "svg.php",
-  "load-more.php"
+  "load-more.php",
+  "redirects.php",
+  "rewrites.php",
+  "routes.php"
 );
 
 foreach($dream_includes as $inc){

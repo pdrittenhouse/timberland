@@ -81,7 +81,14 @@
     "2": "0.5rem",
     "3": "1rem",
     "4": "1.5rem",
-    "5": "3rem"
+    "5": "3rem",
+    "6": "4rem",
+    "7": "5rem",
+    "8": "6rem",
+    "9": "10rem",
+    "10": "12rem",
+    "11": "15rem",
+    "12": "20rem"
   },
   "fontFamilies": {
     "font-stack-serif": [

@@ -7,8 +7,8 @@ jQuery.each(buttons, function () {
         const wrapper = jQuery(this).parents('.posts-loop');
         const location = wrapper.find('.card').parent();
         let currentPage = parseInt(wrapper.data('paged'));
-        
-        currentPage++; 
+
+        currentPage++;
 
         wrapper.addClass('loading');
         wrapper.prepend('<div class="spinner spinner-wrapper spinner-grow text-primary" role="status"><span class="sr-only">Loading...</span></div>');
@@ -26,18 +26,18 @@ jQuery.each(buttons, function () {
                 card: typeof wrapper.data('card') !== 'undefined' ? JSON.parse(wrapper.data('card').replace(/\'/g, '"')) : '',
                 link_items: wrapper.data('link-items') === 'true' ? true : false,
                 elements: typeof wrapper.data('elements') !== 'undefined' ? JSON.parse(wrapper.data('elements').replace(/\'/g, '"')) : '',
-                element_excerpt: wrapper.data('element-excerpt') === 'true' ? true : false,
-                element_author: wrapper.data('element-author') === 'true' ? true : false,
-                element_date: wrapper.data('element-date') === 'true' ? true : false,
-                element_modified: wrapper.data('element-modified') === 'true' ? true : false,
-                element_post_parent: wrapper.data('element-post-parent') === 'true' ? true : false,
-                element_children: wrapper.data('element-children') === 'true' ? true : false,
-                element_post_type: wrapper.data('element-post-type') === 'true' ? true : false,
-                element_comment_count: wrapper.data('element-comment-count') === 'true' ? true : false,
-                element_link: wrapper.data('element-link') === 'true' ? true : false,
-                element_terms: wrapper.data('element-terms') === 'true' ? true : false,
-                element_categories: wrapper.data('element-categories') === 'true' ? true : false,
-                element_tags: wrapper.data('element-tags') === 'true' ? true : false,
+                element_excerpt: wrapper.data('element-excerpt') !== 'undefined' ? JSON.parse(wrapper.data('element-excerpt').replace(/\'/g, '"')) : '',
+                element_author: wrapper.data('element-author') !== 'undefined' ? JSON.parse(wrapper.data('element-author').replace(/\'/g, '"')) : '',
+                element_date: wrapper.data('element-date') !== 'undefined' ? JSON.parse(wrapper.data('element-date').replace(/\'/g, '"')) : '',
+                element_modified: wrapper.data('element-modified') !== 'undefined' ? JSON.parse(wrapper.data('element-modified').replace(/\'/g, '"')) : '',
+                element_post_parent: wrapper.data('element-post-parent') !== 'undefined' ? JSON.parse(wrapper.data('element-post-parent').replace(/\'/g, '"')) : '',
+                element_children: wrapper.data('element-children') !== 'undefined' ? JSON.parse(wrapper.data('element-children').replace(/\'/g, '"')) : '',
+                element_post_type: wrapper.data('element-post-type') !== 'undefined' ? JSON.parse(wrapper.data('element-post-type').replace(/\'/g, '"')) : '',
+                element_comment_count: wrapper.data('element-comment-count') !== 'undefined' ? JSON.parse(wrapper.data('element-comment-count').replace(/\'/g, '"')) : '',
+                element_link: wrapper.data('element-link') !== 'undefined' ? JSON.parse(wrapper.data('element-link').replace(/\'/g, '"')) : '',
+                element_terms: wrapper.data('element-terms') !== 'undefined' ? JSON.parse(wrapper.data('element-terms').replace(/\'/g, '"')) : '',
+                element_categories: wrapper.data('element-categories') !== 'undefined' ? JSON.parse(wrapper.data('element-categories').replace(/\'/g, '"')) : '',
+                element_tags: wrapper.data('element-tags') !== 'undefined' ? JSON.parse(wrapper.data('element-tags').replace(/\'/g, '"')) : '',
                 card_footer_layout: typeof wrapper.data('card-footer-layout') !== 'undefined' ? JSON.parse(wrapper.data('card-footer-layout').replace(/\'/g, '"')) : '',
                 card_back_layout: typeof wrapper.data('card-back-layout') !== 'undefined' ? JSON.parse(wrapper.data('card-back-layout').replace(/\'/g, '"')) : '',
                 card_featured_image: typeof wrapper.data('card-featured-image') !== 'undefined' ? wrapper.data('card-featured-image') : '',

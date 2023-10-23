@@ -71,7 +71,7 @@ function dream_post_loop_load_more()
         $context = [
             'parent' => isset($_POST['parent']) ? $_POST['parent'] : '',
             'card' => isset($_POST['card']) ? $_POST['card'] : '',
-            'link_items' => isset($_POST['link_items']) ? $_POST['link_items'] : '',
+            'link_items' => isset($_POST['link_items']) ? 'true' : 'false',
             'elements' => isset($_POST['elements']) ? $_POST['elements'] : '',
             'element_excerpt' => isset($_POST['element_excerpt']) ? $_POST['element_excerpt'] : '',
             'element_author' => isset($_POST['element_author']) ? $_POST['element_author'] : '',
@@ -849,15 +849,22 @@ function dream_post_loop_load_more()
                 <div class=\"card-body {{ no_body_padding == 'true' ? 'p-0' }}\">
                     {% block card_text %}
                     <div class=\"card-text\">
-                        {% if function('in_array', 'post_excerpt', elements) and post_type == 'page' %}
-                        <div class=\"posts-loop--post-excerpt\">{{ function('get_the_excerpt') }}</div>
+                        {# {% if function('in_array', 'post_excerpt', elements) and post_type == 'page' %}
+                          <div class=\"posts-loop--post-excerpt\">{{ function('get_the_excerpt') }}</div>
                         {% elseif function('in_array', 'post_excerpt', elements) and link_items != 'true' %}
-                        <div class=\"posts-loop--post-excerpt\">{{ function('get_the_excerpt')|slice(0, element_excerpt.element_excerpt_length|default(50)) }}{% if element_excerpt.element_read_more_label %}<a href=\"{{ post.link }}\" class=\"read-more-link\">{{ element_excerpt.element_read_more_label }}</a>{% endif %}</div>
+                          <div class=\"posts-loop--post-excerpt\">{{ function('get_the_excerpt')|slice(0, element_excerpt.element_excerpt_length|default(50)) }}{% if element_excerpt.element_read_more_label %}<a href=\"{{ post.link }}\" class=\"read-more-link\">{{ element_excerpt.element_read_more_label }}</a>{% endif %}</div>
                         {% elseif function('in_array', 'post_excerpt', elements) %}
-                        <div class=\"posts-loop--post-excerpt\">{{ function('get_the_excerpt')|slice(0, element_excerpt.element_excerpt_length|default(50)) }}</div>
+                          <div class=\"posts-loop--post-excerpt\">{{ function('get_the_excerpt')|slice(0, element_excerpt.element_excerpt_length|default(50)) }}</div>
+                        {% endif %} #}
+
+                        {% if function('in_array', 'post_excerpt', elements) and link_items != true %}
+                            <div class=\"posts-loop--post-excerpt\"><span class=\"post-excerpt\">{{ function('wp_trim_words', function('get_the_excerpt'), element_excerpt.element_excerpt_length|number_format) }}</span> {% if element_excerpt.element_read_more_label %}<a href=\"{{ post.link }}\" class=\"read-more-link read-more\">{{ element_excerpt.element_read_more_label }}</a>{% endif %}</div>
+                        {% elseif function('in_array', 'post_excerpt', elements) %}
+                            <div class=\"posts-loop--post-excerpt\"><span class=\"post-excerpt\">{{ function('wp_trim_words', function('get_the_excerpt'), element_excerpt.element_excerpt_length|number_format) }}</span> {% if element_excerpt.element_read_more_label %}<span class=\"read-more-link read-more\">{{ element_excerpt.element_read_more_label }}</span>{% endif %}</div>
                         {% endif %}
+
                         {% if function('in_array', 'post_content', elements) %}
-                        <div class=\"posts-loop--post-content\">{{ content }}</div>
+                          <div class=\"posts-loop--post-content\">{{ content }}</div>
                         {% endif %}
                     </div>
                     {% endblock %}
@@ -1477,7 +1484,7 @@ function dream_post_loop_load_more()
             {% endblock back %}",
             $context
         );
-        
+
         $response[] = $rendered;
     }
 

@@ -10,5 +10,6 @@
  */
 
 $context = Timber::context();
-
+$timber_post = Timber::get_post(get_page_by_path('error-404')->ID);
+$context['post'] = $timber_post;
 Timber::render( 'pages/404.twig', $context );

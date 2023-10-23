@@ -1,14 +1,17 @@
 {% extends "layouts/base.twig" %}
 
 {% block content %}
-  <section>
-    <div class="container">
-      <div class="row">
-        <div class="col">
-          <br>
-          <p>Sorry, we couldn't find what you're looking for.</p>
+
+  <section class="article-content">
+    <div class="article-content--container">
+      <div class="article-content--row">
+        <div class="article-content--column">
+          <div class="article-body">
+            {{post.content|default('<p>Sorry, we couldn't find what you're looking for.</p>')}}
+          </div>
         </div>
       </div>
     </div>
   </section>
+
 {% endblock %}
