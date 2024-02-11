@@ -27,9 +27,9 @@
 
 {% import _self as lists %}
 
-{{ lists.list(parent_classes, parent_other_classes, parent_element, list_id, bullet_icons, bullet_icon_position, bullet_icon_size, items, item_classes, item_other_classes, item_other_attributes, paths) }}
+{{ lists.list(parent_classes, parent_other_classes, parent_element, list_id, bullet_icons, bullet_icon_position, bullet_icon_size, items, item_classes, item_other_classes, item_attributes, item_other_attributes, icon_styles, icon_other_styles, paths) }}
 
-{% macro list(parent_classes, parent_other_classes, parent_element, list_id, bullet_icons, bullet_icon_position, bullet_icon_size, items, item_classes, item_other_classes, item_other_attributes, paths) %}
+{% macro list(parent_classes, parent_other_classes, parent_element, list_id, bullet_icons, bullet_icon_position, bullet_icon_size, items, item_classes, item_other_classes, item_attributes, item_other_attributes, icon_styles, icon_other_styles, paths) %}
 
   {% import _self as lists %}
 
@@ -60,6 +60,7 @@
       parent_other_classes,
     ]) | sort | join(' ') | trim %}
 
+
     <{{ parent_element }} id="{{ list_id }}" class="{{ parent_classes }}">
     {% for item in items %}
       {% set item_count = item_count + 1 %}
@@ -72,7 +73,7 @@
         item.item_other_classes,
       ]) | sort | join(' ') | trim %}
 
-      {% set attributes = attributes|default([])|merge([
+      {% set item_attributes = item.item_attributes|default([])|merge([
         item.item_other_attributes,
       ]) | sort | join(' ') | trim %}
 
@@ -91,33 +92,42 @@
         {% set height = '1em' %}
       {% endif %}
 
-      {# TODO: Fix conflict with inline style in social nav #}
-      <{{ element }} class="{{ item_classes }}" {{ line_height ? 'style="line-height:' ~ line_height ~ ';"' }} {{ attributes }}>
+      {% set icon_styles = item.icon_styles|default([])|merge([
+        item.icon_other_styles,
+      ]) | sort | join(' ') | trim %}
+
+      <{{ element }} class="{{ item_classes }}" {{ line_height ? 'style="line-height:' ~ line_height ~ ';"' }} {{ item_attributes }}>
       {% if (item.item_icon and icon_position == 'before' and bullet_icon_position != 'after') or (bullet_icons == true and bullet_icon_position == 'before') %}
         {% if item.item_icon matches '/(fa[bdlrs] fa)/' %} {# FontAwesome Icon #}
-          <span class="icon" style="font-size: {{ width }};"><i class="{{ item.item_icon }} color-fill--{{ item.icon_color }}"></i></span>
+          <span class="icon" style="font-size: {{ width }};"><i class="{{ item.item_icon }} color-fill--{{ item.icon_color }}" {{ icon_styles | length > 0 ? 'style="' ~ icon_styles ~ '"'}}></i></span>
         {% else %} {# Custom SVG Icon #}
           {% include '@atoms/svg/_svg~icon.tpl.twig' with {
             name: item.item_icon,
             fill: item.icon_color,
             width: width,
             height: height,
+            svg_attributes: [
+              icon_styles | length > 0 ? 'style="' ~ icon_styles ~ '"'
+            ]
           } %}
         {% endif %}
       {% endif %}
       {{ item.item_text }}
       {% if item.items %}
-        {{ lists.list(item.parent_classes, item.parent_other_classes, item.parent_element, item.list_id, item.bullet_icons, item.bullet_icon_position, item.bullet_icon_size, item.items, item.item_classes, item.item_other_classes, item.item_other_attributes, paths) }}
+        {{ lists.list(item.parent_classes, item.parent_other_classes, item.parent_element, item.list_id, item.bullet_icons, item.bullet_icon_position, item.bullet_icon_size, item.items, item.item_classes, item.item_other_classes, item.item_attributes, item.item_other_attributes, item.icon_styles, item.icon_other_styles, paths) }}
       {% endif %}
       {% if (item.item_icon and icon_position == 'after' and bullet_icon_position != 'before') or (bullet_icons == true and bullet_icon_position == 'after') %}
         {% if item.item_icon matches '/(fa[bdlrs] fa)/' %} {# FontAwesome Icon #}
-          <span class="icon" style="font-size: {{ width }};"><i class="{{ item.item_icon }} color-fill--{{ item.icon_color }}"></i></span>
+          <span class="icon"style="font-size: {{ width }};"><i class="{{ item.item_icon }} color-fill--{{ item.icon_color }}"  {{ icon_styles | length > 0 ? 'style="' ~ icon_styles ~ '"'}}></i></span>
         {% else %} {# Custom SVG Icon #}
           {% include '@atoms/svg/_svg~icon.tpl.twig' with {
             name: item.item_icon,
             fill: item.icon_color,
             width: width,
             height: height,
+            svg_attributes: [
+              icon_styles | length > 0 ? 'style="' ~ icon_styles ~ '"'
+            ]
           } %}
         {% endif %}
       {% endif %}

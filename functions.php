@@ -53,6 +53,13 @@ Timber::$locations = array(
 Timber::$autoescape = false;
 
 /**
+ * Enable caching
+ */
+define('TIMBER_CACHE', true);
+define('CACHE_EXPIRATION_TIME', '30 days');
+define('TIMBER_CACHE_TIME', CACHE_EXPIRATION_TIME);
+
+/**
  * Include settings from /src/functions
 */
 $dream_includes = array(

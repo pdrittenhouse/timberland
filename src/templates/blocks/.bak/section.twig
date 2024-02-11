@@ -100,7 +100,7 @@
   <div class="{{ section_wrapper_classes }}" {{ wrapper_styles ? 'style="' ~ wrapper_styles ~ '"' }}>
     {% if fields.container == true %}<div class="{{ container_classes }}" {{ container_styles ? 'style="' ~ container_styles ~ '"' }}>{% endif %}
 
-      <InnerBlocks disallowedBlocks="{{ ['core/image', 'core/paragraph', 'core/heading', 'acf/section'] | json_encode() | escape('html_attr') }}" />
+      <InnerBlocks disallowedBlocks="{{ ['core/image', 'core/paragraph', 'core/heading', 'core/block', 'acf/section'] | json_encode() | escape('html_attr') }}" />
 
     {% if fields.container == true %}</div>{% endif %}
   </div>

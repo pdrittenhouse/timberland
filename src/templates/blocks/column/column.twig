@@ -124,6 +124,7 @@
 ] | sort | join(' ') | trim %}
 
 {% set column_attributes = [
+  block['anchor'] ? 'id="' ~ block['anchor'] ~ '"',
   column_styles ? 'style="' ~ column_styles ~ '"'
 ]|sort|join(' ')|trim %}
 

@@ -26,7 +26,7 @@
             },
             "admin_only": 0,
             "clone": [
-                "group_63abebedd2dc1-copy"
+                "group_63ae37b32b4cc"
             ],
             "display": "group",
             "layout": "block",
@@ -57,7 +57,7 @@
             },
             "admin_only": 0,
             "clone": [
-                "group_63b882801f68e"
+                "group_63b85bfeb1d9e"
             ],
             "display": "group",
             "layout": "block",
@@ -88,29 +88,6 @@
             "prefix_name": 1
         },
         {
-            "key": "field_6397c95d481af",
-            "label": "Border Color",
-            "name": "card_border_color",
-            "aria-label": "",
-            "type": "clone",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "admin_only": 0,
-            "clone": [
-                "group_6346513f54d9a"
-            ],
-            "display": "group",
-            "layout": "block",
-            "prefix_label": 0,
-            "prefix_name": 1
-        },
-        {
             "key": "field_6399385883368",
             "label": "Remove Card Border",
             "name": "remove_card_border",
@@ -130,6 +107,37 @@
             "ui_on_text": "",
             "ui_off_text": "",
             "ui": 1
+        },
+        {
+            "key": "field_656c15621be50",
+            "label": "Card Border",
+            "name": "card_border",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_6399385883368",
+                        "operator": "!=",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "clone": [
+                "group_634db7f7df7b1"
+            ],
+            "display": "group",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1
         },
         {
             "key": "field_6397c907481ad",
@@ -737,7 +745,7 @@
             "prefix_name": 1
         },
         {
-            "key": "field_64bd6a047603e",
+            "key": "field_656c160f1be51",
             "label": "Height",
             "name": "height",
             "aria-label": "",
@@ -964,15 +972,20 @@
             "prefix_name": 1
         },
         {
-            "key": "field_6399041da99fa",
-            "label": "Back Border Color",
-            "name": "back_border_color",
+            "key": "field_656c16771be52",
+            "label": "Back Border",
+            "name": "card_back_border",
             "aria-label": "",
             "type": "clone",
             "instructions": "",
             "required": 0,
             "conditional_logic": [
                 [
+                    {
+                        "field": "field_6399385883368",
+                        "operator": "!=",
+                        "value": "1"
+                    },
                     {
                         "field": "field_6367f8db8d9ec",
                         "operator": "==",
@@ -987,7 +1000,7 @@
             },
             "admin_only": 0,
             "clone": [
-                "group_6346513f54d9a"
+                "group_634db7f7df7b1"
             ],
             "display": "group",
             "layout": "block",
@@ -1188,5 +1201,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1690135059
+    "modified": 1707683056
 }

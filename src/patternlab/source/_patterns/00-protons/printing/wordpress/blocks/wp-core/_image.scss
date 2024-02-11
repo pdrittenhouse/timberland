@@ -11,6 +11,9 @@ wp-block-image {
     display: inline-block;
   }
   &.is-style-full-width {
+    figure {
+      width: 100%;
+    }
     img {
       @include cover-image-max();
     }

@@ -18,6 +18,7 @@
   hide_labels == true ? 'hide-labels' : '',
   hide_icons == true ? 'hide-icons' : '',
   'nav-direction-' ~ nav_direction,
+  custom_colors == true ? 'custom-colors',
   social_nav_other_classes,
 ]) | sort | join(' ') | trim %}
 
@@ -25,23 +26,31 @@
 
 {% for item in social_nav_items %}
   {# TODO: Fix conflict with inline style in list pattern #}
+  {% set link_title = item.title ? item.title : item.label %}
   {% if hide_icons == true %}
-    {%  set nav_item_text = '<a href="' ~ item.url ~ '" class="social-nav-link" target="' ~ item.target|default('_self') ~ '" title="' ~ item.label ~ '"><span class="label">' ~ item.label ~'</span></a>' %}
+    {%  set nav_item_text = '<a href="' ~ item.url ~ '" class="social-nav-link" target="' ~ item.target|default('_self') ~ '" title="' ~ link_title ~ '"><span class="label">' ~ item.label ~'</span></a>' %}
   {% else %}
-    {%  set nav_item_text = '<a href="' ~ item.url ~ '" class="social-nav-link" target="' ~ item.target|default('_self') ~ '" style="padding-top:' ~ bullet_icon_size ~ '; min-width:' ~ bullet_icon_size ~ ';" title="' ~ item.label ~ '"><span class="label">' ~ item.label ~'</span></a>' %}
+    {%  set nav_item_text = '<a href="' ~ item.url ~ '" class="social-nav-link" target="' ~ item.target|default('_self') ~ '" style="padding-top:' ~ bullet_icon_size ~ '; min-width:' ~ bullet_icon_size ~ ';" title="' ~ link_title ~ '"><span class="label">' ~ item.label ~'</span></a>' %}
   {% endif %}
   {% set item_classes = item.item_classes|default([])|merge([
     'social-nav-item',
     item_other_classes,
   ]) | sort | join(' ') | trim %}
   {% set nav_item = {
-    item_classes: [item_classes],
+    item_classes: [
+      item_classes
+    ],
+    item_other_classes: item.item_other_classes,
+    item_attributes: item.item_attributes,
+    item_other_attributes: item.item_other_attributes,
     item_icon: item.icon,
     icon_color: item.icon_color,
     item_text: nav_item_text,
     icon_position: item.icon_position,
     icon_width: item.icon_width,
-    icon_height: item.icon_height
+    icon_height: item.icon_height,
+    icon_styles : item.icon_styles,
+    icon_other_styles : item.icon_other_styles
   } %}
   {% set nav_items = nav_items|merge([nav_item]) %}
 {% endfor %}
@@ -55,4 +64,3 @@
   bullet_icon_size: bullet_icon_size,
   items: nav_items
 } %}
-

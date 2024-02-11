@@ -38,6 +38,7 @@
 {#{{ query_posts }}#}
 
 {% set block_classes = block_classes|default([])|merge([
+  'block-breadcrumb',
   block['className']
 ]) | sort | join(' ') | trim %}
 
@@ -47,7 +48,7 @@
 {% include '@atoms/breadcrumb/_breadcrumb.tpl.twig' with  {
   breadcrumb_divider: fields.divider|default('&#187;'),
   breadcrumb_label: fields.label,
-  breadcrumb: function('get_breadcrumb', fields.show_categories, fields.text_home|default('Home'), fields.text_404|default('404')),
+  breadcrumb: function('get_breadcrumb', fields.show_categories, fields.show_home, fields.text_home|default('Home'), fields.home_link, fields.text_404|default('404')),
   breadcrumb_classes: [
     block_classes
   ],

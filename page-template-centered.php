@@ -9,4 +9,8 @@ $timber_post = new Timber\Post();
 $context['post'] = $timber_post;
 $context['form_action'] = esc_url( site_url( 'wp-login.php?action=postpass', 'login_post' ) );
 
-Timber::render('pages/page-template-stacked.twig', $context);
+if ( post_password_required( $timber_post->ID ) ) {
+  Timber::render( 'pages/password.twig', $context );
+} else {
+  Timber::render('pages/page-template-stacked.twig', $context);
+}

@@ -357,3 +357,20 @@ function new_excerpt_more($more) {
   return '';
 }
 add_filter('excerpt_more', 'new_excerpt_more');
+
+
+/**
+ * Add Pattern link to admin nav
+*/
+function paterns_url()
+{
+  add_menu_page('paterns_url', 'Patterns', 'read', 'my_slug', '', 'dashicons-block-default', 1);
+}
+add_action('admin_menu', 'paterns_url');
+
+function patternsurl_function()
+{
+  global $menu;
+  $menu[1][2] = "/wp-admin/edit.php?post_type=wp_block";
+}
+add_action('admin_menu', 'patternsurl_function');

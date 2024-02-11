@@ -62,7 +62,9 @@ const initTabs = () => {
           click: () => {},
           activate: () => {},
           deactivate: () => {},
-          load: () => {},
+          load: (tabs) => {
+            tabs.currentTarget.classList.add('initialized');
+          },
           activateState: () => {},
           classes: {
             stateDefault: 'r-tabs-state-default',

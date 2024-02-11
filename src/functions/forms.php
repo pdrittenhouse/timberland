@@ -68,22 +68,22 @@ if( !is_admin() ) {
       $input_classes = [];
 
       foreach ($field->inputs as $field_input) {
-        if($field_input['autocompleteAttribute'] == 'address-line1' && $field_input['isHidden'] !== TRUE) {
+        if($field_input['autocompleteAttribute'] == 'address-line1' && isset($field_input['isHidden'])) {
           array_push($input_classes, 'has_street ');
         }
-        if($field_input['autocompleteAttribute'] == 'address-line2' && $field_input['isHidden'] !== TRUE) {
+        if($field_input['autocompleteAttribute'] == 'address-line2' && isset($field_input['isHidden'])) {
           array_push($input_classes, 'has_street2 ');
         }
-        if($field_input['autocompleteAttribute'] == 'address-level2' && $field_input['isHidden'] !== TRUE) {
+        if($field_input['autocompleteAttribute'] == 'address-level2' && isset($field_input['isHidden'])) {
           array_push($input_classes, 'has_city ');
         }
-        if($field_input['autocompleteAttribute'] == 'address-level1' && $field_input['isHidden'] !== TRUE) {
+        if($field_input['autocompleteAttribute'] == 'address-level1' && isset($field_input['isHidden'])) {
           array_push($input_classes, 'has_state ');
         }
-        if($field_input['autocompleteAttribute'] == 'postal-code' && $field_input['isHidden'] !== TRUE) {
+        if($field_input['autocompleteAttribute'] == 'postal-code' && isset($field_input['isHidden'])) {
           array_push($input_classes, 'has_zip ');
         }
-        if($field_input['autocompleteAttribute'] == 'country-name' && $field_input['isHidden'] !== TRUE) {
+        if($field_input['autocompleteAttribute'] == 'country-name' && isset($field_input['isHidden'])) {
           array_push($input_classes, 'has_country ');
         }
       }

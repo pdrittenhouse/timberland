@@ -12,7 +12,35 @@
 
 {# Set custom card styles #}
 {% set bg_color = fields.card_bg_color['bg_color'] == 'custom' and fields.card_bg_color['bg_custom_color'] ? 'background-color: ' ~ fields.card_bg_color['bg_custom_color'] ~ ';' %}
-{% set border_color = fields.card_border_color['color'] == 'custom' and fields.card_border_color['custom_color'] ? 'border-color: ' ~ fields.card_border_color['custom_color'] ~ ';' %}
+{# {% set border_color = fields.card_border_color['color'] == 'custom' and fields.card_border_color['custom_color'] ? 'border-color: ' ~ fields.card_border_color['custom_color'] ~ ';' %} #}
+
+{% if fields.remove_card_border != true %}
+	{% set card_border_top_width = fields.card_border['top']['width'] is not empty ? 'border-top-width: ' ~ fields.card_border['top']['width'] ~ 'px;' %}
+  {% set card_border_top_style = fields.card_border['top']['style'] ? 'border-top-style: ' ~ fields.card_border['top']['style'] ~ ';' %}
+  {% set card_border_top_color = fields.card_border['top']['color'] == 'custom' and fields.card_border['top']['custom_color'] ? 'border-top-color: ' ~ fields.card_border['top']['custom_color'] ~ ';' : fields.card_border['top']['color'] == 'palette' and fields.card_border['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.card_border['top']['theme_color'] ~ ');' %}
+  {% set card_border_bottom_width = fields.card_border['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ fields.card_border['bottom']['width'] ~ 'px;' %}
+  {% set card_border_bottom_style = fields.card_border['bottom']['style'] ? 'border-bottom-style: ' ~ fields.card_border['bottom']['style'] ~ ';' %}
+  {% set card_border_bottom_color = fields.card_border['bottom']['color'] == 'custom' and fields.card_border['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.card_border['bottom']['custom_color'] ~ ';' : fields.card_border['bottom']['color'] == 'palette' and fields.card_border['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.card_border['bottom']['theme_color'] ~ ');' %}
+  {% set card_border_left_width = fields.card_border['left']['width'] is not empty ? 'border-left-width: ' ~ fields.card_border['left']['width'] ~ 'px;' %}
+  {% set card_border_left_style = fields.card_border['left']['style'] ? 'border-left-style: ' ~ fields.card_border['left']['style'] ~ ';' %}
+  {% set card_border_left_color = fields.card_border['left']['color'] == 'custom' and fields.card_border['left']['custom_color'] ? 'border-left-color: ' ~ fields.card_border['left']['custom_color'] ~ ';' : fields.card_border['left']['color'] == 'palette' and fields.card_border['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.card_border['left']['theme_color'] ~ ');' %}
+  {% set card_border_right_width = fields.card_border['right']['width'] is not empty ? 'border-right-width: ' ~ fields.card_border['right']['width'] ~ 'px;' %}
+  {% set card_border_right_style = fields.card_border['right']['style'] ? 'border-right-style: ' ~ fields.card_border['right']['style'] ~ ';' %}
+  {% set card_border_right_color = fields.card_border['right']['color'] == 'custom' and fields.card_border['right']['custom_color'] ? 'border-right-color: ' ~ fields.card_border['right']['custom_color'] ~ ';' : fields.card_border['right']['color'] == 'palette' and fields.card_border['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.card_border['right']['theme_color'] ~ ');' %}
+  {% set card_back_border_top_width = fields.card_back_border['top']['width'] is not empty ? 'border-top-width: ' ~ fields.card_back_border['top']['width'] ~ 'px;' %}
+  {% set card_back_border_top_style = fields.card_back_border['top']['style'] ? 'border-top-style: ' ~ fields.card_back_border['top']['style'] ~ ';' %}
+  {% set card_back_border_top_color = fields.card_back_border['top']['color'] == 'custom' and fields.card_back_border['top']['custom_color'] ? 'border-top-color: ' ~ fields.card_back_border['top']['custom_color'] ~ ';' : fields.card_back_border['top']['color'] == 'palette' and fields.card_back_border['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.card_back_border['top']['theme_color'] ~ ');' %}
+  {% set card_back_border_bottom_width = fields.card_back_border['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ fields.card_back_border['bottom']['width'] ~ 'px;' %}
+  {% set card_back_border_bottom_style = fields.card_back_border['bottom']['style'] ? 'border-bottom-style: ' ~ fields.card_back_border['bottom']['style'] ~ ';' %}
+  {% set card_back_border_bottom_color = fields.card_back_border['bottom']['color'] == 'custom' and fields.card_back_border['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.card_back_border['bottom']['custom_color'] ~ ';' : fields.card_back_border['bottom']['color'] == 'palette' and fields.card_back_border['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.card_back_border['bottom']['theme_color'] ~ ');' %}
+  {% set card_back_border_left_width = fields.card_back_border['left']['width'] is not empty ? 'border-left-width: ' ~ fields.card_back_border['left']['width'] ~ 'px;' %}
+  {% set card_back_border_left_style = fields.card_back_border['left']['style'] ? 'border-left-style: ' ~ fields.card_back_border['left']['style'] ~ ';' %}
+  {% set card_back_border_left_color = fields.card_back_border['left']['color'] == 'custom' and fields.card_back_border['left']['custom_color'] ? 'border-left-color: ' ~ fields.card_back_border['left']['custom_color'] ~ ';' : fields.card_back_border['left']['color'] == 'palette' and fields.card_back_border['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.card_back_border['left']['theme_color'] ~ ');' %}
+  {% set card_back_border_right_width = fields.card_back_border['right']['width'] is not empty ? 'border-right-width: ' ~ fields.card_back_border['right']['width'] ~ 'px;' %}
+  {% set card_back_border_right_style = fields.card_back_border['right']['style'] ? 'border-right-style: ' ~ fields.card_back_border['right']['style'] ~ ';' %}
+  {% set card_back_border_right_color = fields.card_back_border['right']['color'] == 'custom' and fields.card_back_border['right']['custom_color'] ? 'border-right-color: ' ~ fields.card_back_border['right']['custom_color'] ~ ';' : fields.card_back_border['right']['color'] == 'palette' and fields.card_back_border['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.card_back_border['right']['theme_color'] ~ ');' %}
+{% endif %}
+
 {% set text_color = fields.card_text_color['color'] == 'custom' and fields.card_text_color['custom_color'] ? 'color: ' ~ fields.card_text_color['custom_color'] ~ ';' %}
 {% set card_back_bg_color = fields.back_bg_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.back_bg_color['bg_custom_color'] ~ ';' %}
 {% set card_back_border_color = fields.back_border_color['color'] == 'custom' ? 'border-color: ' ~ fields.back_border_color['custom_color'] ~ ';' %}
@@ -20,9 +48,9 @@
 {% set width = fields.width.width['width']['value'] is not empty ? 'width: ' ~ fields.width.width['width']['value']  ~ fields.width.width['width']['unit'] ~  ';' %}
 {% set min_width = fields.width.width['min_width'] is not empty ? 'min-width: ' ~ fields.width.width['min_width']  ~ 'px;' %}
 {% set max_width = fields.width.width['max_width'] is not empty ? 'max-width: ' ~ fields.width.width['max_width']  ~ 'px;' %}
-{% set width = fields.width.width['width']['value'] is not empty ? 'width: ' ~ fields.width.width['width']['value']  ~ fields.width.width['width']['unit'] ~  ';' %}
-{% set min_width = fields.width.width['min_width'] is not empty ? 'min-width: ' ~ fields.width.width['min_width']  ~ 'px;' %}
-{% set max_width = fields.width.width['max_width'] is not empty ? 'max-width: ' ~ fields.width.width['max_width']  ~ 'px;' %}
+{% set height = fields.height.height['height']['value'] is not empty ? 'height: ' ~ fields.height.height['height']['value']  ~ fields.height.height['height']['unit'] ~  ';' %}
+{% set min_height = fields.height.height['min_height'] is not empty ? 'min-height: ' ~ fields.height.height['min_height']  ~ 'px;' %}
+{% set max_height = fields.height.height['max_height'] is not empty ? 'max-height: ' ~ fields.height.height['max_height']  ~ 'px;' %}
 {% set margin_top = parent_block_data['name'] != 'acf/card-grid' and fields.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.margin['margin']['top']['top'] is not empty ? 'margin-top: ' ~ fields.margin['margin']['top']['top'] ~ 'px;' %}
 {% set margin_bottom = parent_block_data['name'] != 'acf/card-grid' and fields.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.margin['margin']['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ fields.margin['margin']['bottom']['bottom'] ~ 'px;' %}
 {% set margin_left = parent_block_data['name'] != 'acf/card-grid' and fields.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.margin['margin']['left']['left'] is not empty ? 'margin-left: ' ~ fields.margin['margin']['left']['left'] ~ 'px;' %}
@@ -130,7 +158,8 @@
   card_subtitle: fields.subtitle ? fields.subtitle,
   card_linked: fields.link_card == true,
   card_link: fields.trigger_modal == true ? 'javascript:void(0);' : fields.link['url'] ? fields.link['url'],
-  card_link_text: 'Card link',
+  card_link_text: fields.link['title'],
+  card_link_target: fields.link['target'],
   flip_card: fields.flip_card,
   inherit_color: (fields.card_text_color['color'] == 'palette' and fields.card_text_color['theme_color']) or (fields.card_text_color['color'] == 'custom' and fields.card_text_color['custom_color']) and fields.inherit_text_color ? fields.inherit_text_color,
   card_image_location: ((fields.image['image_type'] == 'file' and fields.image['image']['url']) or (fields.image['image_type'] == 'url' and fields.image['image_url'])) and fields.image_position ? fields.image_position,
@@ -159,7 +188,18 @@
     fields.flip_card != true or fields.image_overlay_text is empty ? border_top_right_radius,
     fields.flip_card != true or fields.image_overlay_text is empty ? border_bottom_left_radius,
     fields.flip_card != true or fields.image_overlay_text is empty ? border_bottom_right_radius,
-    fields.flip_card != true or fields.image_overlay_text is empty ? border_color,
+    fields.flip_card != true or fields.image_overlay_text is empty ? card_border_top_width,
+    fields.flip_card != true or fields.image_overlay_text is empty ? card_border_top_style,
+    fields.flip_card != true or fields.image_overlay_text is empty ? card_border_top_color,
+    fields.flip_card != true or fields.image_overlay_text is empty ? card_border_bottom_width,
+    fields.flip_card != true or fields.image_overlay_text is empty ? card_border_bottom_style,
+    fields.flip_card != true or fields.image_overlay_text is empty ? card_border_bottom_color,
+    fields.flip_card != true or fields.image_overlay_text is empty ? card_border_left_width,
+    fields.flip_card != true or fields.image_overlay_text is empty ? card_border_left_style,
+    fields.flip_card != true or fields.image_overlay_text is empty ? card_border_left_color,
+    fields.flip_card != true or fields.image_overlay_text is empty ? card_border_right_width,
+    fields.flip_card != true or fields.image_overlay_text is empty ? card_border_right_style,
+    fields.flip_card != true or fields.image_overlay_text is empty ? card_border_right_color,
     fields.flip_card != true ? bg_color,
     fields.flip_card != true ? text_color,
     fields.flip_card != true ? padding_top,
@@ -198,7 +238,18 @@
     fields.flip_card == true or fields.image_overlay_text ? border_top_right_radius,
     fields.flip_card == true or fields.image_overlay_text ? border_bottom_left_radius,
     fields.flip_card == true or fields.image_overlay_text ? border_bottom_right_radius,
-    fields.flip_card == true ? border_color,
+    fields.flip_card == true ? card_border_top_width,
+    fields.flip_card == true ? card_border_top_style,
+    fields.flip_card == true ? card_border_top_color,
+    fields.flip_card == true ? card_border_bottom_width,
+    fields.flip_card == true ? card_border_bottom_style,
+    fields.flip_card == true ? card_border_bottom_color,
+    fields.flip_card == true ? card_border_left_width,
+    fields.flip_card == true ? card_border_left_style,
+    fields.flip_card == true ? card_border_left_color,
+    fields.flip_card == true ? card_border_right_width,
+    fields.flip_card == true ? card_border_right_style,
+    fields.flip_card == true ? card_border_right_color,
     fields.flip_card == true ? bg_color,
     fields.flip_card == true ? text_color,
     fields.flip_card == true ? padding_top,
@@ -222,7 +273,18 @@
     fields.flip_card == true ? back_border_top_right_radius,
     fields.flip_card == true ? back_border_bottom_left_radius,
     fields.flip_card == true ? back_border_bottom_right_radius,
-    fields.flip_card == true ? card_back_border_color,
+    fields.flip_card == true ? card_back_border_top_width,
+    fields.flip_card == true ? card_back_border_top_style,
+    fields.flip_card == true ? card_back_border_top_color,
+    fields.flip_card == true ? card_back_border_bottom_width,
+    fields.flip_card == true ? card_back_border_bottom_style,
+    fields.flip_card == true ? card_back_border_bottom_color,
+    fields.flip_card == true ? card_back_border_left_width,
+    fields.flip_card == true ? card_back_border_left_style,
+    fields.flip_card == true ? card_back_border_left_color,
+    fields.flip_card == true ? card_back_border_right_width,
+    fields.flip_card == true ? card_back_border_right_style,
+    fields.flip_card == true ? card_back_border_right_color,
     fields.flip_card == true ? card_back_bg_color,
     fields.flip_card == true ? card_back_text_color,
     fields.flip_card == true ? padding_top,
@@ -237,7 +299,7 @@
                 <div class="card-text">{{ fields.body }}</div>
             {% endblock %}
             <div class="inner-blocks-wrapper">
-                <InnerBlocks allowedBlocks="{{ ['core/image', 'core/paragraph', 'core/heading', 'core/list', 'core/quote', 'core/code', 'core/preformatted', 'core/pullquote', 'core/table', 'core/verse', 'core/gallery', 'core/audio', 'core/cover', 'core/media-text', 'core/video', 'core/buttons', 'core/columns', 'core/group', 'core/row', 'core/separator', 'core/spacer', 'core/calendar', 'core/html', 'core/search', 'core/shortcode', 'core/social-icons', 'core/tag-cloud', 'acf/quote', 'acf/modal', 'acf/buttons', 'acf/button', 'acf/row', 'acf/price', 'acf/icons', 'acf/button-group', 'acf/accordion', 'acf/pattern', 'gravityforms/form'] | json_encode() | escape('html_attr') }}" />
+                <InnerBlocks allowedBlocks="{{ ['core/block', 'core/post-title', 'core/avatar', 'core/categories', 'core/cover', 'core/embed', 'core/file', 'core/footnotes', 'core/form', 'core/latest-comments', 'core/latest-posts', 'core/loginout', 'core/missing', 'core/navigation', 'core/navigation-link', 'core/page-list', 'core/post-author', 'core/post-author-biography', 'core/post-author-name', 'core/post-comments-count', 'core/post-comments-form', 'core/post-comments-link', 'core/post-date', 'core/post-excerpt', 'core/post-navigation-link', 'core/post-time-to-read', 'core/post-featured-image', 'core/query-pagination', 'core/query-pagination-next', 'core/query-pagination-numbers', 'core/query-pagination-previous', 'core/read-more', 'core/rss', 'core/site-logo', 'core/site-tagline', 'core/site-title', 'core/social-link', 'core/table-of-contents', 'core/term-description', 'core/image', 'core/paragraph', 'core/heading', 'core/list', 'core/quote', 'core/code', 'core/preformatted', 'core/pullquote', 'core/table', 'core/verse', 'core/gallery', 'core/audio', 'core/cover', 'core/media-text', 'core/video', 'core/buttons', 'core/button', 'core/columns', 'core/group', 'core/row', 'core/separator', 'core/spacer', 'core/calendar', 'core/html', 'core/search', 'core/shortcode', 'core/social-icons', 'core/tag-cloud', 'acf/quote', 'acf/modal', 'acf/buttons', 'acf/button', 'acf/row', 'acf/price', 'acf/icons', 'acf/button-group', 'acf/accordion', 'acf/pattern', 'gravityforms/form', 'acf/price', 'acf/updater-forms', 'acf/provider-grid', 'acf/provider-service'] | json_encode() | escape('html_attr') }}" />
             </div>
             {% if fields.link and fields.link_card != true and fields.show_button != true %}
                 <a href="{{ fields.link['url'] }}" class="card-link" target="{{ fields.link['target'] ? fields.link['target'] : '_self' }}">{{ fields.link['title'] }}</a>
@@ -265,6 +327,7 @@
                   close_button: fields.button.close,
                   hide_label: fields.button.hide_label,
                   button_classes: [
+                    'card-button',
                     fields.button.close != 'black' and fields.button.close != 'white' and fields.button.background_color['bg_color'] == 'palette' and fields.button.background_color['bg_theme_color'] ? 'bg-' ~ fields.button.background_color['bg_theme_color'],
                     fields.button.close != 'black' and fields.button.close != 'white' and fields.button.text_color['color'] == 'palette' and fields.button.text_color['theme_color'] ? 'text-' ~ fields.button.text_color['theme_color'],
                     fields.button.full_width != true and fields.button.display['display'] is not null ? fields.button.display['display']

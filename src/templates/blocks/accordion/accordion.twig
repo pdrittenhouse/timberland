@@ -31,7 +31,10 @@
 
 {% embed '@molecules/accordion/_accordion.tpl.twig' with {
   accordion_id: fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'accordion' ~ fields.id['id_gen'],
-  accordion_other_classes: block['className'],
+  accordion_classes: [
+    block['className'],
+    fields.layout.accordion_layout != 'default' ? 'accordion-' ~ fields.layout.accordion_layout
+  ],
   accordion_flush: fields.flush,
   always_open: fields.always_open,
   accordion_attributes: [

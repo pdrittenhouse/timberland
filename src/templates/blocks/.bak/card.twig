@@ -117,7 +117,7 @@
                 <div class="card-text">{{ fields.body }}</div>
             {% endblock %}
             <div class="inner-blocks-wrapper">
-                <InnerBlocks allowedBlocks="{{ ['core/image', 'core/paragraph', 'core/heading', 'core/list', 'core/quote', 'core/code', 'core/preformatted', 'core/pullquote', 'core/table', 'core/verse', 'core/gallery', 'core/audio', 'core/cover', 'core/media-text', 'core/video', 'core/buttons', 'core/columns', 'core/group', 'core/row', 'core/separator', 'core/spacer', 'core/calendar', 'core/html', 'core/search', 'core/shortcode', 'core/social-icons', 'core/tag-cloud', 'acf/quote', 'acf/modal', 'acf/buttons', 'acf/button', 'acf/row', 'acf/price', 'acf/icons', 'acf/button-group', 'acf/accordion'] | json_encode() | escape('html_attr') }}" />
+                <InnerBlocks allowedBlocks="{{ ['core/image', 'core/paragraph', 'core/heading', 'core/list', 'core/quote', 'core/code', 'core/preformatted', 'core/pullquote', 'core/table', 'core/verse', 'core/gallery', 'core/audio', 'core/cover', 'core/media-text', 'core/video', 'core/buttons', 'core/columns', 'core/group', 'core/row', 'core/separator', 'core/spacer', 'core/calendar', 'core/html', 'core/search', 'core/shortcode', 'core/social-icons', 'core/tag-cloud', 'core/block', 'acf/quote', 'acf/modal', 'acf/buttons', 'acf/button', 'acf/row', 'acf/price', 'acf/icons', 'acf/button-group', 'acf/accordion'] | json_encode() | escape('html_attr') }}" />
             </div>
             {% if fields.link and fields.link_card != true and fields.show_button != true %}
                 <a href="{{ fields.link['url'] }}" class="card-link" target="{{ fields.link['target'] ? fields.link['target'] : '_self' }}">{{ fields.link['title'] }}</a>

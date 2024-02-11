@@ -79,7 +79,7 @@ function show_breadcrumb($label = '', $delimiter = '&nbsp;&nbsp;&#187;&nbsp;&nbs
         $post_type = get_post_type_object(get_post_type());
         $slug = $post_type->rewrite;
 
-        echo '<a href="' . $homeLink . '/' . $slug['slug'] . '/">' . $post_type->labels->singular_name . '</a> ' . $delimiter . ' ';
+        echo '<a href="' . $homeLink . '/' . $slug['slug'] . '/">' . $post_type->labels->name . '</a> ' . $delimiter . ' ';
         echo $before . get_the_title() . $after;
 
       } else {
@@ -186,16 +186,26 @@ function show_breadcrumb($label = '', $delimiter = '&nbsp;&nbsp;&#187;&nbsp;&nbs
 }
 
 
-function get_breadcrumb($showCategory = false, $home = 'Home', $error = '404' ) {
-  $homeLink = home_url();
+function get_breadcrumb($showCategory = false, $showHome = true, $home = 'Home', $homeLinkOverride = false, $error = '404' ) {
 
   $homeLink = (object) [
     'text' => $home,
-    'url' => $homeLink
+    'url' => home_url()
   ];
 
-  $breadcrumbList = [$homeLink];
+  if ($showHome == true && $homeLinkOverride != false) {
+    $homeLinkOverride = (object) [
+      'text' => $home,
+      'url' => $homeLinkOverride
+    ];
+    $breadcrumbList = [$homeLinkOverride];
+  } elseif ($showHome == true) {
+    $breadcrumbList = [$homeLink];
+  } else {
+    $breadcrumbList = [];
+  }
 
+  
   // TODO: Add custom parent for posts/pages
 
   if (!is_home() && !is_front_page() || is_paged()) {
@@ -347,10 +357,10 @@ function get_breadcrumb($showCategory = false, $home = 'Home', $error = '404' ) 
 
         $post_type = get_post_type_object(get_post_type());
         $slug = $post_type->rewrite;
-
+        
         $parent = (object) [
-          'text' => $post_type->labels->singular_name,
-          'url' => $homeLink . '/' . $slug['slug']
+          'text' => $post_type->labels->name,
+          'url' => $homeLink->url . '/' . $slug['slug']
         ];
 
         $item = (object) [

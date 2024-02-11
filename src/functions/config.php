@@ -66,7 +66,7 @@ class StarterSite extends Timber\Site {
       ) );
 
       register_sidebar( array(
-        'name'          => 'Territory',
+        'name'          => 'Tertiary',
         'id'            => 'tertiary_sidebar',
         'before_widget' => '<div>',
         'after_widget'  => '</div>',

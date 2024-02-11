@@ -21,7 +21,7 @@
                 "header_widget_area": "Header",
                 "primary_sidebar": "Primary",
                 "secondary_sidebar": "Secondary",
-                "tertiary_sidebar": "Territory",
+                "tertiary_sidebar": "Tertiary",
                 "footer_widget_area": "Footer"
             },
             "default_value": false,
@@ -51,5 +51,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1688748059
+    "modified": 1699843550
 }

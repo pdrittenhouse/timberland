@@ -53,14 +53,14 @@
       .svg--icon,
       svg {
         transition-property: color $transition-duration $transition-timing-function;
-        //color: var(--social-nav-item-hover);
+        color: var(--social-nav-item-hover);
       }
     }
 
     .icon,
     .svg--icon,
     svg {
-      //color: var(--social-nav-item);
+      // color: var(--social-nav-item);
       transition: color $transition-duration $transition-timing-function;
       will-change: color;
     }
@@ -124,6 +124,10 @@
       }
     }
 
+    .social-nav-item {
+      position: relative;
+    }
+
     .label {
       @include remove;
     }
@@ -141,7 +145,6 @@
   }
 
   &.hide-icons {
-
     >.social-nav-item {
 
       > .icon,
@@ -180,4 +183,3 @@
   }
 
 }
-

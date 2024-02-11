@@ -23,7 +23,7 @@
       {% if not (class starts with 'menu-item') %}
         {% set icon_classes = icon_classes|merge([class]) %}
       {% else %}
-        {% set item_classes = item_classes|merge([class]) %}
+        {% set item_classes = item_classes|merge([class ~ ' ' ~ item.title|lower|replace({' ': '-'})]) %}
       {% endif %}
     {% endfor %}
 

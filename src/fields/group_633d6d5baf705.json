@@ -50,7 +50,15 @@
                 "shop_order_refund": "shop_order_refund",
                 "shop_coupon": "shop_coupon",
                 "shop_order_placehold": "shop_order_placehold",
-                "gpb_portfolio": "gpb_portfolio"
+                "gpb_portfolio": "gpb_portfolio",
+                "moving-tips": "moving-tips",
+                "client": "client",
+                "providers": "providers",
+                "reviews": "reviews",
+                "guides": "guides",
+                "compare": "compare",
+                "ninja-table": "ninja-table",
+                "np-redirect": "np-redirect"
             },
             "default_value": [
                 "post"
@@ -652,7 +660,13 @@
                                 "product_cat": "product_cat",
                                 "product_tag": "product_tag",
                                 "product_shipping_class": "product_shipping_class",
-                                "gpb_portfolio_type": "gpb_portfolio_type"
+                                "gpb_portfolio_type": "gpb_portfolio_type",
+                                "client-type": "client-type",
+                                "testimonial": "testimonial",
+                                "service-types": "service-types",
+                                "service-providers": "service-providers",
+                                "article-type": "article-type",
+                                "wp_pattern_category": "wp_pattern_category"
                             },
                             "default_value": false,
                             "return_format": "value",
@@ -2806,7 +2820,7 @@
             "ui": 1
         },
         {
-            "key": "field_64b72eb6ea94d",
+            "key": "field_64b5c7019ca30",
             "label": "Pagination Display Options",
             "name": "pagination_display",
             "aria-label": "",
@@ -2836,7 +2850,7 @@
             "layout": "block",
             "sub_fields": [
                 {
-                    "key": "field_64b72f33ea94f",
+                    "key": "field_64b5c93d281d7",
                     "label": "Hide First",
                     "name": "hide_first",
                     "aria-label": "",
@@ -2857,7 +2871,7 @@
                     "ui": 1
                 },
                 {
-                    "key": "field_64b72ff8ea953",
+                    "key": "field_64b5c72a9ca32",
                     "label": "First Label",
                     "name": "first_label",
                     "aria-label": "",
@@ -2867,7 +2881,7 @@
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_64b72f33ea94f",
+                                "field": "field_64b5c93d281d7",
                                 "operator": "!=",
                                 "value": "1"
                             }
@@ -2879,14 +2893,14 @@
                         "id": ""
                     },
                     "admin_only": 0,
-                    "default_value": "",
+                    "default_value": "First",
                     "maxlength": "",
                     "placeholder": "",
                     "prepend": "",
                     "append": ""
                 },
                 {
-                    "key": "field_64b72fc9ea950",
+                    "key": "field_64b5c955281d8",
                     "label": "Hide Last",
                     "name": "hide_last",
                     "aria-label": "",
@@ -2907,7 +2921,7 @@
                     "ui": 1
                 },
                 {
-                    "key": "field_64b7303eea954",
+                    "key": "field_64b5c73b9ca33",
                     "label": "Last Label",
                     "name": "last_label",
                     "aria-label": "",
@@ -2917,7 +2931,7 @@
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_64b72fc9ea950",
+                                "field": "field_64b5c955281d8",
                                 "operator": "!=",
                                 "value": "1"
                             }
@@ -2929,14 +2943,14 @@
                         "id": ""
                     },
                     "admin_only": 0,
-                    "default_value": "",
+                    "default_value": "Last",
                     "maxlength": "",
                     "placeholder": "",
                     "prepend": "",
                     "append": ""
                 },
                 {
-                    "key": "field_64b72fdeea952",
+                    "key": "field_64b5c973281da",
                     "label": "Hide Previous",
                     "name": "hide_previous",
                     "aria-label": "",
@@ -2957,7 +2971,7 @@
                     "ui": 1
                 },
                 {
-                    "key": "field_64b7306aea956",
+                    "key": "field_64b5c7859ca35",
                     "label": "Previous Label",
                     "name": "previous_label",
                     "aria-label": "",
@@ -2967,7 +2981,7 @@
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_64b72fdeea952",
+                                "field": "field_64b5c973281da",
                                 "operator": "!=",
                                 "value": "1"
                             }
@@ -2979,14 +2993,14 @@
                         "id": ""
                     },
                     "admin_only": 0,
-                    "default_value": "",
+                    "default_value": "Previous",
                     "maxlength": "",
                     "placeholder": "",
                     "prepend": "",
                     "append": ""
                 },
                 {
-                    "key": "field_64b72fd3ea951",
+                    "key": "field_64b5c962281d9",
                     "label": "Hide Next",
                     "name": "hide_next",
                     "aria-label": "",
@@ -3007,7 +3021,7 @@
                     "ui": 1
                 },
                 {
-                    "key": "field_64b73055ea955",
+                    "key": "field_64b5c7779ca34",
                     "label": "Next Label",
                     "name": "next_label",
                     "aria-label": "",
@@ -3017,7 +3031,7 @@
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_64b72fd3ea951",
+                                "field": "field_64b5c962281d9",
                                 "operator": "!=",
                                 "value": "1"
                             }
@@ -3029,14 +3043,14 @@
                         "id": ""
                     },
                     "admin_only": 0,
-                    "default_value": "",
+                    "default_value": "Next",
                     "maxlength": "",
                     "placeholder": "",
                     "prepend": "",
                     "append": ""
                 },
                 {
-                    "key": "field_64c84ea7ed013",
+                    "key": "field_64b5c9fe281db",
                     "label": "Hide Pages",
                     "name": "hide_pages",
                     "aria-label": "",
@@ -4299,7 +4313,13 @@
                                 "product_cat": "product_cat",
                                 "product_tag": "product_tag",
                                 "product_shipping_class": "product_shipping_class",
-                                "gpb_portfolio_type": "gpb_portfolio_type"
+                                "gpb_portfolio_type": "gpb_portfolio_type",
+                                "client-type": "client-type",
+                                "testimonial": "testimonial",
+                                "service-types": "service-types",
+                                "service-providers": "service-providers",
+                                "article-type": "article-type",
+                                "wp_pattern_category": "wp_pattern_category"
                             },
                             "default_value": false,
                             "return_format": "value",
@@ -5998,7 +6018,13 @@
                         "product_cat": "product_cat",
                         "product_tag": "product_tag",
                         "product_shipping_class": "product_shipping_class",
-                        "gpb_portfolio_type": "gpb_portfolio_type"
+                        "gpb_portfolio_type": "gpb_portfolio_type",
+                        "client-type": "client-type",
+                        "testimonial": "testimonial",
+                        "service-types": "service-types",
+                        "service-providers": "service-providers",
+                        "article-type": "article-type",
+                        "wp_pattern_category": "wp_pattern_category"
                     },
                     "default_value": false,
                     "return_format": "value",
@@ -7421,7 +7447,13 @@
                                 "product_cat": "product_cat",
                                 "product_tag": "product_tag",
                                 "product_shipping_class": "product_shipping_class",
-                                "gpb_portfolio_type": "gpb_portfolio_type"
+                                "gpb_portfolio_type": "gpb_portfolio_type",
+                                "client-type": "client-type",
+                                "testimonial": "testimonial",
+                                "service-types": "service-types",
+                                "service-providers": "service-providers",
+                                "article-type": "article-type",
+                                "wp_pattern_category": "wp_pattern_category"
                             },
                             "default_value": false,
                             "return_format": "",
@@ -8694,7 +8726,13 @@
                                 "product_cat": "product_cat",
                                 "product_tag": "product_tag",
                                 "product_shipping_class": "product_shipping_class",
-                                "gpb_portfolio_type": "gpb_portfolio_type"
+                                "gpb_portfolio_type": "gpb_portfolio_type",
+                                "client-type": "client-type",
+                                "testimonial": "testimonial",
+                                "service-types": "service-types",
+                                "service-providers": "service-providers",
+                                "article-type": "article-type",
+                                "wp_pattern_category": "wp_pattern_category"
                             },
                             "default_value": false,
                             "return_format": "value",
@@ -9948,7 +9986,13 @@
                                 "product_cat": "product_cat",
                                 "product_tag": "product_tag",
                                 "product_shipping_class": "product_shipping_class",
-                                "gpb_portfolio_type": "gpb_portfolio_type"
+                                "gpb_portfolio_type": "gpb_portfolio_type",
+                                "client-type": "client-type",
+                                "testimonial": "testimonial",
+                                "service-types": "service-types",
+                                "service-providers": "service-providers",
+                                "article-type": "article-type",
+                                "wp_pattern_category": "wp_pattern_category"
                             },
                             "default_value": false,
                             "return_format": "value",
@@ -11193,7 +11237,13 @@
                                 "product_cat": "product_cat",
                                 "product_tag": "product_tag",
                                 "product_shipping_class": "product_shipping_class",
-                                "gpb_portfolio_type": "gpb_portfolio_type"
+                                "gpb_portfolio_type": "gpb_portfolio_type",
+                                "client-type": "client-type",
+                                "testimonial": "testimonial",
+                                "service-types": "service-types",
+                                "service-providers": "service-providers",
+                                "article-type": "article-type",
+                                "wp_pattern_category": "wp_pattern_category"
                             },
                             "default_value": false,
                             "return_format": "value",
@@ -11778,6 +11828,7 @@
                 "field_634ec3d02152f",
                 "field_6225a8a52f16d",
                 "field_6376f420b1ccb",
+                "field_656c160f1be51",
                 "field_6376f3be391b2",
                 "field_6397d3975a96b",
                 "field_6397d2fd5a969",
@@ -12025,5 +12076,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1690848962
+    "modified": 1707683179
 }

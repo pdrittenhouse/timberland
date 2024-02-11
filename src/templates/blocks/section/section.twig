@@ -32,6 +32,7 @@
 
 {% set section_classes = [
   'block-section',
+  block['gradient'] ? 'gradient-' ~ block['gradient'],
   block['className'],
   fields.section_bg_color['bg_color'] == 'palette' and fields.section_bg_color['bg_theme_color'] ? 'bg-' ~ fields.section_bg_color['bg_theme_color']
 ] | sort | join(' ') | trim %}

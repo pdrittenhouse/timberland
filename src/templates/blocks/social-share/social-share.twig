@@ -1,0 +1,131 @@
+{#
+/**
+ * Block Name:
+ *
+ * This is the template that displays the  block.
+ */
+#}
+
+{#{% if is_preview %}#}
+{#<p>Some editor instructions here.</p>#}
+{#{% endif %}#}
+
+{#{{ block['className'] }}#}
+{#{{ block['align'] ? 'align-' ~ block['align'] }}#}
+{#{{ block['align_text']}}#}
+{#{{ block['align_content'] }}#}
+{#{{ block['full_height'] }}#}
+
+{# Parent Block Data - ACF <= v.5.9 #}
+{#{% set parent = function('get_parent_block', block['id'], block['name']) %}#}
+{# Parent Block Data - ACF >= v.6.0 #}
+{#{{ parent_block_data['data'] }}#}
+{# Block Context #}
+{#{{ block_context['acf/fields'] }}#}
+{# ACF Options Fields #}
+{#{{ options }}#}
+{# ACF Fields #}
+{#{{ fields }}#}
+{# Site Data #}
+{#{{ site }}#}
+{# SASS Data #}
+{#{{ sass_data }}#}
+{# Post Data #}
+{#{{ block_post }}#}
+
+{% set block_classes = block_classes|default([])|merge([
+	'block-social-share',
+	block['className']
+]) | sort | join(' ') | trim %}
+
+{% set block_attributes = block_attributes|default([])|merge([
+	block_styles | length > 0 ? 'style="' ~ block_styles | sort | join(' ') | trim ~ '"'
+]) | sort | join(' ') | trim %}
+
+<div class="{{ block_classes }}" {{ block_attributes }}>
+	{% set items = {} %}
+
+	{% set includes_copy = false %}
+
+	{% for item in fields.items %}
+		{% if item.service == 'copy' %}
+			{% set includes_copy = true %}
+		{% endif %}
+
+		{% set default_icon = item.service == 'facebook' ? 'fab fa-facebook-f' : item.service == 'twitter' ? 'fab fa-twitter' : item.service == 'linkedin' ? 'fab fa-linkedin-in' : item.service == 'reddit' ? 'fab fa-reddit-alien' : item.service == 'email' ? 'fas fa-envelope' : item.service == 'copy' ? 'fas fa-link' %}
+
+		{% set default_label = item.service == 'facebook' ? 'Facebook' : item.service == 'twitter' ? 'Twitter' : item.service == 'linkedin' ? 'LinkedIn' : item.service == 'reddit' ? 'Reddit' : item.service == 'email' ? 'Email' : item.service == 'copy' ? 'Copy URL' %}
+
+		{% set facebook = 'https://www.facebook.com/sharer/sharer.php?u=' ~ function('get_permalink') ~ '&t=' ~ function('get_the_title') | url_encode %}
+
+		{% set twitter = 'https://twitter.com/intent/tweet?text=%20' ~ function('get_the_title') | url_encode ~ ':%20' ~ function('get_permalink') %}
+
+		{% set linkedin = 'http://www.linkedin.com/shareArticle?mini=true&url=' ~ function('get_permalink') ~ '&title=' ~ function('get_the_title') | url_encode ~ '&source=' ~ site.name | url_encode ~ '&summary' %}
+
+		{% set reddit = 'http://www.reddit.com/submit?url=' ~ function('get_permalink') ~ '&title=' ~ function('get_the_title') | url_encode %}
+
+		{% set email = 'mailto:?subject=' ~ function('get_the_title') | url_encode ~ '&body=From ' ~ site.name ~ ': ' ~ function('get_permalink') %}
+
+		{% set link = item.service == 'facebook' ? facebook : item.service == 'twitter' ? twitter : item.service == 'linkedin' ? linkedin : item.service == 'reddit' ? reddit : item.service == 'email' ? email %}
+
+		{% set class = item.service == 'facebook' ? 'service-facebook' : item.service == 'twitter' ? 'service-twitter' : item.service == 'linkedin' ? 'service-linkedin' : item.service == 'reddit' ? 'service-reddit' : item.service == 'email' ? 'service-email' : item.service == 'copy' ? 'service-copy' %}
+
+		{% set color = item.color.color == 'custom' ? 'color: ' ~ item.color.custom_color ~ ';' %}
+		
+		{% set items = items | merge({
+			('item_' ~ loop.index): {
+				item_classes: [
+					item.label ? item.label | lower | replace({' ': '-'}) : default_label | lower | replace({' ': '-'}),
+					class
+				],
+				item_attributes: [
+					item.service == 'copy' ? 'data-clipboard-text="' ~ function('get_permalink') ~ '"',
+				],
+				label: item.label ? item.label : default_label,
+				url: link,
+				target: '_blank',
+				title: (item.service == 'email' or item.service == 'copy') and item.label ? item.label : item.service == 'email' or item.service == 'copy' ? default_label : item.label ? 'Share on ' ~ item.label : 'Share on ' ~ default_label,
+				icon: item.icon ? item.icon : default_icon,
+				icon_color: item.color.color == 'palette' ? item.color.theme_color,
+				icon_position: fields.icon_position | default('before'),
+				icon_width: fields.icon_size | default('18') ~ 'px',
+				icon_height: fields.icon_size | default('18') ~ 'px',
+				icon_styles: [
+					color ? color
+				]
+			}
+		}) %}
+	{% endfor %}
+
+	{% include '@molecules/social-nav/_social-nav.tpl.twig' with {
+		nav_id: fields.id.id ? fields.id.id : fields.id.id_gen ? 'social-share-' ~ fields.id.id_gen,
+		bullet_icon_position: fields.icon_position | default('before'),
+		bullet_icon_size: fields.icon_size | default('18') ~ 'px',
+		hide_labels: fields.hide_labels,
+		hide_icons: fields.hide_icons,
+		nav_direction: fields.direction | default('horizontal'),
+		custom_colors: true,
+		social_nav_items: items,
+		social_nav_classes: [
+			'block-social-share--list',
+			fields.alignment.text_align == 'left' ? 'justify-content-start' : fields.alignment.text_align == 'right' ? 'justify-content-end' : fields.alignment.text_align == 'center' ? 'justify-content-center' : fields.alignment.text_align == 'justify' ? 'justify-content-between'
+		]
+	} %}
+
+	{% if includes_copy == true %}
+		<div class="copied hide z-alert position-fixed top-50 start-50 translate-middle">
+			<div class="copied-content position-absolute top-50 start-50 translate-middle">
+				{% if fields.override_copied_alert != true or (fields.override_copied_alert == true and fields.copied_alert_overrides.hide_icon != true) %}
+					<i class="{{ fields.copied_alert_overrides.icon | default('fas fa-link') }}"></i>
+				{% endif %}
+				{% if fields.override_copied_alert != true or (fields.override_copied_alert == true and fields.copied_alert_overrides.hide_text != true) %}
+					<strong>{{ fields.copied_alert_overrides.text | default('Link Copied') }}</strong>
+				{% endif %}
+			</div>
+		</div>
+	{% endif %}
+</div>
+
+{% if is_preview and (fields.id or fields.id_gen) and fields.show_ids == true %}
+	<small><strong>Social Share ID:</strong> {{ fields.id ? fields.id}}{{ fields.id_gen ? 'social-share-' ~ fields.id_gen }}</small>
+{% endif %}

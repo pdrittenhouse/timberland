@@ -192,7 +192,9 @@
   .carousel-cell {
     width: 100%;
 
-    .flickity-cols-1 & {}
+    .flickity-cols-1 & {
+      width: 100%;
+    }
 
     .flickity-cols-2 & {
       width: calc(100% / 2);

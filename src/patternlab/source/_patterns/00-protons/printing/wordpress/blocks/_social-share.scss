@@ -1,0 +1,36 @@
+.block-social-share {
+
+  &--list {}
+
+  .social-nav-item {
+
+    &.service-facebook {}
+
+    &.service-twitter {}
+
+    &.service-linkedin {}
+
+    &.service-reddit {}
+
+    &.service-email {}
+
+    &.service-copy {}
+  }
+
+  .icon,
+  .svg-icon {}
+
+  .social-nav-link {}
+
+  .copied {
+
+    &.hide {}
+
+    &-content {
+
+      i {}
+
+      strong {}
+    }
+  }
+}

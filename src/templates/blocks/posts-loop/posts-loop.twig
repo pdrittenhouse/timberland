@@ -166,6 +166,24 @@
   } %}
 {% endif %}
 
+{% set taxonomy_query = {
+  'relation': fields.taxonomies.relation,
+} %}
+
+{% for tax_query in fields.taxonomies.taxonomies %}
+  {% set tax_terms = [] %}
+
+  {% for terms in tax_query.terms %}
+    {% set tax_terms = tax_terms|default([])|merge([terms.term]) %}
+  {% endfor %}
+
+  {% set taxonomy = tax_query | filter((v, k) => k != 'terms') | merge({'terms': tax_terms}) %}
+
+  {% set taxonomy_query = taxonomy_query|merge([taxonomy]) %}
+
+{% endfor %}
+
+
 {% set block_attributes = block_attributes|default([])|merge([
   'data-pattern="' ~ fields.pattern ~ '"',
   parent_block_data is not empty ? 'data-parent="' ~ parent_block_data|json_encode()|replace({'"': "'"}) ~ '"',
@@ -213,7 +231,7 @@
   fields.selection_type == 'query' and fields.custom_fields.meta_value_num is not empty ? 'data-meta-value-num="' ~ fields.custom_fields.meta_value_num ~ '"' : '',
   fields.selection_type == 'query' and fields.custom_fields.meta_key is not empty and fields.custom_fields.meta_compare is not empty ? 'data-meta-compare="' ~ fields.custom_fields.meta_compare ~ '"' : '',
   fields.selection_type == 'query' and fields.custom_fields.meta_query.meta_query is not empty ? 'data-meta-query="' ~ metaQueryArgs|json_encode()|replace({'"': "'"}) ~ '"',
-  fields.selection_type == 'query' and fields.taxonomies.taxonomies is not empty ? 'data-tax-query="' ~ fields.taxonomies.taxonomies|json_encode()|replace({'"': "'"}) ~ '"' : '',
+  fields.selection_type == 'query' and fields.taxonomies.taxonomies is not empty ? 'data-tax-query="' ~ taxonomy_query|json_encode()|replace({'"': "'"}) ~ '"' : '',
   fields.selection_type == 'query' and fields.categories.category is not empty and fields.categories.include_cats == 'inc' ? 'data-category-in="' ~ fields.categories.category|json_encode()|replace({'"': "'"}) ~ '"' : '',
   fields.selection_type == 'query' and fields.categories.category is not empty and fields.categories.include_cats == 'exc' ? 'data-category-not-in="' ~ fields.categories.category|json_encode()|replace({'"': "'"}) ~ '"' : '',
   fields.selection_type == 'query' and fields.tags.tags is not empty and fields.tags.include_tags == 'inc' ? 'data-tag-in="' ~ fields.tags.tags|json_encode()|replace({'"': "'"}) ~ '"' : '',
@@ -282,17 +300,20 @@
             {% elseif element.acf_fc_layout == 'post_excerpt' and (post.preview or function('get_the_excerpt')) %}
               {# Post Excerpt #}
               <div class="posts-loop--post-excerpt--wrapper">
-{#                {% if post.post_type == 'page' %}#}
-{#                  <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
-{#                {% elseif fields.link_items != true %}#}
-{#                  <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>#}
-{#                {% else %}#}
-{#                  <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>#}
-{#                {% endif %}#}
-                {% if fields.link_items != true %}
-                  <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
+                {# {% if post.post_type == 'page' %}
+                  <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
+                {% elseif fields.link_items != true %}
+                  <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>
                 {% else %}
-                  <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
+                  <div class="posts-loop--post-excerpt">
+                    <span class="excerpt">{{ post.preview.read_more('').length(element.length|number_format).force }}</span>
+                    {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}
+                  </div>
+                {% endif %} #}
+                {% if fields.link_items != true %}
+                  <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
+                {% else %}
+                  <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
                 {% endif %}
               </div>
             {% elseif element.acf_fc_layout == 'post_content' and post.content %}
@@ -559,7 +580,35 @@
 
         {# Set custom card styles #}
         {% set card_bg_color = fields.card.card_bg_color['bg_color'] == 'custom' and fields.card.card_bg_color['bg_custom_color'] ? 'background-color: ' ~ fields.card.card_bg_color['bg_custom_color'] ~ ';' %}
-        {% set card_border_color = fields.card.card_border_color['color'] == 'custom' and fields.card.card_border_color['custom_color'] ? 'border-color: ' ~ fields.card.card_border_color['custom_color'] ~ ';' %}
+        {# {% set card_border_color = fields.card.card_border_color['color'] == 'custom' and fields.card.card_border_color['custom_color'] ? 'border-color: ' ~ fields.card.card_border_color['custom_color'] ~ ';' %} #}
+
+        {% if fields.card.remove_card_border != true %}
+          {% set card_border_top_width = fields.card.card_border['top']['width'] is not empty ? 'border-top-width: ' ~ fields.card.card_border['top']['width'] ~ 'px;' %}
+          {% set card_border_top_style = fields.card.card_border['top']['style'] ? 'border-top-style: ' ~ fields.card.card_border['top']['style'] ~ ';' %}
+          {% set card_border_top_color = fields.card.card_border['top']['color'] == 'custom' and fields.card.card_border['top']['custom_color'] ? 'border-top-color: ' ~ fields.card.card_border['top']['custom_color'] ~ ';' : fields.card.card_border['top']['color'] == 'palette' and fields.card.card_border['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.card.card_border['top']['theme_color'] ~ ');' %}
+          {% set card_border_bottom_width = fields.card.card_border['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ fields.card.card_border['bottom']['width'] ~ 'px;' %}
+          {% set card_border_bottom_style = fields.card.card_border['bottom']['style'] ? 'border-bottom-style: ' ~ fields.card.card_border['bottom']['style'] ~ ';' %}
+          {% set card_border_bottom_color = fields.card.card_border['bottom']['color'] == 'custom' and fields.card.card_border['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.card.card_border['bottom']['custom_color'] ~ ';' : fields.card.card_border['bottom']['color'] == 'palette' and fields.card.card_border['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.card.card_border['bottom']['theme_color'] ~ ');' %}
+          {% set card_border_left_width = fields.card.card_border['left']['width'] is not empty ? 'border-left-width: ' ~ fields.card.card_border['left']['width'] ~ 'px;' %}
+          {% set card_border_left_style = fields.card.card_border['left']['style'] ? 'border-left-style: ' ~ fields.card.card_border['left']['style'] ~ ';' %}
+          {% set card_border_left_color = fields.card.card_border['left']['color'] == 'custom' and fields.card.card_border['left']['custom_color'] ? 'border-left-color: ' ~ fields.card.card_border['left']['custom_color'] ~ ';' : fields.card.card_border['left']['color'] == 'palette' and fields.card.card_border['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.card.card_border['left']['theme_color'] ~ ');' %}
+          {% set card_border_right_width = fields.card.card_border['right']['width'] is not empty ? 'border-right-width: ' ~ fields.card.card_border['right']['width'] ~ 'px;' %}
+          {% set card_border_right_style = fields.card.card_border['right']['style'] ? 'border-right-style: ' ~ fields.card.card_border['right']['style'] ~ ';' %}
+          {% set card_border_right_color = fields.card.card_border['right']['color'] == 'custom' and fields.card.card_border['right']['custom_color'] ? 'border-right-color: ' ~ fields.card.card_border['right']['custom_color'] ~ ';' : fields.card.card_border['right']['color'] == 'palette' and fields.card.card_border['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.card.card_border['right']['theme_color'] ~ ');' %}
+          {% set card_back_border_top_width = fields.card.card_back_border['top']['width'] is not empty ? 'border-top-width: ' ~ fields.card.card_back_border['top']['width'] ~ 'px;' %}
+          {% set card_back_border_top_style = fields.card.card_back_border['top']['style'] ? 'border-top-style: ' ~ fields.card.card_back_border['top']['style'] ~ ';' %}
+          {% set card_back_border_top_color = fields.card.card_back_border['top']['color'] == 'custom' and fields.card.card_back_border['top']['custom_color'] ? 'border-top-color: ' ~ fields.card.card_back_border['top']['custom_color'] ~ ';' : fields.card.card_back_border['top']['color'] == 'palette' and fields.card.card_back_border['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.card.card_back_border['top']['theme_color'] ~ ');' %}
+          {% set card_back_border_bottom_width = fields.card.card_back_border['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ fields.card.card_back_border['bottom']['width'] ~ 'px;' %}
+          {% set card_back_border_bottom_style = fields.card.card_back_border['bottom']['style'] ? 'border-bottom-style: ' ~ fields.card.card_back_border['bottom']['style'] ~ ';' %}
+          {% set card_back_border_bottom_color = fields.card.card_back_border['bottom']['color'] == 'custom' and fields.card.card_back_border['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.card.card_back_border['bottom']['custom_color'] ~ ';' : fields.card.card_back_border['bottom']['color'] == 'palette' and fields.card.card_back_border['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.card.card_back_border['bottom']['theme_color'] ~ ');' %}
+          {% set card_back_border_left_width = fields.card.card_back_border['left']['width'] is not empty ? 'border-left-width: ' ~ fields.card.card_back_border['left']['width'] ~ 'px;' %}
+          {% set card_back_border_left_style = fields.card.card_back_border['left']['style'] ? 'border-left-style: ' ~ fields.card.card_back_border['left']['style'] ~ ';' %}
+          {% set card_back_border_left_color = fields.card.card_back_border['left']['color'] == 'custom' and fields.card.card_back_border['left']['custom_color'] ? 'border-left-color: ' ~ fields.card.card_back_border['left']['custom_color'] ~ ';' : fields.card.card_back_border['left']['color'] == 'palette' and fields.card.card_back_border['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.card.card_back_border['left']['theme_color'] ~ ');' %}
+          {% set card_back_border_right_width = fields.card.card_back_border['right']['width'] is not empty ? 'border-right-width: ' ~ fields.card.card_back_border['right']['width'] ~ 'px;' %}
+          {% set card_back_border_right_style = fields.card.card_back_border['right']['style'] ? 'border-right-style: ' ~ fields.card.card_back_border['right']['style'] ~ ';' %}
+          {% set card_back_border_right_color = fields.card.card_back_border['right']['color'] == 'custom' and fields.card.card_back_border['right']['custom_color'] ? 'border-right-color: ' ~ fields.card.card_back_border['right']['custom_color'] ~ ';' : fields.card.card_back_border['right']['color'] == 'palette' and fields.card.card_back_border['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.card.card_back_border['right']['theme_color'] ~ ');' %}
+        {% endif %}
+
         {% set card_text_color = fields.card.card_text_color['color'] == 'custom' and fields.card.card_text_color['custom_color'] ? 'color: ' ~ fields.card.card_text_color['custom_color'] ~ ';' %}
         {% set card_back_bg_color = fields.card.back_bg_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.card.back_bg_color['bg_custom_color'] ~ ';' %}
         {% set card_back_border_color = fields.card.back_border_color['color'] == 'custom' ? 'border-color: ' ~ fields.card.back_border_color['custom_color'] ~ ';' %}
@@ -567,6 +616,9 @@
         {% set card_width = fields.card.width.width['width']['value'] is not empty ? 'width: ' ~ fields.card.width.width['width']['value']  ~ fields.card.width.width['width']['unit'] ~  ';' %}
         {% set card_min_width = fields.card.width.width['min_width'] is not empty ? 'min-width: ' ~ fields.card.width.width['min_width']  ~ 'px;' %}
         {% set card_max_width = fields.card.width.width['max_width'] is not empty ? 'max-width: ' ~ fields.card.width.width['max_width']  ~ 'px;' %}
+        {% set card_height = fields.card.height.height['height']['value'] is not empty ? 'height: ' ~ fields.card.height.height['height']['value']  ~ fields.card.height.height['height']['unit'] ~  ';' %}
+        {% set card_min_height = fields.card.height.height['min_height'] is not empty ? 'min-height: ' ~ fields.card.height.height['min_height']  ~ 'px;' %}
+        {% set card_max_height = fields.card.height.height['max_height'] is not empty ? 'max-height: ' ~ fields.card.height.height['max_height']  ~ 'px;' %}
         {% set card_margin_top = parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['top']['top'] is not empty ? 'margin-top: ' ~ fields.card.margin['margin']['top']['top'] ~ 'px;' %}
         {% set card_margin_bottom = parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ fields.card.margin['margin']['bottom']['bottom'] ~ 'px;' %}
         {% set card_margin_left = parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['left']['left'] is not empty ? 'margin-left: ' ~ fields.card.margin['margin']['left']['left'] ~ 'px;' %}
@@ -696,7 +748,18 @@
             fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_top_right_radius,
             fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_left_radius,
             fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_right_radius,
-            fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_color,
+            fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_top_width,
+            fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_top_style,
+            fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_top_color,
+            fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_width,
+            fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_style,
+            fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_color,
+            fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_left_width,
+            fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_left_style,
+            fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_left_color,
+            fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_right_width,
+            fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_right_style,
+            fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_right_color,
             fields.card.flip_card != true ? card_bg_color,
             fields.card.flip_card != true ? card_text_color,
             fields.card.flip_card != true ? card_padding_top,
@@ -706,6 +769,9 @@
             card_width,
             card_min_width,
             card_max_width,
+            card_height,
+            card_min_height,
+            card_max_height,
             card_margin_top,
             card_margin_bottom,
             card_margin_left,
@@ -733,7 +799,18 @@
             fields.card.flip_card == true or fields.card.image_overlay_text ? card_border_top_right_radius,
             fields.card.flip_card == true or fields.card.image_overlay_text ? card_border_bottom_left_radius,
             fields.card.flip_card == true or fields.card.image_overlay_text ? card_border_bottom_right_radius,
-            fields.card.flip_card == true ? card_border_color,
+            fields.card.flip_card == true ? card_border_top_width,
+            fields.card.flip_card == true ? card_border_top_style,
+            fields.card.flip_card == true ? card_border_top_color,
+            fields.card.flip_card == true ? card_border_bottom_width,
+            fields.card.flip_card == true ? card_border_bottom_style,
+            fields.card.flip_card == true ? card_border_bottom_color,
+            fields.card.flip_card == true ? card_border_left_width,
+            fields.card.flip_card == true ? card_border_left_style,
+            fields.card.flip_card == true ? card_border_left_color,
+            fields.card.flip_card == true ? card_border_right_width,
+            fields.card.flip_card == true ? card_border_right_style,
+            fields.card.flip_card == true ? card_border_right_color,
             fields.card.flip_card == true ? card_bg_color,
             fields.card.flip_card == true ? card_text_color,
             fields.card.flip_card == true ? card_padding_top,
@@ -757,7 +834,18 @@
             fields.card.flip_card == true ? card_back_border_top_right_radius,
             fields.card.flip_card == true ? card_back_border_bottom_left_radius,
             fields.card.flip_card == true ? card_back_border_bottom_right_radius,
-            fields.card.flip_card == true ? card_back_border_color,
+            fields.card.flip_card == true ? card_back_border_top_width,
+            fields.card.flip_card == true ? card_back_border_top_style,
+            fields.card.flip_card == true ? card_back_border_top_color,
+            fields.card.flip_card == true ? card_back_border_bottom_width,
+            fields.card.flip_card == true ? card_back_border_bottom_style,
+            fields.card.flip_card == true ? card_back_border_bottom_color,
+            fields.card.flip_card == true ? card_back_border_left_width,
+            fields.card.flip_card == true ? card_back_border_left_style,
+            fields.card.flip_card == true ? card_back_border_left_color,
+            fields.card.flip_card == true ? card_back_border_right_width,
+            fields.card.flip_card == true ? card_back_border_right_style,
+            fields.card.flip_card == true ? card_back_border_right_color,
             fields.card.flip_card == true ? card_back_bg_color,
             fields.card.flip_card == true ? card_back_text_color,
             fields.card.flip_card == true ? card_padding_top,
@@ -1296,23 +1384,21 @@
             <div class="card-body {{ no_body_padding == true ? 'p-0' }}">
               {% block card_text %}
                 <div class="card-text">
-{#                  {% if function('in_array', 'post_excerpt', fields.elements) and post.post_type == 'page' %}#}
-{#                    <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
-{#                  {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}#}
-{#                    <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>#}
-{#                  {% elseif function('in_array', 'post_excerpt', fields.elements) %}#}
-{#                    <div class="posts-loop--post-excerpt">#}
-{#                        <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>#}
-{#                        {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}#}
-{#                      </div>#}
-{#                  {% endif %}#}
-
-                    {% if function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
-                      <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ fields.element_excerpt.element_read_more_label }}</a>{% endif %}</div>
+                  {# {% if function('in_array', 'post_excerpt', fields.elements) and post.post_type == 'page' %}
+                    <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
+                  {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
+                    <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>
+                  {% elseif function('in_array', 'post_excerpt', fields.elements) %}
+                    <div class="posts-loop--post-excerpt">
+                        <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>
+                        {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}
+                      </div>
+                  {% endif %} #}
+                  {% if function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
+                      <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ fields.element_excerpt.element_read_more_label }}</a>{% endif %}</div>
                     {% elseif function('in_array', 'post_excerpt', fields.elements) %}
-                      <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}</div>
+                      <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}</div>
                     {% endif %}
-
                   {% if function('in_array', 'post_content', fields.elements) %}
                     <div class="posts-loop--post-content">{{ post.content }}</div>
                   {% endif %}
@@ -2137,7 +2223,35 @@
 
             {# Set custom card styles #}
             {% set card_bg_color = fields.card.card_bg_color['bg_color'] == 'custom' and fields.card.card_bg_color['bg_custom_color'] ? 'background-color: ' ~ fields.card.card_bg_color['bg_custom_color'] ~ ';' %}
-            {% set card_border_color = fields.card.card_border_color['color'] == 'custom' and fields.card.card_border_color['custom_color'] ? 'border-color: ' ~ fields.card.card_border_color['custom_color'] ~ ';' %}
+            {# {% set card_border_color = fields.card.card_border_color['color'] == 'custom' and fields.card.card_border_color['custom_color'] ? 'border-color: ' ~ fields.card.card_border_color['custom_color'] ~ ';' %} #}
+
+            {% if fields.card.remove_card_border != true %}
+              {% set card_border_top_width = fields.card.card_border['top']['width'] is not empty ? 'border-top-width: ' ~ fields.card.card_border['top']['width'] ~ 'px;' %}
+              {% set card_border_top_style = fields.card.card_border['top']['style'] ? 'border-top-style: ' ~ fields.card.card_border['top']['style'] ~ ';' %}
+              {% set card_border_top_color = fields.card.card_border['top']['color'] == 'custom' and fields.card.card_border['top']['custom_color'] ? 'border-top-color: ' ~ fields.card.card_border['top']['custom_color'] ~ ';' : fields.card.card_border['top']['color'] == 'palette' and fields.card.card_border['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.card.card_border['top']['theme_color'] ~ ');' %}
+              {% set card_border_bottom_width = fields.card.card_border['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ fields.card.card_border['bottom']['width'] ~ 'px;' %}
+              {% set card_border_bottom_style = fields.card.card_border['bottom']['style'] ? 'border-bottom-style: ' ~ fields.card.card_border['bottom']['style'] ~ ';' %}
+              {% set card_border_bottom_color = fields.card.card_border['bottom']['color'] == 'custom' and fields.card.card_border['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.card.card_border['bottom']['custom_color'] ~ ';' : fields.card.card_border['bottom']['color'] == 'palette' and fields.card.card_border['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.card.card_border['bottom']['theme_color'] ~ ');' %}
+              {% set card_border_left_width = fields.card.card_border['left']['width'] is not empty ? 'border-left-width: ' ~ fields.card.card_border['left']['width'] ~ 'px;' %}
+              {% set card_border_left_style = fields.card.card_border['left']['style'] ? 'border-left-style: ' ~ fields.card.card_border['left']['style'] ~ ';' %}
+              {% set card_border_left_color = fields.card.card_border['left']['color'] == 'custom' and fields.card.card_border['left']['custom_color'] ? 'border-left-color: ' ~ fields.card.card_border['left']['custom_color'] ~ ';' : fields.card.card_border['left']['color'] == 'palette' and fields.card.card_border['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.card.card_border['left']['theme_color'] ~ ');' %}
+              {% set card_border_right_width = fields.card.card_border['right']['width'] is not empty ? 'border-right-width: ' ~ fields.card.card_border['right']['width'] ~ 'px;' %}
+              {% set card_border_right_style = fields.card.card_border['right']['style'] ? 'border-right-style: ' ~ fields.card.card_border['right']['style'] ~ ';' %}
+              {% set card_border_right_color = fields.card.card_border['right']['color'] == 'custom' and fields.card.card_border['right']['custom_color'] ? 'border-right-color: ' ~ fields.card.card_border['right']['custom_color'] ~ ';' : fields.card.card_border['right']['color'] == 'palette' and fields.card.card_border['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.card.card_border['right']['theme_color'] ~ ');' %}
+              {% set card_back_border_top_width = fields.card.card_back_border['top']['width'] is not empty ? 'border-top-width: ' ~ fields.card.card_back_border['top']['width'] ~ 'px;' %}
+              {% set card_back_border_top_style = fields.card.card_back_border['top']['style'] ? 'border-top-style: ' ~ fields.card.card_back_border['top']['style'] ~ ';' %}
+              {% set card_back_border_top_color = fields.card.card_back_border['top']['color'] == 'custom' and fields.card.card_back_border['top']['custom_color'] ? 'border-top-color: ' ~ fields.card.card_back_border['top']['custom_color'] ~ ';' : fields.card.card_back_border['top']['color'] == 'palette' and fields.card.card_back_border['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.card.card_back_border['top']['theme_color'] ~ ');' %}
+              {% set card_back_border_bottom_width = fields.card.card_back_border['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ fields.card.card_back_border['bottom']['width'] ~ 'px;' %}
+              {% set card_back_border_bottom_style = fields.card.card_back_border['bottom']['style'] ? 'border-bottom-style: ' ~ fields.card.card_back_border['bottom']['style'] ~ ';' %}
+              {% set card_back_border_bottom_color = fields.card.card_back_border['bottom']['color'] == 'custom' and fields.card.card_back_border['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.card.card_back_border['bottom']['custom_color'] ~ ';' : fields.card.card_back_border['bottom']['color'] == 'palette' and fields.card.card_back_border['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.card.card_back_border['bottom']['theme_color'] ~ ');' %}
+              {% set card_back_border_left_width = fields.card.card_back_border['left']['width'] is not empty ? 'border-left-width: ' ~ fields.card.card_back_border['left']['width'] ~ 'px;' %}
+              {% set card_back_border_left_style = fields.card.card_back_border['left']['style'] ? 'border-left-style: ' ~ fields.card.card_back_border['left']['style'] ~ ';' %}
+              {% set card_back_border_left_color = fields.card.card_back_border['left']['color'] == 'custom' and fields.card.card_back_border['left']['custom_color'] ? 'border-left-color: ' ~ fields.card.card_back_border['left']['custom_color'] ~ ';' : fields.card.card_back_border['left']['color'] == 'palette' and fields.card.card_back_border['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.card.card_back_border['left']['theme_color'] ~ ');' %}
+              {% set card_back_border_right_width = fields.card.card_back_border['right']['width'] is not empty ? 'border-right-width: ' ~ fields.card.card_back_border['right']['width'] ~ 'px;' %}
+              {% set card_back_border_right_style = fields.card.card_back_border['right']['style'] ? 'border-right-style: ' ~ fields.card.card_back_border['right']['style'] ~ ';' %}
+              {% set card_back_border_right_color = fields.card.card_back_border['right']['color'] == 'custom' and fields.card.card_back_border['right']['custom_color'] ? 'border-right-color: ' ~ fields.card.card_back_border['right']['custom_color'] ~ ';' : fields.card.card_back_border['right']['color'] == 'palette' and fields.card.card_back_border['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.card.card_back_border['right']['theme_color'] ~ ');' %}
+            {% endif %}
+
             {% set card_text_color = fields.card.card_text_color['color'] == 'custom' and fields.card.card_text_color['custom_color'] ? 'color: ' ~ fields.card.card_text_color['custom_color'] ~ ';' %}
             {% set card_back_bg_color = fields.card.back_bg_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.card.back_bg_color['bg_custom_color'] ~ ';' %}
             {% set card_back_border_color = fields.card.back_border_color['color'] == 'custom' ? 'border-color: ' ~ fields.card.back_border_color['custom_color'] ~ ';' %}
@@ -2145,6 +2259,9 @@
             {% set card_width = fields.card.width.width['width']['value'] is not empty ? 'width: ' ~ fields.card.width.width['width']['value']  ~ fields.card.width.width['width']['unit'] ~  ';' %}
             {% set card_min_width = fields.card.width.width['min_width'] is not empty ? 'min-width: ' ~ fields.card.width.width['min_width']  ~ 'px;' %}
             {% set card_max_width = fields.card.width.width['max_width'] is not empty ? 'max-width: ' ~ fields.card.width.width['max_width']  ~ 'px;' %}
+            {% set card_height = fields.card.height.height['height']['value'] is not empty ? 'height: ' ~ fields.card.height.height['height']['value']  ~ fields.card.height.height['height']['unit'] ~  ';' %}
+            {% set card_min_height = fields.card.height.height['min_height'] is not empty ? 'min-height: ' ~ fields.card.height.height['min_height']  ~ 'px;' %}
+            {% set card_max_height = fields.card.height.height['max_height'] is not empty ? 'max-height: ' ~ fields.card.height.height['max_height']  ~ 'px;' %}
             {% set card_margin_top = parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['top']['top'] is not empty ? 'margin-top: ' ~ fields.card.margin['margin']['top']['top'] ~ 'px;' %}
             {% set card_margin_bottom = parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ fields.card.margin['margin']['bottom']['bottom'] ~ 'px;' %}
             {% set card_margin_left = parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['left']['left'] is not empty ? 'margin-left: ' ~ fields.card.margin['margin']['left']['left'] ~ 'px;' %}
@@ -2274,7 +2391,18 @@
                 fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_top_right_radius,
                 fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_left_radius,
                 fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_right_radius,
-                fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_color,
+                fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_top_width,
+                fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_top_style,
+                fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_top_color,
+                fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_width,
+                fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_style,
+                fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_color,
+                fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_left_width,
+                fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_left_style,
+                fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_left_color,
+                fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_right_width,
+                fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_right_style,
+                fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_right_color,
                 fields.card.flip_card != true ? card_bg_color,
                 fields.card.flip_card != true ? card_text_color,
                 fields.card.flip_card != true ? card_padding_top,
@@ -2284,6 +2412,9 @@
                 card_width,
                 card_min_width,
                 card_max_width,
+                card_height,
+                card_min_height,
+                card_max_height,
                 card_margin_top,
                 card_margin_bottom,
                 card_margin_left,
@@ -2311,7 +2442,18 @@
                 fields.card.flip_card == true or fields.card.image_overlay_text ? card_border_top_right_radius,
                 fields.card.flip_card == true or fields.card.image_overlay_text ? card_border_bottom_left_radius,
                 fields.card.flip_card == true or fields.card.image_overlay_text ? card_border_bottom_right_radius,
-                fields.card.flip_card == true ? card_border_color,
+                fields.card.flip_card == true ? card_border_top_width,
+                fields.card.flip_card == true ? card_border_top_style,
+                fields.card.flip_card == true ? card_border_top_color,
+                fields.card.flip_card == true ? card_border_bottom_width,
+                fields.card.flip_card == true ? card_border_bottom_style,
+                fields.card.flip_card == true ? card_border_bottom_color,
+                fields.card.flip_card == true ? card_border_left_width,
+                fields.card.flip_card == true ? card_border_left_style,
+                fields.card.flip_card == true ? card_border_left_color,
+                fields.card.flip_card == true ? card_border_right_width,
+                fields.card.flip_card == true ? card_border_right_style,
+                fields.card.flip_card == true ? card_border_right_color,
                 fields.card.flip_card == true ? card_bg_color,
                 fields.card.flip_card == true ? card_text_color,
                 fields.card.flip_card == true ? card_padding_top,
@@ -2335,7 +2477,18 @@
                 fields.card.flip_card == true ? card_back_border_top_right_radius,
                 fields.card.flip_card == true ? card_back_border_bottom_left_radius,
                 fields.card.flip_card == true ? card_back_border_bottom_right_radius,
-                fields.card.flip_card == true ? card_back_border_color,
+                fields.card.flip_card == true ? card_back_border_top_width,
+                fields.card.flip_card == true ? card_back_border_top_style,
+                fields.card.flip_card == true ? card_back_border_top_color,
+                fields.card.flip_card == true ? card_back_border_bottom_width,
+                fields.card.flip_card == true ? card_back_border_bottom_style,
+                fields.card.flip_card == true ? card_back_border_bottom_color,
+                fields.card.flip_card == true ? card_back_border_left_width,
+                fields.card.flip_card == true ? card_back_border_left_style,
+                fields.card.flip_card == true ? card_back_border_left_color,
+                fields.card.flip_card == true ? card_back_border_right_width,
+                fields.card.flip_card == true ? card_back_border_right_style,
+                fields.card.flip_card == true ? card_back_border_right_color,
                 fields.card.flip_card == true ? card_back_bg_color,
                 fields.card.flip_card == true ? card_back_text_color,
                 fields.card.flip_card == true ? card_padding_top,
@@ -2874,23 +3027,21 @@
                 <div class="card-body {{ no_body_padding == true ? 'p-0' }}">
                   {% block card_text %}
                     <div class="card-text">
-{#                      {% if function('in_array', 'post_excerpt', fields.elements) and post.post_type == 'page' %}#}
-{#                        <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
-{#                      {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}#}
-{#                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>#}
-{#                      {% elseif function('in_array', 'post_excerpt', fields.elements) %}#}
-{#                        <div class="posts-loop--post-excerpt">#}
-{#                          <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>#}
-{#                          {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}#}
-{#                        </div>#}
-{#                      {% endif %}#}
-
-                       {% if function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
-                          <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ fields.element_excerpt.element_read_more_label }}</a>{% endif %}</div>
-                        {% elseif function('in_array', 'post_excerpt', fields.elements) %}
-                          <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}</div>
-                        {% endif %}
-
+                      {# {% if function('in_array', 'post_excerpt', fields.elements) and post.post_type == 'page' %}
+                        <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
+                      {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
+                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>
+                      {% elseif function('in_array', 'post_excerpt', fields.elements) %}
+                        <div class="posts-loop--post-excerpt">
+                          <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>
+                          {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}
+                        </div>
+                      {% endif %} #}
+                      {% if function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
+                        <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ fields.element_excerpt.element_read_more_label }}</a>{% endif %}</div>
+                      {% elseif function('in_array', 'post_excerpt', fields.elements) %}
+                        <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}</div>
+                      {% endif %}
                       {% if function('in_array', 'post_content', fields.elements) %}
                         <div class="posts-loop--post-content">{{ post.content }}</div>
                       {% endif %}
@@ -3637,7 +3788,35 @@
                 <div class="{{ slide_classes }} {{ fields.slider.initial_slide == loop.index0 ? 'active' }}" {{ slide_attributes }} {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
                   {# Set custom card styles #}
                   {% set card_bg_color = fields.card.card_bg_color['bg_color'] == 'custom' and fields.card.card_bg_color['bg_custom_color'] ? 'background-color: ' ~ fields.card.card_bg_color['bg_custom_color'] ~ ';' %}
-                  {% set card_border_color = fields.card.card_border_color['color'] == 'custom' and fields.card.card_border_color['custom_color'] ? 'border-color: ' ~ fields.card.card_border_color['custom_color'] ~ ';' %}
+                  {# {% set card_border_color = fields.card.card_border_color['color'] == 'custom' and fields.card.card_border_color['custom_color'] ? 'border-color: ' ~ fields.card.card_border_color['custom_color'] ~ ';' %} #}
+
+                  {% if fields.card.remove_card_border != true %}
+                    {% set card_border_top_width = fields.card.card_border['top']['width'] is not empty ? 'border-top-width: ' ~ fields.card.card_border['top']['width'] ~ 'px;' %}
+                    {% set card_border_top_style = fields.card.card_border['top']['style'] ? 'border-top-style: ' ~ fields.card.card_border['top']['style'] ~ ';' %}
+                    {% set card_border_top_color = fields.card.card_border['top']['color'] == 'custom' and fields.card.card_border['top']['custom_color'] ? 'border-top-color: ' ~ fields.card.card_border['top']['custom_color'] ~ ';' : fields.card.card_border['top']['color'] == 'palette' and fields.card.card_border['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.card.card_border['top']['theme_color'] ~ ');' %}
+                    {% set card_border_bottom_width = fields.card.card_border['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ fields.card.card_border['bottom']['width'] ~ 'px;' %}
+                    {% set card_border_bottom_style = fields.card.card_border['bottom']['style'] ? 'border-bottom-style: ' ~ fields.card.card_border['bottom']['style'] ~ ';' %}
+                    {% set card_border_bottom_color = fields.card.card_border['bottom']['color'] == 'custom' and fields.card.card_border['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.card.card_border['bottom']['custom_color'] ~ ';' : fields.card.card_border['bottom']['color'] == 'palette' and fields.card.card_border['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.card.card_border['bottom']['theme_color'] ~ ');' %}
+                    {% set card_border_left_width = fields.card.card_border['left']['width'] is not empty ? 'border-left-width: ' ~ fields.card.card_border['left']['width'] ~ 'px;' %}
+                    {% set card_border_left_style = fields.card.card_border['left']['style'] ? 'border-left-style: ' ~ fields.card.card_border['left']['style'] ~ ';' %}
+                    {% set card_border_left_color = fields.card.card_border['left']['color'] == 'custom' and fields.card.card_border['left']['custom_color'] ? 'border-left-color: ' ~ fields.card.card_border['left']['custom_color'] ~ ';' : fields.card.card_border['left']['color'] == 'palette' and fields.card.card_border['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.card.card_border['left']['theme_color'] ~ ');' %}
+                    {% set card_border_right_width = fields.card.card_border['right']['width'] is not empty ? 'border-right-width: ' ~ fields.card.card_border['right']['width'] ~ 'px;' %}
+                    {% set card_border_right_style = fields.card.card_border['right']['style'] ? 'border-right-style: ' ~ fields.card.card_border['right']['style'] ~ ';' %}
+                    {% set card_border_right_color = fields.card.card_border['right']['color'] == 'custom' and fields.card.card_border['right']['custom_color'] ? 'border-right-color: ' ~ fields.card.card_border['right']['custom_color'] ~ ';' : fields.card.card_border['right']['color'] == 'palette' and fields.card.card_border['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.card.card_border['right']['theme_color'] ~ ');' %}
+                    {% set card_back_border_top_width = fields.card.card_back_border['top']['width'] is not empty ? 'border-top-width: ' ~ fields.card.card_back_border['top']['width'] ~ 'px;' %}
+                    {% set card_back_border_top_style = fields.card.card_back_border['top']['style'] ? 'border-top-style: ' ~ fields.card.card_back_border['top']['style'] ~ ';' %}
+                    {% set card_back_border_top_color = fields.card.card_back_border['top']['color'] == 'custom' and fields.card.card_back_border['top']['custom_color'] ? 'border-top-color: ' ~ fields.card.card_back_border['top']['custom_color'] ~ ';' : fields.card.card_back_border['top']['color'] == 'palette' and fields.card.card_back_border['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.card.card_back_border['top']['theme_color'] ~ ');' %}
+                    {% set card_back_border_bottom_width = fields.card.card_back_border['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ fields.card.card_back_border['bottom']['width'] ~ 'px;' %}
+                    {% set card_back_border_bottom_style = fields.card.card_back_border['bottom']['style'] ? 'border-bottom-style: ' ~ fields.card.card_back_border['bottom']['style'] ~ ';' %}
+                    {% set card_back_border_bottom_color = fields.card.card_back_border['bottom']['color'] == 'custom' and fields.card.card_back_border['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.card.card_back_border['bottom']['custom_color'] ~ ';' : fields.card.card_back_border['bottom']['color'] == 'palette' and fields.card.card_back_border['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.card.card_back_border['bottom']['theme_color'] ~ ');' %}
+                    {% set card_back_border_left_width = fields.card.card_back_border['left']['width'] is not empty ? 'border-left-width: ' ~ fields.card.card_back_border['left']['width'] ~ 'px;' %}
+                    {% set card_back_border_left_style = fields.card.card_back_border['left']['style'] ? 'border-left-style: ' ~ fields.card.card_back_border['left']['style'] ~ ';' %}
+                    {% set card_back_border_left_color = fields.card.card_back_border['left']['color'] == 'custom' and fields.card.card_back_border['left']['custom_color'] ? 'border-left-color: ' ~ fields.card.card_back_border['left']['custom_color'] ~ ';' : fields.card.card_back_border['left']['color'] == 'palette' and fields.card.card_back_border['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.card.card_back_border['left']['theme_color'] ~ ');' %}
+                    {% set card_back_border_right_width = fields.card.card_back_border['right']['width'] is not empty ? 'border-right-width: ' ~ fields.card.card_back_border['right']['width'] ~ 'px;' %}
+                    {% set card_back_border_right_style = fields.card.card_back_border['right']['style'] ? 'border-right-style: ' ~ fields.card.card_back_border['right']['style'] ~ ';' %}
+                    {% set card_back_border_right_color = fields.card.card_back_border['right']['color'] == 'custom' and fields.card.card_back_border['right']['custom_color'] ? 'border-right-color: ' ~ fields.card.card_back_border['right']['custom_color'] ~ ';' : fields.card.card_back_border['right']['color'] == 'palette' and fields.card.card_back_border['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.card.card_back_border['right']['theme_color'] ~ ');' %}
+                  {% endif %}
+
                   {% set card_text_color = fields.card.card_text_color['color'] == 'custom' and fields.card.card_text_color['custom_color'] ? 'color: ' ~ fields.card.card_text_color['custom_color'] ~ ';' %}
                   {% set card_back_bg_color = fields.card.back_bg_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.card.back_bg_color['bg_custom_color'] ~ ';' %}
                   {% set card_back_border_color = fields.card.back_border_color['color'] == 'custom' ? 'border-color: ' ~ fields.card.back_border_color['custom_color'] ~ ';' %}
@@ -3645,6 +3824,9 @@
                   {% set card_width = fields.card.width.width['width']['value'] is not empty ? 'width: ' ~ fields.card.width.width['width']['value']  ~ fields.card.width.width['width']['unit'] ~  ';' %}
                   {% set card_min_width = fields.card.width.width['min_width'] is not empty ? 'min-width: ' ~ fields.card.width.width['min_width']  ~ 'px;' %}
                   {% set card_max_width = fields.card.width.width['max_width'] is not empty ? 'max-width: ' ~ fields.card.width.width['max_width']  ~ 'px;' %}
+                  {% set card_height = fields.card.height.height['height']['value'] is not empty ? 'height: ' ~ fields.card.height.height['height']['value']  ~ fields.card.height.height['height']['unit'] ~  ';' %}
+                  {% set card_min_height = fields.card.height.height['min_height'] is not empty ? 'min-height: ' ~ fields.card.height.height['min_height']  ~ 'px;' %}
+                  {% set card_max_height = fields.card.height.height['max_height'] is not empty ? 'max-height: ' ~ fields.card.height.height['max_height']  ~ 'px;' %}
                   {% set card_margin_top = parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['top']['top'] is not empty ? 'margin-top: ' ~ fields.card.margin['margin']['top']['top'] ~ 'px;' %}
                   {% set card_margin_bottom = parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ fields.card.margin['margin']['bottom']['bottom'] ~ 'px;' %}
                   {% set card_margin_left = parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['left']['left'] is not empty ? 'margin-left: ' ~ fields.card.margin['margin']['left']['left'] ~ 'px;' %}
@@ -3774,7 +3956,18 @@
                       fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_top_right_radius,
                       fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_left_radius,
                       fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_right_radius,
-                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_color,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_top_width,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_top_style,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_top_color,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_width,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_style,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_color,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_left_width,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_left_style,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_left_color,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_right_width,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_right_style,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_right_color,
                       fields.card.flip_card != true ? card_bg_color,
                       fields.card.flip_card != true ? card_text_color,
                       fields.card.flip_card != true ? card_padding_top,
@@ -3810,7 +4003,18 @@
                       fields.card.flip_card == true or fields.card.image_overlay_text ? card_border_top_right_radius,
                       fields.card.flip_card == true or fields.card.image_overlay_text ? card_border_bottom_left_radius,
                       fields.card.flip_card == true or fields.card.image_overlay_text ? card_border_bottom_right_radius,
-                      fields.card.flip_card == true ? card_border_color,
+                      fields.card.flip_card == true ? card_border_top_width,
+                      fields.card.flip_card == true ? card_border_top_style,
+                      fields.card.flip_card == true ? card_border_top_color,
+                      fields.card.flip_card == true ? card_border_bottom_width,
+                      fields.card.flip_card == true ? card_border_bottom_style,
+                      fields.card.flip_card == true ? card_border_bottom_color,
+                      fields.card.flip_card == true ? card_border_left_width,
+                      fields.card.flip_card == true ? card_border_left_style,
+                      fields.card.flip_card == true ? card_border_left_color,
+                      fields.card.flip_card == true ? card_border_right_width,
+                      fields.card.flip_card == true ? card_border_right_style,
+                      fields.card.flip_card == true ? card_border_right_color,
                       fields.card.flip_card == true ? card_bg_color,
                       fields.card.flip_card == true ? card_text_color,
                       fields.card.flip_card == true ? card_padding_top,
@@ -3834,7 +4038,18 @@
                       fields.card.flip_card == true ? card_back_border_top_right_radius,
                       fields.card.flip_card == true ? card_back_border_bottom_left_radius,
                       fields.card.flip_card == true ? card_back_border_bottom_right_radius,
-                      fields.card.flip_card == true ? card_back_border_color,
+                      fields.card.flip_card == true ? card_back_border_top_width,
+                      fields.card.flip_card == true ? card_back_border_top_style,
+                      fields.card.flip_card == true ? card_back_border_top_color,
+                      fields.card.flip_card == true ? card_back_border_bottom_width,
+                      fields.card.flip_card == true ? card_back_border_bottom_style,
+                      fields.card.flip_card == true ? card_back_border_bottom_color,
+                      fields.card.flip_card == true ? card_back_border_left_width,
+                      fields.card.flip_card == true ? card_back_border_left_style,
+                      fields.card.flip_card == true ? card_back_border_left_color,
+                      fields.card.flip_card == true ? card_back_border_right_width,
+                      fields.card.flip_card == true ? card_back_border_right_style,
+                      fields.card.flip_card == true ? card_back_border_right_color,
                       fields.card.flip_card == true ? card_back_bg_color,
                       fields.card.flip_card == true ? card_back_text_color,
                       fields.card.flip_card == true ? card_padding_top,
@@ -4373,23 +4588,21 @@
                       <div class="card-body {{ no_body_padding == true ? 'p-0' }}">
                         {% block card_text %}
                           <div class="card-text">
-{#                            {% if function('in_array', 'post_excerpt', fields.elements) and post.post_type == 'page' %}#}
-{#                              <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
-{#                            {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}#}
-{#                              <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>#}
-{#                            {% elseif function('in_array', 'post_excerpt', fields.elements) %}#}
-{#                              <div class="posts-loop--post-excerpt">#}
-{#                                <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>#}
-{#                                {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}#}
-{#                              </div>#}
-{#                            {% endif %}#}
-
-                              {% if function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
-                                <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ fields.element_excerpt.element_read_more_label }}</a>{% endif %}</div>
-                              {% elseif function('in_array', 'post_excerpt', fields.elements) %}
-                                <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}</div>
-                              {% endif %}
-
+                            {# {% if function('in_array', 'post_excerpt', fields.elements) and post.post_type == 'page' %}
+                              <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
+                            {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
+                              <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>
+                            {% elseif function('in_array', 'post_excerpt', fields.elements) %}
+                              <div class="posts-loop--post-excerpt">
+                                <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>
+                                {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}
+                              </div>
+                            {% endif %} #}
+                            {% if function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
+                              <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ fields.element_excerpt.element_read_more_label }}</a>{% endif %}</div>
+                            {% elseif function('in_array', 'post_excerpt', fields.elements) %}
+                              <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}</div>
+                            {% endif %}
                             {% if function('in_array', 'post_content', fields.elements) %}
                               <div class="posts-loop--post-content">{{ post.content }}</div>
                             {% endif %}
@@ -5063,7 +5276,35 @@
                 <div class="{{ slide_classes }}" {{ slide_attributes }} {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
                   {# Set custom card styles #}
                   {% set card_bg_color = fields.card.card_bg_color['bg_color'] == 'custom' and fields.card.card_bg_color['bg_custom_color'] ? 'background-color: ' ~ fields.card.card_bg_color['bg_custom_color'] ~ ';' %}
-                  {% set card_border_color = fields.card.card_border_color['color'] == 'custom' and fields.card.card_border_color['custom_color'] ? 'border-color: ' ~ fields.card.card_border_color['custom_color'] ~ ';' %}
+                  {# {% set card_border_color = fields.card.card_border_color['color'] == 'custom' and fields.card.card_border_color['custom_color'] ? 'border-color: ' ~ fields.card.card_border_color['custom_color'] ~ ';' %} #}
+
+                  {% if fields.card.remove_card_border != true %}
+                    {% set card_border_top_width = fields.card.card_border['top']['width'] is not empty ? 'border-top-width: ' ~ fields.card.card_border['top']['width'] ~ 'px;' %}
+                    {% set card_border_top_style = fields.card.card_border['top']['style'] ? 'border-top-style: ' ~ fields.card.card_border['top']['style'] ~ ';' %}
+                    {% set card_border_top_color = fields.card.card_border['top']['color'] == 'custom' and fields.card.card_border['top']['custom_color'] ? 'border-top-color: ' ~ fields.card.card_border['top']['custom_color'] ~ ';' : fields.card.card_border['top']['color'] == 'palette' and fields.card.card_border['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.card.card_border['top']['theme_color'] ~ ');' %}
+                    {% set card_border_bottom_width = fields.card.card_border['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ fields.card.card_border['bottom']['width'] ~ 'px;' %}
+                    {% set card_border_bottom_style = fields.card.card_border['bottom']['style'] ? 'border-bottom-style: ' ~ fields.card.card_border['bottom']['style'] ~ ';' %}
+                    {% set card_border_bottom_color = fields.card.card_border['bottom']['color'] == 'custom' and fields.card.card_border['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.card.card_border['bottom']['custom_color'] ~ ';' : fields.card.card_border['bottom']['color'] == 'palette' and fields.card.card_border['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.card.card_border['bottom']['theme_color'] ~ ');' %}
+                    {% set card_border_left_width = fields.card.card_border['left']['width'] is not empty ? 'border-left-width: ' ~ fields.card.card_border['left']['width'] ~ 'px;' %}
+                    {% set card_border_left_style = fields.card.card_border['left']['style'] ? 'border-left-style: ' ~ fields.card.card_border['left']['style'] ~ ';' %}
+                    {% set card_border_left_color = fields.card.card_border['left']['color'] == 'custom' and fields.card.card_border['left']['custom_color'] ? 'border-left-color: ' ~ fields.card.card_border['left']['custom_color'] ~ ';' : fields.card.card_border['left']['color'] == 'palette' and fields.card.card_border['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.card.card_border['left']['theme_color'] ~ ');' %}
+                    {% set card_border_right_width = fields.card.card_border['right']['width'] is not empty ? 'border-right-width: ' ~ fields.card.card_border['right']['width'] ~ 'px;' %}
+                    {% set card_border_right_style = fields.card.card_border['right']['style'] ? 'border-right-style: ' ~ fields.card.card_border['right']['style'] ~ ';' %}
+                    {% set card_border_right_color = fields.card.card_border['right']['color'] == 'custom' and fields.card.card_border['right']['custom_color'] ? 'border-right-color: ' ~ fields.card.card_border['right']['custom_color'] ~ ';' : fields.card.card_border['right']['color'] == 'palette' and fields.card.card_border['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.card.card_border['right']['theme_color'] ~ ');' %}
+                    {% set card_back_border_top_width = fields.card.card_back_border['top']['width'] is not empty ? 'border-top-width: ' ~ fields.card.card_back_border['top']['width'] ~ 'px;' %}
+                    {% set card_back_border_top_style = fields.card.card_back_border['top']['style'] ? 'border-top-style: ' ~ fields.card.card_back_border['top']['style'] ~ ';' %}
+                    {% set card_back_border_top_color = fields.card.card_back_border['top']['color'] == 'custom' and fields.card.card_back_border['top']['custom_color'] ? 'border-top-color: ' ~ fields.card.card_back_border['top']['custom_color'] ~ ';' : fields.card.card_back_border['top']['color'] == 'palette' and fields.card.card_back_border['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.card.card_back_border['top']['theme_color'] ~ ');' %}
+                    {% set card_back_border_bottom_width = fields.card.card_back_border['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ fields.card.card_back_border['bottom']['width'] ~ 'px;' %}
+                    {% set card_back_border_bottom_style = fields.card.card_back_border['bottom']['style'] ? 'border-bottom-style: ' ~ fields.card.card_back_border['bottom']['style'] ~ ';' %}
+                    {% set card_back_border_bottom_color = fields.card.card_back_border['bottom']['color'] == 'custom' and fields.card.card_back_border['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.card.card_back_border['bottom']['custom_color'] ~ ';' : fields.card.card_back_border['bottom']['color'] == 'palette' and fields.card.card_back_border['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.card.card_back_border['bottom']['theme_color'] ~ ');' %}
+                    {% set card_back_border_left_width = fields.card.card_back_border['left']['width'] is not empty ? 'border-left-width: ' ~ fields.card.card_back_border['left']['width'] ~ 'px;' %}
+                    {% set card_back_border_left_style = fields.card.card_back_border['left']['style'] ? 'border-left-style: ' ~ fields.card.card_back_border['left']['style'] ~ ';' %}
+                    {% set card_back_border_left_color = fields.card.card_back_border['left']['color'] == 'custom' and fields.card.card_back_border['left']['custom_color'] ? 'border-left-color: ' ~ fields.card.card_back_border['left']['custom_color'] ~ ';' : fields.card.card_back_border['left']['color'] == 'palette' and fields.card.card_back_border['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.card.card_back_border['left']['theme_color'] ~ ');' %}
+                    {% set card_back_border_right_width = fields.card.card_back_border['right']['width'] is not empty ? 'border-right-width: ' ~ fields.card.card_back_border['right']['width'] ~ 'px;' %}
+                    {% set card_back_border_right_style = fields.card.card_back_border['right']['style'] ? 'border-right-style: ' ~ fields.card.card_back_border['right']['style'] ~ ';' %}
+                    {% set card_back_border_right_color = fields.card.card_back_border['right']['color'] == 'custom' and fields.card.card_back_border['right']['custom_color'] ? 'border-right-color: ' ~ fields.card.card_back_border['right']['custom_color'] ~ ';' : fields.card.card_back_border['right']['color'] == 'palette' and fields.card.card_back_border['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.card.card_back_border['right']['theme_color'] ~ ');' %}
+                  {% endif %}
+
                   {% set card_text_color = fields.card.card_text_color['color'] == 'custom' and fields.card.card_text_color['custom_color'] ? 'color: ' ~ fields.card.card_text_color['custom_color'] ~ ';' %}
                   {% set card_back_bg_color = fields.card.back_bg_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.card.back_bg_color['bg_custom_color'] ~ ';' %}
                   {% set card_back_border_color = fields.card.back_border_color['color'] == 'custom' ? 'border-color: ' ~ fields.card.back_border_color['custom_color'] ~ ';' %}
@@ -5071,6 +5312,9 @@
                   {% set card_width = fields.card.width.width['width']['value'] is not empty ? 'width: ' ~ fields.card.width.width['width']['value']  ~ fields.card.width.width['width']['unit'] ~  ';' %}
                   {% set card_min_width = fields.card.width.width['min_width'] is not empty ? 'min-width: ' ~ fields.card.width.width['min_width']  ~ 'px;' %}
                   {% set card_max_width = fields.card.width.width['max_width'] is not empty ? 'max-width: ' ~ fields.card.width.width['max_width']  ~ 'px;' %}
+                  {% set card_height = fields.card.height.height['height']['value'] is not empty ? 'height: ' ~ fields.card.height.height['height']['value']  ~ fields.card.height.height['height']['unit'] ~  ';' %}
+                  {% set card_min_height = fields.card.height.height['min_height'] is not empty ? 'min-height: ' ~ fields.card.height.height['min_height']  ~ 'px;' %}
+                  {% set card_max_height = fields.card.height.height['max_height'] is not empty ? 'max-height: ' ~ fields.card.height.height['max_height']  ~ 'px;' %}
                   {% set card_margin_top = parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['top']['top'] is not empty ? 'margin-top: ' ~ fields.card.margin['margin']['top']['top'] ~ 'px;' %}
                   {% set card_margin_bottom = parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ fields.card.margin['margin']['bottom']['bottom'] ~ 'px;' %}
                   {% set card_margin_left = parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['left']['left'] is not empty ? 'margin-left: ' ~ fields.card.margin['margin']['left']['left'] ~ 'px;' %}
@@ -5151,6 +5395,10 @@
 
                   {% set card_template = fields.card.horizontal == true ? '_card~horizontal.tpl.twig' : '_card.tpl.twig'  %}
 
+                  {# {{ function('print_r', '<pre>') }}
+                  {{ function('print_r', fields.card) }}
+                  {{ function('print_r', '</pre>') }} #}
+
                   {% embed '@molecules/card/' ~ card_template with {
                     text_color: fields.card.card_text_color['color'] == 'palette' and fields.card.card_text_color['theme_color'] and fields.card.flip_card != true ? fields.card.card_text_color['theme_color'],
                     card_background: fields.card.card_bg_color['bg_color'] == 'palette' and fields.card.card_bg_color['bg_theme_color'] and fields.card.flip_card != true ? fields.card.card_bg_color['bg_theme_color'],
@@ -5201,7 +5449,18 @@
                       fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_left_radius,
                       fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_right_radius,
                       fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_color,
-                      fields.card.flip_card != true ? card_bg_color,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_top_width,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_top_style,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_top_color,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_width,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_style,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_color,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_left_width,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_left_style,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_left_color,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_right_width,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_right_style,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_right_color,
                       fields.card.flip_card != true ? card_text_color,
                       fields.card.flip_card != true ? card_padding_top,
                       fields.card.flip_card != true ? card_padding_bottom,
@@ -5210,6 +5469,9 @@
                       card_width,
                       card_min_width,
                       card_max_width,
+                      card_height,
+                      card_min_height,
+                      card_max_height,
                       card_margin_top,
                       card_margin_bottom,
                       card_margin_left,
@@ -5236,7 +5498,18 @@
                       fields.card.flip_card == true or fields.card.image_overlay_text ? card_border_top_right_radius,
                       fields.card.flip_card == true or fields.card.image_overlay_text ? card_border_bottom_left_radius,
                       fields.card.flip_card == true or fields.card.image_overlay_text ? card_border_bottom_right_radius,
-                      fields.card.flip_card == true ? card_border_color,
+                      fields.card.flip_card == true ? card_border_top_width,
+                      fields.card.flip_card == true ? card_border_top_style,
+                      fields.card.flip_card == true ? card_border_top_color,
+                      fields.card.flip_card == true ? card_border_bottom_width,
+                      fields.card.flip_card == true ? card_border_bottom_style,
+                      fields.card.flip_card == true ? card_border_bottom_color,
+                      fields.card.flip_card == true ? card_border_left_width,
+                      fields.card.flip_card == true ? card_border_left_style,
+                      fields.card.flip_card == true ? card_border_left_color,
+                      fields.card.flip_card == true ? card_border_right_width,
+                      fields.card.flip_card == true ? card_border_right_style,
+                      fields.card.flip_card == true ? card_border_right_color,
                       fields.card.flip_card == true ? card_bg_color,
                       fields.card.flip_card == true ? card_text_color,
                       fields.card.flip_card == true ? card_padding_top,
@@ -5260,7 +5533,18 @@
                       fields.card.flip_card == true ? card_back_border_top_right_radius,
                       fields.card.flip_card == true ? card_back_border_bottom_left_radius,
                       fields.card.flip_card == true ? card_back_border_bottom_right_radius,
-                      fields.card.flip_card == true ? card_back_border_color,
+                      fields.card.flip_card == true ? card_back_border_top_width,
+                      fields.card.flip_card == true ? card_back_border_top_style,
+                      fields.card.flip_card == true ? card_back_border_top_color,
+                      fields.card.flip_card == true ? card_back_border_bottom_width,
+                      fields.card.flip_card == true ? card_back_border_bottom_style,
+                      fields.card.flip_card == true ? card_back_border_bottom_color,
+                      fields.card.flip_card == true ? card_back_border_left_width,
+                      fields.card.flip_card == true ? card_back_border_left_style,
+                      fields.card.flip_card == true ? card_back_border_left_color,
+                      fields.card.flip_card == true ? card_back_border_right_width,
+                      fields.card.flip_card == true ? card_back_border_right_style,
+                      fields.card.flip_card == true ? card_back_border_right_color,
                       fields.card.flip_card == true ? card_back_bg_color,
                       fields.card.flip_card == true ? card_back_text_color,
                       fields.card.flip_card == true ? card_padding_top,
@@ -5799,23 +6083,21 @@
                       <div class="card-body {{ no_body_padding == true ? 'p-0' }}">
                         {% block card_text %}
                           <div class="card-text">
-{#                            {% if function('in_array', 'post_excerpt', fields.elements) and post.post_type == 'page' %}#}
-{#                              <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
-{#                            {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}#}
-{#                              <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>#}
-{#                            {% elseif function('in_array', 'post_excerpt', fields.elements) %}#}
-{#                              <div class="posts-loop--post-excerpt">#}
-{#                                <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>#}
-{#                                {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}#}
-{#                              </div>#}
-{#                            {% endif %}#}
-
-                             {% if function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
-                                <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ fields.element_excerpt.element_read_more_label }}</a>{% endif %}</div>
-                              {% elseif function('in_array', 'post_excerpt', fields.elements) %}
-                                <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}</div>
-                              {% endif %}
-
+                            {# {% if function('in_array', 'post_excerpt', fields.elements) and post.post_type == 'page' %}
+                              <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
+                            {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
+                              <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>
+                            {% elseif function('in_array', 'post_excerpt', fields.elements) %}
+                              <div class="posts-loop--post-excerpt">
+                                <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>
+                                {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}
+                              </div>
+                            {% endif %} #}
+                            {% if function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
+                              <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ fields.element_excerpt.element_read_more_label }}</a>{% endif %}</div>
+                            {% elseif function('in_array', 'post_excerpt', fields.elements) %}
+                              <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}</div>
+                            {% endif %}
                             {% if function('in_array', 'post_content', fields.elements) %}
                               <div class="posts-loop--post-content">{{ post.content }}</div>
                             {% endif %}
@@ -6495,7 +6777,35 @@
                 <div class="{{ slide_classes }}" {{ slide_attributes }} {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
                   {# Set custom card styles #}
                   {% set card_bg_color = fields.card.card_bg_color['bg_color'] == 'custom' and fields.card.card_bg_color['bg_custom_color'] ? 'background-color: ' ~ fields.card.card_bg_color['bg_custom_color'] ~ ';' %}
-                  {% set card_border_color = fields.card.card_border_color['color'] == 'custom' and fields.card.card_border_color['custom_color'] ? 'border-color: ' ~ fields.card.card_border_color['custom_color'] ~ ';' %}
+                  {# {% set card_border_color = fields.card.card_border_color['color'] == 'custom' and fields.card.card_border_color['custom_color'] ? 'border-color: ' ~ fields.card.card_border_color['custom_color'] ~ ';' %} #}
+                  
+                  {% if fields.card.remove_card_border != true %}
+                    {% set card_border_top_width = fields.card.card_border['top']['width'] is not empty ? 'border-top-width: ' ~ fields.card.card_border['top']['width'] ~ 'px;' %}
+                    {% set card_border_top_style = fields.card.card_border['top']['style'] ? 'border-top-style: ' ~ fields.card.card_border['top']['style'] ~ ';' %}
+                    {% set card_border_top_color = fields.card.card_border['top']['color'] == 'custom' and fields.card.card_border['top']['custom_color'] ? 'border-top-color: ' ~ fields.card.card_border['top']['custom_color'] ~ ';' : fields.card.card_border['top']['color'] == 'palette' and fields.card.card_border['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.card.card_border['top']['theme_color'] ~ ');' %}
+                    {% set card_border_bottom_width = fields.card.card_border['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ fields.card.card_border['bottom']['width'] ~ 'px;' %}
+                    {% set card_border_bottom_style = fields.card.card_border['bottom']['style'] ? 'border-bottom-style: ' ~ fields.card.card_border['bottom']['style'] ~ ';' %}
+                    {% set card_border_bottom_color = fields.card.card_border['bottom']['color'] == 'custom' and fields.card.card_border['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.card.card_border['bottom']['custom_color'] ~ ';' : fields.card.card_border['bottom']['color'] == 'palette' and fields.card.card_border['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.card.card_border['bottom']['theme_color'] ~ ');' %}
+                    {% set card_border_left_width = fields.card.card_border['left']['width'] is not empty ? 'border-left-width: ' ~ fields.card.card_border['left']['width'] ~ 'px;' %}
+                    {% set card_border_left_style = fields.card.card_border['left']['style'] ? 'border-left-style: ' ~ fields.card.card_border['left']['style'] ~ ';' %}
+                    {% set card_border_left_color = fields.card.card_border['left']['color'] == 'custom' and fields.card.card_border['left']['custom_color'] ? 'border-left-color: ' ~ fields.card.card_border['left']['custom_color'] ~ ';' : fields.card.card_border['left']['color'] == 'palette' and fields.card.card_border['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.card.card_border['left']['theme_color'] ~ ');' %}
+                    {% set card_border_right_width = fields.card.card_border['right']['width'] is not empty ? 'border-right-width: ' ~ fields.card.card_border['right']['width'] ~ 'px;' %}
+                    {% set card_border_right_style = fields.card.card_border['right']['style'] ? 'border-right-style: ' ~ fields.card.card_border['right']['style'] ~ ';' %}
+                    {% set card_border_right_color = fields.card.card_border['right']['color'] == 'custom' and fields.card.card_border['right']['custom_color'] ? 'border-right-color: ' ~ fields.card.card_border['right']['custom_color'] ~ ';' : fields.card.card_border['right']['color'] == 'palette' and fields.card.card_border['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.card.card_border['right']['theme_color'] ~ ');' %}
+                    {% set card_back_border_top_width = fields.card.card_back_border['top']['width'] is not empty ? 'border-top-width: ' ~ fields.card.card_back_border['top']['width'] ~ 'px;' %}
+                    {% set card_back_border_top_style = fields.card.card_back_border['top']['style'] ? 'border-top-style: ' ~ fields.card.card_back_border['top']['style'] ~ ';' %}
+                    {% set card_back_border_top_color = fields.card.card_back_border['top']['color'] == 'custom' and fields.card.card_back_border['top']['custom_color'] ? 'border-top-color: ' ~ fields.card.card_back_border['top']['custom_color'] ~ ';' : fields.card.card_back_border['top']['color'] == 'palette' and fields.card.card_back_border['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.card.card_back_border['top']['theme_color'] ~ ');' %}
+                    {% set card_back_border_bottom_width = fields.card.card_back_border['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ fields.card.card_back_border['bottom']['width'] ~ 'px;' %}
+                    {% set card_back_border_bottom_style = fields.card.card_back_border['bottom']['style'] ? 'border-bottom-style: ' ~ fields.card.card_back_border['bottom']['style'] ~ ';' %}
+                    {% set card_back_border_bottom_color = fields.card.card_back_border['bottom']['color'] == 'custom' and fields.card.card_back_border['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.card.card_back_border['bottom']['custom_color'] ~ ';' : fields.card.card_back_border['bottom']['color'] == 'palette' and fields.card.card_back_border['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.card.card_back_border['bottom']['theme_color'] ~ ');' %}
+                    {% set card_back_border_left_width = fields.card.card_back_border['left']['width'] is not empty ? 'border-left-width: ' ~ fields.card.card_back_border['left']['width'] ~ 'px;' %}
+                    {% set card_back_border_left_style = fields.card.card_back_border['left']['style'] ? 'border-left-style: ' ~ fields.card.card_back_border['left']['style'] ~ ';' %}
+                    {% set card_back_border_left_color = fields.card.card_back_border['left']['color'] == 'custom' and fields.card.card_back_border['left']['custom_color'] ? 'border-left-color: ' ~ fields.card.card_back_border['left']['custom_color'] ~ ';' : fields.card.card_back_border['left']['color'] == 'palette' and fields.card.card_back_border['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.card.card_back_border['left']['theme_color'] ~ ');' %}
+                    {% set card_back_border_right_width = fields.card.card_back_border['right']['width'] is not empty ? 'border-right-width: ' ~ fields.card.card_back_border['right']['width'] ~ 'px;' %}
+                    {% set card_back_border_right_style = fields.card.card_back_border['right']['style'] ? 'border-right-style: ' ~ fields.card.card_back_border['right']['style'] ~ ';' %}
+                    {% set card_back_border_right_color = fields.card.card_back_border['right']['color'] == 'custom' and fields.card.card_back_border['right']['custom_color'] ? 'border-right-color: ' ~ fields.card.card_back_border['right']['custom_color'] ~ ';' : fields.card.card_back_border['right']['color'] == 'palette' and fields.card.card_back_border['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.card.card_back_border['right']['theme_color'] ~ ');' %}
+                  {% endif %}
+
                   {% set card_text_color = fields.card.card_text_color['color'] == 'custom' and fields.card.card_text_color['custom_color'] ? 'color: ' ~ fields.card.card_text_color['custom_color'] ~ ';' %}
                   {% set card_back_bg_color = fields.card.back_bg_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.card.back_bg_color['bg_custom_color'] ~ ';' %}
                   {% set card_back_border_color = fields.card.back_border_color['color'] == 'custom' ? 'border-color: ' ~ fields.card.back_border_color['custom_color'] ~ ';' %}
@@ -6503,6 +6813,9 @@
                   {% set card_width = fields.card.width.width['width']['value'] is not empty ? 'width: ' ~ fields.card.width.width['width']['value']  ~ fields.card.width.width['width']['unit'] ~  ';' %}
                   {% set card_min_width = fields.card.width.width['min_width'] is not empty ? 'min-width: ' ~ fields.card.width.width['min_width']  ~ 'px;' %}
                   {% set card_max_width = fields.card.width.width['max_width'] is not empty ? 'max-width: ' ~ fields.card.width.width['max_width']  ~ 'px;' %}
+                  {% set card_height = fields.card.height.height['height']['value'] is not empty ? 'height: ' ~ fields.card.height.height['height']['value']  ~ fields.card.height.height['height']['unit'] ~  ';' %}
+                  {% set card_min_height = fields.card.height.height['min_height'] is not empty ? 'min-height: ' ~ fields.card.height.height['min_height']  ~ 'px;' %}
+                  {% set card_max_height = fields.card.height.height['max_height'] is not empty ? 'max-height: ' ~ fields.card.height.height['max_height']  ~ 'px;' %}
                   {% set card_margin_top = parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['top']['top'] is not empty ? 'margin-top: ' ~ fields.card.margin['margin']['top']['top'] ~ 'px;' %}
                   {% set card_margin_bottom = parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ fields.card.margin['margin']['bottom']['bottom'] ~ 'px;' %}
                   {% set card_margin_left = parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : parent_block_data['name'] != 'acf/card-grid' and fields.card.margin['margin']['left']['left'] is not empty ? 'margin-left: ' ~ fields.card.margin['margin']['left']['left'] ~ 'px;' %}
@@ -6633,7 +6946,18 @@
                       fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_left_radius,
                       fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_right_radius,
                       fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_color,
-                      fields.card.flip_card != true ? card_bg_color,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_top_width,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_top_style,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_top_color,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_width,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_style,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_bottom_color,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_left_width,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_left_style,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_left_color,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_right_width,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_right_style,
+                      fields.card.flip_card != true or fields.card.image_overlay_text is empty ? card_border_right_color,
                       fields.card.flip_card != true ? card_text_color,
                       fields.card.flip_card != true ? card_padding_top,
                       fields.card.flip_card != true ? card_padding_bottom,
@@ -6642,6 +6966,9 @@
                       card_width,
                       card_min_width,
                       card_max_width,
+                      card_height,
+                      card_min_height,
+                      card_max_height,
                       card_margin_top,
                       card_margin_bottom,
                       card_margin_left,
@@ -6668,7 +6995,18 @@
                       fields.card.flip_card == true or fields.card.image_overlay_text ? card_border_top_right_radius,
                       fields.card.flip_card == true or fields.card.image_overlay_text ? card_border_bottom_left_radius,
                       fields.card.flip_card == true or fields.card.image_overlay_text ? card_border_bottom_right_radius,
-                      fields.card.flip_card == true ? card_border_color,
+                      fields.card.flip_card == true ? card_border_top_width,
+                      fields.card.flip_card == true ? card_border_top_style,
+                      fields.card.flip_card == true ? card_border_top_color,
+                      fields.card.flip_card == true ? card_border_bottom_width,
+                      fields.card.flip_card == true ? card_border_bottom_style,
+                      fields.card.flip_card == true ? card_border_bottom_color,
+                      fields.card.flip_card == true ? card_border_left_width,
+                      fields.card.flip_card == true ? card_border_left_style,
+                      fields.card.flip_card == true ? card_border_left_color,
+                      fields.card.flip_card == true ? card_border_right_width,
+                      fields.card.flip_card == true ? card_border_right_style,
+                      fields.card.flip_card == true ? card_border_right_color,
                       fields.card.flip_card == true ? card_bg_color,
                       fields.card.flip_card == true ? card_text_color,
                       fields.card.flip_card == true ? card_padding_top,
@@ -7231,23 +7569,21 @@
                       <div class="card-body {{ no_body_padding == true ? 'p-0' }}">
                         {% block card_text %}
                           <div class="card-text">
-{#                            {% if function('in_array', 'post_excerpt', fields.elements) and post.post_type == 'page' %}#}
-{#                              <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
-{#                            {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}#}
-{#                              <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>#}
-{#                            {% elseif function('in_array', 'post_excerpt', fields.elements) %}#}
-{#                              <div class="posts-loop--post-excerpt">#}
-{#                                <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>#}
-{#                                {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}#}
-{#                              </div>#}
-{#                            {% endif %}#}
-
-                             {% if function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
-                                <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ fields.element_excerpt.element_read_more_label }}</a>{% endif %}</div>
-                              {% elseif function('in_array', 'post_excerpt', fields.elements) %}
-                                <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}</div>
-                              {% endif %}
-
+                            {# {% if function('in_array', 'post_excerpt', fields.elements) and post.post_type == 'page' %}
+                              <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
+                            {% elseif function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
+                              <div class="posts-loop--post-excerpt">{{ post.preview.read_more(fields.element_excerpt.element_read_more_label).length(fields.element_excerpt.element_excerpt_length|number_format).force }}</div>
+                            {% elseif function('in_array', 'post_excerpt', fields.elements) %}
+                              <div class="posts-loop--post-excerpt">
+                                <span class="excerpt">{{ post.preview.read_more('').length(fields.element_excerpt.element_excerpt_length|number_format).force }}</span>
+                                {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}
+                              </div>
+                            {% endif %} #}
+                            {% if function('in_array', 'post_excerpt', fields.elements) and fields.link_items != true %}
+                              <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ fields.element_excerpt.element_read_more_label }}</a>{% endif %}</div>
+                            {% elseif function('in_array', 'post_excerpt', fields.elements) %}
+                              <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}</div>
+                            {% endif %}
                             {% if function('in_array', 'post_content', fields.elements) %}
                               <div class="posts-loop--post-content">{{ post.content }}</div>
                             {% endif %}
@@ -7942,17 +8278,20 @@
                       {% elseif element.acf_fc_layout == 'post_excerpt' and (post.preview or function('get_the_excerpt')) %}
                         {# Post Excerpt #}
                         <div class="posts-loop--post-excerpt--wrapper">
-{#                          {% if post.post_type == 'page' %}#}
-{#                            <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
-{#                          {% elseif fields.link_items != true %}#}
-{#                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>#}
-{#                          {% else %}#}
-{#                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>#}
-{#                          {% endif %}#}
-                          {% if fields.link_items != true %}
-                            <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
+                          {# {% if post.post_type == 'page' %}
+                            <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
+                          {% elseif fields.link_items != true %}
+                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>
                           {% else %}
-                            <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
+                            <div class="posts-loop--post-excerpt">
+                              <span class="excerpt">{{ post.preview.read_more('').length(element.length|number_format).force }}</span>
+                              {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}
+                            </div>
+                          {% endif %} #}
+                          {% if fields.link_items != true %}
+                            <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
+                          {% else %}
+                            <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
                           {% endif %}
                         </div>
                       {% elseif element.acf_fc_layout == 'post_content' and post.content %}
@@ -8289,17 +8628,20 @@
                       {% elseif element.acf_fc_layout == 'post_excerpt' and (post.preview or function('get_the_excerpt')) %}
                         {# Post Excerpt #}
                         <div class="posts-loop--post-excerpt--wrapper">
-{#                          {% if post.post_type == 'page' %}#}
-{#                            <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
-{#                          {% elseif fields.link_items != true %}#}
-{#                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>#}
-{#                          {% else %}#}
-{#                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>#}
-{#                          {% endif %}#}
-                          {% if fields.link_items != true %}
-                            <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
+                          {# {% if post.post_type == 'page' %}
+                            <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
+                          {% elseif fields.link_items != true %}
+                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>
                           {% else %}
-                            <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
+                            <div class="posts-loop--post-excerpt">
+                              <span class="excerpt">{{ post.preview.read_more('').length(element.length|number_format).force }}</span>
+                              {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}
+                            </div>
+                          {% endif %} #}
+                          {% if fields.link_items != true %}
+                            <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
+                          {% else %}
+                            <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
                           {% endif %}
                         </div>
                       {% elseif element.acf_fc_layout == 'post_content' and post.content %}
@@ -8643,17 +8985,20 @@
                       {% elseif element.acf_fc_layout == 'post_excerpt' and (post.preview or function('get_the_excerpt')) %}
                         {# Post Excerpt #}
                         <div class="posts-loop--post-excerpt--wrapper">
-{#                          {% if post.post_type == 'page' %}#}
-{#                            <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
-{#                          {% elseif fields.link_items != true %}#}
-{#                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>#}
-{#                          {% else %}#}
-{#                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>#}
-{#                          {% endif %}#}
-                          {% if fields.link_items != true %}
-                            <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
+                          {# {% if post.post_type == 'page' %}
+                            <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
+                          {% elseif fields.link_items != true %}
+                            <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>
                           {% else %}
-                            <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
+                            <div class="posts-loop--post-excerpt">
+                              <span class="excerpt">{{ post.preview.read_more('').length(element.length|number_format).force }}</span>
+                              {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}
+                            </div>
+                          {% endif %} #}
+                          {% if fields.link_items != true %}
+                            <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
+                          {% else %}
+                            <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
                           {% endif %}
                         </div>
                       {% elseif element.acf_fc_layout == 'post_content' and post.content %}
@@ -8978,17 +9323,20 @@
           {% elseif element.acf_fc_layout == 'post_excerpt' and (post.preview or function('get_the_excerpt')) %}
             {# Post Excerpt #}
             <div class="posts-loop--post-excerpt--wrapper">
-{#              {% if post.post_type == 'page' %}#}
-{#                <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
-{#              {% elseif fields.link_items != true %}#}
-{#                <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>#}
-{#              {% else %}#}
-{#                <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>#}
-{#              {% endif %}#}
-              {% if fields.link_items != true %}
-                <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
+              {# {% if post.post_type == 'page' %}
+                <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
+              {% elseif fields.link_items != true %}
+                <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>
               {% else %}
-                <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
+                <div class="posts-loop--post-excerpt">
+                  <span class="excerpt">{{ post.preview.read_more('').length(element.length|number_format).force }}</span>
+                  {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}
+                </div>
+              {% endif %} #}
+              {% if fields.link_items != true %}
+                <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
+              {% else %}
+                <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
               {% endif %}
             </div>
           {% elseif element.acf_fc_layout == 'post_content' and post.content %}
@@ -9450,18 +9798,20 @@
                   {% elseif element.acf_fc_layout == 'post_excerpt' and (post.preview or function('get_the_excerpt')) %}
                     {# Post Excerpt #}
                     <div class="posts-loop--post-excerpt--wrapper">
-{#                      {% if post.post_type == 'page' %}#}
-{#                        <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
-{#                      {% elseif fields.link_items != true %}#}
-{#                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>#}
-{#                      {% else %}#}
-{#                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>#}
-{#                      {% endif %}#}
-
-                      {% if fields.link_items != true %}
-                        <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
+                      {# {% if post.post_type == 'page' %}
+                        <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
+                      {% elseif fields.link_items != true %}
+                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>
                       {% else %}
-                        <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
+                        <div class="posts-loop--post-excerpt">
+                          <span class="excerpt">{{ post.preview.read_more('').length(element.length|number_format).force }}</span>
+                          {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}
+                        </div>
+                      {% endif %} #}
+                      {% if fields.link_items != true %}
+                        <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
+                      {% else %}
+                        <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
                       {% endif %}
                     </div>
                   {% elseif element.acf_fc_layout == 'post_content' and post.content %}
@@ -9741,18 +10091,20 @@
                   {% elseif element.acf_fc_layout == 'post_excerpt' and (post.preview or function('get_the_excerpt')) %}
                     {# Post Excerpt #}
                     <div class="posts-loop--post-excerpt--wrapper">
-{#                      {% if post.post_type == 'page' %}#}
-{#                        <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>#}
-{#                      {% elseif fields.link_items != true %}#}
-{#                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>#}
-{#                      {% else %}#}
-{#                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>#}
-{#                      {% endif %}#}
-
-                      {% if fields.link_items != true %}
-                        <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
+                      {# {% if post.post_type == 'page' %}
+                        <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
+                      {% elseif fields.link_items != true %}
+                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>
                       {% else %}
-                        <div class="posts-loop--post-excerpt"><span class="excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
+                        <div class="posts-loop--post-excerpt">
+                          <span class="excerpt">{{ post.preview.read_more('').length(element.length|number_format).force }}</span>
+                          {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}
+                        </div>
+                      {% endif %} #}
+                      {% if fields.link_items != true %}
+                        <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
+                      {% else %}
+                        <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
                       {% endif %}
                     </div>
                   {% elseif element.acf_fc_layout == 'link' and post.link %}
