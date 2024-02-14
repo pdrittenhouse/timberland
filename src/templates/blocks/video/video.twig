@@ -83,7 +83,7 @@
   playlist: fields.playlist,
   list: fields.list,
   list_type: fields.list_type,
-  origin: fields.origin,
+  origin: fields.origin | default(site.url),
   background: fields.background,
   disable_keyboard: false,
   quality: fields.quality,
