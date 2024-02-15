@@ -28,6 +28,12 @@ module.exports = {
     './src/patternlab'
   ),
 
+  // Patternlab patterns
+  patterns: path.resolve(
+    __dirname,
+    './src/patternlab/source/_patterns'
+  ),
+
   // Static files
   static: path.resolve(__dirname, './static'),
 

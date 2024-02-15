@@ -12,8 +12,8 @@ import './_base.scss';
 require('bootstrap');
 
 // Import AOS
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+// import AOS from 'aos';
+// import 'aos/dist/aos.css';
 
 // Add loaded class to body
 const bodyLoaded = () => {
