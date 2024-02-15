@@ -10,7 +10,11 @@ const sassExportData = require('@theme-tools/sass-export-data');
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
 const { ProgressPlugin, ProvidePlugin } = require('webpack');
+// const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const paths = require('./paths');
+// const os = require('os');
+// const fs = require('fs');
+// const crypto = require('crypto');
 
 module.exports = {
   entry: {
@@ -22,7 +26,7 @@ module.exports = {
     path: paths.build,
     filename: 'js/[name].bundle.js',
     //publicPath: '/dist/wp/',
-    publicPath: '/wp-content/themes/timberland/dist/wp/',
+    publicPath: '/wp-content/themes/updater-starter/dist/wp/',
   },
   module: {
     rules: [
@@ -32,16 +36,18 @@ module.exports = {
         exclude: [
           /(node_modules|vendor|wp-admin|wp-includes|plugins|twentyfifteen|twentysixteen|twentyseventeen|twentynineteen|libs|bundle|dist)/,
         ],
-        use: {
-          loader: 'babel-loader',
-          options: {
-            babelrc: false,
-            presets: [
-              ['@babel/preset-env', { modules: false }],
-              '@babel/preset-react',
-            ],
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              babelrc: false,
+              presets: [
+                ['@babel/preset-env', { modules: false }],
+                '@babel/preset-react',
+              ],
+            },
           },
-        },
+        ],
       },
       // Images
       {
@@ -79,7 +85,16 @@ module.exports = {
                 plugins: [
                   postcssPresetEnv(),
                   autoprefixer({ overrideBrowserslist: 'last 2 version' }),
-                  cssnano(),
+                  cssnano({
+                    preset: [
+                      'default', {
+                        discardDuplicates: true,
+                        discardComments: {
+                          removeAll: true
+                        }
+                      }
+                    ]
+                  }),
                 ],
               },
             },
@@ -162,16 +177,123 @@ module.exports = {
         svgo: true,
       },
     }),
-    // Copy json data after build
+    // Spritemap with caching
+    // (() => {
+    //   // Calculate file hash helper function
+    //   function calculateFileHash(directoryPath) {
+    //     const files = fs.readdirSync(directoryPath);
+    //     const hash = crypto.createHash('sha256');
+
+    //     files.forEach(file => {
+    //         const filePath = `${directoryPath}/${file}`;
+    //         const stats = fs.statSync(filePath);
+
+    //         if (stats.isFile()) {
+    //             const fileContent = fs.readFileSync(filePath);
+    //             hash.update(fileContent);
+    //         }
+    //     });
+
+    //     return hash.digest('hex');
+    //   }
+
+    //   if (!fs.existsSync(`${paths.cache}/svg/spritemap.svg`)) {
+    //     // Generate the spritemap only if it doesn't exist
+    //     return new SVGSpritemapPlugin(`${paths.svg}/svg/*.svg`, {
+    //       styles: {
+    //         keepAttributes: true,
+    //         filename: `${paths.svg}/generated/_icons-generated.scss`,
+    //         variables: {
+    //           sizes: 'svgicon-sizes', // Prevent collision with Bootstrap $sizes
+    //           variables: 'svgicon-variables',
+    //         },
+    //       },
+    //       output: {
+    //         filename: 'spritemap.svg',
+    //         svg4everybody: true,
+    //         svgo: true,
+    //       },
+    //     });
+    //   } else {
+    //     // Check if any new SVG files have been added since the last build
+    //     const storedHashPath = `${paths.cache}/svg/.svgHash`;
+    //     const currentHash = calculateFileHash(`${paths.svg}/svg/`);
+    //     let previousHash = '';
+
+    //     // Read the stored hash from the file if it exists
+    //     if (fs.existsSync(storedHashPath)) {
+    //       previousHash = fs.readFileSync(storedHashPath, 'utf8');
+    //     }
+
+    //     // Save current hash
+    //     try {
+    //       fs.writeFileSync(storedHashPath, currentHash);
+    //     } catch (error) {
+    //       console.error('Error writing hash file:', error);
+    //     }
+
+    //     // Compare the current hash with the stored hash
+    //     if (currentHash !== previousHash) {
+    //       // If there are differences, regenerate the spritemap and update the stored hash
+    //       return new SVGSpritemapPlugin(`${paths.svg}/svg/*.svg`, {
+    //         styles: {
+    //           keepAttributes: true,
+    //           filename: `${paths.svg}/generated/_icons-generated.scss`,
+    //           variables: {
+    //             sizes: 'svgicon-sizes', // Prevent collision with Bootstrap $sizes
+    //             variables: 'svgicon-variables',
+    //           },
+    //         },
+    //         output: {
+    //           filename: 'spritemap.svg',
+    //           svg4everybody: true,
+    //           svgo: true,
+    //         },
+    //       });
+
+    //     } else {
+    //       // TODO: Fix this
+    //       // Write the spritemap.svg file to the build folder
+    //       const spritemapContent = fs.readFileSync(`${paths.cache}/svg/spritemap.svg`, 'utf8');
+    //       fs.writeFileSync(`${paths.build}/spritemap.svg`, spritemapContent);
+    //     }
+    //   }
+    // })(),
+    // Copy files after build
     new FileManagerPlugin({
       events: {
         onEnd: {
           copy: [
-            { source: `${paths.plsrc}/**/*.json`, destination: `${paths.build}/data` },
+            { source: `${paths.plsrc}/**/*.json`, destination: `${paths.build}/data` }, // Copy JSON data
+            { source: `${paths.build}/spritemap.svg`, destination: `${paths.cache}/svg/`}, // Copy spritemap.svg to cache
           ],
         },
       },
       runTasksInSeries: false,
     }),
+    // new BundleAnalyzerPlugin(),
   ],
+  optimization: {
+    usedExports: true, // Enable tree shaking
+    concatenateModules: true, // Concatenate modules | REMOVE IF PROBLEMS OCCUR
+    minimize: true, // minify
+  },
+  // performance: {
+  //   hints: "warning", // "error" or false are also valid options
+  //   maxEntrypointSize: 1500000, // Set the maximum size for entry points
+  //   maxAssetSize: 1500000, // Set the maximum size for individual assets
+  // },
+  cache: {
+    // Configuration for caching
+    type: 'filesystem', // Specify the type of caching mechanism
+    cacheDirectory: `${paths.cache}/.webpack-cache`,
+    buildDependencies: {
+      // Add dependencies for caching (optional)
+      config: [
+        __filename,
+        'webpack.prod.js',
+        'webpack.dev.js',
+      ],
+    },
+  },
 };

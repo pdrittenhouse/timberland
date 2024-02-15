@@ -36,4 +36,7 @@ module.exports = {
 
   // SVG's
   svg: path.resolve(__dirname, './src/patternlab/source/_patterns/01-atoms/svg'),
+
+  // Cache directory for loaders
+  cache: path.resolve(__dirname, './.webpack-cache'),
 };

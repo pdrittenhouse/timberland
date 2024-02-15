@@ -3,6 +3,7 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 // const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 const common = require('./webpack.config.js');
 
 module.exports = merge(common, {
@@ -12,7 +13,15 @@ module.exports = merge(common, {
   devtool: false,
   optimization: {
     minimize: true,
-    minimizer: [new CssMinimizerPlugin(), '...'],
+    minimizer: [
+      new CssMinimizerPlugin({
+        minimizerOptions: {
+          preset: ['default', { discardDuplicates: true }],
+          discardComments: { removeAll: true },
+        },
+      }),
+      '...',
+    ],
     // Once your build outputs multiple chunks, this option will ensure they share the webpack runtime
     // instead of having their own. This also helps with long-term caching, since the chunks will only
     // change when actual code changes, not the webpack runtime.
@@ -38,6 +47,14 @@ module.exports = merge(common, {
     // Clean build folders and unused assets when rebuilding
     new CleanWebpackPlugin({
       verbose: true,
+    }),
+    // gzip js and css
+    new CompressionPlugin({
+      filename: '[path][name].gz',
+      algorithm: 'gzip',
+      test: /\.(js|css)$/,
+      threshold: 10240,
+      minRatio: 0.8,
     }),
     // Optimize images
     // new ImageMinimizerPlugin({

@@ -1,6 +1,7 @@
 const { merge } = require('webpack-merge');
 const webpack = require('webpack');
 const { exec } = require('child_process');
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const path = require('path');
 const paths = require('./paths');
 const common = require('./webpack.config.js');
@@ -40,6 +41,8 @@ module.exports = merge(common, {
     ],
   },
   plugins: [
+    // Analyze build
+    new BundleAnalyzerPlugin(),
     // Only update what has changed on hot reload
     new webpack.HotModuleReplacementPlugin(),
     // Rebuild Pattern Lab files after emit
@@ -58,4 +61,5 @@ module.exports = merge(common, {
       },
     },
   ],
+  stats: "verbose",
 });

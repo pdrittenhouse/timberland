@@ -67,6 +67,7 @@ $dream_includes = array(
   "menus.php",
   "theme-support.php",
   "customizer.php",
+  "gzip.php",
   "scripts.php",
   "styles.php",
   "paths.php",
