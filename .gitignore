@@ -21,6 +21,7 @@ vendor/
 # Ignore build directories
 dist/
 build/
+.webpack-cache
 
 # Ignore Libraries
 src/libs/
