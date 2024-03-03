@@ -313,7 +313,10 @@
                 "class": "",
                 "id": ""
             },
-            "clone": "",
+            "admin_only": 0,
+            "clone": [
+                "group_634831db1b317"
+            ],
             "display": "seamless",
             "layout": "block",
             "prefix_label": 0,
@@ -404,5 +407,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1689348514
+    "modified": 1709445219
 }
