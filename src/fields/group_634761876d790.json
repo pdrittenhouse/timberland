@@ -61,13 +61,14 @@
                 "class": "",
                 "id": ""
             },
+            "admin_only": 0,
             "clone": [
                 "group_63473f08f0299"
             ],
             "display": "group",
             "layout": "block",
             "prefix_label": 0,
-            "prefix_name": 0
+            "prefix_name": 1
         },
         {
             "key": "field_634761876f472",
@@ -303,13 +304,14 @@
                 "class": "",
                 "id": ""
             },
+            "admin_only": 0,
             "clone": [
                 "group_634728b1e7498"
             ],
-            "display": "seamless",
+            "display": "group",
             "layout": "block",
             "prefix_label": 0,
-            "prefix_name": 0
+            "prefix_name": 1
         },
         {
             "key": "field_63a721afdcd44",
@@ -399,5 +401,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1709503969
+    "modified": 1709517151
 }

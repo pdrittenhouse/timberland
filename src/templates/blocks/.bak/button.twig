@@ -101,7 +101,7 @@
   button_outline: fields.outline,
   button_block: fields.full_width,
   button_toggle: fields.toggle,
-  button_id: fields.id ? fields.id : fields.id_gen ? 'button' ~ fields.id_gen,
+  button_id: fields.id.id ? fields.id.id : fields.id.id_gen ? 'button' ~ fields.id.id_gen,
   button_active: fields.active,
   button_disabled: fields.disabled,
   button_expanded: fields.active,

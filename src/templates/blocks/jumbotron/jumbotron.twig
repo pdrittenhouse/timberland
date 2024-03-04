@@ -210,7 +210,7 @@
           button_outline: fields.jumbotron_button['outline'],
           button_block: fields.jumbotron_button['full_width'],
           button_toggle: fields.jumbotron_button['toggle'],
-          button_id: fields.jumbotron_button['id'] ? fields.jumbotron_button['id'] : fields.jumbotron_button['id_gen'] ? 'button' ~ fields.jumbotron_button['id_gen'],
+          button_id: fields.jumbotron_button['id']['id'] ? fields.jumbotron_button['id']['id'] : fields.jumbotron_button['id']['id_gen'] ? 'button' ~ fields.jumbotron_button['id']['id_gen'],
           button_active: fields.jumbotron_button['active'],
           button_disabled: fields.jumbotron_button['disabled'],
           button_expanded: fields.jumbotron_button['active'],

@@ -99,13 +99,14 @@
                 "class": "",
                 "id": ""
             },
+            "admin_only": 0,
             "clone": [
                 "group_63464d79a3c59"
             ],
-            "display": "seamless",
+            "display": "group",
             "layout": "block",
             "prefix_label": 0,
-            "prefix_name": 0
+            "prefix_name": 1
         },
         {
             "key": "field_6376898a62ebf",
@@ -285,13 +286,14 @@
                 "class": "",
                 "id": ""
             },
+            "admin_only": 0,
             "clone": [
                 "group_634728b1e7498"
             ],
             "display": "group",
             "layout": "block",
             "prefix_label": 0,
-            "prefix_name": 0
+            "prefix_name": 1
         },
         {
             "key": "field_63766afd9f3fa",
@@ -450,13 +452,14 @@
                 "class": "",
                 "id": ""
             },
+            "admin_only": 0,
             "clone": [
                 "group_634db16363404"
             ],
             "display": "group",
             "layout": "block",
             "prefix_label": 0,
-            "prefix_name": 0
+            "prefix_name": 1
         },
         {
             "key": "field_634b9262e0f72",
@@ -866,5 +869,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1709504146
+    "modified": 1709516084
 }

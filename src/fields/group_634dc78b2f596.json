@@ -85,13 +85,14 @@
                 "class": "",
                 "id": ""
             },
+            "admin_only": 0,
             "clone": [
                 "group_6346513f54d9a"
             ],
             "display": "group",
             "layout": "block",
             "prefix_label": 0,
-            "prefix_name": 0
+            "prefix_name": 1
         }
     ],
     "location": [
@@ -112,5 +113,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1709504247
+    "modified": 1709513730
 }
