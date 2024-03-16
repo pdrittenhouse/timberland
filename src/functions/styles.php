@@ -117,27 +117,29 @@ function dream_enqueue_block_styles() {
   $blocks_path = dirname(__DIR__) . '/templates/blocks';
   $blocks = array_filter(scandir($blocks_path), 'filter_block_dir');
 
-  // Get the post content
-  $post_content = get_post()->post_content;
+  if (get_post() !== null) {
+    // Get the post content
+    $post_content = get_post()->post_content;
 
-  foreach ($blocks as $block) {
-    // Get the block.json file path
-    $block_json_path = $blocks_path . '/' . $block . '/block.json';
+    foreach ($blocks as $block) {
+      // Get the block.json file path
+      $block_json_path = $blocks_path . '/' . $block . '/block.json';
 
-    if (file_exists($block_json_path)) {
-      // Read the block.json file
-      $block_json_content = file_get_contents($block_json_path);
-      $block_data = json_decode($block_json_content, true);
+      if (file_exists($block_json_path)) {
+        // Read the block.json file
+        $block_json_content = file_get_contents($block_json_path);
+        $block_data = json_decode($block_json_content, true);
 
-      // Check if the block name is defined in block.json
-      if (isset($block_data['name'])) {
-        $block_name = $block_data['name'];
+        // Check if the block name is defined in block.json
+        if (isset($block_data['name'])) {
+          $block_name = $block_data['name'];
 
-        // Check if the post content contains the block
-        if (has_block($block_name, $post_content)) {
-          // Enqueue the block style
-          if (file_exists($blocks_path . '/' . $block . '/style.css')) {
-            wp_enqueue_style('blocks_css_' . $block, get_template_directory_uri() . '/src/templates/blocks/' . $block . '/style.css', array(), wp_get_theme()->get('Version'), 'all');
+          // Check if the post content contains the block
+          if (has_block($block_name, $post_content)) {
+            // Enqueue the block style
+            if (file_exists($blocks_path . '/' . $block . '/style.css')) {
+              wp_enqueue_style('blocks_css_' . $block, get_template_directory_uri() . '/src/templates/blocks/' . $block . '/style.css', array(), wp_get_theme()->get('Version'), 'all');
+            }
           }
         }
       }
@@ -162,27 +164,29 @@ function dream_enqueue_block_admin_styles() {
   $blocks_path = dirname(__DIR__) . '/templates/blocks';
   $blocks = array_filter(scandir($blocks_path), 'filter_block_dir');
 
-  // Get the post content
-  $post_content = get_post()->post_content;
+  if (get_post() !== null) {
+    // Get the post content
+    $post_content = get_post()->post_content;
 
-  foreach ($blocks as $block) {
-    // Get the block.json file path
-    $block_json_path = $blocks_path . '/' . $block . '/block.json';
+    foreach ($blocks as $block) {
+      // Get the block.json file path
+      $block_json_path = $blocks_path . '/' . $block . '/block.json';
 
-    if (file_exists($block_json_path)) {
-      // Read the block.json file
-      $block_json_content = file_get_contents($block_json_path);
-      $block_data = json_decode($block_json_content, true);
+      if (file_exists($block_json_path)) {
+        // Read the block.json file
+        $block_json_content = file_get_contents($block_json_path);
+        $block_data = json_decode($block_json_content, true);
 
-      // Check if the block name is defined in block.json
-      if (isset($block_data['name'])) {
-        $block_name = $block_data['name'];
+        // Check if the block name is defined in block.json
+        if (isset($block_data['name'])) {
+          $block_name = $block_data['name'];
 
-        // Check if the post content contains the block
-        if (has_block($block_name, $post_content)) {
-          // Enqueue the block admin style
-          if (file_exists($blocks_path . '/' . $block . '/index.css')) {
-            wp_enqueue_style('blocks_css_' . $block, get_template_directory_uri() . '/src/templates/blocks/' . $block . '/index.css', array(), wp_get_theme()->get('Version'), 'all');
+          // Check if the post content contains the block
+          if (has_block($block_name, $post_content)) {
+            // Enqueue the block admin style
+            if (file_exists($blocks_path . '/' . $block . '/index.css')) {
+              wp_enqueue_style('blocks_css_' . $block, get_template_directory_uri() . '/src/templates/blocks/' . $block . '/index.css', array(), wp_get_theme()->get('Version'), 'all');
+            }
           }
         }
       }
