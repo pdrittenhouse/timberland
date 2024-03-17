@@ -343,7 +343,25 @@
 
     {% block search %}
       <div class="pt-2 {{ hide_header_search == 'mobile' ? 'd-none d-xxl-flex' }} {{ hide_header_search == 'desktop' ? 'd-xxl-none' }} {{ hide_header_search == 'both' ? 'd-none' }}">
-        {{ function('get_search_form') }}
+{#        {{ function('get_search_form') }}#}
+        {% include "partials/content/searchform.twig" with {
+          show_label: false,
+          label: '',
+          placeholder: 'Search',
+          placeholder_color: 'black',
+          button_text: 'Search',
+          button_color: 'black',
+          button_size: 'lg',
+          button_outline: false,
+          button_block: false,
+          button_nowrap: true,
+          hide_button_label: true,
+          hide_icon: false,
+          icon_width: '16px',
+          icon_height: '16px',
+          icon_name: 'search',
+          icon_color: 'white'
+        } %}
       </div>
     {% endblock search %}
 
