@@ -27,3 +27,42 @@ function fix_svg() {
         </style>';
 }
 add_action('admin_head', 'fix_svg');
+
+
+// Fix to add width and height metadata to svg to prevent woocommerce regenerate images error
+function update_svg_metadata() {
+  // Get all attachments of 'image/svg+xml' MIME type
+  $args = array(
+    'post_type'      => 'attachment',
+    'post_mime_type' => 'image/svg+xml',
+    'posts_per_page' => -1,
+  );
+  $attachments = get_posts($args);
+
+  // Loop through each SVG attachment
+  foreach ($attachments as $attachment) {
+    // Get the attachment ID
+    $attachment_id = $attachment->ID;
+
+    // Get the path to the SVG file
+    $file_path = get_attached_file($attachment_id);
+
+    // Get the SVG dimensions using SimpleXML
+    $svg = simplexml_load_file($file_path);
+    $attributes = $svg->attributes();
+    $width = (int) $attributes['width'];
+    $height = (int) $attributes['height'];
+
+    print_r('test: ');
+    print_r($height);
+
+    // Update the attachment metadata
+    $metadata = array(
+      'width'  => $width,
+      'height' => $height,
+    );
+    wp_update_attachment_metadata($attachment_id, $metadata);
+  }
+}
+add_action('wp', 'update_svg_metadata', 10, 2);
+

@@ -76,7 +76,7 @@
       fields.color['color'] == 'custom' and fields.color['custom_color'] ? 'color: ' ~ fields.color['custom_color'] ~ ';',
     ]
   } %}
-{% elseif site_logo %}
+{% elseif fields.branding_image.url %}
   {% if fields.non_svg_options.use_bg_image == true %}
     {% set image_key = 'logo_bg_img_src' %}
   {% else %}
