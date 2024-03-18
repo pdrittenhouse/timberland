@@ -1,5 +1,6 @@
 .block-branding {
   margin: 0 auto;
+  max-width: 100%;
 
   &.branding {
 
@@ -10,6 +11,7 @@
 
   .branding--site-logo {
     height: 100%;
+    margin: 0 auto;
 
     > a {
       display: block;
