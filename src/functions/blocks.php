@@ -134,6 +134,14 @@ function dream_block_render($block, $content = '', $is_preview = false, $post_id
   // Store block context
   $context['block_context'] = $acf_context;
 
+  // Menus
+  // Adding menus to block context so they're available within widget areas
+  $context['menu_primary'] = new Timber\Menu( 'primary' );;
+  $context['menu_secondary'] = new Timber\Menu( 'secondary' );;
+  $context['menu_footer'] = new Timber\Menu( 'footer' );;
+  $context['menu_utility'] = new Timber\Menu( 'utility' );;
+  $context['menu_social'] = new Timber\Menu( 'social' );;
+
   // Replace acf keys with human readable acf field names
   if( !empty( $context['block_context']['acf/fields'] ) ) {
     $context['block_context']['acf/fields'] = replace_acf_keys_with_names( $context['block_context']['acf/fields'] );

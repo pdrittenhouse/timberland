@@ -1,0 +1,23 @@
+.block-branding {
+  margin: 0 auto;
+
+  &.branding {
+
+    .site-header & {
+      margin: 0 auto;
+    }
+  }
+
+  .branding--site-logo {
+    height: 100%;
+
+    > a {
+      display: block;
+      height: 100%;
+    }
+  }
+
+  .branding--logo-img {
+    height: 100%;
+  }
+}

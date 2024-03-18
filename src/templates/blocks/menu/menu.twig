@@ -69,15 +69,30 @@
 
 {% if fields.type == 'menu' %}
 
+  {% if fields.menu == 'primary' %}
+    {% set selected_menu = menu_primary.get_items %}
+  {% elseif fields.menu == 'secondary' %}
+    {% set selected_menu = menu_secondary.get_items %}
+  {% elseif fields.menu == 'footer' %}
+    {% set selected_menu = menu_footer.get_items %}
+  {% elseif fields.menu == 'utility' %}
+    {% set selected_menu = menu_utility.get_items %}
+  {% endif %}
+
   {% include "partials/menus/menu.twig" with {
-    'menu': menu_primary.get_items,
+    'menu': selected_menu,
     'navbar_id': fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'menu' ~ fields.id['id_gen'],
     'nav_id': fields.nav_id['id'] ? fields.nav_id['id'] : fields.nav_id['id_gen'] ? 'menu' ~ fields.nav_id['id_gen'],
     'nav_element': fields.nav_element,
     'hover_dropdown': fields.hover_dropdown,
     'navbar_breakpoint': fields.breakpoint.breakpoint|default('xs'),
     'breakpoints': sass_data['scssBreakpoints'],
-    'navbar_classes': ['block-menu'],
+    'navbar_classes': [
+      'block-menu',
+      fields.type == 'menu' ? 'menu-nav',
+      fields.type == 'social' ? 'menu-social',
+      fields.type == 'custom' ? 'menu-custom',
+    ],
     'nav_classes': [
       block_classes
     ]
