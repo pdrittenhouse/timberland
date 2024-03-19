@@ -1,0 +1,88 @@
+{#
+/**
+ * Block Name:
+ *
+ * This is the template that displays the  block.
+ */
+#}
+
+{#{% if is_preview %}#}
+{#<p>Some editor instructions here.</p>#}
+{#{% endif %}#}
+
+{#{{ block['className'] }}#}
+{#{{ block['align'] ? 'align-' ~ block['align'] }}#}
+{#{{ block['align_text']}}#}
+{#{{ block['align_content'] }}#}
+{#{{ block['full_height'] }}#}
+
+{# Parent Block Data - ACF <= v.5.9 #}
+{#{% set parent = function('get_parent_block', block['id'], block['name']) %}#}
+{# Parent Block Data - ACF >= v.6.0 #}
+{#{{ parent_block_data['data'] }}#}
+{# Block Context #}
+{#{{ block_context['acf/fields'] }}#}
+{# ACF Options Fields #}
+{#{{ options }}#}
+{# ACF Fields #}
+{#{{ fields }}#}
+{# Site Data #}
+{#{{ site }}#}
+{# SASS Data #}
+{#{{ sass_data }}#}
+{# Post Data #}
+{#{{ block_post }}#}
+{# Query #}
+{#{{ query }}#}
+{# Query Posts #}
+{#{{ query_posts }}#}
+
+{% set block_classes = block_classes|default([])|merge([
+  'block-copyright',
+  block['className'],
+  fields.color['color'] == 'palette' and fields.color['theme_color'] ? 'text-' ~ fields.color['theme_color'],
+]) | sort | join(' ') | trim %}
+
+{% set block_styles = block_styles|default([])|merge([
+  fields.font_size.font_size ? 'font-size:' ~ fields.font_size.font_size.value ~ fields.font_size.font_size.unit ~ ';',
+  fields.color['color'] == 'custom' and fields.color['custom_color'] ? 'color: ' ~ fields.color['custom_color'] ~ ';',
+  fields.alignment.text_align ? 'text-align:' ~ fields.alignment.text_align ~ ';'
+]) | sort | join(' ') | trim %}
+
+{% set block_attributes = block_attributes|default([])|merge([
+  block_styles | length >= 1 ? 'style="' ~ block_styles ~ '"',
+]) | sort | join(' ') | trim %}
+
+<div class="{{ block_classes }}" {{ block_attributes }}>
+  {% for element in fields.copyright %}
+    {% if element.acf_fc_layout == 'copyright_label' %}
+      {% if element.link_label == true %}
+        <a class="copyright-label" href="{{ element.link_to == 'internal' ? element.internal_link : element.external_link['url']}}" {{ element.link_to == 'external' and element.external_link['target'] ? 'target="' ~ element.external_link['target'] ~ '"'}} {{ element.external_link['title'] ? 'title="' ~ element.external_link['title'] ~ '"' }}>
+      {% else %}
+        <span class="copyright-label">
+      {% endif %}
+        {{ element.label }}
+      {% if element.link_label == true %}
+        </a>
+      {% else %}
+        </span>
+      {% endif %}
+    {% elseif element.acf_fc_layout == 'copyright_icon' %}
+      <span class="copyright-icon">{{ element.icon | default('&nbsp;') }}</span>
+    {% elseif element.acf_fc_layout == 'copyright_date' %}
+      <span class="copyright-date">{{ now|date(element.date_format) }}</span>
+    {% elseif element.acf_fc_layout == 'copyright_site_name' %}
+      {% if element.link_site_name == true %}
+        <a class="copyright-site" href="{{ element.link_to == 'internal' ? element.internal_link : element.external_link['url'] }}" {{ element.link_to == 'external' and element.external_link['target'] ? 'target="' ~ element.external_link['target'] ~ '"'}} {{ element.external_link['title'] ? 'title="' ~ element.external_link['title'] ~ '"' }}>
+      {% else %}
+        <span class="copyright-site">
+      {% endif %}
+        {{ site.name }}
+      {% if element.link_site_name == true %}
+        </a>
+      {% else %}
+        </span>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+</div>
