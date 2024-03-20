@@ -123,7 +123,7 @@
     {% endif %}
   {% endblock left %}
   {% block button_content %}
-    {% if close_button != 'black' and close_button != 'white' %}
+    {% if close_button != 'black' and close_button != 'white' and hide_label != true %}
       <span class="button--label">
         <InnerBlocks allowedBlocks="{{ ['acf/button-text'] | json_encode() | escape('html_attr') }}" template="{{ [['acf/button-text']] | json_encode() | escape('html_attr') }}" templateLock="all" />
       </span>
