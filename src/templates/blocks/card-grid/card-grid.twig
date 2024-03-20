@@ -84,10 +84,10 @@
   fields.card_grid_width['width']['width']['value'] ? 'width: ' ~ fields.card_grid_width['width']['width']['value'] ~ fields.card_grid_width['width']['width']['unit'] ~ ';',
   fields.card_grid_width['width']['min_width'] ? 'min-width: ' ~ fields.card_grid_width['width']['min_width'] ~ 'px;',
   fields.card_grid_width['width']['max_width'] ? 'max-width: ' ~ fields.card_grid_width['width']['max_width'] ~ 'px;',
-  fields.card_grid_margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : fields.card_grid_margin['margin']['top']['top'] >= 0 ? 'margin-top: ' ~ fields.card_grid_margin['margin']['top']['top'] ~ 'px;',
-  fields.card_grid_margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.card_grid_margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.card_grid_margin['margin']['bottom']['bottom'] ~ 'px;',
-  fields.card_grid_margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : fields.card_grid_margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.card_grid_margin['margin']['left']['left'] ~ 'px;',
-  fields.card_grid_margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : fields.card_grid_margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.card_grid_margin['margin']['right']['right'] ~ 'px;'
+  fields.card_grid_margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : fields.card_grid_margin['margin']['top']['top'] is not empty ? 'margin-top: ' ~ fields.card_grid_margin['margin']['top']['top'] ~ 'px;',
+  fields.card_grid_margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.card_grid_margin['margin']['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ fields.card_grid_margin['margin']['bottom']['bottom'] ~ 'px;',
+  fields.card_grid_margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : fields.card_grid_margin['margin']['left']['left'] is not empty ? 'margin-left: ' ~ fields.card_grid_margin['margin']['left']['left'] ~ 'px;',
+  fields.card_grid_margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : fields.card_grid_margin['margin']['right']['right'] is not empty ? 'margin-right: ' ~ fields.card_grid_margin['margin']['right']['right'] ~ 'px;'
 ]) | sort | join(' ') | trim %}
 
 {% set grid_id = fields.card_grid_id['id_type'] == 'generated' ? 'cardgrid' ~ fields.card_grid_id['id_gen'] : fields.card_grid_id['id_type'] == 'custom' ? fields.card_grid_id['id'] %}
