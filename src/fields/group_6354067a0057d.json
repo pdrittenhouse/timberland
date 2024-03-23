@@ -66,19 +66,21 @@
                         "class": "",
                         "id": ""
                     },
+                    "admin_only": 0,
                     "choices": {
                         "briefcase": "Briefcase",
                         "game-controller": "Game Controller",
                         "laptop": "Laptop",
                         "mobile-device": "Mobile Phone",
-                        "close": "Close"
+                        "close": "Close",
+                        "search": "Search"
                     },
                     "default_value": "null",
-                    "allow_null": 1,
+                    "return_format": "value",
                     "multiple": 0,
+                    "allow_null": 1,
                     "ui": 0,
                     "ajax": 0,
-                    "return_format": "value",
                     "placeholder": ""
                 },
                 {
@@ -270,5 +272,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1709504199
+    "modified": 1711166387
 }
