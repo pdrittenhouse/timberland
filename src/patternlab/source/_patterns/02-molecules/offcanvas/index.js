@@ -25,8 +25,21 @@ const offcanvasEnable = () => {
   });
 };
 
+const moveOffcanvas = () => {
+  const offcanvases = [].slice.call(document.querySelectorAll('.offcanvas'));
+
+  offcanvases.forEach(offcanvas => {
+    // console.log(offcanvas);
+    // const canvas = offcanvas.outerHtml;
+    // console.log(canvas);
+
+    // offcanvas.remove();
+    document.body.appendChild(offcanvas);
+  });
+};
 $(document).ready(() => {
   offcanvasEnable();
+  moveOffcanvas();
 });
 
 export default offcanvasEnable;

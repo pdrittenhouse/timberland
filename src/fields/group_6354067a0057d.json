@@ -71,6 +71,7 @@
                         "briefcase": "Briefcase",
                         "game-controller": "Game Controller",
                         "laptop": "Laptop",
+                        "menu": "Menu",
                         "mobile-device": "Mobile Phone",
                         "close": "Close",
                         "search": "Search"
@@ -273,5 +274,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1711223794
+    "modified": 1711312309
 }
