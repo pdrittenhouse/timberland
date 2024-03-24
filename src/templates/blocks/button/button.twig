@@ -117,7 +117,7 @@
         {% set color = fields.icon_left.icon_color.color == 'palette' ? 'color: var(--' ~ fields.icon_left.icon_color.theme_color ~ ');' : fields.icon_left.icon_color.color == 'custom' ? 'color: ' ~ fields.icon_left.icon_color.custom_color ~ ';' %}
         {% set fontsize = fields.icon_left.size ? 'font-size: ' ~ fields.icon_left.size ~ 'px;' %}
         <span class="icon">
-          <i class="{{ fields.icon_left.fa_icon_style }} fa-{{ fields.icon_left.fa_icon }}" {{ color or fontsize or left_offset ? 'style="' ~ color ~ fontsize ~ left_offset ~ '"' }}></i>
+          <i class="{{ fields.icon_left.fa_icon_style }} {{ fields.icon_left.fa_icon }}" {{ color or fontsize or left_offset ? 'style="' ~ color ~ fontsize ~ left_offset ~ '"' }}></i>
         </span>
       {% endif %}
     {% endif %}
@@ -150,7 +150,7 @@
         {% set color = fields.icon_right.icon_color.color == 'palette' ? 'color: var(--' ~ fields.icon_right.icon_color.theme_color ~ ');' : fields.icon_right.icon_color.color == 'custom' ? 'color: ' ~ fields.icon_right.icon_color.custom_color ~ ';' %}
         {% set fontsize = fields.icon_right.size ? 'font-size: ' ~ fields.icon_right.size ~ 'px;' %}
         <span class="icon">
-          <i class="{{ fields.icon_right.fa_icon_style }} fa-{{ fields.icon_right.fa_icon }}" {{ color or fontsize or right_offset ? 'style="' ~ color ~ fontsize ~ right_offset ~ '"' }}></i>
+          <i class="{{ fields.icon_right.fa_icon_style }} {{ fields.icon_right.fa_icon }}" {{ color or fontsize or right_offset ? 'style="' ~ color ~ fontsize ~ right_offset ~ '"' }}></i>
         </span>
       {% endif %}
     {% endif %}

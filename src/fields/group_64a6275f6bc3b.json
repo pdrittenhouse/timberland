@@ -30,7 +30,10 @@
                 "shop_order": "shop_order",
                 "shop_order_refund": "shop_order_refund",
                 "shop_coupon": "shop_coupon",
-                "shop_order_placehold": "shop_order_placehold"
+                "shop_order_placehold": "shop_order_placehold",
+                "acf-ui-options-page": "acf-ui-options-page",
+                "mailpoet_page": "mailpoet_page",
+                "patterns_ai_data": "patterns_ai_data"
             },
             "default_value": false,
             "return_format": "value",
@@ -527,9 +530,14 @@
             },
             "admin_only": 0,
             "clone": [
+                "field_635406cfd4432",
                 "field_635406cfd4433",
+                "field_635406cfd4434",
+                "field_635406cfd4435",
                 "field_635406cfd4437",
-                "field_635406cfd4438"
+                "field_635406cfd4438",
+                "field_6354b94f6bf6c",
+                "field_6354ba126bf6d"
             ],
             "display": "group",
             "layout": "block",
@@ -555,5 +563,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1709503964
+    "modified": 1711223356
 }

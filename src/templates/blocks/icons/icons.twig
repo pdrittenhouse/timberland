@@ -31,6 +31,9 @@
 
 <div class="{{ icon_group_classes }}" {{ icon_group_styles ? 'style="' ~ icon_group_styles ~ '"'}}>
   {% for icon in fields.icon_list %}
+    {{ function('print_r', '<pre>') }}
+    {{ function('print_r', icon) }}
+    {{ function('print_r', '</pre>') }}
     {% set v_offset = icon.icon.icon.vertical_offset ? icon.icon.icon.vertical_offset ~ 'px' : '0px' %}
     {% set h_offset = icon.icon.icon.horizontal_offset ? icon.icon.icon.horizontal_offset ~ 'px' : '0px' %}
     {% set offset = h_offset or v_offset ? 'transform: translate(' ~ h_offset ~ ' , ' ~ v_offset ~ ');'  %}
@@ -67,7 +70,7 @@
       {% endif %}
     {% elseif icon.icon.icon.type == "font-awesome"%}
       {% if icon.icon.icon.link  %}
-        {% set color = icon.icon.icon.color == 'custom' ? 'color: ' ~ icon.icon.icon.custom_color ~ ';'  %}
+        {% set color = icon.icon.icon.icon_color.color == 'custom' ? 'color: ' ~ icon.icon.icon.icon_color.custom_color ~ ';'  %}
         {% include '@atoms/svg/_svg~link.tpl.twig' with {
           url: icon.icon.icon.link['url'],
           target: icon.icon.icon.link['target'],
@@ -81,10 +84,10 @@
           svg_link_other_attributes: color or offset ? 'style="' ~ color ~ ' ' ~ offset ~ '"'
         } %}
       {% else %}
-        {% set color = icon.icon.icon.color == 'palette' ? 'color: var(--' ~ icon.icon.icon.theme_color ~ ');' : icon.icon.icon.color == 'custom' ? 'color: ' ~ icon.icon.icon.custom_color ~ ';' %}
+        {% set color = icon.icon.icon.icon_color.color == 'palette' ? 'color: var(--' ~ icon.icon.icon.icon_color.theme_color ~ ');' : icon.icon.icon.icon_color.color == 'custom' ? 'color: ' ~ icon.icon.icon.icon_color.custom_color ~ ';' %}
         {% set fontsize = icon.icon.icon.size ? 'font-size: ' ~ icon.icon.icon.size ~ 'px;' %}
         <span class="icon">
-          <i class="{{ icon.icon.icon.fa_icon_style }} fa-{{ icon.icon.icon.fa_icon }}" {{ color or fontsize or offset ? 'style="' ~ color ~ fontsize ~ offset ~ '"' }}></i>
+          <i class="{{ icon.icon.icon.fa_icon_style }} {{ icon.icon.icon.fa_icon }}" {{ color or fontsize or offset ? 'style="' ~ color ~ fontsize ~ offset ~ '"' }}></i>
         </span>
       {% endif %}
     {% endif %}

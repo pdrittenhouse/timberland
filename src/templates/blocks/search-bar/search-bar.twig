@@ -129,9 +129,6 @@
 {% set btn_margin_left = fields.button.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : parent_block_data['name'] != 'acf/group' and fields.button.margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.button.margin['margin']['left']['left'] ~ 'px;' %}
 {% set btn_margin_right = fields.button.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : parent_block_data['name'] != 'acf/group' and fields.button.margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.button.margin['margin']['right']['right'] ~ 'px;' %}
 
-{# Set icon styles #}
-{% set icon_color = fields.icon.icon_color.custom_color ? 'color: ' ~ fields.icon.icon_color.custom_color ~ ';'  %}
-
 {% set block_classes = block_classes|default([])|merge([
   'block-search',
   fields.wrapper_background_color['bg_color'] == 'palette' and fields.wrapper_background_color['bg_theme_color'] ? 'bg-' ~ fields.wrapper_background_color['bg_theme_color'],
@@ -141,6 +138,10 @@
 {% set block_attributes = block_attributes|default([])|merge([
   wrapper_bg_color or wrapper_border_top_width or wrapper_border_top_style or wrapper_border_top_color or wrapper_border_bottom_width or wrapper_border_bottom_style or wrapper_border_bottom_color or wrapper_border_left_width or wrapper_border_left_style or wrapper_border_left_color or wrapper_border_right_width or wrapper_border_right_style or wrapper_border_right_color or wrapper_border_top_left_radius or wrapper_border_top_right_radius or wrapper_border_bottom_left_radius or wrapper_border_bottom_right_radius or wrapper_width or wrapper_min_width or wrapper_max_width or wrapper_margin_top or wrapper_margin_bottom or wrapper_margin_left or wrapper_margin_right ? 'style="' ~ wrapper_bg_color ~ wrapper_border_top_width ~ wrapper_border_top_style ~ wrapper_border_top_color ~ wrapper_border_bottom_width ~ wrapper_border_bottom_style ~ wrapper_border_bottom_color ~ wrapper_border_left_width ~ wrapper_border_left_style ~ wrapper_border_left_color ~ wrapper_border_right_width ~ wrapper_border_right_style ~ wrapper_border_right_color ~ wrapper_border_top_left_radius ~ wrapper_border_top_right_radius ~ wrapper_border_bottom_left_radius ~ wrapper_border_bottom_right_radius ~ wrapper_width ~ wrapper_min_width ~ wrapper_max_width ~ wrapper_margin_top ~ wrapper_margin_bottom ~ wrapper_margin_left ~ wrapper_margin_right ~ '"'
 ]) | sort | join(' ') | trim %}
+
+{% set icon_v_offset = fields.icon.vertical_offset ? fields.icon.vertical_offset ~ 'px' : '0px' %}
+{% set icon_h_offset = fields.icon.horizontal_offset ? fields.icon.horizontal_offset ~ 'px' : '0px' %}
+{% set icon_offset = icon_h_offset or icon_v_offset ? 'transform: translate(' ~ icon_h_offset ~ ' , ' ~ icon_v_offset ~ ');' %}
 
 <div class="{{ block_classes }}" {{ block_attributes }}>
   {# {{ function('get_search_form') }} #}
@@ -186,9 +187,15 @@
     icon_width: fields.icon.size ? fields.icon.size ~ 'px' : '16px',
     icon_height: fields.icon.size ? fields.icon.size ~ 'px' : '16px',
     icon_name: fields.icon.icon|default('search'),
-    icon_color: fields.icon.icon_color.theme_color ? fields.icon.icon_color.theme_color,
+    icon_type: fields.icon.type,
+    fa_icon_style: fields.icon.fa_icon_style,
+    fa_icon: fields.icon.fa_icon,
+    icon_color: fields.icon.icon_color.color == 'palette' ? fields.icon.icon_color.theme_color,
     icon_styles: [
-      icon_color ? icon_color
+      fields.icon.icon_color.color == 'custom' ? 'color: ' ~ fields.icon.icon_color.custom_color ~ ';',
+      fields.icon.type == 'font-awesome' and fields.icon.icon_color.color == 'palette' ?  'color: var(--' ~ fields.icon.icon_color.theme_color ~ ');',
+      fields.icon.type == 'font-awesome' ? 'font-size:' ~ fields.icon.size|default(16) ~ 'px;',
+      icon_offset ? icon_offset
     ]
   } %}
 </div>

@@ -63,6 +63,7 @@ define('TIMBER_CACHE_TIME', CACHE_EXPIRATION_TIME);
  * Include settings from /src/functions
 */
 $dream_includes = array(
+  "paths.php",
   "config.php",
   "menus.php",
   "theme-support.php",
@@ -70,7 +71,6 @@ $dream_includes = array(
   "gzip.php",
   "scripts.php",
   "styles.php",
-  "paths.php",
   "vars.php",
   "data.php",
   "filters.php",

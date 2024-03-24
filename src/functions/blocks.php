@@ -134,13 +134,29 @@ function dream_block_render($block, $content = '', $is_preview = false, $post_id
   // Store block context
   $context['block_context'] = $acf_context;
 
+  // Paths
+  // Adding paths to block context so they're available within widget areas
+  $context['paths'] = array(
+    'protons' => get_template_directory_uri() . "/src/patternlab/source/_patterns/00-protons",
+    'atoms' => get_template_directory_uri() . "/src/patternlab/source/_patterns/01-atoms",
+    'molecules' => get_template_directory_uri() . "/src/patternlab/source/_patterns/02-molecules",
+    'organisms' => get_template_directory_uri() . "/src/patternlab/source/_patterns/03-organisms",
+    'templates' => get_template_directory_uri() . "/src/patternlab/source/_patterns/04-templates",
+    'pages' => get_template_directory_uri() . "/src/patternlab/source/_patterns/05-pages",
+    'assets' => get_template_directory_uri() . "/dist/wp",
+    'styles' => get_template_directory_uri() . "/dist/wp/css",
+    'images' => get_template_directory_uri() . "/dist/wp/img",
+    'fonts' => get_template_directory_uri() . "/dist/wp/fonts",
+    'scripts' => get_template_directory_uri() . "/dist/wp/js",
+  );
+
   // Menus
   // Adding menus to block context so they're available within widget areas
-  $context['menu_primary'] = new Timber\Menu( 'primary' );;
-  $context['menu_secondary'] = new Timber\Menu( 'secondary' );;
-  $context['menu_footer'] = new Timber\Menu( 'footer' );;
-  $context['menu_utility'] = new Timber\Menu( 'utility' );;
-  $context['menu_social'] = new Timber\Menu( 'social' );;
+  $context['menu_primary'] = new Timber\Menu( 'primary' );
+  $context['menu_secondary'] = new Timber\Menu( 'secondary' );
+  $context['menu_footer'] = new Timber\Menu( 'footer' );
+  $context['menu_utility'] = new Timber\Menu( 'utility' );
+  $context['menu_social'] = new Timber\Menu( 'social' );
 
   // Replace acf keys with human readable acf field names
   if( !empty( $context['block_context']['acf/fields'] ) ) {

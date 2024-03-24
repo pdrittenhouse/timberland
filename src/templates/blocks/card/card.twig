@@ -131,6 +131,10 @@
 
 {% set template = fields.horizontal == true ? '_card~horizontal.tpl.twig' : '_card.tpl.twig'  %}
 
+{% set icon_v_offset = fields.card_icon.vertical_offset ? fields.card_icon.vertical_offset ~ 'px' : '0px' %}
+{% set icon_h_offset = fields.card_icon.horizontal_offset ? fields.card_icon.horizontal_offset ~ 'px' : '0px' %}
+{% set icon_offset = icon_h_offset or icon_v_offset ? 'transform: translate(' ~ icon_h_offset ~ ' , ' ~ icon_v_offset ~ ');' %}
+
 {% if parent_block_data['name'] == 'acf/card-grid' and block_context['acf/fields']['type'] == 'row' %}
 <div class="col">
 {% endif %}
@@ -150,7 +154,8 @@
     width: fields.card_icon['size'] ? fields.card_icon['size'] ~ 'px',
     height: fields.card_icon['size'] ? fields.card_icon['size'] ~ 'px',
     svg_styles: [
-      fields.card_icon['icon_color']['color']  == 'custom' and fields.card_icon['icon_color']['custom_color'] ? 'color: ' ~ fields.card_icon['icon_color']['custom_color'] ~ ';',
+      fields.card_icon['icon_color']['color'] == 'custom' and fields.card_icon['icon_color']['custom_color'] ? 'color: ' ~ fields.card_icon['icon_color']['custom_color'] ~ ';',
+      icon_offset ? icon_offset,
     ]
   },
   card_label: fields.label,
@@ -293,6 +298,36 @@
     fields.flip_card == true ? padding_right,
   ]
 } %}
+    {% block card_icon %}
+      {% if fields.card_icon.type == 'custom' and card_icon.name is not empty %}
+        <div class="card-icon">
+          {% include '@atoms/svg/_svg~icon.tpl.twig' with {
+            name: card_icon.name,
+            fill: card_icon.fill,
+            width: card_icon.width,
+            height: card_icon.height,
+            svg_classes: card_icon.svg_classes,
+            svg_other_classes: card_icon.svg_other_classes,
+            svg_styles: card_icon.svg_styles,
+            svg_other_styles: card_icon.svg_other_styles,
+            svg_attributes: card_icon.svg_attributes,
+            svg_other_attributes: card_icon.svg_other_attributes,
+          } %}
+        </div>
+      {% elseif fields.card_icon.type == 'font-awesome' %}
+        {% set icon_color = fields.card_icon['icon_color']['color'] == 'palette' and fields.card_icon['icon_color']['theme_color'] ? 'color: var(--' ~ fields.card_icon['icon_color']['theme_color'] ~ ');' : fields.card_icon['icon_color']['color'] == 'custom' and fields.card_icon['icon_color']['custom_color'] ? 'color:' ~ fields.card_icon['icon_color']['custom_color'] ~ ';' %}
+
+        {% set icon_styles = [
+          icon_color ? icon_color,
+          icon_offset ? icon_offset
+        ]|sort|join|trim %}
+
+        <div class="card-icon">
+          <i class="{{ fields.card_icon.fa_icon_style }} {{ fields.card_icon.fa_icon }}" {{ icon_styles ? 'style="' ~ icon_styles ~ '"' }}></i>
+        </div>
+      {% endif %}
+    {% endblock card_icon %}
+
     {% block card_body %}
         <div class="card-body {{ no_body_padding == true ? 'p-0' }}">
             {% block card_text %}

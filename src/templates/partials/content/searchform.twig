@@ -1,3 +1,7 @@
+{% set icon_type = icon_type|default('custom') %}
+
+{% set color = icon.icon.icon.color == 'custom' ? 'color: ' ~ icon.icon.icon.custom_color ~ ';'  %}
+
 {% embed '@atoms/form/_form.tpl.twig' with {
   attributes: 'role="search"',
   name: 'searchform',
@@ -38,7 +42,7 @@
         hide_label: hide_button_label
       } %}
         {% block left %}
-          {% if hide_icon != true %}
+          {% if hide_icon != true and icon_type == 'custom' %}
             {% include '@atoms/svg/_svg~icon.tpl.twig' with {
               svg_other_classes: 'search-icon',
               svg_classes: icon_classes,
@@ -52,6 +56,10 @@
               name: icon_name|default('search'),
               fill: icon_color|default('black'),
             } %}
+          {% elseif hide_icon != true and icon_type == 'font-awesome' %}
+            <span class="icon">
+              <i class="{{ fa_icon_style }} {{ fa_icon }}" {{ icon_styles ? 'style="' ~ icon_styles|sort|join|trim ~ '"' }}></i>
+            </span>
           {% endif %}
         {% endblock left %}
       {% endembed %}
