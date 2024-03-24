@@ -31,9 +31,6 @@
 
 <div class="{{ icon_group_classes }}" {{ icon_group_styles ? 'style="' ~ icon_group_styles ~ '"'}}>
   {% for icon in fields.icon_list %}
-    {{ function('print_r', '<pre>') }}
-    {{ function('print_r', icon) }}
-    {{ function('print_r', '</pre>') }}
     {% set v_offset = icon.icon.icon.vertical_offset ? icon.icon.icon.vertical_offset ~ 'px' : '0px' %}
     {% set h_offset = icon.icon.icon.horizontal_offset ? icon.icon.icon.horizontal_offset ~ 'px' : '0px' %}
     {% set offset = h_offset or v_offset ? 'transform: translate(' ~ h_offset ~ ' , ' ~ v_offset ~ ');'  %}
