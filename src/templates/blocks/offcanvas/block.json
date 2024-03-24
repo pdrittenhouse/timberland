@@ -1,0 +1,65 @@
+{
+  "name": "acf/offcanvas",
+  "title": "Offcanvas",
+  "description": "An offcanvas block.",
+  "category": "dream",
+  "icon": "menu",
+  "keywords": ["offcanvas", "menu", "slide"],
+  "attributes": {},
+  "providesContext": {
+    "acf/fields": "data"
+  },
+  "usesContext": [ "acf/fields" ],
+  "supports": {
+    "jsx": true,
+    "align": true,
+    "alignContent": true,
+    "alignText": true,
+    "anchor": true,
+    "className": true,
+    "multiple": true,
+    "html": false,
+    "inserter": true,
+    "fullHeight": false,
+    "color": {
+      "text": false,
+      "background": true,
+      "link": false,
+      "gradients": true,
+      "linkColor": true
+    },
+    "typography": {
+      "fontSize": true
+    }
+  },
+  "styles": [
+    { "name": "default", "label": "Default", "isDefault": true },
+    { "name": "other", "label": "Other" }
+  ],
+  "example": {
+    "attributes": {
+      "message": "This is a notice!"
+    }
+  },
+  "variations": [
+    {
+      "name": "example",
+      "title": "Example",
+      "attributes": {
+        "message": "This is an example!"
+      }
+    }
+  ],
+  "editorScript": "./index.js",
+  "script": "./script.js",
+  "editorStyle": "./index.css",
+  "style": "./style.css",
+  "viewScript": [ "file:./view.js", "example-shared-view-script" ],
+  "acf": {
+    "mode": "preview",
+    "renderCallback": "dream_block_render",
+    "postTypes": true,
+    "parent": "acf/blockname",
+    "reusable": true
+  }
+}

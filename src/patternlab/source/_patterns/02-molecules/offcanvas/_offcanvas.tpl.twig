@@ -99,27 +99,29 @@
   {%  endblock control %}
 
   <div class="{{ offcanvas_classes }}" {{ offcanvas_attributes }}>
-    {% block offcanvas_content %}
-    {% endblock offcanvas_content %}
-    <div class="offcanvas-header">
-      {% block offcanvas_header %}
-        {% if offcanvas_title %}
-          <h5 class="offcanvas-title" id="{{ offcanvas_id ? offcanvas_id ~ '_label' : offcanvasId ~ '_label' }}">{{ offcanvas_title }}</h5>
-        {% endif %}
+    {% block offcanvas_header %}
+      {% if offcanvas_title is not empty or offcanvas_close_button is not empty %}
+        <div class="offcanvas-header {{ offcanvas_close_button and offcanvas_title is empty ? 'justify-content-end' }}">
+          {% if offcanvas_title %}
+            <h5 class="offcanvas-title" id="{{ offcanvas_id ? offcanvas_id ~ '_label' : offcanvasId ~ '_label' }}">{{ offcanvas_title }}</h5>
+          {% endif %}
 
-        {% if offcanvas_close_button %}
-          {% include '@atoms/button/_button.tpl.twig' with {
-            close_button: offcanvas_close_button,
-            button_other_classes: 'text-reset',
-            button_attributes: [
-              'data-bs-dismiss="offcanvas"'
-            ]
-          } %}
-        {% endif %}
-      {% block offcanvas_header %}
-    </div>
+          {% if offcanvas_close_button %}
+            {% include '@atoms/button/_button.tpl.twig' with {
+              close_button: offcanvas_close_button,
+              button_other_classes: 'text-reset',
+              button_attributes: [
+                'data-bs-dismiss="offcanvas"'
+              ]
+            } %}
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endblock offcanvas_header %}
     <div class="offcanvas-body">
-      {{ offcanvas_content }}
+      {% block offcanvas_content %}
+        {{ offcanvas_content }}
+      {% endblock offcanvas_content %}
     </div>
   </div>
 

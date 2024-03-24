@@ -1,0 +1,220 @@
+{#
+/**
+ * Block Name:
+ *
+ * This is the template that displays the  block.
+ */
+#}
+
+{#{% if is_preview %}#}
+{#<p>Some editor instructions here.</p>#}
+{#{% endif %}#}
+
+{#{{ block['className'] }}#}
+{#{{ block['align'] ? 'align-' ~ block['align'] }}#}
+{#{{ block['align_text']}}#}
+{#{{ block['align_content'] }}#}
+{#{{ block['full_height'] }}#}
+
+{# Parent Block Data - ACF <= v.5.9 #}
+{#{% set parent = function('get_parent_block', block['id'], block['name']) %}#}
+{# Parent Block Data - ACF >= v.6.0 #}
+{#{{ parent_block_data['data'] }}#}
+{# Block Context #}
+{#{{ block_context['acf/fields'] }}#}
+{# ACF Options Fields #}
+{#{{ options }}#}
+{# ACF Fields #}
+{#{{ fields }}#}
+{# Site Data #}
+{#{{ site }}#}
+{# SASS Data #}
+{#{{ sass_data }}#}
+{# Post Data #}
+{#{{ block_post }}#}
+{# Query #}
+{#{{ query }}#}
+{# Query Posts #}
+{#{{ query_posts }}#}
+
+{% set block_classes = block_classes|default([])|merge([
+  'block-offcanvas',
+  block['className']
+]) | sort | join(' ') | trim %}
+
+{% set block_styles = block_styles|default([])|merge([
+  fields.background_color.bg_color == 'custom' ? 'background-color: ' ~ fields.background_color.bg_custom_color ~ ';',
+  fields.color.color == 'custom' ? 'color: ' ~ fields.color.custom_color ~ ';',
+]) | sort | join(' ') | trim %}
+
+{% set button_styles = button_styles|default([])|merge([
+  fields.button.background_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.button.background_color['bg_custom_color'] ~ ';',
+  fields.button.text_color['color'] == 'custom' ? 'color: ' ~ fields.button.text_color['custom_color'] ~ ';',
+  fields.button['text_transform']['text_transform'] ? 'text-transform: ' ~ fields.button['text_transform']['text_transform'] ~ ';',
+  fields.button['padding']['padding']['top'] >= 0 ? 'padding-top: ' ~ fields.button['padding']['padding']['top'] ~ 'px;',
+  fields.button['padding']['padding']['bottom'] >= 0 ? 'padding-bottom: ' ~ fields.button['padding']['padding']['bottom'] ~ 'px;',
+  fields.button['padding']['padding']['left'] >= 0 ? 'padding-left: ' ~ fields.button['padding']['padding']['left'] ~ 'px;',
+  fields.button['padding']['padding']['right'] >= 0 ? 'padding-right: ' ~ fields.button['padding']['padding']['right'] ~ 'px;',
+  fields.button['border']['top']['width'] >= 0 ? 'border-top-width: ' ~ fields.button['border']['top']['width'] ~ 'px;',
+  fields.button['border']['top']['style'] ? 'border-top-style: ' ~ fields.button['border']['top']['style'] ~ ';',
+  fields.button['border']['top']['color'] == 'custom' and fields.button['border']['top']['custom_color'] ? 'border-top-color: ' ~ fields.button['border']['top']['custom_color'] ~ ';' : fields.button['border']['top']['color'] == 'palette' and fields.button['border']['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.button['border']['top']['theme_color'] ~ ');',
+  fields.button['border']['bottom']['width'] >= 0 ? 'border-bottom-width: ' ~ fields.button['border']['bottom']['width'] ~ 'px;',
+  fields.button['border']['bottom']['style'] ? 'border-bottom-style: ' ~ fields.button['border']['bottom']['style'] ~ ';',
+  fields.button['border']['bottom']['color'] == 'custom' and fields.button['border']['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.button['border']['bottom']['custom_color'] ~ ';' : fields.button['border']['bottom']['color'] == 'palette' and fields.button['border']['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.button['border']['bottom']['theme_color'] ~ ');',
+  fields.button['border']['left']['width'] >= 0 ? 'border-left-width: ' ~ fields.button['border']['left']['width'] ~ 'px;',
+  fields.button['border']['left']['style'] ? 'border-left-style: ' ~ fields.button['border']['left']['style'] ~ ';',
+  fields.button['border']['left']['color'] == 'custom' and fields.button['border']['left']['custom_color'] ? 'border-left-color: ' ~ fields.button['border']['left']['custom_color'] ~ ';' : fields.button['border']['left']['color'] == 'palette' and fields.button['border']['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.button['border']['left']['theme_color'] ~ ');',
+  fields.button['border']['right']['width'] >= 0 ? 'border-right-width: ' ~ fields.button['border']['right']['width'] ~ 'px;',
+  fields.button['border']['right']['style'] ? 'border-right-style: ' ~ fields.button['border']['right']['style'] ~ ';',
+  fields.button['border']['right']['color'] == 'custom' and fields.button['border']['right']['custom_color'] ? 'border-right-color: ' ~ fields.button['border']['right']['custom_color'] ~ ';' : fields.button['border']['right']['color'] == 'palette' and fields.button['border']['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.button['border']['right']['theme_color'] ~ ');',
+  fields.button['border_radius']['top_left'] >= 0 ? 'border-top-left-radius: ' ~ fields.button['border_radius']['top_left'] ~ 'px;',
+  fields.button['border_radius']['top_right'] >= 0 ? 'border-top-right-radius: ' ~ fields.button['border_radius']['top_right'] ~ 'px;',
+  fields.button['border_radius']['bottom_left'] >= 0 ? 'border-bottom-left-radius: ' ~ fields.button['border_radius']['bottom_left'] ~ 'px;',
+  fields.button['border_radius']['bottom_right'] >= 0 ? 'border-bottom-right-radius: ' ~ fields.button['border_radius']['bottom_right'] ~ 'px;',
+  fields.button['box_shadow']['color']['color'] == 'palette' and fields.button['box_shadow']['color']['theme_color'] ? 'var(--' ~ fields.button['box_shadow']['color']['theme_color'] ~ ')' : fields.button['box_shadow']['color']['color'] == 'custom' and fields.button['box_shadow']['color']['custom_color'] ? fields.button['box_shadow']['color']['custom_color'],
+  fields.button['box_shadow']['inset'] == true ? 'inset',
+  fields.button['box_shadow']['horizontal_offset'] >= 0 or fields.button['box_shadow']['vertical_offset'] >= 0 or fields.button['box_shadow']['blur'] >= 0 or fields.button['box_shadow']['spread'] >= 0 or box_shadow_color or box_shadow_inset == true ? 'box-shadow: ' ~ fields.button['box_shadow']['horizontal_offset'] ~ 'px ' ~ fields.button['box_shadow']['vertical_offset'] ~ 'px ' ~ fields.button['box_shadow']['blur'] ~ 'px ' ~ fields.button['box_shadow']['spread'] ~ 'px ' ~ box_shadow_color ~ ' ' ~ box_shadow_inset ~ ';',
+  fields.button['text_shadow']['color']['color'] == 'palette' and fields.button['text_shadow']['color']['theme_color'] ? 'var(--' ~ fields.button['text_shadow']['color']['theme_color'] ~ ')' : fields.button['text_shadow']['color']['color'] == 'custom' and fields.button['text_shadow']['color']['custom_color'] ? fields.button['text_shadow']['color']['custom_color'],
+  fields.button['text_shadow']['horizontal_offset'] >= 0 or fields.button['text_shadow']['vertical_offset'] >= 0 or fields.button['text_shadow']['blur'] >= 0 or text_shadow_color ? 'text-shadow: ' ~ fields.button['text_shadow']['horizontal_offset'] ~ 'px ' ~ fields.button['text_shadow']['vertical_offset'] ~ 'px ' ~ fields.button['text_shadow']['blur'] ~ 'px ' ~ text_shadow_color ~ ';',
+  fields.button['font_size']['font_size']['value'] >= 0 ? 'font-size: ' ~ fields.button['font_size']['font_size']['value'] ~ fields.button['font_size']['font_size']['unit'] ~ ';',
+  fields.button.width['width']['value'] >= 0 ? 'width: ' ~ fields.button.width['width']['value']  ~ fields.button.width['width']['unit'] ~  ';',
+  fields.button.width['min_width'] >= 0 ? 'min-width: ' ~ fields.button.width['min_width']  ~ 'px;',
+  fields.button.width['max_width'] >= 0 ? 'max-width: ' ~ fields.button.width['max_width']  ~ 'px;',
+  fields.button.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : parent_block_data['name'] != 'acf/group' and fields.button.margin['margin']['top']['top'] >= 0 ? 'margin-top: ' ~ fields.button.margin['margin']['top']['top'] ~ 'px;',
+  fields.button.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : parent_block_data['name'] != 'acf/group' and fields.button.margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.button.margin['margin']['bottom']['bottom'] ~ 'px;',
+  fields.button.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : parent_block_data['name'] != 'acf/group' and fields.button.margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.button.margin['margin']['left']['left'] ~ 'px;',
+  fields.button.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : parent_block_data['name'] != 'acf/group' and fields.button.margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.button.margin['margin']['right']['right'] ~ 'px;',
+]) | sort | join(' ') | trim %}
+
+{% set block_attributes = block_attributes|default([])|merge([
+  block_styles ? 'style="' ~ block_styles ~ '"',
+]) | sort | join(' ') | trim %}
+
+{% embed '@molecules/offcanvas/_offcanvas.tpl.twig' with {
+  offcanvas_other_classes: block_classes,
+  offcanvas_other_attributes: block_attributes,
+  offcanvas_id: fields.id.id ? fields.id.id : fields.id.id_gen ? 'offcanvas' ~ fields.id.id_gen,
+  offcanvas_placement: fields.placement,
+  offcanvas_backdrop: fields.backdrop,
+  offcanvas_scroll: fields.scroll,
+  background_color: fields.background_color.bg_color == 'palette' ? fields.background_color.bg_theme_color,
+  text_color: fields.color.color == 'palette' ? fields.color.theme_color,
+  offcanvas_title: fields.title,
+  offcanvas_content: 'Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.',
+  offcanvas_close_button: fields.close,
+  button: {
+    button_element: fields.button.element,
+    button_text: fields.button_label | default('Add text'),
+    button_color: fields.button.style != 'custom' ? fields.button.style | default('default'),
+    button_size: fields.button.size,
+    button_outline: fields.button.outline,
+    button_block: fields.button.full_width,
+    button_id: fields.button.id.id ? fields.button.id.id : fields.button.id.id_gen ? 'button' ~ fields.button.id.id_gen,
+    button_disabled: fields.button.disabled,
+    button_controls: fields.button.toggle == true ? fields.button.link['url'] | trim('#'),
+    nowrap: fields.button.nowrap,
+    hide_label: fields.button.hide_label,
+    button_classes: [
+      fields.button.background_color['bg_color'] == 'palette' and fields.button.background_color['bg_theme_color'] ? 'bg-' ~ fields.button.background_color['bg_theme_color'],
+      fields.button.text_color['color'] == 'palette' and fields.button.text_color['theme_color'] ? 'text-' ~ fields.button.text_color['theme_color'],
+      fields.button.full_width != true and fields.button.display['display'] is not null ? fields.button.display['display']
+    ],
+    button_attributes: [
+      'aria-controls="' ~ fields.id.id ? fields.id.id : fields.id.id_gen ? 'offcanvas' ~ fields.id.id_gen ~ '"',
+      button_styles ? 'style="' ~ button_styles ~ '"',
+    ]
+  },
+} %}
+  {%  block control %}
+    {% embed "@atoms/button/_button.tpl.twig" with {
+      button_classes: button.button_classes,
+      button_other_classes: button.button_other_classes,
+      button_element: button.button_element,
+      button_type: button.button_type,
+      button_outline: button.button_outline,
+      buttonless_dropdown: button.buttonless_dropdown,
+      button_color: button.button_color,
+      button_size: button.button_size,
+      button_block: button.button_block,
+      button_active: button.button_active,
+      button_toggle: 'offcanvas',
+      button_link: offcanvas_id ? '#' ~ offcanvas_id : '#' ~ offcanvasId,
+      button_value: button.button_value,
+      button_id: button.button_id,
+      button_disabled: button.button_disabled,
+      button_attributes: button.button_attributes,
+      button_other_attributes: button.button_other_attributes,
+      button_text: fields.button_label,
+      button_target: offcanvas_id ? '#' ~ offcanvas_id : '#' ~ offcanvasId,
+      button_expanded: button.button_expanded,
+      button_controls: button.button_controls,
+      nowrap: button.nowrap,
+      contextual_content: button.contextual_content,
+      title: button.title,
+      popover_content: button.popover_content,
+      context_placement: button.context_placement,
+      context_container: button.context_container
+    } %}
+      {% block left %}
+        {% if fields.show_left_icon == true %}
+          {% set left_v_offset = fields.icon_left.vertical_offset ? fields.icon_left.vertical_offset ~ 'px' : '0px' %}
+          {% set left_h_offset = fields.icon_left.horizontal_offset ? fields.icon_left.horizontal_offset ~ 'px' : '0px' %}
+          {% set left_offset = left_h_offset or left_v_offset ? 'transform: translate(' ~ left_v_offset ~ ' , ' ~ left_h_offset ~ ');'  %}
+          {% if fields.icon_left.type == 'custom' %}
+            {% include '@atoms/svg/_svg~icon.tpl.twig' with {
+              svg_other_classes: 'icon',
+              width: fields.icon_left.size ~ 'px',
+              height: fields.icon_left.size ~ 'px',
+              name: fields.icon_left.icon,
+              fill: fields.icon_left.icon_color.color == 'palette' ? fields.icon_left.icon_color.theme_color,
+              svg_styles: [
+                fields.icon_left.icon_color.color == 'custom' ? 'color: ' ~ fields.icon_left.icon_color.custom_color ~ ';',
+                left_offset
+              ]
+            } %}
+          {% elseif fields.icon_left.type == "font-awesome"%}
+            {% set color = fields.icon_left.icon_color.color == 'palette' ? 'color: var(--' ~ fields.icon_left.icon_color.theme_color ~ ');' : fields.icon_left.icon_color.color == 'custom' ? 'color: ' ~ fields.icon_left.icon_color.custom_color ~ ';' %}
+            {% set fontsize = fields.icon_left.size ? 'font-size: ' ~ fields.icon_left.size ~ 'px;' %}
+            <span class="icon">
+          <i class="{{ fields.icon_left.fa_icon_style }} {{ fields.icon_left.fa_icon }}" {{ color or fontsize or left_offset ? 'style="' ~ color ~ fontsize ~ left_offset ~ '"' }}></i>
+        </span>
+          {% endif %}
+        {% endif %}
+      {% endblock left %}
+      {% block right %}
+        {% if fields.show_right_icon == true %}
+          {% set right_v_offset = fields.icon_right.vertical_offset ? fields.icon_right.vertical_offset ~ 'px' : '0px' %}
+          {% set right_h_offset = fields.icon_right.horizontal_offset ? fields.icon_right.horizontal_offset ~ 'px' : '0px' %}
+          {% set right_offset = right_h_offset or right_v_offset ? 'transform: translate(' ~ right_v_offset ~ ' , ' ~ right_h_offset ~ ');'  %}
+          {% if fields.icon_right.type == 'custom' %}
+            {% include '@atoms/svg/_svg~icon.tpl.twig' with {
+              svg_other_classes: 'icon',
+              width: fields.icon_right.size ~ 'px',
+              height: fields.icon_right.size ~ 'px',
+              name: fields.icon_right.icon,
+              fill: fields.icon_right.icon_color.color == 'palette' ? fields.icon_right.icon_color.theme_color,
+              svg_styles: [
+                fields.icon_right.icon_color.color == 'custom' ? 'color: ' ~ fields.icon_right.icon_color.custom_color ~ ';',
+                right_offset
+              ]
+            } %}
+          {% elseif fields.icon_right.type == "font-awesome"%}
+            {% set color = fields.icon_right.icon_color.color == 'palette' ? 'color: var(--' ~ fields.icon_right.icon_color.theme_color ~ ');' : fields.icon_right.icon_color.color == 'custom' ? 'color: ' ~ fields.icon_right.icon_color.custom_color ~ ';' %}
+            {% set fontsize = fields.icon_right.size ? 'font-size: ' ~ fields.icon_right.size ~ 'px;' %}
+            <span class="icon">
+          <i class="{{ fields.icon_right.fa_icon_style }} {{ fields.icon_right.fa_icon }}" {{ color or fontsize or right_offset ? 'style="' ~ color ~ fontsize ~ right_offset ~ '"' }}></i>
+        </span>
+          {% endif %}
+        {% endif %}
+      {% endblock right %}
+    {% endembed %}
+  {%  endblock control %}
+
+  {% block offcanvas_content %}
+    <InnerBlocks />
+  {% endblock offcanvas_content %}
+{% endembed %}
+
+{% if is_preview and (fields.id.id or fields.id.id_gen) and fields.show_ids == true %}
+  <small><strong>Offcanvas {{ fields.link['title'] ? '"' ~ fields.link['title'] ~ '"' : loop.index }} ID:</strong> {{ fields.id.id ? fields.id.id}}{{ fields.id.id_gen ? 'offcanvas' ~ fields.id.id_gen }}</small>
+{% endif %}
