@@ -67,7 +67,8 @@
 {% set block_attributes = block_attributes|default([])|merge([
 ]) | sort | join(' ') | trim %}
 
-{% if (fields.type == 'menu' or fields.type == 'custom') and (fields.color.theme_color or fields.color.custom_color or fields.hover_color.theme_color or fields.hover_color.custom_color) %}
+{% if (fields.type == 'menu' or fields.type == 'custom') and (fields.color.theme_color or fields.color.custom_color or fields.hover_color.theme_color or fields.hover_color.custom_color or fields.font_size.font_size.value) %}
+
   <style>
     {% if fields.color.color == 'palette' and fields.color.theme_color %}
       #{{ fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'menu' ~ fields.id['id_gen'] }} .nav-link {
@@ -87,6 +88,11 @@
     {% if fields.hover_color.color == 'custom' and fields.hover_color.custom_color %}
       #{{ fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'menu' ~ fields.id['id_gen'] }} .nav-link:hover {
         color: var(--{{ fields.hover_color.custom_color }});
+      }
+    {% endif %}
+    {% if fields.font_size.font_size.value %}
+      #{{ fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'menu' ~ fields.id['id_gen'] }} .nav-link {
+        font-size: {{ fields.font_size.font_size.value }}{{ fields.font_size.font_size.unit }};
       }
     {% endif %}
   </style>

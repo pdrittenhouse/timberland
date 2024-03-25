@@ -249,6 +249,29 @@
             "ui": 1
         },
         {
+            "key": "field_6601a88f6b359",
+            "label": "Font Size",
+            "name": "font_size",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "clone": [
+                "group_634db16363404"
+            ],
+            "display": "group",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1
+        },
+        {
             "key": "field_6600da308d90e",
             "label": "Color",
             "name": "color",
@@ -1080,5 +1103,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1711379217
+    "modified": 1711384788
 }
