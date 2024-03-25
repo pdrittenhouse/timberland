@@ -39,18 +39,20 @@
 
 {% set block_classes = block_classes|default([])|merge([
   block['className'],
-  fields.alignment.text_align ? 'text-' ~ fields.alignment.text_align,
+  fields.alignment.text_align == 'left' ? 'text-start' : fields.alignment.text_align == 'right' ? 'text-end' : fields.alignment.text_align ? 'text-' ~ fields.alignment.text_align,
   'block-branding'
 ]) | sort | join(' ') | trim %}
 
 {% set block_attributes = block_attributes|default([])|merge([
 ]) | sort | join(' ') | trim %}
 
-{% if fields.branding_image.url and (fields.branding_image.url ends with '.svg') %}
+{% set brand_url = fields.use_site_logo == true and site_logo ? site_logo : fields.branding_image.url ? fields.branding_image.url %}
+
+{% if brand_url and (brand_url ends with '.svg') %}
   {% include "@atoms/branding/_branding.tpl.twig" with {
     url: fields.branding_link,
     target: fields.open_in_new_window == true ? '_blank',
-    logo_svg_inline: fields.branding_image.url|replace({(site.url ~ '/wp-content/uploads/'): ''}),
+    logo_svg_inline: brand_url|replace({(site.url ~ '/wp-content/uploads/'): ''}),
     colorOriginal: fields.svg_options.use_original_color,
     site_name: fields.branding_name,
     site_slogan: fields.branding_slogan,
@@ -76,7 +78,7 @@
       fields.color['color'] == 'custom' and fields.color['custom_color'] ? 'color: ' ~ fields.color['custom_color'] ~ ';',
     ]
   } %}
-{% elseif fields.branding_image.url %}
+{% elseif brand_url %}
   {% if fields.non_svg_options.use_bg_image == true %}
     {% set image_key = 'logo_bg_img_src' %}
   {% else %}
@@ -85,7 +87,7 @@
   {% include "@atoms/branding/_branding.tpl.twig" with {
     url: fields.branding_link,
     target: fields.open_in_new_window == true ? '_blank',
-    (image_key): fields.branding_image.url,
+    (image_key): brand_url,
     site_name: fields.branding_name,
     site_slogan: fields.branding_slogan,
     height: fields.non_svg_options.branding_height ? fields.non_svg_options.branding_height ~ 'px',

@@ -15,7 +15,8 @@
   target: '',
   form_classes: [
     'searchform',
-    placeholder_color ? 'placeholder-' ~ placeholder_color
+    placeholder_color ? 'placeholder-' ~ placeholder_color,
+    alignment == 'left' ? 'text-start' : alignment == 'right' ? 'text-end' : alignment != null ? 'text-' ~ alignment
   ]
 } %}
   {% block form_content %}

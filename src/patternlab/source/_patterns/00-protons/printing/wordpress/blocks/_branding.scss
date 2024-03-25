@@ -5,13 +5,15 @@
   &.branding {
 
     .site-header & {
-      margin: 0 auto;
+      //margin: 0 auto;
+      margin: 0;
     }
   }
 
   .branding--site-logo {
     height: 100%;
     margin: 0 auto;
+    display: inline-block;
 
     > a {
       display: block;

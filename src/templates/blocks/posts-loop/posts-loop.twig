@@ -737,7 +737,7 @@
             'posts-loop--post',
             'posts-loop--card',
             fields.card.horizontal != true and fields.card.layout.card_layout != 'default' ? 'card-' ~ fields.card.layout.card_layout : fields.card.horizontal == true and fields.card.horizontal_layout.horizontal_card_layout != 'default' ? 'card-' ~ fields.card.horizontal_layout.horizontal_card_layout,
-            fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
+            fields.card.text_align is not empty and fields.card.text_align == 'left' ? 'text-start' : fields.card.text_align is not empty and fields.card.text_align == 'right' ? 'text-end' : fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
           ],
           card_styles: [
             fields.card.flip_card != true ? card_bg_image_size,
@@ -2380,7 +2380,7 @@
                 'posts-loop--post',
                 'posts-loop--card',
                 fields.card.horizontal != true and fields.card.layout.card_layout != 'default' ? 'card-' ~ fields.card.layout.card_layout : fields.card.horizontal == true and fields.card.horizontal_layout.horizontal_card_layout != 'default' ? 'card-' ~ fields.card.horizontal_layout.horizontal_card_layout,
-                fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
+                fields.card.text_align is not empty and fields.card.text_align == 'left' ? 'text-start' : fields.card.text_align is not empty and fields.card.text_align == 'right' ? 'text-end' : fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
               ],
               card_styles: [
                 fields.card.flip_card != true ? card_bg_image_size,
@@ -3945,7 +3945,7 @@
                       'posts-loop--post',
                       'posts-loop--card',
                       fields.card.horizontal != true and fields.card.layout.card_layout != 'default' ? 'card-' ~ fields.card.layout.card_layout : fields.card.horizontal == true and fields.card.horizontal_layout.horizontal_card_layout != 'default' ? 'card-' ~ fields.card.horizontal_layout.horizontal_card_layout,
-                      fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
+                      fields.card.text_align is not empty and fields.card.text_align == 'left' ? 'text-start' : fields.card.text_align is not empty and fields.card.text_align == 'right' ? 'text-end' : fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
                     ],
                     card_styles: [
                       fields.card.flip_card != true ? card_bg_image_size,
@@ -5437,7 +5437,7 @@
                       'posts-loop--post',
                       'posts-loop--card',
                       fields.card.horizontal != true and fields.card.layout.card_layout != 'default' ? 'card-' ~ fields.card.layout.card_layout : fields.card.horizontal == true and fields.card.horizontal_layout.horizontal_card_layout != 'default' ? 'card-' ~ fields.card.horizontal_layout.horizontal_card_layout,
-                      fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
+                      fields.card.text_align is not empty and fields.card.text_align == 'left' ? 'text-start' : fields.card.text_align is not empty and fields.card.text_align == 'right' ? 'text-end' : fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
                     ],
                     card_styles: [
                       fields.card.flip_card != true ? card_bg_image_size,
@@ -6778,7 +6778,7 @@
                   {# Set custom card styles #}
                   {% set card_bg_color = fields.card.card_bg_color['bg_color'] == 'custom' and fields.card.card_bg_color['bg_custom_color'] ? 'background-color: ' ~ fields.card.card_bg_color['bg_custom_color'] ~ ';' %}
                   {# {% set card_border_color = fields.card.card_border_color['color'] == 'custom' and fields.card.card_border_color['custom_color'] ? 'border-color: ' ~ fields.card.card_border_color['custom_color'] ~ ';' %} #}
-                  
+
                   {% if fields.card.remove_card_border != true %}
                     {% set card_border_top_width = fields.card.card_border['top']['width'] is not empty ? 'border-top-width: ' ~ fields.card.card_border['top']['width'] ~ 'px;' %}
                     {% set card_border_top_style = fields.card.card_border['top']['style'] ? 'border-top-style: ' ~ fields.card.card_border['top']['style'] ~ ';' %}
@@ -6934,7 +6934,7 @@
                       'posts-loop--post',
                       'posts-loop--card',
                       fields.card.horizontal != true and fields.card.layout.card_layout != 'default' ? 'card-' ~ fields.card.layout.card_layout : fields.card.horizontal == true and fields.card.horizontal_layout.horizontal_card_layout != 'default' ? 'card-' ~ fields.card.horizontal_layout.horizontal_card_layout,
-                      fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
+                      fields.card.text_align is not empty and fields.card.text_align == 'left' ? 'text-start' : fields.card.text_align is not empty and fields.card.text_align == 'right' ? 'text-end' : fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
                     ],
                     card_styles: [
                       fields.card.flip_card != true ? card_bg_image_size,

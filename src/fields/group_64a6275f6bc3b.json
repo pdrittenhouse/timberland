@@ -159,6 +159,29 @@
             "prefix_name": 1
         },
         {
+            "key": "field_6600c1e127178",
+            "label": "Alignment",
+            "name": "alignment",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "clone": [
+                "group_634831f382bce"
+            ],
+            "display": "group",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1
+        },
+        {
             "key": "field_64a6e03ad447d",
             "label": "Show Label",
             "name": "show_label",
@@ -563,5 +586,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1711223356
+    "modified": 1711325712
 }

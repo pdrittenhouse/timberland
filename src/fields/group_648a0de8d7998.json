@@ -3,6 +3,27 @@
     "title": "Block: Branding",
     "fields": [
         {
+            "key": "field_6600d55e1100a",
+            "label": "Use Site Logo",
+            "name": "use_site_logo",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "message": "",
+            "default_value": 1,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
             "key": "field_648a0de9903df",
             "label": "Branding Image",
             "name": "branding_image",
@@ -10,7 +31,15 @@
             "type": "image",
             "instructions": "",
             "required": 0,
-            "conditional_logic": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_6600d55e1100a",
+                        "operator": "!=",
+                        "value": "1"
+                    }
+                ]
+            ],
             "wrapper": {
                 "width": "",
                 "class": "",
@@ -369,5 +398,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1709503695
+    "modified": 1711331197
 }

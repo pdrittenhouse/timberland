@@ -155,11 +155,9 @@
     label_attributes: [
       label_text_color ? 'style="' ~ label_text_color ~ '"'
     ],
+    alignment: fields.alignment.text_align,
     placeholder: fields.placeholder,
     placeholder_color: fields.placeholder_color,
-    form_classes: [
-      fields.placeholder_color ? fields.placeholder_color,
-    ],
     input_classes: [
       fields.input_background_color['bg_color'] == 'palette' and fields.input_background_color['bg_theme_color'] ? 'bg-' ~ fields.input_background_color['bg_theme_color'],
       fields.input_color['color'] == 'palette' and fields.input_color['theme_color'] ? 'text-' ~ fields.input_color['theme_color'],

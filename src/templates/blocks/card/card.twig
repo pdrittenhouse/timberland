@@ -179,7 +179,7 @@
   card_classes: [
     'block-card',
     fields.horizontal != true and fields.layout.card_layout != 'default' ? 'card-' ~ fields.layout.card_layout : fields.horizontal == true and fields.horizontal_layout.horizontal_card_layout != 'default' ? 'card-' ~ fields.horizontal_layout.horizontal_card_layout,
-    fields.text_align is not empty and fields.text_align != 'null' ? 'text-' ~ fields.text_align,
+    fields.text_align is not empty and fields.text_align == 'left' ? 'text-start' : fields.text_align is not empty and fields.text_align == 'right' ? 'text-end' : fields.text_align is not empty and fields.text_align != 'null' ? 'text-' ~ fields.text_align,
     block_context['acf/fields']['type'] == 'grid' and fields.featured == true ? 'featured',
     block['className'],
     block['align'] ? 'align-' ~ block['align'],

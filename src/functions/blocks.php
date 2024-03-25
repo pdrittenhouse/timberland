@@ -134,6 +134,9 @@ function dream_block_render($block, $content = '', $is_preview = false, $post_id
   // Store block context
   $context['block_context'] = $acf_context;
 
+  // Store site logo url
+  $context['site_logo'] = parse_url(esc_url( wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ) , 'full' )[0] ))['path'];
+
   // Paths
   // Adding paths to block context so they're available within widget areas
   $context['paths'] = array(

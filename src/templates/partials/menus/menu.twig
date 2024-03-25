@@ -46,9 +46,16 @@
       title: item.title,
       url: item.link,
       parent_element: 'ul',
-      item_classes: item.classes,
+      item_classes: item.item_classes,
+      item_other_classes: item.item_other_classes,
+      item_attributes: item.item_attributes,
+      item_other_attributes: item.item_other_attributes,
       link_id: item.title|replace({' ': ''})|lower,
       link_target: item.target,
+      link_classes: item.link_classes,
+      link_other_classes: item.link_other_classes,
+      link_attributes: item.link_attributes,
+      link_other_attributes: item.link_other_attribtues,
       description: item.description,
       items: children_level_1
     } %}
