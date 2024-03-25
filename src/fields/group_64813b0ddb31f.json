@@ -832,11 +832,6 @@
                         "field": "field_64813b0ead741",
                         "operator": "==",
                         "value": "social"
-                    },
-                    {
-                        "field": "field_6488c065c2e7c",
-                        "operator": "!=",
-                        "value": "1"
                     }
                 ]
             ],
@@ -851,6 +846,88 @@
             "ui_on_text": "",
             "ui_off_text": "",
             "ui": 1
+        },
+        {
+            "key": "field_66019281ce51b",
+            "label": "Color",
+            "name": "social_color",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_64813b0ead741",
+                        "operator": "==",
+                        "value": "social"
+                    },
+                    {
+                        "field": "field_6488c065c2e7c",
+                        "operator": "==",
+                        "value": "1"
+                    },
+                    {
+                        "field": "field_64894c91990cf",
+                        "operator": "!=",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "clone": [
+                "group_6346513f54d9a"
+            ],
+            "display": "group",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1
+        },
+        {
+            "key": "field_660192b2ce51d",
+            "label": "Hover Color",
+            "name": "social_hover_color",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_64813b0ead741",
+                        "operator": "==",
+                        "value": "social"
+                    },
+                    {
+                        "field": "field_6488c065c2e7c",
+                        "operator": "==",
+                        "value": "1"
+                    },
+                    {
+                        "field": "field_64894c91990cf",
+                        "operator": "!=",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "clone": [
+                "group_6346513f54d9a"
+            ],
+            "display": "group",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1
         },
         {
             "key": "field_6488c019c2e7b",
@@ -1003,5 +1080,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1711332022
+    "modified": 1711379217
 }

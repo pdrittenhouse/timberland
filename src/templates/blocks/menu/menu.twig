@@ -128,6 +128,39 @@
 
 {% elseif fields.type == 'social' %}
 
+  {% if fields.use_social_menu_items == true and fields.use_global_colors != true and (fields.social_color.theme_color or fields.social_color.custom_color or fields.social_hover_color.theme_color or fields.social_hover_color.custom_color) %}
+    <style>
+      {% if fields.social_color.color == 'palette' and fields.social_color.theme_color %}
+        #{{ fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'menu' ~ fields.id['id_gen'] }} .social-nav-link,
+        #{{ fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'menu' ~ fields.id['id_gen'] }} .icon,
+        #{{ fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'menu' ~ fields.id['id_gen'] }} svg {
+          color: var(--{{ fields.social_color.theme_color }});
+        }
+      {% endif %}
+      {% if fields.social_color.color == 'custom' and fields.social_color.custom_color %}
+        #{{ fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'menu' ~ fields.id['id_gen'] }} .social-nav-link,
+        #{{ fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'menu' ~ fields.id['id_gen'] }} .icon,
+        #{{ fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'menu' ~ fields.id['id_gen'] }} svg {
+          color: {{ fields.social_color.custom_color }};
+        }
+      {% endif %}
+      {% if fields.social_hover_color.color == 'palette' and fields.social_hover_color.theme_color %}
+        #{{ fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'menu' ~ fields.id['id_gen'] }} .list-item:hover .social-nav-link,
+        #{{ fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'menu' ~ fields.id['id_gen'] }} .list-item:hover .icon,
+        #{{ fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'menu' ~ fields.id['id_gen'] }} .list-item:hover svg {
+          color: var(--{{ fields.social_hover_color.theme_color }});
+        }
+      {% endif %}
+      {% if fields.social_hover_color.color == 'custom' and fields.social_hover_color.custom_color %}
+        #{{ fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'menu' ~ fields.id['id_gen'] }} .list-item:hover .social-nav-link,
+        #{{ fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'menu' ~ fields.id['id_gen'] }} .list-item:hover .icon,
+        #{{ fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'menu' ~ fields.id['id_gen'] }} .list-item:hover svg {
+          color: var(--{{ fields.social_hover_color.custom_color }});
+        }
+      {% endif %}
+    </style>
+  {% endif %}
+
   {% if fields.use_social_menu_items == true %}
     {% include "partials/menus/social-nav.twig" with {
       'menu':  menu_social.get_items,
@@ -135,7 +168,7 @@
       'menu_icon_position': fields.icon_position|default('before'),
       'menu_icon_width': fields.icon_width ? fields.icon_width|default('18') ~ 'px',
       'menu_icon_height': fields.icon_height ? fields.icon_height|default('18') ~ 'px',
-      'menu_nav_id': fields.nav_id['id'] ? fields.nav_id['id'] : fields.nav_id['id_gen'] ? 'menu' ~ fields.nav_id['id_gen'],
+      'menu_nav_id': fields.id['id'] ? fields.id['id'] : fields.id['id_gen'] ? 'menu' ~ fields.id['id_gen'],
       'menu_bullet_icon_position': fields.icon_position('before'),
       'menu_bullet_icon_size': fields.icon_width ? fields.icon_width|default('18px') ~ 'px',
       'menu_hide_labels': fields.hide_labels,

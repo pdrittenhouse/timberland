@@ -92,6 +92,7 @@
 
 {% embed '@molecules/offcanvas/_offcanvas.tpl.twig' with {
   offcanvas_wrapper_other_classes: block_classes,
+  offcanvas_other_classes: block_classes,
   offcanvas_other_attributes: block_attributes,
   offcanvas_id: fields.id.id ? fields.id.id : fields.id.id_gen ? 'offcanvas' ~ fields.id.id_gen,
   offcanvas_placement: fields.placement,
