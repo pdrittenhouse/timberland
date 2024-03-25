@@ -92,70 +92,44 @@
 
 {% embed '@molecules/offcanvas/_offcanvas.tpl.twig' with {
   offcanvas_wrapper_other_classes: block_classes,
-  offcanvas_other_classes: block_classes,
   offcanvas_other_attributes: block_attributes,
   offcanvas_id: fields.id.id ? fields.id.id : fields.id.id_gen ? 'offcanvas' ~ fields.id.id_gen,
   offcanvas_placement: fields.placement,
+  offcanvas_breakpoint: fields.breakpoint.breakpoint,
   offcanvas_backdrop: fields.backdrop,
   offcanvas_scroll: fields.scroll,
   background_color: fields.background_color.bg_color == 'palette' ? fields.background_color.bg_theme_color,
   text_color: fields.color.color == 'palette' ? fields.color.theme_color,
   offcanvas_title: fields.title,
   offcanvas_content: 'Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.',
-  offcanvas_close_button: fields.close,
-  button: {
-    button_element: fields.button.element,
-    button_text: fields.button_label | default('Add text'),
-    button_color: fields.button.style != 'custom' ? fields.button.style | default('default'),
-    button_size: fields.button.size,
-    button_outline: fields.button.outline,
-    button_block: fields.button.full_width,
-    button_id: fields.button.id.id ? fields.button.id.id : fields.button.id.id_gen ? 'button' ~ fields.button.id.id_gen,
-    button_disabled: fields.button.disabled,
-    button_controls: fields.button.toggle == true ? fields.button.link['url'] | trim('#'),
-    nowrap: fields.button.nowrap,
-    hide_label: fields.button.hide_label,
-    button_classes: [
-      fields.button.background_color['bg_color'] == 'palette' and fields.button.background_color['bg_theme_color'] ? 'bg-' ~ fields.button.background_color['bg_theme_color'],
-      fields.button.text_color['color'] == 'palette' and fields.button.text_color['theme_color'] ? 'text-' ~ fields.button.text_color['theme_color'],
-      fields.button.full_width != true and fields.button.display['display'] is not null ? fields.button.display['display']
-    ],
-    button_attributes: [
-      'aria-controls="' ~ fields.id.id ? fields.id.id : fields.id.id_gen ? 'offcanvas' ~ fields.id.id_gen ~ '"',
-      button_styles ? 'style="' ~ button_styles ~ '"',
-    ]
-  },
+  offcanvas_close_button: fields.close
 } %}
   {%  block control %}
     {% embed "@atoms/button/_button.tpl.twig" with {
-      button_classes: button.button_classes,
-      button_other_classes: button.button_other_classes,
-      button_element: button.button_element,
-      button_type: button.button_type,
-      button_outline: button.button_outline,
-      buttonless_dropdown: button.buttonless_dropdown,
-      button_color: button.button_color,
-      button_size: button.button_size,
-      button_block: button.button_block,
-      button_active: button.button_active,
+      button_classes: [
+        fields.button.background_color['bg_color'] == 'palette' and fields.button.background_color['bg_theme_color'] ? 'bg-' ~ fields.button.background_color['bg_theme_color'],
+        fields.button.text_color['color'] == 'palette' and fields.button.text_color['theme_color'] ? 'text-' ~ fields.button.text_color['theme_color'],
+        fields.button.full_width != true and fields.button.display['display'] is not null ? fields.button.display['display']
+      ],
+      button_element: fields.button.element,
+      button_text: fields.button_label | default('Add text'),
+      button_color: fields.button.style != 'custom' ? fields.button.style | default('default'),
+      button_size: fields.button.size,
+      button_outline: fields.button.outline,
+      button_block: fields.button.full_width,
+      button_id: fields.button.id.id ? fields.button.id.id : fields.button.id.id_gen ? 'button' ~ fields.button.id.id_gen,
+      button_disabled: fields.button.disabled,
+      button_controls: fields.button.toggle == true ? fields.button.link['url'] | trim('#'),
+      nowrap: fields.button.nowrap,
+      hide_label: fields.button.hide_label,
       button_toggle: 'offcanvas',
       button_link: offcanvas_id ? '#' ~ offcanvas_id : '#' ~ offcanvasId,
-      button_value: button.button_value,
-      button_id: button.button_id,
-      button_disabled: button.button_disabled,
-      button_attributes: button.button_attributes,
+      button_attributes: [
+        'aria-controls="' ~ fields.id.id ? fields.id.id : fields.id.id_gen ? 'offcanvas' ~ fields.id.id_gen ~ '"',
+        button_styles ? 'style="' ~ button_styles ~ '"',
+      ],
       button_other_attributes: button.button_other_attributes,
-      button_text: fields.button_label,
       button_target: offcanvas_id ? '#' ~ offcanvas_id : '#' ~ offcanvasId,
-      button_expanded: button.button_expanded,
-      button_controls: button.button_controls,
-      hide_label: button.hide_label,
-      nowrap: button.nowrap,
-      contextual_content: button.contextual_content,
-      title: button.title,
-      popover_content: button.popover_content,
-      context_placement: button.context_placement,
-      context_container: button.context_container
     } %}
       {% block left %}
         {% if fields.show_left_icon == true %}

@@ -14,6 +14,7 @@
  *  - offcanvas_attributes [array]: Additional component attributes.
  *  - offcanvas_other_attributes [string]: Additional component attributes.
  *  - offcanvas_button [object]: Button object for offcanvas toggle.
+ *  - offcanvas_breakpoint [string: 'sm', 'md', 'lg', 'xl', 'xxl']: Responsive breakpoint to show offcanvas.
  *  - offcanvas_placement [string: 'top', 'bottom', 'left', 'right']: Postion of offcanvas panel.
  *  - offcanvas_backdrop [boolean]: Toggle the offcanvas back drop.
  *  - offcanvas_scroll [boolean]: Toggle scrolling on the offcanvas.
@@ -36,6 +37,7 @@
 
 {% set offcanvas_wrapper_classes = offcanvas_wrapper_classes|default([])|merge([
   'offcanvas-wrapper',
+  offcanvas_breakpoint ? 'd-' ~ offcanvas_breakpoint ~ '-none',
   offcanvas_wrapper_other_classes,
 ]) | sort | join(' ') | trim %}
 
@@ -45,9 +47,11 @@
 
 {% set offcanvas_classes = offcanvas_classes|default([])|merge([
   'offcanvas',
+  offcanvas_breakpoint ? 'offcanvas-' ~ offcanvas_breakpoint,
   background_color ? 'bg-' ~ background_color,
   text_color ? 'text-' ~ text_color,
   offcanvas_placement == 'top' ? 'offcanvas-top' : offcanvas_placement == 'bottom'  ? 'offcanvas-bottom' : offcanvas_placement == 'right' ? 'offcanvas-end' : 'offcanvas-start',
+  offcanvas_breakpoint ? 'd-' ~ offcanvas_breakpoint ~ '-none',
   offcanvas_other_classes,
 ]) | sort | join(' ') | trim %}
 
