@@ -55,8 +55,9 @@ Timber::$autoescape = false;
 /**
  * Enable caching
  */
+define('ENABLE_CACHE', true);
 define('TIMBER_CACHE', true);
-define('CACHE_EXPIRATION_TIME', '30 days');
+define('CACHE_EXPIRATION_TIME', 2592000);
 define('TIMBER_CACHE_TIME', CACHE_EXPIRATION_TIME);
 
 /**
@@ -86,7 +87,8 @@ $dream_includes = array(
   "load-more.php",
   "redirects.php",
   "rewrites.php",
-  "routes.php"
+  "routes.php",
+  "search.php"
 );
 
 foreach($dream_includes as $inc){

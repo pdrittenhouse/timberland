@@ -542,28 +542,31 @@ function dream_block_render($block, $content = '', $is_preview = false, $post_id
     // $context['query_posts'] = $data['loop']->posts;
   }
 
-  // Render the block.
-  // Timber::render($block['path'] . '/' . implode('-', explode(' ', strtolower($block['title']))) . '.twig', $context);
-
-  // Generate a unique cache key based on the block's ID, title, and date.
-  $cache_key = 'dream_block_' . $block['id'] . '_' . sanitize_title($block['title']) . '_' . $context['block_post']->post_date;
-
-  // Try to get the cached template.
-  $cached_template = get_transient($cache_key);
-
-  // If the template is not cached, render and cache it.
-  if (false === $cached_template) {
+  if (false === TIMBER_CACHE) {
     // Render the block.
-    ob_start();
     Timber::render($block['path'] . '/' . implode('-', explode(' ', strtolower($block['title']))) . '.twig', $context);
-    $cached_template = ob_get_clean();
+  } else {
+    // Generate a unique cache key based on the block's ID, title, and date.
+    $cache_key = 'dream_block_' . $block['id'] . '_' . sanitize_title($block['title']) . '_' . $context['block_post']->post_date;
 
-    // Cache the template for, let's say, 1 hour (you can adjust this).
-    set_transient($cache_key, $cached_template, CACHE_EXPIRATION_TIME);
+    // Try to get the cached template.
+    $cached_template = get_transient($cache_key);
+
+    // If the template is not cached, render and cache it.
+    if (false === $cached_template) {
+      // Render the block.
+      ob_start();
+      Timber::render($block['path'] . '/' . implode('-', explode(' ', strtolower($block['title']))) . '.twig', $context);
+      $cached_template = ob_get_clean();
+
+      // Cache the template for, let's say, 1 hour (you can adjust this).
+      set_transient($cache_key, $cached_template, CACHE_EXPIRATION_TIME);
+    }
+    
+    // Output the cached or newly rendered template.
+    echo $cached_template;
   }
 
-  // Output the cached or newly rendered template.
-  echo $cached_template;
 }
 
 // Remove .acf-inner-blocks-container element
