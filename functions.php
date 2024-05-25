@@ -88,7 +88,8 @@ $dream_includes = array(
   "redirects.php",
   "rewrites.php",
   "routes.php",
-  "search.php"
+  "search.php",
+  "api.php"
 );
 
 foreach($dream_includes as $inc){
