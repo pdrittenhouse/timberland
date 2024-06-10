@@ -88,10 +88,6 @@
   options.disable_gf_layout == true ? 'no-gf-layout'
 ]) | sort | join(' ') | trim %}
 
-{{ function('print_r', '<pre>') }}
-{{ function('print_r', post.meta('header_position' is empty)) }}
-{{ function('print_r', '</pre>') }}
-
 {# Set Body Attributes #}
 {% set body_attributes = body_attributes|default([])|merge([
   'data-template="base.twig"',
