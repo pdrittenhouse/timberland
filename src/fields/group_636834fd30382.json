@@ -562,6 +562,34 @@
             "ui": 1
         },
         {
+            "key": "field_666697a0f9ed0",
+            "label": "Header Position",
+            "name": "header_position",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "choices": {
+                "sticky": "Sticky",
+                "absolute": "Absolute",
+                "fixed": "Fixed"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
             "key": "field_63c7419b3ce61",
             "label": "Fluid Header Container",
             "name": "fluid_header_container",
@@ -931,5 +959,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1709504275
+    "modified": 1718001549
 }

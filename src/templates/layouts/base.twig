@@ -81,12 +81,16 @@
   options.fluid_content_containers != true and post.meta('fluid_content_container') != true ? 'max-width-content-container',
   options.fluid_footer_containers != true and post.meta('fluid_footer_container') != true ? 'max-width-footer-container',
   options.max_width_fluid_containers == true ? 'max-width-fluid-containers',
-  options.header_position is not null ? options.header_position ~ '-header-enabled',
+  post.meta('header_position') ? post.meta('header_position') ~ '-header-enabled' : options.header_position ? options.header_position ~ '-header-enabled' : '',
   options.shrink_header == true ? 'shrink-header-enabled',
   options.body_classes,
   post.meta('page_classes'),
   options.disable_gf_layout == true ? 'no-gf-layout'
 ]) | sort | join(' ') | trim %}
+
+{{ function('print_r', '<pre>') }}
+{{ function('print_r', post.meta('header_position' is empty)) }}
+{{ function('print_r', '</pre>') }}
 
 {# Set Body Attributes #}
 {% set body_attributes = body_attributes|default([])|merge([

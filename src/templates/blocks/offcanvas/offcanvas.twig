@@ -102,7 +102,8 @@
   text_color: fields.color.color == 'palette' ? fields.color.theme_color,
   offcanvas_title: fields.title,
   offcanvas_content: 'Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.',
-  offcanvas_close_button: fields.close
+  offcanvas_close_button: fields.close,
+  offcanvas_body_other_classes: fields.body_classes
 } %}
   {%  block control %}
     {% embed "@atoms/button/_button.tpl.twig" with {

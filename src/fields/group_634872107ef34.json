@@ -16,7 +16,9 @@
                 "class": "",
                 "id": ""
             },
+            "admin_only": 0,
             "choices": {
+                "xs": "XS",
                 "sm": "SM",
                 "md": "MD",
                 "lg": "LG",
@@ -26,10 +28,10 @@
                 "xxxxl": "XXXXL"
             },
             "default_value": "null",
-            "allow_null": 1,
-            "multiple": 0,
-            "ui": 0,
             "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "ui": 0,
             "ajax": 0,
             "placeholder": ""
         }
@@ -52,5 +54,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1709504141
+    "modified": 1717991120
 }

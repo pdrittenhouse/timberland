@@ -64,6 +64,11 @@
   offcanvas_other_attributes,
 ]) | sort | join(' ') | trim %}
 
+{% set offcanvas_body_classes = offcanvas_body_classes|default([])|merge([
+  'offcanvas-body',
+  offcanvas_body_other_classes,
+]) | sort | join(' ') | trim %}
+
 <div class="{{ offcanvas_wrapper_classes }}" {{ offcanvas_wrapper_attributes }}>
 
   {%  block control %}
@@ -122,7 +127,7 @@
         </div>
       {% endif %}
     {% endblock offcanvas_header %}
-    <div class="offcanvas-body">
+    <div class="{{ offcanvas_body_classes }}">
       {% block offcanvas_content %}
         {{ offcanvas_content }}
       {% endblock offcanvas_content %}
