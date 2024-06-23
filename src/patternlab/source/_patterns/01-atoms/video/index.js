@@ -47,6 +47,7 @@ const modalVideoControl = () => {
       const vimeo = modal.querySelector('.video-format--vimeo iframe');
 
       if (video !== null) {
+        video.pause();
         if (videoWrapper.classList.contains('has-autoplay')) {
           video.pause();
         }
@@ -61,6 +62,7 @@ const modalVideoControl = () => {
       }
 
       if (youtube !== null) {
+        youtube.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
         if (videoWrapper.classList.contains('has-autoplay')) {
           youtube.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
         }
@@ -75,6 +77,7 @@ const modalVideoControl = () => {
       }
 
       if (vimeo !== null) {
+        vimeo.contentWindow.postMessage('{"method":"pause"}', '*');
         if (videoWrapper.classList.contains('has-autoplay')) {
           vimeo.contentWindow.postMessage('{"method":"pause"}', '*');
         }
@@ -153,6 +156,66 @@ const ytIframeCallbacks = () => {
   };
 
   window.hideYTActivated=true;
+};
+
+// Set global functions
+global.modalVideoControls = () => {
+  const modals = [].slice.call(document.querySelectorAll('.modal.video'));
+
+  if (modals !== null) {
+    modals.forEach(modal => {
+      const videoWrapper = modal.querySelector('.video');
+      const video = modal.querySelector('video');
+      const youtube = modal.querySelector('.video-format--youtube iframe');
+      const vimeo = modal.querySelector('.video-format--vimeo iframe');
+
+      if (video !== null) {
+        video.pause();
+        if (videoWrapper.classList.contains('has-autoplay')) {
+          video.pause();
+        }
+        $(modal).on('shown.bs.modal', function () {
+          if (videoWrapper.classList.contains('has-autoplay')) {
+            video.play();
+          };
+        });
+        $(modal).on('hide.bs.modal', function () {
+          video.pause();
+        });
+      }
+
+      if (youtube !== null) {
+        youtube.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+        if (videoWrapper.classList.contains('has-autoplay')) {
+          youtube.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+        }
+        $(modal).on('shown.bs.modal', function () {
+          if (videoWrapper.classList.contains('has-autoplay')) {
+            youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+          };
+        });
+        $(modal).on('hide.bs.modal', function () {
+          youtube.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+        });
+      }
+
+      if (vimeo !== null) {
+        vimeo.contentWindow.postMessage('{"method":"pause"}', '*');
+        if (videoWrapper.classList.contains('has-autoplay')) {
+          vimeo.contentWindow.postMessage('{"method":"pause"}', '*');
+        }
+        $(modal).on('shown.bs.modal', function () {
+          if (videoWrapper.classList.contains('has-autoplay')) {
+            vimeo.contentWindow.postMessage('{"method":"play"}', '*');
+          };
+        });
+        $(modal).on('hide.bs.modal', function () {
+          vimeo.contentWindow.postMessage('{"method":"pause"}', '*');
+        });
+      }
+
+    });
+  }
 };
 
 $(document).ready(() => {

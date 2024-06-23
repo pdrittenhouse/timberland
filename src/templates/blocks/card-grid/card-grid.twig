@@ -250,7 +250,7 @@
 
 {% embed '@organisms/card-grid/_card-grid.tpl.twig' with {
   type: fields.type | default('grid'),
-  columns: fields.column_count,
+  columns: fields.type != 'row' ? fields.column_count,
   placecard: fields.placecard,
   singlerow: fields.single_row,
   mobilecolumns: fields.mobile_columns,

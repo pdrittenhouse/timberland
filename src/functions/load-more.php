@@ -5,25 +5,37 @@
 function dream_post_loop_load_more()
 {
 
-    if (isset($_POST['load_posts']) && absint($_POST['load_posts']) > 0) {
-        $display_posts = absint($_POST['load_posts']);
-    } elseif (isset($_POST['posts_per_page'])) {
-        $display_posts = absint($_POST['posts_per_page']);
+    $rendered_posts = !empty($_POST['posts_per_page']) ? absint($_POST['posts_per_page']) : absint(get_option('posts_per_page'));
+    $display_posts = !empty($_POST['posts_per_page']) ? $rendered_posts : 0;
+    $load_posts = !empty($_POST['load_posts']) ? absint($_POST['load_posts']) : $rendered_posts;
+    $offset = !empty($_POST['offset']) ? absint($_POST['offset']) : 0;
+    $page = absint($_POST['paged']);
+
+    if (!empty($_POST['load_posts'])) {
+        $display_posts = $load_posts;
+    }
+
+    if (absint($_POST['paged']) <= 2) {
+        $offset = $offset + $rendered_posts;
+    } else {
+        $offset = $offset + $rendered_posts + ($load_posts * ($page - 2));
     }
 
     $ajaxpostargs = [
         'paged' => isset($_POST['paged']) ? absint($_POST['paged']) : '',
         'page' => isset($_POST['paged']) ? absint($_POST['paged']) : '',
-        'post_type' => isset($_POST['post_type']) ? $_POST['post_type'] : '',
+        'post_type' => isset($_POST['post_type']) ? $_POST['post_type'] : [],
         'order' => isset($_POST['order']) ? $_POST['order'] : '',
         'order_by' => isset($_POST['order_by']) ? $_POST['order_by'] : '',
-        'ignore_sticky_posts' => isset($_POST['ignore_sticky_posts']) ? $_POST['ignore_sticky_posts'] : '',
-        'posts_per_page' => $display_posts > 0 ? $display_posts : 3,
+        'ignore_sticky_posts' => isset($_POST['ignore_sticky_posts']) && ($_POST['ignore_sticky_posts'] === 'true') ? true : false,
+        // 'posts_per_page' => isset($_POST['posts_per_page']) ? absint($_POST['posts_per_page']) : 0,
+        'posts_per_page' => $display_posts,
         'posts_per_archive_page' => isset($_POST['posts_per_archive_page']) ? absint($_POST['posts_per_archive_page']) : '',
         'nopaging' => isset($_POST['nopaging']) && ($_POST['nopaging'] === 'true') ? true : false,
-        'offset' => isset($_POST['offset']) ? $_POST['offset'] : '',
-        'post_parent_in' => isset($_POST['post_parent_in']) ? absint($_POST['post_parent_in']) : '',
-        'post_parent_not_in' => isset($_POST['post_parent_not_in']) ? $_POST['post_parent_not_in'] : '',
+        // 'offset' => isset($_POST['offset']) ? $_POST['offset'] : '',
+        'offset' => $offset,
+        'post_parent_in' => isset($_POST['post_parent_in']) ? absint($_POST['post_parent_in']) : [],
+        'post_parent_not_in' => isset($_POST['post_parent_not_in']) ? $_POST['post_parent_not_in'] : [],
         'year' => isset($_POST['year']) ? $_POST['year'] : '',
         'monthnum' => isset($_POST['monthnum']) ? $_POST['monthnum'] : '',
         'w' => isset($_POST['w']) ? $_POST['w'] : '',
@@ -32,21 +44,21 @@ function dream_post_loop_load_more()
         'minute' => isset($_POST['minute']) ? $_POST['minute'] : '',
         'second' => isset($_POST['second']) ? $_POST['second'] : '',
         'm' => isset($_POST['m']) ? $_POST['m'] : '',
-        'date_query' => isset($_POST['date_query']) ? $_POST['date_query'] : '',
+        'date_query' => isset($_POST['date_query']) ? $_POST['date_query'] : [],
         'meta_key' => isset($_POST['meta_key']) ? $_POST['meta_key'] : '',
         'meta_value' => isset($_POST['meta_value']) ? $_POST['meta_value'] : '',
         'meta_value_num' => isset($_POST['meta_value_num']) ? $_POST['meta_value_num'] : '',
         'meta_compare' => isset($_POST['meta_compare']) ? $_POST['meta_compare'] : '',
-        'meta_query' => isset($_POST['meta_query']) ? $_POST['meta_query'] : '',
-        'tax_query' => isset($_POST['tax_query']) ? $_POST['tax_query'] : '',
-        'category_in' => isset($_POST['category_in']) ? $_POST['category_in'] : '',
-        'category_not_in' => isset($_POST['category_not_in']) ? $_POST['category_not_in'] : '',
-        'tag_in' => isset($_POST['tag_in']) ? $_POST['tag_in'] : '',
-        'tag_not_in' => isset($_POST['tag_not_in']) ? $_POST['tag_not_in'] : '',
-        'author_in' => isset($_POST['author_in']) ? $_POST['author_in'] : '',
-        'author_not_in' => isset($_POST['author_not_in']) ? $_POST['author_not_in'] : '',
+        'meta_query' => isset($_POST['meta_query']) ? $_POST['meta_query'] : [],
+        'tax_query' => isset($_POST['tax_query']) ? $_POST['tax_query'] : [],
+        'category_in' => isset($_POST['category_in']) ? $_POST['category_in'] : [],
+        'category_not_in' => isset($_POST['category_not_in']) ? $_POST['category_not_in'] : [],
+        'tag_in' => isset($_POST['tag_in']) ? $_POST['tag_in'] : [],
+        'tag_not_in' => isset($_POST['tag_not_in']) ? $_POST['tag_not_in'] : [],
+        'author_in' => isset($_POST['author_in']) ? $_POST['author_in'] : [],
+        'author_not_in' => isset($_POST['author_not_in']) ? $_POST['author_not_in'] : [],
         'comment_count' => isset($_POST['comment_count']) ? $_POST['comment_count'] : '',
-        'post_status' => isset($_POST['post_status']) ? $_POST['post_status'] : '',
+        'post_status' => !empty($_POST['post_status']) ? $_POST['post_status'] : 'publish',
         'has_password' => isset($_POST['has_password']) && ($_POST['has_password'] === 'true') ? true : false,
         'post_password' => isset($_POST['post_password']) ? $_POST['post_password'] : '',
         'post_mime_type' => isset($_POST['post_mime_type']) ? $_POST['post_mime_type'] : '',
@@ -54,7 +66,7 @@ function dream_post_loop_load_more()
         's' => isset($_POST['s']) ? $_POST['s'] : '',
         'exact' => isset($_POST['exact']) && ($_POST['exact'] === 'true') ? true : false,
         'sentence' => isset($_POST['sentence']) && ($_POST['sentence'] === 'true') ? true : false,
-        'post_in' => isset($_POST['post_in']) ? $_POST['post_in'] : '',
+        'post_in' => isset($_POST['post_in']) ? $_POST['post_in'] : [],
     ];
 
     $pattern = $_POST['pattern'];
@@ -81,7 +93,7 @@ function dream_post_loop_load_more()
             'element_children' => isset($_POST['element_children']) ? $_POST['element_children'] : '',
             'element_post_type' => isset($_POST['element_post_type']) ? $_POST['element_post_type'] : '',
             'element_comment_count' => isset($_POST['element_comment_count']) ? $_POST['element_comment_count'] : '',
-            'element_link' => isset($_POST['element_link']) ? $_POST['element_link'] : '',
+            'element_link' => isset($_POST['element_link']) ? 'true' : 'false',
             'element_terms' => isset($_POST['element_terms']) ? $_POST['element_terms'] : '',
             'element_categories' => isset($_POST['element_categories']) ? $_POST['element_categories'] : '',
             'element_tags' => isset($_POST['element_tags']) ? $_POST['element_tags'] : '',
@@ -108,12 +120,40 @@ function dream_post_loop_load_more()
             'preview' => $post->preview(),
             'thumbnail' => $post->thumbnail(),
             'post' => $post,
+            'grid_type' => isset($_POST['grid_type']) ? $_POST['grid_type'] : ''
         ];
 
         $rendered = Timber::compile_string(
             "{# Set custom card styles #}
             {% set card_bg_color = card.card_bg_color['bg_color'] == 'custom' and card.card_bg_color['bg_custom_color'] ? 'background-color: ' ~ card.card_bg_color['bg_custom_color'] ~ ';' %}
-            {% set card_border_color = card.card_border_color['color'] == 'custom' and card.card_border_color['custom_color'] ? 'border-color: ' ~ card.card_border_color['custom_color'] ~ ';' %}
+            
+            {% if card.remove_card_border != true %}
+              {% set card_border_top_width = card.card_border['top']['width'] is not empty ? 'border-top-width: ' ~ card.card_border['top']['width'] ~ 'px;' %}
+              {% set card_border_top_style = card.card_border['top']['style'] ? 'border-top-style: ' ~ card.card_border['top']['style'] ~ ';' %}
+              {% set card_border_top_color = card.card_border['top']['color'] == 'custom' and card.card_border['top']['custom_color'] ? 'border-top-color: ' ~ card.card_border['top']['custom_color'] ~ ';' : card.card_border['top']['color'] == 'palette' and card.card_border['top']['theme_color'] ? 'border-top-color: var(--' ~ card.card_border['top']['theme_color'] ~ ');' %}
+              {% set card_border_bottom_width = card.card_border['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ card.card_border['bottom']['width'] ~ 'px;' %}
+              {% set card_border_bottom_style = card.card_border['bottom']['style'] ? 'border-bottom-style: ' ~ card.card_border['bottom']['style'] ~ ';' %}
+              {% set card_border_bottom_color = card.card_border['bottom']['color'] == 'custom' and card.card_border['bottom']['custom_color'] ? 'border-bottom-color: ' ~ card.card_border['bottom']['custom_color'] ~ ';' : card.card_border['bottom']['color'] == 'palette' and card.card_border['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ card.card_border['bottom']['theme_color'] ~ ');' %}
+              {% set card_border_left_width = card.card_border['left']['width'] is not empty ? 'border-left-width: ' ~ card.card_border['left']['width'] ~ 'px;' %}
+              {% set card_border_left_style = card.card_border['left']['style'] ? 'border-left-style: ' ~ card.card_border['left']['style'] ~ ';' %}
+              {% set card_border_left_color = card.card_border['left']['color'] == 'custom' and card.card_border['left']['custom_color'] ? 'border-left-color: ' ~ card.card_border['left']['custom_color'] ~ ';' : card.card_border['left']['color'] == 'palette' and card.card_border['left']['theme_color'] ? 'border-left-color: var(--' ~ card.card_border['left']['theme_color'] ~ ');' %}
+              {% set card_border_right_width = card.card_border['right']['width'] is not empty ? 'border-right-width: ' ~ card.card_border['right']['width'] ~ 'px;' %}
+              {% set card_border_right_style = card.card_border['right']['style'] ? 'border-right-style: ' ~ card.card_border['right']['style'] ~ ';' %}
+              {% set card_border_right_color = card.card_border['right']['color'] == 'custom' and card.card_border['right']['custom_color'] ? 'border-right-color: ' ~ card.card_border['right']['custom_color'] ~ ';' : card.card_border['right']['color'] == 'palette' and card.card_border['right']['theme_color'] ? 'border-right-color: var(--' ~ card.card_border['right']['theme_color'] ~ ');' %}
+              {% set card_back_border_top_width = card.card_back_border['top']['width'] is not empty ? 'border-top-width: ' ~ card.card_back_border['top']['width'] ~ 'px;' %}
+              {% set card_back_border_top_style = card.card_back_border['top']['style'] ? 'border-top-style: ' ~ card.card_back_border['top']['style'] ~ ';' %}
+              {% set card_back_border_top_color = card.card_back_border['top']['color'] == 'custom' and card.card_back_border['top']['custom_color'] ? 'border-top-color: ' ~ card.card_back_border['top']['custom_color'] ~ ';' : card.card_back_border['top']['color'] == 'palette' and card.card_back_border['top']['theme_color'] ? 'border-top-color: var(--' ~ card.card_back_border['top']['theme_color'] ~ ');' %}
+              {% set card_back_border_bottom_width = card.card_back_border['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ card.card_back_border['bottom']['width'] ~ 'px;' %}
+              {% set card_back_border_bottom_style = card.card_back_border['bottom']['style'] ? 'border-bottom-style: ' ~ card.card_back_border['bottom']['style'] ~ ';' %}
+              {% set card_back_border_bottom_color = card.card_back_border['bottom']['color'] == 'custom' and card.card_back_border['bottom']['custom_color'] ? 'border-bottom-color: ' ~ card.card_back_border['bottom']['custom_color'] ~ ';' : card.card_back_border['bottom']['color'] == 'palette' and card.card_back_border['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ card.card_back_border['bottom']['theme_color'] ~ ');' %}
+              {% set card_back_border_left_width = card.card_back_border['left']['width'] is not empty ? 'border-left-width: ' ~ card.card_back_border['left']['width'] ~ 'px;' %}
+              {% set card_back_border_left_style = card.card_back_border['left']['style'] ? 'border-left-style: ' ~ card.card_back_border['left']['style'] ~ ';' %}
+              {% set card_back_border_left_color = card.card_back_border['left']['color'] == 'custom' and card.card_back_border['left']['custom_color'] ? 'border-left-color: ' ~ card.card_back_border['left']['custom_color'] ~ ';' : card.card_back_border['left']['color'] == 'palette' and card.card_back_border['left']['theme_color'] ? 'border-left-color: var(--' ~ card.card_back_border['left']['theme_color'] ~ ');' %}
+              {% set card_back_border_right_width = card.card_back_border['right']['width'] is not empty ? 'border-right-width: ' ~ card.card_back_border['right']['width'] ~ 'px;' %}
+              {% set card_back_border_right_style = card.card_back_border['right']['style'] ? 'border-right-style: ' ~ card.card_back_border['right']['style'] ~ ';' %}
+              {% set card_back_border_right_color = card.card_back_border['right']['color'] == 'custom' and card.card_back_border['right']['custom_color'] ? 'border-right-color: ' ~ card.card_back_border['right']['custom_color'] ~ ';' : card.card_back_border['right']['color'] == 'palette' and card.card_back_border['right']['theme_color'] ? 'border-right-color: var(--' ~ card.card_back_border['right']['theme_color'] ~ ');' %}
+            {% endif %}
+
             {% set card_text_color = card.card_text_color['color'] == 'custom' and card.card_text_color['custom_color'] ? 'color: ' ~ card.card_text_color['custom_color'] ~ ';' %}
             {% set card_back_bg_color = card.back_bg_color['bg_color'] == 'custom' ? 'background-color: ' ~ card.back_bg_color['bg_custom_color'] ~ ';' %}
             {% set card_back_border_color = card.back_border_color['color'] == 'custom' ? 'border-color: ' ~ card.back_border_color['custom_color'] ~ ';' %}
@@ -121,6 +161,9 @@ function dream_post_loop_load_more()
             {% set card_width = card.width.width['width']['value'] is not empty ? 'width: ' ~ card.width.width['width']['value']  ~ card.width.width['width']['unit'] ~  ';' %}
             {% set card_min_width = card.width.width['min_width'] is not empty ? 'min-width: ' ~ card.width.width['min_width']  ~ 'px;' %}
             {% set card_max_width = card.width.width['max_width'] is not empty ? 'max-width: ' ~ card.width.width['max_width']  ~ 'px;' %}
+            {% set card_height = card.height.height['height']['value'] is not empty ? 'height: ' ~ card.height.height['height']['value']  ~ card.height.height['height']['unit'] ~  ';' %}
+            {% set card_min_height = card.height.height['min_height'] is not empty ? 'min-height: ' ~ card.height.height['min_height']  ~ 'px;' %}
+            {% set card_max_height = card.height.height['max_height'] is not empty ? 'max-height: ' ~ card.height.height['max_height']  ~ 'px;' %}
             {% set card_margin_top = parent['name'] != 'acf/card-grid' and card.margin['margin']['top']['auto'] == 'true' ? 'margin-top: auto;' : parent['name'] != 'acf/card-grid' and card.margin['margin']['top']['top'] is not empty ? 'margin-top: ' ~ card.margin['margin']['top']['top'] ~ 'px;' %}
             {% set card_margin_bottom = parent['name'] != 'acf/card-grid' and card.margin['margin']['bottom']['auto'] == 'true' ? 'margin-bottom: auto;' : parent['name'] != 'acf/card-grid' and card.margin['margin']['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ card.margin['margin']['bottom']['bottom'] ~ 'px;' %}
             {% set card_margin_left = parent['name'] != 'acf/card-grid' and card.margin['margin']['left']['auto'] == 'true' ? 'margin-left: auto;' : parent['name'] != 'acf/card-grid' and card.margin['margin']['left']['left'] is not empty ? 'margin-left: ' ~ card.margin['margin']['left']['left'] ~ 'px;' %}
@@ -200,6 +243,11 @@ function dream_post_loop_load_more()
             {% set card_btn_margin_right = card.button.margin['margin']['right']['auto'] == 'true' ? 'margin-right: auto;' : card.button.margin['margin']['right']['right'] is not empty ? 'margin-right: ' ~ card.button.margin['margin']['right']['right'] ~ 'px;' %}
 
             {% set card_template = card.horizontal == 'true' ? '_card~horizontal.tpl.twig' : '_card.tpl.twig'  %}
+
+            {%if grid_type == 'row' %}
+                <div class=\"col\">
+            {% endif %}
+
             {% embed \"@molecules/card/\" ~ card_template with {
                 post: post,
                 text_color: card.card_text_color['color'] == 'palette' and card.card_text_color['theme_color'] and card.flip_card != 'true' ? card.card_text_color['theme_color'],
@@ -250,7 +298,18 @@ function dream_post_loop_load_more()
                 card.flip_card != 'true' or card.image_overlay_text is empty ? card_border_top_right_radius,
                 card.flip_card != 'true' or card.image_overlay_text is empty ? card_border_bottom_left_radius,
                 card.flip_card != 'true' or card.image_overlay_text is empty ? card_border_bottom_right_radius,
-                card.flip_card != 'true' or card.image_overlay_text is empty ? card_border_color,
+                card.flip_card != true or card.image_overlay_text is empty ? card_border_top_width,
+                card.flip_card != true or card.image_overlay_text is empty ? card_border_top_style,
+                card.flip_card != true or card.image_overlay_text is empty ? card_border_top_color,
+                card.flip_card != true or card.image_overlay_text is empty ? card_border_bottom_width,
+                card.flip_card != true or card.image_overlay_text is empty ? card_border_bottom_style,
+                card.flip_card != true or card.image_overlay_text is empty ? card_border_bottom_color,
+                card.flip_card != true or card.image_overlay_text is empty ? card_border_left_width,
+                card.flip_card != true or card.image_overlay_text is empty ? card_border_left_style,
+                card.flip_card != true or card.image_overlay_text is empty ? card_border_left_color,
+                card.flip_card != true or card.image_overlay_text is empty ? card_border_right_width,
+                card.flip_card != true or card.image_overlay_text is empty ? card_border_right_style,
+                card.flip_card != true or card.image_overlay_text is empty ? card_border_right_color,
                 card.flip_card != 'true' ? card_bg_color,
                 card.flip_card != 'true' ? card_text_color,
                 card.flip_card != 'true' ? card_padding_top,
@@ -260,6 +319,9 @@ function dream_post_loop_load_more()
                 card_width,
                 card_min_width,
                 card_max_width,
+                card_height,
+                card_min_height,
+                card_max_height,
                 card_margin_top,
                 card_margin_bottom,
                 card_margin_left,
@@ -286,6 +348,18 @@ function dream_post_loop_load_more()
                 card.flip_card == 'true' or card.image_overlay_text ? card_border_top_right_radius,
                 card.flip_card == 'true' or card.image_overlay_text ? card_border_bottom_left_radius,
                 card.flip_card == 'true' or card.image_overlay_text ? card_border_bottom_right_radius,
+                card.flip_card == true ? card_border_top_width,
+                card.flip_card == true ? card_border_top_style,
+                card.flip_card == true ? card_border_top_color,
+                card.flip_card == true ? card_border_bottom_width,
+                card.flip_card == true ? card_border_bottom_style,
+                card.flip_card == true ? card_border_bottom_color,
+                card.flip_card == true ? card_border_left_width,
+                card.flip_card == true ? card_border_left_style,
+                card.flip_card == true ? card_border_left_color,
+                card.flip_card == true ? card_border_right_width,
+                card.flip_card == true ? card_border_right_style,
+                card.flip_card == true ? card_border_right_color,
                 card.flip_card == 'true' ? card_border_color,
                 card.flip_card == 'true' ? card_bg_color,
                 card.flip_card == 'true' ? card_text_color,
@@ -310,6 +384,18 @@ function dream_post_loop_load_more()
                 card.flip_card == 'true' ? card_back_border_top_right_radius,
                 card.flip_card == 'true' ? card_back_border_bottom_left_radius,
                 card.flip_card == 'true' ? card_back_border_bottom_right_radius,
+                card.flip_card == true ? card_back_border_top_width,
+                card.flip_card == true ? card_back_border_top_style,
+                card.flip_card == true ? card_back_border_top_color,
+                card.flip_card == true ? card_back_border_bottom_width,
+                card.flip_card == true ? card_back_border_bottom_style,
+                card.flip_card == true ? card_back_border_bottom_color,
+                card.flip_card == true ? card_back_border_left_width,
+                card.flip_card == true ? card_back_border_left_style,
+                card.flip_card == true ? card_back_border_left_color,
+                card.flip_card == true ? card_back_border_right_width,
+                card.flip_card == true ? card_back_border_right_style,
+                card.flip_card == true ? card_back_border_right_color,
                 card.flip_card == 'true' ? card_back_border_color,
                 card.flip_card == 'true' ? card_back_bg_color,
                 card.flip_card == 'true' ? card_back_text_color,
@@ -849,13 +935,6 @@ function dream_post_loop_load_more()
                 <div class=\"card-body {{ no_body_padding == 'true' ? 'p-0' }}\">
                     {% block card_text %}
                     <div class=\"card-text\">
-                        {# {% if function('in_array', 'post_excerpt', elements) and post_type == 'page' %}
-                          <div class=\"posts-loop--post-excerpt\">{{ function('get_the_excerpt') }}</div>
-                        {% elseif function('in_array', 'post_excerpt', elements) and link_items != 'true' %}
-                          <div class=\"posts-loop--post-excerpt\">{{ function('get_the_excerpt')|slice(0, element_excerpt.element_excerpt_length|default(50)) }}{% if element_excerpt.element_read_more_label %}<a href=\"{{ post.link }}\" class=\"read-more-link\">{{ element_excerpt.element_read_more_label }}</a>{% endif %}</div>
-                        {% elseif function('in_array', 'post_excerpt', elements) %}
-                          <div class=\"posts-loop--post-excerpt\">{{ function('get_the_excerpt')|slice(0, element_excerpt.element_excerpt_length|default(50)) }}</div>
-                        {% endif %} #}
 
                         {% if function('in_array', 'post_excerpt', elements) and link_items != true %}
                             <div class=\"posts-loop--post-excerpt\"><span class=\"post-excerpt\">{{ function('wp_trim_words', function('get_the_excerpt'), element_excerpt.element_excerpt_length|number_format) }}</span> {% if element_excerpt.element_read_more_label %}<a href=\"{{ post.link }}\" class=\"read-more-link read-more\">{{ element_excerpt.element_read_more_label }}</a>{% endif %}</div>
@@ -864,7 +943,7 @@ function dream_post_loop_load_more()
                         {% endif %}
 
                         {% if function('in_array', 'post_content', elements) %}
-                          <div class=\"posts-loop--post-content\">{{ content }}</div>
+                        <div class=\"posts-loop--post-content\">{{ content }}</div>
                         {% endif %}
                     </div>
                     {% endblock %}
@@ -1195,296 +1274,300 @@ function dream_post_loop_load_more()
                 {% endif %}
                 {% endblock card_footer %}
 
-                {% endembed %}
-
                 {% block back %}
-                {% if card_back_layout and card.flip_card == 'true' %}
-                <div class=\"card-back-content\">
-                    {% for element in card_back_layout %}
-                    {% if element.acf_fc_layout == 'featured_image' and thumbnail.src %}
-                    {# Featured Image #}
-                    <div class=\"posts-loop--featured-image--wrapper\">
-                        {% if link_items != 'true' and element.link_image == 'true' %}
-                        <a class=\"posts-loop--post-thumbnail\" href=\"{{ link }}\">
-                            {% else %}
-                            <span class=\"posts-loop--post-thumbnail\">
-                                {% endif %}
-                                <img src=\"{{ thumbnail.src }}\" alt=\"{{ thumbnail.alt }}\">
+                    {% if card_back_layout and card.flip_card == 'true' %}
+                        <div class=\"card-back-content\">
+                            {% for element in card_back_layout %}
+                            {% if element.acf_fc_layout == 'featured_image' and thumbnail.src %}
+                            {# Featured Image #}
+                            <div class=\"posts-loop--featured-image--wrapper\">
                                 {% if link_items != 'true' and element.link_image == 'true' %}
-                        </a>
-                        {% else %}
-                        </span>
-                        {% endif %}
-                    </div>
-                    {% elseif element.acf_fc_layout == 'post_title' and post_title %}
-                    {# Post Title #}
-                    <div class=\"posts-loop--post-title--wrapper\">
-                        {% if link_items != 'true' and element.link_title == 'true' %}
-                        <a href=\"{{ link }}\">
-                            {% endif %}
-                            <{{ element.title_element}} class=\"posts-loop--post-title\">{{ title }}</{{ element.title_element }}>
-                            {% if link_items != 'true' and element.link_title == 'true' %}
-                        </a>
-                        {% endif %}
-                    </div>
-                    {% elseif element.acf_fc_layout == 'post_excerpt' and (preview or function('get_the_excerpt')) %}
-                    {# Post Excerpt #}
-                    <div class=\"posts-loop--post-excerpt--wrapper\">
-                        {% if post_type == 'page' %}
-                        <div class=\"posts-loop--post-excerpt\">{{ function('get_the_excerpt') }}</div>
-                        {% elseif link_items != 'true' %}
-                        <div class=\"posts-loop--post-excerpt\">{{ preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>
-                        {% else %}
-                        <div class=\"posts-loop--post-excerpt\">{{ preview.read_more('').length(element.length|number_format) }}</div>
-                        {% endif %}
-                    </div>
-                    {% elseif element.acf_fc_layout == 'post_content' and content %}
-                    {# Post Content #}
-                    <div class=\"posts-loop--post-content--wrapper\">
-                        <div class=\"posts-loop--post-content\">{{ content }}</div>
-                    </div>
-                    {% elseif element.acf_fc_layout == 'link' and link %}
-                    {# Post Link #}
-                    <div class=\"posts-loop--post-link--wrapper\">
-                        {% if element.label %}
-                        <span class=\"posts-loop--post-link--label\">{{ element.label }}</span>
-                        {% endif %}
-                        {% if link_items != 'true' and element.link_link == 'true' %}
-                        <a href=\"{{ link }}\" class=\"posts-loop--post-link posts-loop--post-url\">
-                            {% else %}
-                            <span class=\"posts-loop--post-url\">
+                                <a class=\"posts-loop--post-thumbnail\" href=\"{{ link }}\">
+                                    {% else %}
+                                    <span class=\"posts-loop--post-thumbnail\">
+                                        {% endif %}
+                                        <img src=\"{{ thumbnail.src }}\" alt=\"{{ thumbnail.alt }}\">
+                                        {% if link_items != 'true' and element.link_image == 'true' %}
+                                </a>
+                                {% else %}
+                                </span>
                                 {% endif %}
-                                {{ link }}
+                            </div>
+                            {% elseif element.acf_fc_layout == 'post_title' and post_title %}
+                            {# Post Title #}
+                            <div class=\"posts-loop--post-title--wrapper\">
+                                {% if link_items != 'true' and element.link_title == 'true' %}
+                                <a href=\"{{ link }}\">
+                                    {% endif %}
+                                    <{{ element.title_element}} class=\"posts-loop--post-title\">{{ title }}</{{ element.title_element }}>
+                                    {% if link_items != 'true' and element.link_title == 'true' %}
+                                </a>
+                                {% endif %}
+                            </div>
+                            {% elseif element.acf_fc_layout == 'post_excerpt' and (preview or function('get_the_excerpt')) %}
+                            {# Post Excerpt #}
+                            <div class=\"posts-loop--post-excerpt--wrapper\">
+                                {% if post_type == 'page' %}
+                                <div class=\"posts-loop--post-excerpt\">{{ function('get_the_excerpt') }}</div>
+                                {% elseif link_items != 'true' %}
+                                <div class=\"posts-loop--post-excerpt\">{{ preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>
+                                {% else %}
+                                <div class=\"posts-loop--post-excerpt\">{{ preview.read_more('').length(element.length|number_format) }}</div>
+                                {% endif %}
+                            </div>
+                            {% elseif element.acf_fc_layout == 'post_content' and content %}
+                            {# Post Content #}
+                            <div class=\"posts-loop--post-content--wrapper\">
+                                <div class=\"posts-loop--post-content\">{{ content }}</div>
+                            </div>
+                            {% elseif element.acf_fc_layout == 'link' and link %}
+                            {# Post Link #}
+                            <div class=\"posts-loop--post-link--wrapper\">
+                                {% if element.label %}
+                                <span class=\"posts-loop--post-link--label\">{{ element.label }}</span>
+                                {% endif %}
                                 {% if link_items != 'true' and element.link_link == 'true' %}
-                        </a>
-                        {% else %}
-                        </span>
-                        {% endif %}
-                    </div>
-                    {% elseif element.acf_fc_layout == 'post_author' and authors %}
-                    {# Post Author #}
-                    <div class=\"posts-loop--post-author--wrapper\">
-                        <div class=\"posts-loop--post-author\">
-                            {% for author in authors %}
-                            {% for author_element in element.author_elements %}
-                            {% if author_element.acf_fc_layout == 'gravatar' and author.avatar %}
-                            {% if link_items != 'true' and element.link_author == 'true' %}
-                            <a class=\"posts-loop--post-author--link posts-loop--post-author--gravatar\" href=\"{{ author.link }}\">
+                                <a href=\"{{ link }}\" class=\"posts-loop--post-link posts-loop--post-url\">
+                                    {% else %}
+                                    <span class=\"posts-loop--post-url\">
+                                        {% endif %}
+                                        {{ link }}
+                                        {% if link_items != 'true' and element.link_link == 'true' %}
+                                </a>
                                 {% else %}
-                                <span class=\"posts-loop--post-author--gravatar\">
-                                    {% endif %}
-                                    <img src=\"{{ author.avatar }}\" alt=\"{{ author.name }}\">
+                                </span>
+                                {% endif %}
+                            </div>
+                            {% elseif element.acf_fc_layout == 'post_author' and authors %}
+                            {# Post Author #}
+                            <div class=\"posts-loop--post-author--wrapper\">
+                                <div class=\"posts-loop--post-author\">
+                                    {% for author in authors %}
+                                    {% for author_element in element.author_elements %}
+                                    {% if author_element.acf_fc_layout == 'gravatar' and author.avatar %}
                                     {% if link_items != 'true' and element.link_author == 'true' %}
-                            </a>
-                            {% else %}
-                            </span>
-                            {% endif %}
-                            {% elseif author_element.acf_fc_layout == 'name' and author.name %}
-                            {% if author_element.label %}
-                            <span class=\"posts-loop--post-author--label\">{{ author_element.label }}</span>
-                            {% endif %}
-                            {% if link_items != 'true' and element.link_author == 'true' %}
-                            <a class=\"posts-loop--post-author--link posts-loop--post-author--name\" href=\"{{ author.link }}\">
-                                {% else %}
-                                <span class=\"posts-loop--post-author--name\">
+                                    <a class=\"posts-loop--post-author--link posts-loop--post-author--gravatar\" href=\"{{ author.link }}\">
+                                        {% else %}
+                                        <span class=\"posts-loop--post-author--gravatar\">
+                                            {% endif %}
+                                            <img src=\"{{ author.avatar }}\" alt=\"{{ author.name }}\">
+                                            {% if link_items != 'true' and element.link_author == 'true' %}
+                                    </a>
+                                    {% else %}
+                                    </span>
                                     {% endif %}
-                                    {{ author.name }}
+                                    {% elseif author_element.acf_fc_layout == 'name' and author.name %}
+                                    {% if author_element.label %}
+                                    <span class=\"posts-loop--post-author--label\">{{ author_element.label }}</span>
+                                    {% endif %}
                                     {% if link_items != 'true' and element.link_author == 'true' %}
-                            </a>
-                            {% else %}
-                            </span>
-                            {% endif %}
-                            {% elseif author_element.acf_fc_layout == 'email' and function('get_user_by', 'id', author.id).data.user_email %}
-                            {% if link_items != 'true' %}
-                            <a class=\"posts-loop--post-author--link posts-loop--post-author--email\" href=\"mailto:{{ function('get_user_by', 'id', author.id).data.user_email }}\">
-                                {% else %}
-                                <span class=\"posts-loop--post-author--email\">
+                                    <a class=\"posts-loop--post-author--link posts-loop--post-author--name\" href=\"{{ author.link }}\">
+                                        {% else %}
+                                        <span class=\"posts-loop--post-author--name\">
+                                            {% endif %}
+                                            {{ author.name }}
+                                            {% if link_items != 'true' and element.link_author == 'true' %}
+                                    </a>
+                                    {% else %}
+                                    </span>
                                     {% endif %}
-                                    {{ function('get_user_by', 'id', author.id).data.user_email }}
+                                    {% elseif author_element.acf_fc_layout == 'email' and function('get_user_by', 'id', author.id).data.user_email %}
                                     {% if link_items != 'true' %}
-                            </a>
-                            {% else %}
-                            </span>
+                                    <a class=\"posts-loop--post-author--link posts-loop--post-author--email\" href=\"mailto:{{ function('get_user_by', 'id', author.id).data.user_email }}\">
+                                        {% else %}
+                                        <span class=\"posts-loop--post-author--email\">
+                                            {% endif %}
+                                            {{ function('get_user_by', 'id', author.id).data.user_email }}
+                                            {% if link_items != 'true' %}
+                                    </a>
+                                    {% else %}
+                                    </span>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% elseif element.acf_fc_layout == 'post_date' and date %}
+                            {# Post Date #}
+                            <div class=\"posts-loop--post-date--wrapper\">
+                                {% if element.label %}
+                                <span class=\"posts-loop--post-date--label\">{{ element.label }}</span>
+                                {% endif %}
+                                {% if link_items != 'true' and element.link_date == 'true' and type.slug == 'post' %}
+                                <a class=\"posts-loop--date--link posts-loop--post-date\" href=\"/{{ date|date('Y') }}{{ element.link_to == 'month' or element.link_to == 'day' ? '/' ~ date|date('m') }}{{ element.link_to == 'day' ? '/' ~ date|date('d') }}\">
+                                {% elseif link_items != 'true' and element.link_date == 'true' and type.has_archive %}
+                                <a class=\"posts-loop--date--link posts-loop--post-date\" href=\"/{{ type.has_archive }}/{{ date|date('Y') }}{{ element.link_to == 'month' or element.link_to == 'day' ? '/' ~ date|date('m') }}{{ element.link_to == 'day' ? '/' ~ date|date('d') }}\">
+                                    {% else %}
+                                    <span class=\"posts-loop--post-date\">
+                                        {% endif %}
+                                        {{ date|date(element.date_format) }}
+                                        {% if link_items != 'true' and element.link_date == 'true' and (type.slug == 'post' or type.has_archive) %}
+                                </a>
+                                {% else %}
+                                </span>
+                                {% endif %}
+                            </div>
+                            {% elseif element.acf_fc_layout == 'post_modified' and (modified_date or modified_author) %}
+                            {# Post Modified #}
+                            <div class=\"posts-loop--post-modified--wrapper\">
+                                {% if function('in_array', 'label', element.modified_elements) and element.label %}
+                                <span class=\"posts-loop--post-modified--label\">{{ element.label }}</span>
+                                {% endif %}
+                                {% if function('in_array', 'date', element.modified_elements) and modified_date %}
+                                {% if link_items != 'true' and element.link_date == 'true' and type.slug == 'post' %}
+                                <a class=\"posts-loop--post-modified--link posts-loop--post-modified--date\" href=\"/{{ modified_date|date('Y') }}{{ element.link_to == 'month' or element.link_to == 'day' ? '/' ~ modified_date|date('m') }}{{ element.link_to == 'day' ? '/' ~ modified_date|date('d') }}\">
+                                {% elseif link_items != 'true' and element.link_date == 'true' and type.has_archive %}
+                                <a class=\"posts-loop--post-modified--link posts-loop--post-modified--date\" href=\"/{{ type.has_archive }}/{{ modified_date|date('Y') }}{{ element.link_to == 'month' or element.link_to == 'day' ? '/' ~ modified_date|date('m') }}{{ element.link_to == 'day' ? '/' ~ modified_date|date('d') }}\">
+                                    {% else %}
+                                    <span class=\"posts-loop--post-modified--date\">
+                                        {% endif %}
+                                        {{ modified_date|date(element.date_format) }}
+                                        {% if link_items != 'true' and element.link_date == 'true' and (type.slug == 'post' or type.has_archive) %}
+                                </a>
+                                {% else %}
+                                </span>
+                                {% endif %}
+
+                                {% endif %}
+                                {% if function('in_array', 'author', element.modified_elements) and  element.separator %}
+                                <span class=\"posts-loop--post-modified--separator\">{{ element.separator }}</span>
+                                {% endif %}
+                                {% if function('in_array', 'author', element.modified_elements) and modified_author %}
+                                {% if link_items != 'true' and element.link_author == 'true' %}
+                                <a class=\"posts-loop--post-modified--link posts-loop--post-modified--author\" href=\"{{ modified_author.link }}\">
+                                    {% else %}
+                                    <span class=\"posts-loop--post-modified--author\">
+                                        {% endif %}
+                                        {{ modified_author.name }}
+                                        {% if link_items != 'true' and element.link_author == 'true' %}
+                                </a>
+                                {% else %}
+                                </span>
+                                {% endif %}
+                                {% endif %}
+                                {% if function('in_array', 'email', element.modified_elements) and function('get_user_by', 'id', modified_author.id).data.user_email %}
+                                {% if link_items != 'true' %}
+                                <a class=\"posts-loop--post-modified--link posts-loop--post-modified--author-email\" href=\"mailto:{{ function('get_user_by', 'id', modified_author.id).data.user_email }}\">
+                                    {% else %}
+                                    <span class=\"posts-loop--post-modified--author-email\">
+                                        {% endif %}
+                                        {{ function('get_user_by', 'id', modified_author.id).data.user_email }}
+                                        {% if link_items != 'true' %}
+                                </a>
+                                {% else %}
+                                </span>
+                                {% endif %}
+                                {% endif %}
+                            </div>
+                            {% elseif element.acf_fc_layout == 'post_type' and type %}
+                            {# Post Type #}
+                            <div class=\"posts-loop--post-type--wrapper\">
+                                {% if element.label %}
+                                <span class=\"posts-loop--post-type--label\">{{ element.label }}</span>
+                                {% endif %}
+                                {% if link_items != 'true' and element.link_post_type == 'true' and type.has_archive %}
+                                <a class=\"posts-loop--post-type--link posts-loop--post-type\" href=\"/{{ type.has_archive }}\">
+                                    {% elseif link_items != 'true' and element.link_post_type == 'true' %}
+                                    <a class=\"posts-loop--post-type--link posts-loop--post-type\" href=\"{{ function('get_post_type_archive_link', type.slug) }}\">
+                                    {% else %}
+                                    <span class=\"posts-loop--post-type\">
+                                        {% endif %}
+                                        {% if element.name_format == 'name' %}
+                                        {{ type.labels.name }}
+                                        {% elseif element.name_format == 'singular_name' %}
+                                        {{ type.labels.singular_name }}
+                                        {% elseif element.name_format == 'menu_name' %}
+                                        {{ type.labels.menu_name }}
+                                        {% elseif element.name_format == 'name_admin_bar' %}
+                                        {{ type.labels.name_admin_bar }}
+                                        {% endif %}
+                                        {% if link_items != 'true' and element.link_post_type == 'true' %}
+                                    </a>
+                                    {% else %}
+                                    </span>
+                                    {% endif %}
+                            </div>
+                            {% elseif element.acf_fc_layout == 'post_parent' and parent %}
+                            {# Post Parent #}
+                            <div class=\"posts-loop--post-parent--wrapper\">
+                                {% if element.label %}
+                                <span class=\"posts-loop--post-parent--label\">{{ element.label }}</span>
+                                {% endif %}
+                                {% if link_items != 'true' and element.link_parent == 'true' %}
+                                <a class=\"posts-loop--post-parent-link posts-loop--post-parent\" href=\"{{ parent.link }}\">
+                                    {% else %}
+                                    <span class=\"posts-loop--post-parent\">
+                                        {% endif %}
+                                        {{ parent.title }}
+                                        {% if link_items != 'true' and element.link_link == 'true' %}
+                                </a>
+                                {% else %}
+                                </span>
+                                {% endif %}
+                            </div>
+                            {% elseif element.acf_fc_layout == 'children' and children %}
+                            {# Children #}
+                            <div class=\"posts-loop--post-children--wrapper\">
+                                {% if element.label %}
+                                <span class=\"posts-loop--children--label\">{{ element.label }}</span>
+                                {% endif %}
+                                {% for child in children %}
+                                {% if link_items != 'true' and element.link_children == 'true' %}<a class=\"posts-loop--child--link posts-loop--child\" href=\"/child/{{ child.slug }}\">{% else %}<span class=\"posts-loop--child\">{% endif %}{{ child.name }}{% if link_items != 'true' and element.link_children == 'true' %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </div>
+                            {% elseif element.acf_fc_layout == 'comment_count' and comment_count %}
+                            {# Comment Count #}
+                            <div class=\"posts-loop--comment-count--wrapper\">
+                                {% if element.label %}
+                                <span class=\"posts-loop--comment-count--label\">{{ element.label }}</span>
+                                {% endif %}
+                                <span class=\"posts-loop--comment-count\">{{ comment_count }}</span>
+                            </div>
+                            {% elseif element.acf_fc_layout == 'terms' and terms is not empty %}
+                            {# Terms #}
+                            <div class=\"posts-loop--terms--wrapper\">
+                                {% if element.label %}
+                                <span class=\"posts-loop--terms--label\">{{ element.label }}</span>
+                                {% endif %}
+                                {% for term in terms %}
+                                {% if link_items != 'true' and element.link_terms == 'true' %}<a class=\"posts-loop--term--link posts-loop--term\" href=\"/{{ term.taxonomy }}/{{ term.slug }}\">{% else %}<span class=\"posts-loop--term\">{% endif %}{{ term.name }}{% if link_items != 'true' and element.link_terms == 'true' %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </div>
+                            {% elseif element.acf_fc_layout == 'categories' and categories %}
+                            {# Categories #}
+                            <div class=\"posts-loop--categories--wrapper\">
+                                {% if element.label %}
+                                <span class=\"posts-loop--categories--label\">{{ element.label }}</span>
+                                {% endif %}
+                                {% for category in categories %}
+                                {% if link_items != 'true' and element.link_categories == 'true' %}<a class=\"posts-loop--category--link posts-loop--category\" href=\"/{{ category.taxonomy }}/{{ category.slug }}\">{% else %}<span class=\"posts-loop--category\">{% endif %}{{ category.name }}{% if link_items != 'true' and element.link_categories == 'true' %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </div>
+                            {% elseif element.acf_fc_layout == 'tags' and tags %}
+                            {# Tags #}
+                            <div class=\"posts-loop--tags--wrapper\">
+                                {% if element.label %}
+                                <span class=\"posts-loop--tags--label\">{{ element.label }}</span>
+                                {% endif %}
+                                {% for tag in tags %}
+                                {% if link_items != 'true' and element.link_tags == 'true' %}<a class=\"posts-loop--tag--link posts-loop--tag\" href=\"/tag/{{ tag.slug }}\">{% else %}<span class=\"posts-loop--tag\">{% endif %}{{ tag.name }}{% if link_items != 'true' and element.link_tags == 'true' %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </div>
                             {% endif %}
-                            {% endif %}
-                            {% endfor %}
                             {% endfor %}
                         </div>
-                    </div>
-                    {% elseif element.acf_fc_layout == 'post_date' and date %}
-                    {# Post Date #}
-                    <div class=\"posts-loop--post-date--wrapper\">
-                        {% if element.label %}
-                        <span class=\"posts-loop--post-date--label\">{{ element.label }}</span>
-                        {% endif %}
-                        {% if link_items != 'true' and element.link_date == 'true' and type.slug == 'post' %}
-                        <a class=\"posts-loop--date--link posts-loop--post-date\" href=\"/{{ date|date('Y') }}{{ element.link_to == 'month' or element.link_to == 'day' ? '/' ~ date|date('m') }}{{ element.link_to == 'day' ? '/' ~ date|date('d') }}\">
-                            {% elseif link_items != 'true' and element.link_date == 'true' and type.has_archive %}
-                            <a class=\"posts-loop--date--link posts-loop--post-date\" href=\"/{{ type.has_archive }}/{{ date|date('Y') }}{{ element.link_to == 'month' or element.link_to == 'day' ? '/' ~ date|date('m') }}{{ element.link_to == 'day' ? '/' ~ date|date('d') }}\">
-                                {% else %}
-                                <span class=\"posts-loop--post-date\">
-                                    {% endif %}
-                                    {{ date|date(element.date_format) }}
-                                    {% if link_items != 'true' and element.link_date == 'true' and (type.slug == 'post' or type.has_archive) %}
-                            </a>
-                            {% else %}
-                            </span>
-                            {% endif %}
-                    </div>
-                    {% elseif element.acf_fc_layout == 'post_modified' and (modified_date or modified_author) %}
-                    {# Post Modified #}
-                    <div class=\"posts-loop--post-modified--wrapper\">
-                        {% if function('in_array', 'label', element.modified_elements) and element.label %}
-                        <span class=\"posts-loop--post-modified--label\">{{ element.label }}</span>
-                        {% endif %}
-                        {% if function('in_array', 'date', element.modified_elements) and modified_date %}
-                        {% if link_items != 'true' and element.link_date == 'true' and type.slug == 'post' %}
-                        <a class=\"posts-loop--post-modified--link posts-loop--post-modified--date\" href=\"/{{ modified_date|date('Y') }}{{ element.link_to == 'month' or element.link_to == 'day' ? '/' ~ modified_date|date('m') }}{{ element.link_to == 'day' ? '/' ~ modified_date|date('d') }}\">
-                            {% elseif link_items != 'true' and element.link_date == 'true' and type.has_archive %}
-                            <a class=\"posts-loop--post-modified--link posts-loop--post-modified--date\" href=\"/{{ type.has_archive }}/{{ modified_date|date('Y') }}{{ element.link_to == 'month' or element.link_to == 'day' ? '/' ~ modified_date|date('m') }}{{ element.link_to == 'day' ? '/' ~ modified_date|date('d') }}\">
-                                {% else %}
-                                <span class=\"posts-loop--post-modified--date\">
-                                    {% endif %}
-                                    {{ modified_date|date(element.date_format) }}
-                                    {% if link_items != 'true' and element.link_date == 'true' and (type.slug == 'post' or type.has_archive) %}
-                            </a>
-                            {% else %}
-                            </span>
-                            {% endif %}
-
-                            {% endif %}
-                            {% if function('in_array', 'author', element.modified_elements) and  element.separator %}
-                            <span class=\"posts-loop--post-modified--separator\">{{ element.separator }}</span>
-                            {% endif %}
-                            {% if function('in_array', 'author', element.modified_elements) and modified_author %}
-                            {% if link_items != 'true' and element.link_author == 'true' %}
-                            <a class=\"posts-loop--post-modified--link posts-loop--post-modified--author\" href=\"{{ modified_author.link }}\">
-                                {% else %}
-                                <span class=\"posts-loop--post-modified--author\">
-                                    {% endif %}
-                                    {{ modified_author.name }}
-                                    {% if link_items != 'true' and element.link_author == 'true' %}
-                            </a>
-                            {% else %}
-                            </span>
-                            {% endif %}
-                            {% endif %}
-                            {% if function('in_array', 'email', element.modified_elements) and function('get_user_by', 'id', modified_author.id).data.user_email %}
-                            {% if link_items != 'true' %}
-                            <a class=\"posts-loop--post-modified--link posts-loop--post-modified--author-email\" href=\"mailto:{{ function('get_user_by', 'id', modified_author.id).data.user_email }}\">
-                                {% else %}
-                                <span class=\"posts-loop--post-modified--author-email\">
-                                    {% endif %}
-                                    {{ function('get_user_by', 'id', modified_author.id).data.user_email }}
-                                    {% if link_items != 'true' %}
-                            </a>
-                            {% else %}
-                            </span>
-                            {% endif %}
-                            {% endif %}
-                    </div>
-                    {% elseif element.acf_fc_layout == 'post_type' and type %}
-                    {# Post Type #}
-                    <div class=\"posts-loop--post-type--wrapper\">
-                        {% if element.label %}
-                        <span class=\"posts-loop--post-type--label\">{{ element.label }}</span>
-                        {% endif %}
-                        {% if link_items != 'true' and element.link_post_type == 'true' and type.has_archive %}
-                        <a class=\"posts-loop--post-type--link posts-loop--post-type\" href=\"/{{ type.has_archive }}\">
-                            {% elseif link_items != 'true' and element.link_post_type == 'true' %}
-                            <a class=\"posts-loop--post-type--link posts-loop--post-type\" href=\"{{ function('get_post_type_archive_link', type.slug) }}\">
-                                {% else %}
-                                <span class=\"posts-loop--post-type\">
-                                    {% endif %}
-                                    {% if element.name_format == 'name' %}
-                                    {{ type.labels.name }}
-                                    {% elseif element.name_format == 'singular_name' %}
-                                    {{ type.labels.singular_name }}
-                                    {% elseif element.name_format == 'menu_name' %}
-                                    {{ type.labels.menu_name }}
-                                    {% elseif element.name_format == 'name_admin_bar' %}
-                                    {{ type.labels.name_admin_bar }}
-                                    {% endif %}
-                                    {% if link_items != 'true' and element.link_post_type == 'true' %}
-                            </a>
-                            {% else %}
-                            </span>
-                            {% endif %}
-                    </div>
-                    {% elseif element.acf_fc_layout == 'post_parent' and parent %}
-                    {# Post Parent #}
-                    <div class=\"posts-loop--post-parent--wrapper\">
-                        {% if element.label %}
-                        <span class=\"posts-loop--post-parent--label\">{{ element.label }}</span>
-                        {% endif %}
-                        {% if link_items != 'true' and element.link_parent == 'true' %}
-                        <a class=\"posts-loop--post-parent-link posts-loop--post-parent\" href=\"{{ parent.link }}\">
-                            {% else %}
-                            <span class=\"posts-loop--post-parent\">
-                                {% endif %}
-                                {{ parent.title }}
-                                {% if link_items != 'true' and element.link_link == 'true' %}
-                        </a>
-                        {% else %}
-                        </span>
-                        {% endif %}
-                    </div>
-                    {% elseif element.acf_fc_layout == 'children' and children %}
-                    {# Children #}
-                    <div class=\"posts-loop--post-children--wrapper\">
-                        {% if element.label %}
-                        <span class=\"posts-loop--children--label\">{{ element.label }}</span>
-                        {% endif %}
-                        {% for child in children %}
-                        {% if link_items != 'true' and element.link_children == 'true' %}<a class=\"posts-loop--child--link posts-loop--child\" href=\"/child/{{ child.slug }}\">{% else %}<span class=\"posts-loop--child\">{% endif %}{{ child.name }}{% if link_items != 'true' and element.link_children == 'true' %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
-                        {% endfor %}
-                    </div>
-                    {% elseif element.acf_fc_layout == 'comment_count' and comment_count %}
-                    {# Comment Count #}
-                    <div class=\"posts-loop--comment-count--wrapper\">
-                        {% if element.label %}
-                        <span class=\"posts-loop--comment-count--label\">{{ element.label }}</span>
-                        {% endif %}
-                        <span class=\"posts-loop--comment-count\">{{ comment_count }}</span>
-                    </div>
-                    {% elseif element.acf_fc_layout == 'terms' and terms is not empty %}
-                    {# Terms #}
-                    <div class=\"posts-loop--terms--wrapper\">
-                        {% if element.label %}
-                        <span class=\"posts-loop--terms--label\">{{ element.label }}</span>
-                        {% endif %}
-                        {% for term in terms %}
-                        {% if link_items != 'true' and element.link_terms == 'true' %}<a class=\"posts-loop--term--link posts-loop--term\" href=\"/{{ term.taxonomy }}/{{ term.slug }}\">{% else %}<span class=\"posts-loop--term\">{% endif %}{{ term.name }}{% if link_items != 'true' and element.link_terms == 'true' %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
-                        {% endfor %}
-                    </div>
-                    {% elseif element.acf_fc_layout == 'categories' and categories %}
-                    {# Categories #}
-                    <div class=\"posts-loop--categories--wrapper\">
-                        {% if element.label %}
-                        <span class=\"posts-loop--categories--label\">{{ element.label }}</span>
-                        {% endif %}
-                        {% for category in categories %}
-                        {% if link_items != 'true' and element.link_categories == 'true' %}<a class=\"posts-loop--category--link posts-loop--category\" href=\"/{{ category.taxonomy }}/{{ category.slug }}\">{% else %}<span class=\"posts-loop--category\">{% endif %}{{ category.name }}{% if link_items != 'true' and element.link_categories == 'true' %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
-                        {% endfor %}
-                    </div>
-                    {% elseif element.acf_fc_layout == 'tags' and tags %}
-                    {# Tags #}
-                    <div class=\"posts-loop--tags--wrapper\">
-                        {% if element.label %}
-                        <span class=\"posts-loop--tags--label\">{{ element.label }}</span>
-                        {% endif %}
-                        {% for tag in tags %}
-                        {% if link_items != 'true' and element.link_tags == 'true' %}<a class=\"posts-loop--tag--link posts-loop--tag\" href=\"/tag/{{ tag.slug }}\">{% else %}<span class=\"posts-loop--tag\">{% endif %}{{ tag.name }}{% if link_items != 'true' and element.link_tags == 'true' %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
-                        {% endfor %}
-                    </div>
                     {% endif %}
-                    {% endfor %}
-                </div>
-                {% endif %}
-            {% endblock back %}",
+                {% endblock back %}
+
+                {% endembed %}
+
+                {%if grid_type == 'row' %}
+                    </div>
+                {% endif %}",
             $context
         );
-
+        
         $response[] = $rendered;
     }
 
@@ -1516,6 +1599,7 @@ function dream_post_loop_load_more()
         'posts' => count($ajaxposts),
         'last' => $last,
         'html' => implode('', $response),
+        'offset' => $offset,
     ];
 
     echo json_encode($result);

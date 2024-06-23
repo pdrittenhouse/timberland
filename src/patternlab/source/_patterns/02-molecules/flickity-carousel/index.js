@@ -130,6 +130,14 @@ const initFlickity = () => {
         document.body.classList.toggle('is-fullscreen');
       });
 
+      // Restart autoplay after interaction
+      if (flkty.options.autoPlay) {
+        // eslint-disable-next-line no-unused-vars
+        flkty.on('pointerUp', function (event, pointer) {
+          flkty.player.play();
+        });
+      }
+
     });
 
   });

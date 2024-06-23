@@ -58,7 +58,12 @@
                 "guides": "guides",
                 "compare": "compare",
                 "ninja-table": "ninja-table",
-                "np-redirect": "np-redirect"
+                "np-redirect": "np-redirect",
+                "wp_font_family": "wp_font_family",
+                "wp_font_face": "wp_font_face",
+                "acf-ui-options-page": "acf-ui-options-page",
+                "mailpoet_page": "mailpoet_page",
+                "patterns_ai_data": "patterns_ai_data"
             },
             "default_value": [
                 "post"
@@ -182,7 +187,8 @@
                     "return_format": "id",
                     "min": "",
                     "max": "",
-                    "elements": ""
+                    "elements": "",
+                    "bidirectional_target": []
                 }
             ]
         },
@@ -353,7 +359,7 @@
                     },
                     "admin_only": 0,
                     "default_value": "",
-                    "min": "",
+                    "min": 0,
                     "max": "",
                     "placeholder": "",
                     "step": "",
@@ -480,7 +486,8 @@
                     "return_format": "id",
                     "field_type": "multi_select",
                     "allow_null": 0,
-                    "multiple": 0
+                    "multiple": 0,
+                    "bidirectional_target": []
                 }
             ]
         },
@@ -558,7 +565,8 @@
                     "return_format": "id",
                     "field_type": "multi_select",
                     "allow_null": 0,
-                    "multiple": 0
+                    "multiple": 0,
+                    "bidirectional_target": []
                 }
             ]
         },
@@ -881,7 +889,8 @@
                     "role": "",
                     "return_format": "id",
                     "multiple": 1,
-                    "allow_null": 1
+                    "allow_null": 1,
+                    "bidirectional_target": []
                 }
             ]
         },
@@ -2679,7 +2688,8 @@
             "return_format": "id",
             "min": "",
             "max": "",
-            "elements": ""
+            "elements": "",
+            "bidirectional_target": []
         },
         {
             "key": "field_63e272c82cc6f",
@@ -12076,5 +12086,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1709503864
+    "modified": 1719115784
 }

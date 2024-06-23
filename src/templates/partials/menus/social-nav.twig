@@ -27,8 +27,10 @@
       {% endif %}
     {% endfor %}
 
+    {% set item_icon_classes = icon_classes | map(i => 'icon-' ~ i) %}
+
     {% set nav_item = {
-      item_classes: item_classes,
+      item_classes: item_classes|merge(item_icon_classes),
       url: item.link,
       target: item.target,
       label: item.title,

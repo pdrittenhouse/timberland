@@ -134,35 +134,6 @@ function dream_block_render($block, $content = '', $is_preview = false, $post_id
   // Store block context
   $context['block_context'] = $acf_context;
 
-  // Store site logo url
-  if (get_theme_mod( 'custom_logo' )) {
-    $context['site_logo'] = parse_url(esc_url( wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ) , 'full' )[0] ))['path'];
-  }
-
-  // Paths
-  // Adding paths to block context so they're available within widget areas
-  $context['paths'] = array(
-    'protons' => get_template_directory_uri() . "/src/patternlab/source/_patterns/00-protons",
-    'atoms' => get_template_directory_uri() . "/src/patternlab/source/_patterns/01-atoms",
-    'molecules' => get_template_directory_uri() . "/src/patternlab/source/_patterns/02-molecules",
-    'organisms' => get_template_directory_uri() . "/src/patternlab/source/_patterns/03-organisms",
-    'templates' => get_template_directory_uri() . "/src/patternlab/source/_patterns/04-templates",
-    'pages' => get_template_directory_uri() . "/src/patternlab/source/_patterns/05-pages",
-    'assets' => get_template_directory_uri() . "/dist/wp",
-    'styles' => get_template_directory_uri() . "/dist/wp/css",
-    'images' => get_template_directory_uri() . "/dist/wp/img",
-    'fonts' => get_template_directory_uri() . "/dist/wp/fonts",
-    'scripts' => get_template_directory_uri() . "/dist/wp/js",
-  );
-
-  // Menus
-  // Adding menus to block context so they're available within widget areas
-  $context['menu_primary'] = new Timber\Menu( 'primary' );
-  $context['menu_secondary'] = new Timber\Menu( 'secondary' );
-  $context['menu_footer'] = new Timber\Menu( 'footer' );
-  $context['menu_utility'] = new Timber\Menu( 'utility' );
-  $context['menu_social'] = new Timber\Menu( 'social' );
-
   // Replace acf keys with human readable acf field names
   if( !empty( $context['block_context']['acf/fields'] ) ) {
     $context['block_context']['acf/fields'] = replace_acf_keys_with_names( $context['block_context']['acf/fields'] );
@@ -206,17 +177,17 @@ function dream_block_render($block, $content = '', $is_preview = false, $post_id
       'search' => get_field( 'search' )
     );
 
-//  print_r('<pre>');
-//  print_r($data['date']['date_query']);
-//  print_r('<bre>-----------------------<br>');
-//  print_r('</pre>');
+    // print_r('<pre>');
+    // print_r($data['date']['date_query']);
+    // print_r('<bre>-----------------------<br>');
+    // print_r('</pre>');
 
-//  $data['taxonomies']['terms'] = array_column($data['taxonomies']['terms']);
-//  print_r('<pre>');
-//  print_r($data['taxonomies']);
-//  print_r('<br>--------<br>');
-//  print_r(get_field( 'taxonomies'));
-//  print_r('</pre>');
+    // $data['taxonomies']['terms'] = array_column($data['taxonomies']['terms']);
+    // print_r('<pre>');
+    // print_r($data['taxonomies']);
+    // print_r('<br>--------<br>');
+    // print_r(get_field( 'taxonomies'));
+    // print_r('</pre>');
 
 
 
@@ -239,8 +210,12 @@ function dream_block_render($block, $content = '', $is_preview = false, $post_id
       'post_type' => $data['post_type'],
       'order'     => !empty($data['sort']) ? $data['sort']['order'] : '',
       'orderby' => !empty($data['sort']) ? $data['sort']['order_by'] : '',
-      'ignore_sticky_posts' => $data['ignore_sticky_posts']
     );
+
+    // Ignore Sticky Posts
+    if ($data['ignore_sticky_posts'] === true) {
+      $queryArgs['ignore_sticky_posts'] = $data['ignore_sticky_posts'];
+    }
 
     // Set Pagination Paramerters
     if ( !is_archive() && !empty($data['pagination']) ) {
@@ -404,7 +379,7 @@ function dream_block_render($block, $content = '', $is_preview = false, $post_id
     if ( $data['selection_type'] == 'query' && !empty($data['custom_fields']['meta_value_num']) ) {
       $queryArgs['meta_value_num'] = intval($data['custom_fields']['meta_value_num']);
     }
-    if ( $data['selection_type'] == 'query' && !empty($data['custom_fields']['meta_compare']) ) {
+    if ( $data['selection_type'] == 'query' && !empty($data['custom_fields']['meta_compare']) && (!empty($data['custom_fields']['meta_key']) || !empty($data['custom_fields']['meta_value']) || !empty($data['custom_fields']['meta_value_num'])) ) {
       $queryArgs['meta_compare'] = $data['custom_fields']['meta_compare'];
     }
 
@@ -537,6 +512,7 @@ function dream_block_render($block, $content = '', $is_preview = false, $post_id
 
     // Add the response of WP_Query to the Timber context
     // $data['loop'] = $posts;
+    $context['args'] = $queryArgs;
     $context['query'] = $data;
     $context['posts'] = $posts;
     // $context['query_posts'] = $data['loop']->posts;
@@ -562,19 +538,18 @@ function dream_block_render($block, $content = '', $is_preview = false, $post_id
       // Cache the template for, let's say, 1 hour (you can adjust this).
       set_transient($cache_key, $cached_template, CACHE_EXPIRATION_TIME);
     }
-    
+
     // Output the cached or newly rendered template.
     echo $cached_template;
   }
-
 }
 
 // Remove .acf-inner-blocks-container element
 add_filter( 'acf/blocks/wrap_frontend_innerblocks', 'acf_should_wrap_innerblocks', 10, 2 );
 function acf_should_wrap_innerblocks( $wrap, $name ) {
-//  if ( $name == 'acf/test-block' ) {
-//    return true;
-//  }
+  // if ( $name == 'acf/test-block' ) {
+  //   return true;
+  // }
   return false;
 }
 

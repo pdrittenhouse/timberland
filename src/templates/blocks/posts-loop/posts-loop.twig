@@ -183,7 +183,6 @@
 
 {% endfor %}
 
-
 {% set block_attributes = block_attributes|default([])|merge([
   'data-pattern="' ~ fields.pattern ~ '"',
   parent_block_data is not empty ? 'data-parent="' ~ parent_block_data|json_encode()|replace({'"': "'"}) ~ '"',
@@ -211,9 +210,9 @@
   fields.selection_type == 'query' and fields.sort_order is not empty ? 'data-order="' ~ fields.sort_order.order ~ '"',
   fields.selection_type == 'query' and fields.sort_order is not empty ? 'data-order-by="' ~ fields.sort_order.order_by ~ '"',
   fields.selection_type == 'query' and fields.ignore_sticky_posts == true ? 'data-ignore-sticky-posts="true"' : 'data-ignore-sticky-posts="false"',
-  fields.selection_type == 'query' and not function('is_archive') and fields.pagination is not empty ? 'data-posts-per-page="' ~ fields.pagination.posts_per_page ~ '"' : fields.pagination is not empty ? 'data-posts-per-archive-page="' ~ fields.pagination.posts_per_page ~ '"',
+  fields.selection_type == 'query' and not function('is_archive') and fields.pagination is not empty and fields.pagination.posts_per_page is not empty ? 'data-posts-per-page="' ~ fields.pagination.posts_per_page ~ '"' : fields.pagination is not empty and fields.pagination.posts_per_page is not empty ? 'data-posts-per-archive-page="' ~ fields.pagination.posts_per_page ~ '"',
   fields.selection_type == 'query' and fields.pagination is not empty and fields.pagination.nopaging == true ? 'data-nopaging="true"' : 'data-nopaging="false"',
-  fields.selection_type == 'query' and fields.pagination is not empty and fields.pagination.offset is not empty ? 'data-offset="' ~ fields.pagination.offset ~ '"',
+  fields.selection_type == 'query' and fields.pagination is not empty and fields.pagination.offset is not empty ? 'data-offset="' ~ fields.pagination.offset | number_format ~ '"',
   fields.pagination and fields.pagination.page is not empty and not function('is_page') ? 'data-paged="1"' : 'data-paged="' ~ fields.pagination.page ~ '"',
   fields.selection_type == 'query' and fields.post_parent.parent is not empty and fields.post_parent.include_parent == 'inc' ? 'data-post-parent-in="' ~ fields.post_parent.parent|json_encode()|replace({'"': "'"}) ~ '"',
   fields.selection_type == 'query' and fields.post_parent.parent is not empty and fields.post_parent.include_parent == 'exc' ? 'data-post-parent-not-in="' ~ fields.post_parent.parent|json_encode()|replace({'"': "'"}) ~ '"',
@@ -248,6 +247,7 @@
   fields.selection_type == 'query' and fields.search is not empty and fields.search.exact == true ? 'data-exact="true"' : '',
   fields.selection_type == 'query' and fields.search is not empty and fields.search.sentence == true ? 'data-sentence="true"' : '',
   fields.selection_type == 'select' ? 'data-post-in="' ~ fields.select_posts|json_encode()|replace({'"': "'"}) ~ '"' : '',
+  fields.pattern == 'card-grid' ? 'data-grid-type="' ~ fields.card_grid.type ~ '"',
 ]) | sort | join(' ') | trim %}
 
 <div class="{{ block_classes }}" {{ block_attributes }}>
@@ -737,7 +737,7 @@
             'posts-loop--post',
             'posts-loop--card',
             fields.card.horizontal != true and fields.card.layout.card_layout != 'default' ? 'card-' ~ fields.card.layout.card_layout : fields.card.horizontal == true and fields.card.horizontal_layout.horizontal_card_layout != 'default' ? 'card-' ~ fields.card.horizontal_layout.horizontal_card_layout,
-            fields.card.text_align is not empty and fields.card.text_align == 'left' ? 'text-start' : fields.card.text_align is not empty and fields.card.text_align == 'right' ? 'text-end' : fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
+            fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
           ],
           card_styles: [
             fields.card.flip_card != true ? card_bg_image_size,
@@ -2191,7 +2191,7 @@
 
       {% embed '@organisms/card-grid/_card-grid.tpl.twig' with {
         type: fields.card_grid.type | default('grid'),
-        columns: fields.card_grid.column_count,
+        columns: fields.card_grid.type != 'row' ? fields.card_grid.column_count,
         placecard: fields.card_grid.placecard,
         singlerow: fields.card_grid.single_row,
         mobilecolumns: fields.card_grid.mobile_columns,
@@ -2213,6 +2213,7 @@
         {% block card_grid_cards %}
 
           {% for post in posts %}
+
             {# Categories #}
             {% if post.categories %}
               {% set catArr = [] %}
@@ -2342,6 +2343,10 @@
 
             {% set card_template = fields.card.horizontal == true ? '_card~horizontal.tpl.twig' : '_card.tpl.twig'  %}
 
+            {% if fields.card_grid.type == 'row' %}
+              <div class="col">
+            {% endif %}
+
             {% embed '@molecules/card/' ~ card_template with {
               text_color: fields.card.card_text_color['color'] == 'palette' and fields.card.card_text_color['theme_color'] and fields.card.flip_card != true ? fields.card.card_text_color['theme_color'],
               card_background: fields.card.card_bg_color['bg_color'] == 'palette' and fields.card.card_bg_color['bg_theme_color'] and fields.card.flip_card != true ? fields.card.card_bg_color['bg_theme_color'],
@@ -2380,7 +2385,7 @@
                 'posts-loop--post',
                 'posts-loop--card',
                 fields.card.horizontal != true and fields.card.layout.card_layout != 'default' ? 'card-' ~ fields.card.layout.card_layout : fields.card.horizontal == true and fields.card.horizontal_layout.horizontal_card_layout != 'default' ? 'card-' ~ fields.card.horizontal_layout.horizontal_card_layout,
-                fields.card.text_align is not empty and fields.card.text_align == 'left' ? 'text-start' : fields.card.text_align is not empty and fields.card.text_align == 'right' ? 'text-end' : fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
+                fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
               ],
               card_styles: [
                 fields.card.flip_card != true ? card_bg_image_size,
@@ -3661,6 +3666,10 @@
               {% endblock back %}
             {% endembed %}
 
+            {% if fields.card_grid.type == 'row' %}
+              </div>
+            {% endif %}
+
           {% endfor %}
 
         {% endblock %}
@@ -3945,7 +3954,7 @@
                       'posts-loop--post',
                       'posts-loop--card',
                       fields.card.horizontal != true and fields.card.layout.card_layout != 'default' ? 'card-' ~ fields.card.layout.card_layout : fields.card.horizontal == true and fields.card.horizontal_layout.horizontal_card_layout != 'default' ? 'card-' ~ fields.card.horizontal_layout.horizontal_card_layout,
-                      fields.card.text_align is not empty and fields.card.text_align == 'left' ? 'text-start' : fields.card.text_align is not empty and fields.card.text_align == 'right' ? 'text-end' : fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
+                      fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
                     ],
                     card_styles: [
                       fields.card.flip_card != true ? card_bg_image_size,
@@ -5395,10 +5404,6 @@
 
                   {% set card_template = fields.card.horizontal == true ? '_card~horizontal.tpl.twig' : '_card.tpl.twig'  %}
 
-                  {# {{ function('print_r', '<pre>') }}
-                  {{ function('print_r', fields.card) }}
-                  {{ function('print_r', '</pre>') }} #}
-
                   {% embed '@molecules/card/' ~ card_template with {
                     text_color: fields.card.card_text_color['color'] == 'palette' and fields.card.card_text_color['theme_color'] and fields.card.flip_card != true ? fields.card.card_text_color['theme_color'],
                     card_background: fields.card.card_bg_color['bg_color'] == 'palette' and fields.card.card_bg_color['bg_theme_color'] and fields.card.flip_card != true ? fields.card.card_bg_color['bg_theme_color'],
@@ -5437,7 +5442,7 @@
                       'posts-loop--post',
                       'posts-loop--card',
                       fields.card.horizontal != true and fields.card.layout.card_layout != 'default' ? 'card-' ~ fields.card.layout.card_layout : fields.card.horizontal == true and fields.card.horizontal_layout.horizontal_card_layout != 'default' ? 'card-' ~ fields.card.horizontal_layout.horizontal_card_layout,
-                      fields.card.text_align is not empty and fields.card.text_align == 'left' ? 'text-start' : fields.card.text_align is not empty and fields.card.text_align == 'right' ? 'text-end' : fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
+                      fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
                     ],
                     card_styles: [
                       fields.card.flip_card != true ? card_bg_image_size,
@@ -6778,7 +6783,7 @@
                   {# Set custom card styles #}
                   {% set card_bg_color = fields.card.card_bg_color['bg_color'] == 'custom' and fields.card.card_bg_color['bg_custom_color'] ? 'background-color: ' ~ fields.card.card_bg_color['bg_custom_color'] ~ ';' %}
                   {# {% set card_border_color = fields.card.card_border_color['color'] == 'custom' and fields.card.card_border_color['custom_color'] ? 'border-color: ' ~ fields.card.card_border_color['custom_color'] ~ ';' %} #}
-
+                  
                   {% if fields.card.remove_card_border != true %}
                     {% set card_border_top_width = fields.card.card_border['top']['width'] is not empty ? 'border-top-width: ' ~ fields.card.card_border['top']['width'] ~ 'px;' %}
                     {% set card_border_top_style = fields.card.card_border['top']['style'] ? 'border-top-style: ' ~ fields.card.card_border['top']['style'] ~ ';' %}
@@ -6934,7 +6939,7 @@
                       'posts-loop--post',
                       'posts-loop--card',
                       fields.card.horizontal != true and fields.card.layout.card_layout != 'default' ? 'card-' ~ fields.card.layout.card_layout : fields.card.horizontal == true and fields.card.horizontal_layout.horizontal_card_layout != 'default' ? 'card-' ~ fields.card.horizontal_layout.horizontal_card_layout,
-                      fields.card.text_align is not empty and fields.card.text_align == 'left' ? 'text-start' : fields.card.text_align is not empty and fields.card.text_align == 'right' ? 'text-end' : fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
+                      fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
                     ],
                     card_styles: [
                       fields.card.flip_card != true ? card_bg_image_size,
@@ -10414,13 +10419,6 @@
     {% set load_more_btn_margin_bottom = fields.load_more.load_more_button.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.load_more.load_more_button.margin['margin']['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ fields.load_more.load_more_button.margin['margin']['bottom']['bottom'] ~ 'px;' %}
     {% set load_more_btn_margin_left = fields.load_more.load_more_button.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : fields.load_more.load_more_button.margin['margin']['left']['left'] is not empty ? 'margin-left: ' ~ fields.load_more.load_more_button.margin['margin']['left']['left'] ~ 'px;' %}
     {% set load_more_btn_margin_right = fields.load_more.load_more_button.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : fields.load_more.load_more_button.margin['margin']['right']['right'] is not empty ? 'margin-right: ' ~ fields.load_more.load_more_button.margin['margin']['right']['right'] ~ 'px;' %}
-
-
-
-
-    {# {{ function('print_r', '<pre>') }}
-    {{ function('print_r', fields.load_more.load_more_button) }}
-    {{ function('print_r', '</pre>') }} #}
 
     <div class="load-more--wrapper d-flex {{ load_more_btn_alignment|length > 0 ? load_more_btn_alignment|sort|join(' ')|trim }}">
       {% include '@atoms/button/_button.tpl.twig' with {

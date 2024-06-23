@@ -58,8 +58,8 @@
   format ? 'video-format--' ~ format : '',
   aspect_ratio == 'wide' ? aspect_ratio : aspect_ratio ? 'aspect-ratio--' ~ aspect_ratio,
   controls ? 'has-controls' : '',
-  autoplay == true ? 'has-autoplay' : '',
   format == 'youtube' and suggested != true ? 'hide-suggested',
+  autoplay == true ? 'has-autoplay' : '',
   video_other_classes,
 ]) | sort | join(' ') | trim %}
 
@@ -82,10 +82,17 @@
   video_other_attributes,
 ]) | sort | join(' ') | trim %}
 
+{% set yt_id = '' %}
+
 {% if format == 'youtube' %}
-  {% set yt_id = source | split('?v=') %}
+  {# {% set yt_id = source | split('?v=') %}
   {% if yt_id[1] == true %}
     {% set source = 'https://www.youtube.com/embed/' ~ yt_id[1] %}
+  {% endif %} #}
+  {% set yt_id = source | split('/') | last | trim('watch?v=') | split('?si=')[0] %}
+  {% if yt_id == true %}
+    {% set source = 'https://www.youtube.com/embed/' ~ yt_id %}
+    {% set yt_thumb = 'https://img.youtube.com/vi/' ~ yt_id ~ '/hqdefault.jpg' %}
   {% endif %}
 {% endif %}
 
@@ -98,6 +105,7 @@
   <div class="video-responsive">
 
     {% if format == 'youtube' or format == 'vimeo' or format == 'iframe' %}
+    
 
       {% if autoplay == true %}
         {% set autoplay = '&autoplay=1' %}
@@ -126,9 +134,9 @@
       {% endif %}
 
       {% if muted == true %}
-        {% set muted = '&mute=1&muted=1' %}
+        {% set muted = '&mute=1' %}
       {% else %}
-        {% set muted = '&mute=0&muted=0' %}
+        {% set muted = '&mute=0' %}
       {% endif %}
 
       {% if playsinline == true %}
@@ -315,7 +323,12 @@
         {% set transparent = '' %}
       {% endif %}
 
-      <iframe width="100%" height="100%" src="{{ source }}?enablejsapi=1&version=3{{ related }}{{ autoplay }}{{ controls }}{{ info }}{{ loop }}{{ muted }}{{ fs }}{{ cc }}{{ cc_lang }}{{ hl }}{{ modestbranding }}{{ iv_load_policy }}{{ playlist }}{{ list }}{{ list_type }}{{ origin }}{{ background }}{{ autopause }}{{ color }}{{ quality }}{{ byline }}{{ dnt }}{{ portrait }}{{ speed }}{{ video_title }}{{ transparent }}{{ start }}{{ end }}{{ time }}" frameborder="0" allow="accelerometer; {{ allow_autoplay }} encrypted-media; gyroscope; picture-in-picture; {{ allow_fullscreen }}" {{ fullscreen }}></iframe>
+      {% set src = source ~ "?enablejsapi=1&version=3" ~ related ~ autoplay ~ controls ~ info ~ loop ~ muted ~ fs ~ cc ~ cc_lang ~ hl ~ modestbranding ~ iv_load_policy ~ playlist ~ list ~ list_type ~ origin ~ background ~ autopause ~ color ~ quality ~ byline ~ dnt ~ portrait ~ speed ~ video_title ~ transparent ~ start ~ end ~ time %}
+
+       {% set srcdoc_content = "<style>*{padding:0;margin:0;overflow:hidden}html,body{height:100%}img,span{position:absolute;width:100%;top:0;bottom:0;margin:auto}span{height:1.5em;text-align:center;font:48px/1.5 sans-serif;color:white;text-shadow:0 0 0.5em black}</style><a href='" ~ src ~ "'><img src=" ~ yt_thumb ~ " alt=" ~ title ~ "><span>▶</span></a>" %}
+
+      <iframe width="100%" height="100%" src="{{ src }}" srcdoc="{{ srcdoc_content | e }}" frameborder="0" allow="accelerometer; {{ allow_autoplay }} encrypted-media; gyroscope; picture-in-picture; {{ allow_fullscreen }}" {{ fullscreen }}></iframe>
+
 
     {% else %}
 
