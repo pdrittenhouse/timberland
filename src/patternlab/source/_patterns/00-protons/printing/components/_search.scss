@@ -1,5 +1,5 @@
 .searchform {
-    
+
     > div {}
 
     label {
@@ -9,4 +9,42 @@
     .search-field {}
 
     .search-submit {}
+}
+
+.search {}
+
+.search-results {
+
+  &--header {}
+
+  &--search {}
+
+  &--search-form {}
+
+  .searchform {
+
+    .searchform {
+
+      > div {}
+    }
+
+    label {}
+
+    .search-field {}
+
+    .search-submit {
+
+      .button--label {}
+
+      .search-icon {}
+    }
+  }
+
+  &--wrapper {}
+
+  .post-grid {}
+
+  .grid {}
+
+  &--result { }
 }
