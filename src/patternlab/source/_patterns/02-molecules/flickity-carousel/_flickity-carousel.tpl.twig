@@ -76,7 +76,7 @@
   freeScroll == true ? 'data-freescroll="true"' : 'data-freescroll="false"',
   wrapAround == true ? 'data-wraparound="true"' : 'data-wraparound="false"',
   groupCells == true ? 'data-groupcells="true"' : 'data-groupcells="false"',
-  autoPlay ? 'data-autoplay="' ~ autoPlay ~ '"' : 'data-autoplay="false"',
+  autoPlay is not empty ? 'data-autoplay="' ~ autoPlay ~ '"' : 'data-autoplay="false"',
   pauseAutoPlayOnHover == true ? 'data-pauseautoplay="true"' : 'data-pause-autoplay="false"',
   fullscreen == true ? 'data-fullscreen="true"' : 'data-fullscreen="false"',
   fade == true ? 'data-fade="true"' : 'data-fade="false"',

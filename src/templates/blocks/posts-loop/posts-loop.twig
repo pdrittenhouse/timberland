@@ -6726,6 +6726,29 @@
             {% endblock slides %}
           {% endembed %}
         {% elseif fields.slider.slider == 'slick' %}
+          {% set responsive_settings = [] %}
+
+          {% for item in fields.responsive %}
+            {% set breakpoint = item.breakpoint %}
+            {% set settings = {} %}
+            {% for setting in item.settings %}
+              {% set responsive_setting = setting.setting %}
+              {% if setting.value_type == 'int' %}
+                {% set value = setting.value | number_format %}
+              {% else %}
+                {% set value = setting.value %}
+              {% endif %}
+              
+              {% set settings = settings | merge({(responsive_setting): value}) %}
+            {% endfor %}
+            {% set responsive_settings = responsive_settings | merge([
+              {
+                breakpoint: breakpoint,
+                settings: settings
+              }
+            ]) %}
+          {% endfor %}
+          
           {% embed '@molecules/slick-carousel/_slick-carousel.tpl.twig' with {
             dots: fields.slider.dots,
             arrows: fields.slider.arrows,
@@ -8901,6 +8924,29 @@
             {% endblock slides %}
           {% endembed %}
         {% elseif fields.slider.slider == 'slick' %}
+          {% set responsive_settings = [] %}
+
+          {% for item in fields.responsive %}
+            {% set breakpoint = item.breakpoint %}
+            {% set settings = {} %}
+            {% for setting in item.settings %}
+              {% set responsive_setting = setting.setting %}
+              {% if setting.value_type == 'int' %}
+                {% set value = setting.value | number_format %}
+              {% else %}
+                {% set value = setting.value %}
+              {% endif %}
+              
+              {% set settings = settings | merge({(responsive_setting): value}) %}
+            {% endfor %}
+            {% set responsive_settings = responsive_settings | merge([
+              {
+                breakpoint: breakpoint,
+                settings: settings
+              }
+            ]) %}
+          {% endfor %}
+          
           {% embed '@molecules/slick-carousel/_slick-carousel.tpl.twig' with {
             dots: fields.slider.dots,
             arrows: fields.slider.arrows,

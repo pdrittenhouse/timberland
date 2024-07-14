@@ -35,7 +35,7 @@ const initSlick = () => {
   carousels.forEach(carousel => {
 
     const $carousel = $(carousel).find('.slick-carousel').slick({
-      accessibility: true,
+      accessibility: false,
       adaptiveHeight: carousel.dataset.adaptiveheight === 'true' ? true : false,
       autoplay: carousel.dataset.autoplay === 'true' ? true : false,
       autoplaySpeed: parseInt(carousel.dataset.autoplayspeed),

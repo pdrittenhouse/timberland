@@ -1,6 +1,6 @@
 {#
 /**
- * Block Name: Slider
+ * Block Name:
  *
  * This is the template that displays the  block.
  */
@@ -140,7 +140,7 @@
     show_controls: fields.show_custom_controls == true ? 'true' : 'false',
     slides: slideCount,
     flickity_wrapper_classes: [block_classes],
-    flickity_carousel_attributes: block_attributes
+    flickity_carousel_attributes: [block_attributes]
   } %}
     {% block slides %}
       <InnerBlocks allowedBlocks="{{ ['acf/slide'] | json_encode() | escape('html_attr') }}" template="{{ [
@@ -163,6 +163,29 @@
     {% endblock slides %}
   {% endembed %}
 {% elseif fields.slider == 'slick' %}
+  {% set responsive_settings = [] %}
+
+  {% for item in fields.responsive %}
+    {% set breakpoint = item.breakpoint %}
+    {% set settings = {} %}
+    {% for setting in item.settings %}
+      {% set responsive_setting = setting.setting %}
+      {% if setting.value_type == 'int' %}
+        {% set value = setting.value | number_format %}
+      {% else %}
+        {% set value = setting.value %}
+      {% endif %}
+      
+      {% set settings = settings | merge({(responsive_setting): value}) %}
+    {% endfor %}
+    {% set responsive_settings = responsive_settings | merge([
+      {
+        breakpoint: breakpoint,
+        settings: settings
+      }
+    ]) %}
+  {% endfor %}
+
   {% embed '@molecules/slick-carousel/_slick-carousel.tpl.twig' with {
     dots: fields.dots,
     arrows: fields.arrows,
@@ -197,10 +220,10 @@
     easing: fields.easing,
     css_ease: fields.css_ease,
     asNavFor: fields.as_nav_for,
-    responsive: fields.responsive,
+    responsive: responsive_settings | json_encode,
     slides: slideCount,
     slick_wrapper_classes: [block_classes],
-    slick_carousel_attributes: block_attributes
+    slick_carousel_attributes: [block_attributes]
   } %}
     {% block slides %}
       <InnerBlocks allowedBlocks="{{ ['acf/slide'] | json_encode() | escape('html_attr') }}" template="{{ [

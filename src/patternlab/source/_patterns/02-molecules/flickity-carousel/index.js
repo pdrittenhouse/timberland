@@ -62,7 +62,7 @@ const initFlickity = () => {
         wrapAround: carousel.dataset.wraparound === 'true' ? true : false,
         groupCells: carousel.dataset.groupcells === 'true' ? true : false,
         // eslint-disable-next-line no-nested-ternary
-        autoPlay: carousel.dataset.autoplay === 'true' ? true : carousel.dataset.autoplay === 'false' ? false : carousel.dataset.autoplay,
+        autoPlay: carousel.dataset.autoplay === 'true' ? true : carousel.dataset.autoplay === 'false' ? false : parseInt(carousel.dataset.autoplay),
         pauseAutoPlayOnHover: carousel.dataset.pauseautoplay === 'true' ? true : false,
         fullscreen: carousel.dataset.fullscreen === 'true' ? true : false,
         fade: carousel.dataset.fade === 'true' ? true : false,
