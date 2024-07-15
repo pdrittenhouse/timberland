@@ -1255,7 +1255,7 @@
             "label": "Responsive",
             "name": "responsive",
             "aria-label": "",
-            "type": "textarea",
+            "type": "repeater",
             "instructions": "An array of <a href=\"https:\/\/kenwheeler.github.io\/slick\/\" target=\"_blank\">Slick Carousel settings<\/a>.",
             "required": 0,
             "conditional_logic": [
@@ -1273,11 +1273,217 @@
                 "id": ""
             },
             "admin_only": 0,
-            "default_value": "",
-            "maxlength": "",
-            "rows": "",
-            "placeholder": "",
-            "new_lines": ""
+            "layout": "block",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "Add Breakpoint",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_66839448ba480",
+                    "label": "Settings",
+                    "name": "settings",
+                    "aria-label": "",
+                    "type": "repeater",
+                    "instructions": "",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "layout": "block",
+                    "min": 1,
+                    "max": 0,
+                    "collapsed": "field_66833cc0be19b",
+                    "button_label": "Add Setting",
+                    "rows_per_page": 20,
+                    "parent_repeater": "field_640cc49199d1e",
+                    "sub_fields": [
+                        {
+                            "key": "field_66839448ba481",
+                            "label": "Setting",
+                            "name": "setting",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "admin_only": 0,
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "parent_repeater": "field_66839448ba480"
+                        },
+                        {
+                            "key": "field_66839448ba482",
+                            "label": "Value Type",
+                            "name": "value_type",
+                            "aria-label": "",
+                            "type": "select",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "admin_only": 0,
+                            "choices": {
+                                "int": "Integer",
+                                "bool": "Boolean",
+                                "str": "String"
+                            },
+                            "default_value": false,
+                            "return_format": "value",
+                            "multiple": 0,
+                            "allow_null": 0,
+                            "ui": 0,
+                            "ajax": 0,
+                            "placeholder": "",
+                            "parent_repeater": "field_66839448ba480"
+                        },
+                        {
+                            "key": "field_66839448ba483",
+                            "label": "Value",
+                            "name": "value",
+                            "aria-label": "",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_66839448ba482",
+                                        "operator": "==",
+                                        "value": "int"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "admin_only": 0,
+                            "default_value": "",
+                            "min": "",
+                            "max": "",
+                            "placeholder": "",
+                            "step": "",
+                            "prepend": "",
+                            "append": "",
+                            "parent_repeater": "field_66839448ba480"
+                        },
+                        {
+                            "key": "field_66839448ba484",
+                            "label": "Value",
+                            "name": "value",
+                            "aria-label": "",
+                            "type": "true_false",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_66839448ba482",
+                                        "operator": "==",
+                                        "value": "bool"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "admin_only": 0,
+                            "message": "",
+                            "default_value": 1,
+                            "ui_on_text": "",
+                            "ui_off_text": "",
+                            "ui": 1,
+                            "parent_repeater": "field_66839448ba480"
+                        },
+                        {
+                            "key": "field_66839449ba485",
+                            "label": "Value",
+                            "name": "value",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_66839448ba482",
+                                        "operator": "==",
+                                        "value": "str"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "admin_only": 0,
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "parent_repeater": "field_66839448ba480"
+                        }
+                    ]
+                },
+                {
+                    "key": "field_66839448ba47f",
+                    "label": "Breakpoint",
+                    "name": "breakpoint",
+                    "aria-label": "",
+                    "type": "select",
+                    "instructions": "",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "choices": {
+                        "300": "300",
+                        "540": "540",
+                        "768": "768",
+                        "1024": "1024",
+                        "1200": "1200",
+                        "1440": "1440",
+                        "1780": "1780",
+                        "2400": "2400"
+                    },
+                    "default_value": false,
+                    "return_format": "value",
+                    "multiple": 0,
+                    "allow_null": 1,
+                    "ui": 0,
+                    "ajax": 0,
+                    "placeholder": "",
+                    "parent_repeater": "field_640cc49199d1e"
+                }
+            ]
         },
         {
             "key": "field_640ad33d31bb2",
@@ -1764,5 +1970,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1709503988
+    "modified": 1721013957
 }

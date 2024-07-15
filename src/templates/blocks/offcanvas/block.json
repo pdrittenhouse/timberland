@@ -54,7 +54,6 @@
   "script": "./script.js",
   "editorStyle": "./index.css",
   "style": "./style.css",
-  "viewScript": [ "file:./view.js", "example-shared-view-script" ],
   "acf": {
     "mode": "preview",
     "renderCallback": "dream_block_render",
