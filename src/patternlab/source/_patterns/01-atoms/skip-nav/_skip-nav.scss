@@ -19,6 +19,14 @@
   border: none;
   z-index: z(skip-nav);
 
+  &.screen-reader-text {
+    background-color: c(black);
+
+    &.focus {
+      background-color: c(black);
+    }
+  }
+
   &:active,
   &:focus,
   &:hover {
@@ -30,5 +38,6 @@
     overflow: visible;
     color: #fff;
     text-decoration: none;
+    outline: none;
   }
 }

@@ -4,8 +4,8 @@
 
 {% embed '@atoms/form/_form.tpl.twig' with {
   attributes: 'role="search"',
-  name: 'searchform',
-  id: 'searchform',
+  name: name ? name : 'searchform',
+  id: id ? id : 'searchform',
   charset: '',
   action: site.link,
   autocomplete: '',

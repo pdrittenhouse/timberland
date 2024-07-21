@@ -10,7 +10,9 @@ module.exports = merge(common, {
   // Set the mode to production
   mode: 'production',
   // Disable source maps
-  devtool: false,
+  // devtool: false,
+  // Enable source maps
+  devtool: 'source-map',
   optimization: {
     minimize: true,
     minimizer: [
