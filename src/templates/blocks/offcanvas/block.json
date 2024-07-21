@@ -50,7 +50,6 @@
       }
     }
   ],
-  "viewScript": [ "file:./view.js", "example-shared-view-script" ],
   "editorScript": "./index.js",
   "script": "./script.js",
   "editorStyle": "./index.css",

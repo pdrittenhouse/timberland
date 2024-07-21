@@ -18,7 +18,8 @@ class customVars extends TimberSite {
     // Menu - Timber stored it as an array so you can loop it and write custom markup
     $context['nav'] = new TimberMenu( 'main-nav' );
 
-    // Link to the image inside your theme
+    // Add paths to context
+    // Replicate in block context [blocks.php] when updating
     // Example:   <img src="{{ images }}/logo.svg">
     $context['paths'] = [
       'assets' => get_template_directory_uri() . '/dist/wp',

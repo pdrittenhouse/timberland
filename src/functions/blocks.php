@@ -149,6 +149,27 @@ function dream_block_render($block, $content = '', $is_preview = false, $post_id
     $context[ 'parent_block_data' ][ 'data' ] = replace_acf_keys_with_names( $context[ 'parent_block_data' ][ 'data' ] );
   }
 
+  // Menus
+  // Passing menus into the block context to ensure they work in widget areas
+  // Copied from config.php
+  $context['menu_primary'] = new \Timber\Menu( 'primary' );
+  $context['menu_secondary'] = new \Timber\Menu( 'secondary' );
+  $context['menu_footer'] = new \Timber\Menu( 'footer' );
+  $context['menu_social'] = new \Timber\Menu( 'social' );
+  $context['menu_utility'] = new \Timber\Menu( 'utility' );
+
+  // Paths
+  // Passing paths into the block context to ensure they work in widget areas
+  // Copied from vars.php
+  $context['paths'] = [
+    'assets' => get_template_directory_uri() . '/dist/wp',
+    'scripts' => get_template_directory_uri() . '/dist/wp/css',
+    'styles' => get_template_directory_uri() . '/dist/wp/js',
+    'images' => get_template_directory_uri() . '/dist/wp/img',
+    'fonts' => get_template_directory_uri() . '/dist/wp/fonts',
+    'patternlab' => get_template_directory_uri() . '/dist/pl'
+  ];
+
   /**
    * Posts query data
   */

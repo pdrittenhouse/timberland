@@ -117,6 +117,7 @@ class StarterSite extends Timber\Site {
         $context['header_bg'] = $header_bg_path['path'];
 
         // Menus
+        // Replicate in block context [blocks.php] when updating
         $context['menu'] = new Timber\Menu();
         $context['menu_primary'] = new \Timber\Menu( 'primary' );
         $context['menu_secondary'] = new \Timber\Menu( 'secondary' );

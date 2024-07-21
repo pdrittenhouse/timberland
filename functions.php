@@ -55,8 +55,8 @@ Timber::$autoescape = false;
 /**
  * Enable caching
  */
-define('ENABLE_CACHE', true);
-define('TIMBER_CACHE', true);
+define('ENABLE_CACHE', false);
+define('TIMBER_CACHE', false);
 define('CACHE_EXPIRATION_TIME', 2592000);
 define('TIMBER_CACHE_TIME', CACHE_EXPIRATION_TIME);
 
