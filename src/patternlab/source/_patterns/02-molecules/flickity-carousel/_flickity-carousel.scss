@@ -5,10 +5,13 @@
 //   webpack.config.js: sass-loader.data|includePaths
 
 .flickity-carousel {
-  padding: rem-calc(0 70px);
   opacity: 0;
   transition: opacity, $transition-duration $transition-timing-function;
   will-change: opacity;
+
+  &.has-arrows {
+    padding: rem-calc(0 70px);
+  }
 
   &:after {
     @include remove;
@@ -126,11 +129,14 @@
   }
 
   .flickity-page-dots {
+    @include absolute-center(true, false, true);
     //bottom: rem-calc(-53.5px);
     bottom: 0;
     max-width: calc(100% - 200px);
 
-    .dot {
+    .dot,
+    .flickity-page-dot {
+      display: inline-block;
       width: rem-calc(8px);
       height: rem-calc(8px);
       background-color: c(gray, light);

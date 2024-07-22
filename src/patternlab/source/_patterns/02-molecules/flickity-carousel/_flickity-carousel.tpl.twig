@@ -59,6 +59,7 @@
 
 {% set flickity_carousel_classes = flickity_carousel_classes|default([])|merge([
   'flickity-carousel',
+  prevNextButtons == true ? 'has-arrows',
   flickity_carousel_other_classes,
 ]) | sort | join(' ') | trim %}
 
