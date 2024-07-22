@@ -9,14 +9,14 @@
   transition: opacity, $transition-duration $transition-timing-function;
   will-change: opacity;
 
-  &.has-arrows {
-    padding: rem-calc(0 70px);
-  }
-
   &:after {
     @include remove;
     // Enable Flickity
     content: 'flickity';
+  }
+
+  &.has-arrows {
+    padding: rem-calc(0 70px);
   }
 
   &.flickity-enabled {
