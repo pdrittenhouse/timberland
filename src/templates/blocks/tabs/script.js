@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const blocks = [].slice.call(document.querySelectorAll('.block-tabs'));
 
-  if (blocks !== undefined && blocks !== null && blocks !== []) {
+  if (blocks !== undefined && blocks !== null && blocks.length) {
     blocks.forEach(block => {
       if (block.classList.contains('jquery')) {
         // Add jQuery tabs
