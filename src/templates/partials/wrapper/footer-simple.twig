@@ -246,7 +246,7 @@
         {% include "@atoms/branding/_branding.tpl.twig" with {
           name_element: 'h2',
           url: site.url,
-          logo_svg_inline: options.co_brand['url'] | trim(site.url),
+          logo_svg_inline: options.co_brand['url'] | replace({(site.url): ''}),
           colorOriginal: options.footer_logo_use_original_color,
           branding_classes: [
             display_header_text == true ? '' : 'hide-text',
