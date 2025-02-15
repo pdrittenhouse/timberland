@@ -105,7 +105,7 @@
   <div class="video-responsive">
 
     {% if format == 'youtube' or format == 'vimeo' or format == 'iframe' %}
-    
+
 
       {% if autoplay == true %}
         {% set autoplay = '&autoplay=1' %}
@@ -323,7 +323,7 @@
         {% set transparent = '' %}
       {% endif %}
 
-      {% set src = source ~ "?enablejsapi=1&version=3" ~ related ~ autoplay ~ controls ~ info ~ loop ~ muted ~ fs ~ cc ~ cc_lang ~ hl ~ modestbranding ~ iv_load_policy ~ playlist ~ list ~ list_type ~ origin ~ background ~ autopause ~ color ~ quality ~ byline ~ dnt ~ portrait ~ speed ~ video_title ~ transparent ~ start ~ end ~ time %}
+      {% set src = source ~ "?enablejsapi=1&version=3" ~ related ~ autoplay ~ controls ~ info ~ loop ~ muted ~ fs ~ cc ~ cc_lang ~ hl ~ modestbranding ~ iv_load_policy ~ playlist ~ list ~ list_type ~ origin | default(site.url) ~ background ~ autopause ~ color ~ quality ~ byline ~ dnt ~ portrait ~ speed ~ video_title ~ transparent ~ start ~ end ~ time %}
 
        {% set srcdoc_content = "<style>*{padding:0;margin:0;overflow:hidden}html,body{height:100%}img,span{position:absolute;width:100%;top:0;bottom:0;margin:auto}span{height:1.5em;text-align:center;font:48px/1.5 sans-serif;color:white;text-shadow:0 0 0.5em black}</style><a href='" ~ src ~ "'><img src=" ~ yt_thumb ~ " alt=" ~ title ~ "><span>▶</span></a>" %}
 
