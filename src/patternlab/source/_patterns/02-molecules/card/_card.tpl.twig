@@ -162,7 +162,9 @@
                             src: card_image.src,
                             alt: card_image.alt,
                             placeholder: card_image.placeholder,
-                            image_classes: card_image.image_classes,
+                            image_classes: card_image.image_classes | merge([
+                              'card-img-top'
+                            ]),
                             image_other_classes: card_image.image_other_classes,
                             width: card_image.width,
                             height: card_image.height,
@@ -282,7 +284,10 @@
                           src: card_image.src,
                           alt: card_image.alt,
                           placeholder: card_image.placeholder,
-                          image_classes: card_image.image_classes,
+                          image_classes: card_image.image_classes | merge([
+                            'card-img-bottom'
+                          ]),
+                          image_other_classes: card_image.image_classes,
                           image_other_classes: card_image.image_other_classes,
                           width: card_image.width,
                           height: card_image.height,

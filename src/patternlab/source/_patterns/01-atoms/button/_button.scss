@@ -39,15 +39,6 @@
         }
       }
 
-      &-outline-default {
-        @include button(
-          $bgcolor: transparent,
-          $hover-bg-color: transparent,
-          $color: var(--button-bg),
-          $hover-color: var(--button-bg-hover),
-        );
-      }
-
       &-primary {
         //@include button(
         //  $bgcolor: var(--primary),

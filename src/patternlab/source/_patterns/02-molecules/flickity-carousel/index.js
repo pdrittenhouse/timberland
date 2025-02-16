@@ -94,15 +94,22 @@ const initFlickity = () => {
       // Flickity instance
       const flkty = $carousel.data('flickity');
 
+      // Custom controls
       if (cellsButtonGroup !== null) {
         const cellsButtons = utils.makeArray( cellsButtonGroup.children );
 
         // Update buttons on select
         flkty.on( 'select', function() {
           const previousSelectedButton = cellsButtonGroup.querySelector('.is-selected');
-          const selectedButton = cellsButtonGroup.children[ flkty.selectedIndex ];
-          previousSelectedButton.classList.remove('is-selected');
-          selectedButton.classList.add('is-selected');
+          const selectedButton = cellsButtonGroup.children[flkty.selectedIndex];
+          
+          if (previousSelectedButton !== null && typeof previousSelectedButton !== 'undefined') {
+            previousSelectedButton.classList.remove('is-selected');
+          }
+
+          if (selectedButton !== null && typeof selectedButton !== 'undefined') {
+            selectedButton.classList.add('is-selected');
+          }
         });
 
         // Select cell on button click
@@ -125,16 +132,23 @@ const initFlickity = () => {
         });
       }
 
+      // Slide click control
+      const cells = [].slice.call(carousel.querySelectorAll('.carousel-cell'));
+      cells.forEach( (cell, index) => {
+        cell.addEventListener('click', () => {
+          flkty.select(index);
+        });
+      });
+
       // Add fullscreen body class
       flkty.on('fullscreenChange', () => {
         document.body.classList.toggle('is-fullscreen');
       });
 
-      // Restart autoplay after interaction
       if (flkty.options.autoPlay) {
         // eslint-disable-next-line no-unused-vars
         flkty.on('pointerUp', function (event, pointer) {
-          flkty.player.play();
+            flkty.player.play();
         });
       }
 

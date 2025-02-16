@@ -51,19 +51,22 @@
                 "shop_coupon": "shop_coupon",
                 "shop_order_placehold": "shop_order_placehold",
                 "gpb_portfolio": "gpb_portfolio",
+                "wp_font_family": "wp_font_family",
+                "wp_font_face": "wp_font_face",
+                "acf-ui-options-page": "acf-ui-options-page",
+                "guest-author": "guest-author",
                 "moving-tips": "moving-tips",
                 "client": "client",
                 "providers": "providers",
                 "reviews": "reviews",
                 "guides": "guides",
                 "compare": "compare",
-                "ninja-table": "ninja-table",
-                "np-redirect": "np-redirect",
-                "wp_font_family": "wp_font_family",
-                "wp_font_face": "wp_font_face",
-                "acf-ui-options-page": "acf-ui-options-page",
-                "mailpoet_page": "mailpoet_page",
-                "patterns_ai_data": "patterns_ai_data"
+                "dmv": "dmv",
+                "updater-life": "updater-life",
+                "trends": "trends",
+                "product-news": "product-news",
+                "press": "press",
+                "ninja-table": "ninja-table"
             },
             "default_value": [
                 "post"
@@ -669,12 +672,14 @@
                                 "product_tag": "product_tag",
                                 "product_shipping_class": "product_shipping_class",
                                 "gpb_portfolio_type": "gpb_portfolio_type",
+                                "wp_pattern_category": "wp_pattern_category",
                                 "client-type": "client-type",
                                 "testimonial": "testimonial",
                                 "service-types": "service-types",
                                 "service-providers": "service-providers",
                                 "article-type": "article-type",
-                                "wp_pattern_category": "wp_pattern_category"
+                                "state": "state",
+                                "author": "author"
                             },
                             "default_value": false,
                             "return_format": "value",
@@ -4324,12 +4329,14 @@
                                 "product_tag": "product_tag",
                                 "product_shipping_class": "product_shipping_class",
                                 "gpb_portfolio_type": "gpb_portfolio_type",
+                                "wp_pattern_category": "wp_pattern_category",
                                 "client-type": "client-type",
                                 "testimonial": "testimonial",
                                 "service-types": "service-types",
                                 "service-providers": "service-providers",
                                 "article-type": "article-type",
-                                "wp_pattern_category": "wp_pattern_category"
+                                "state": "state",
+                                "author": "author"
                             },
                             "default_value": false,
                             "return_format": "value",
@@ -6029,12 +6036,14 @@
                         "product_tag": "product_tag",
                         "product_shipping_class": "product_shipping_class",
                         "gpb_portfolio_type": "gpb_portfolio_type",
+                        "wp_pattern_category": "wp_pattern_category",
                         "client-type": "client-type",
                         "testimonial": "testimonial",
                         "service-types": "service-types",
                         "service-providers": "service-providers",
                         "article-type": "article-type",
-                        "wp_pattern_category": "wp_pattern_category"
+                        "state": "state",
+                        "author": "author"
                     },
                     "default_value": false,
                     "return_format": "value",
@@ -7458,12 +7467,14 @@
                                 "product_tag": "product_tag",
                                 "product_shipping_class": "product_shipping_class",
                                 "gpb_portfolio_type": "gpb_portfolio_type",
+                                "wp_pattern_category": "wp_pattern_category",
                                 "client-type": "client-type",
                                 "testimonial": "testimonial",
                                 "service-types": "service-types",
                                 "service-providers": "service-providers",
                                 "article-type": "article-type",
-                                "wp_pattern_category": "wp_pattern_category"
+                                "state": "state",
+                                "author": "author"
                             },
                             "default_value": false,
                             "return_format": "",
@@ -8737,12 +8748,14 @@
                                 "product_tag": "product_tag",
                                 "product_shipping_class": "product_shipping_class",
                                 "gpb_portfolio_type": "gpb_portfolio_type",
+                                "wp_pattern_category": "wp_pattern_category",
                                 "client-type": "client-type",
                                 "testimonial": "testimonial",
                                 "service-types": "service-types",
                                 "service-providers": "service-providers",
                                 "article-type": "article-type",
-                                "wp_pattern_category": "wp_pattern_category"
+                                "state": "state",
+                                "author": "author"
                             },
                             "default_value": false,
                             "return_format": "value",
@@ -9997,12 +10010,14 @@
                                 "product_tag": "product_tag",
                                 "product_shipping_class": "product_shipping_class",
                                 "gpb_portfolio_type": "gpb_portfolio_type",
+                                "wp_pattern_category": "wp_pattern_category",
                                 "client-type": "client-type",
                                 "testimonial": "testimonial",
                                 "service-types": "service-types",
                                 "service-providers": "service-providers",
                                 "article-type": "article-type",
-                                "wp_pattern_category": "wp_pattern_category"
+                                "state": "state",
+                                "author": "author"
                             },
                             "default_value": false,
                             "return_format": "value",
@@ -11248,12 +11263,14 @@
                                 "product_tag": "product_tag",
                                 "product_shipping_class": "product_shipping_class",
                                 "gpb_portfolio_type": "gpb_portfolio_type",
+                                "wp_pattern_category": "wp_pattern_category",
                                 "client-type": "client-type",
                                 "testimonial": "testimonial",
                                 "service-types": "service-types",
                                 "service-providers": "service-providers",
                                 "article-type": "article-type",
-                                "wp_pattern_category": "wp_pattern_category"
+                                "state": "state",
+                                "author": "author"
                             },
                             "default_value": false,
                             "return_format": "value",
@@ -12086,5 +12103,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1719115784
+    "modified": 1719089110
 }

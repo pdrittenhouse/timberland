@@ -7,16 +7,22 @@
 #}
 
 {% if is_preview %}
-<p>Some editor instructions here.</p>
+{# <p>Some editor instructions here.</p> #}
 {% endif %}
 
 {% include '@atoms/blockquote/_blockquote.tpl.twig' with {
   quote: fields.quote,
   citation: fields.citation,
+  citation_image: {
+    variant: 'primary',
+    src: fields.citation_image['url'],
+    alt: fields.citation_image['alt']
+  },
   citation_position: fields.citation_position,
   blockquote_classes: [
     'block-quote',
     block['className'],
-    block['align'] ? 'align-' ~ block['align']
+    block['align'] ? 'align-' ~ block['align'],
+    fields.layout != 'default' ? fields.layout,
   ]
 } %}

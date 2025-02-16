@@ -20,21 +20,37 @@
     {% set icon_classes = [] %}
     {% set item_classes = [] %}
     {% for class in item.classes %}
-      {% if not (class starts with 'menu-item') %}
+      {% if not (
+        class starts with 'menu-item' or 
+        class starts with 'fa-' or 
+        class == 'fab' or 
+        class == 'fad' or 
+        class == 'fal' or 
+        class == 'far' or 
+        class == 'fas' or 
+        class == 'fat' or 
+        class == 'fa-brands' or 
+        class == 'fa-duotone' or 
+        class == 'fa-light' or 
+        class == 'fa-regular' or 
+        class == 'fa-sharp' or 
+        class == 'fa-solid' or 
+        class == 'fa-thin'
+      ) %}
         {% set icon_classes = icon_classes|merge([class]) %}
       {% else %}
-        {% set item_classes = item_classes|merge([class ~ ' ' ~ item.title|lower|replace({' ': '-'})]) %}
+        {% set item_classes = item_classes|merge([class]) %}
       {% endif %}
     {% endfor %}
 
-    {% set item_icon_classes = icon_classes | map(i => 'icon-' ~ i) %}
+    {% set item_icon_classes = icon_classes | map(i => 'icon-' ~ i) %}  
 
     {% set nav_item = {
       item_classes: item_classes|merge(item_icon_classes),
       url: item.link,
       target: item.target,
       label: item.title,
-      icon: icon_classes|join(' '),
+      icon: icon_classes|sort|join(' ')|trim,
       icon_color: menu_icon_color,
       icon_position: menu_icon_position,
       icon_width: menu_icon_width,

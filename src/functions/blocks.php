@@ -117,6 +117,7 @@ function replace_acf_keys_with_names( $data ) {
  */
 // Render Callback Function
 function dream_block_render($block, $content = '', $is_preview = false, $post_id, $wp_block, $acf_context) {
+  
   $context = Timber::context();
 
   // Post data

@@ -57,7 +57,10 @@ Timber::$autoescape = false;
  */
 define('ENABLE_CACHE', false);
 define('TIMBER_CACHE', false);
-define('CACHE_EXPIRATION_TIME', 2592000);
+define('CACHE_EXPIRATION_TIME', 2592000); // 1 month
+// define('CACHE_EXPIRATION_TIME', 604800); // 1 week
+// define('CACHE_EXPIRATION_TIME', 86400); // 1 day
+// define('CACHE_EXPIRATION_TIME', 3600); // 1 hour
 define('TIMBER_CACHE_TIME', CACHE_EXPIRATION_TIME);
 
 /**

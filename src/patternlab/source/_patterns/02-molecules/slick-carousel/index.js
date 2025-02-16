@@ -30,11 +30,47 @@ const slickCarouselEnable = () => {
 };
 
 const initSlick = () => {
-  const carousels = [].slice.call( document.querySelectorAll('.slick-carousel-wrapper') );
-
+  const carousels = [].slice.call(document.querySelectorAll('.slick-carousel-wrapper'));
+  
   carousels.forEach(carousel => {
 
-    const $carousel = $(carousel).find('.slick-carousel').slick({
+    // Parse the JSON from the data attribute
+    const responsiveSettings = JSON.parse(carousel.dataset.responsive);
+
+    // Helper function to dynamically convert values
+    function convertValue(value) {
+      // Check if value is a number string and convert it to an integer
+      if (!isNaN(value) && typeof value === 'string') {
+        return parseInt(value, 10);
+      }
+      // Check if value is "true" or "false" and convert it to a boolean
+      if (value === 'true') {
+        return true;
+      }
+      if (value === 'false') {
+        return false;
+      }
+      // Return the value as is if it's not a number string or a boolean string
+      return value;
+    }
+
+    // Iterate over the responsive settings and convert dynamically
+    responsiveSettings.forEach(item => {
+      // Convert the breakpoint to an integer
+      item.breakpoint = convertValue(item.breakpoint);
+
+      // Iterate over the settings object and convert its values
+      Object.keys(item.settings).forEach(key => {
+        item.settings[key] = convertValue(item.settings[key]);
+      });
+    });
+
+    const slidesShowCount = parseInt(carousel.dataset.slidestoshow);
+    const loop = carousel.dataset.infinite === 'true' ? true : false;
+    const customControls = carousel.dataset.customcontrols === 'true';
+    const controlsWrap = $(carousel).find('.slick-carousel-controls');
+
+    const slickOptions = {
       accessibility: false,
       adaptiveHeight: carousel.dataset.adaptiveheight === 'true' ? true : false,
       autoplay: carousel.dataset.autoplay === 'true' ? true : false,
@@ -54,19 +90,19 @@ const initSlick = () => {
       focusOnSelect: carousel.dataset.focusonselect === 'true' ? true : false,
       easing: carousel.dataset.easing,
       edgeFriction: parseFloat(carousel.dataset.edgefriction),
-      infinite: carousel.dataset.infinite === 'true' ? true : false,
+      infinite: loop,
       initialSlide: parseInt(carousel.dataset.initialslide),
       lazyLoad: 'ondemand',
-      mobileFirst: true,
+      mobileFirst: true, // TODO: Add this option to slider blocks
       pauseOnFocus: carousel.dataset.pauseonfocus === 'true' ? true : false,
       pauseOnHover: carousel.dataset.pauseonhover === 'true' ? true : false,
       pauseOnDotsHover: carousel.dataset.pauseondotshover === 'true' ? true : false,
       respondTo: 'window',
-      responsive: JSON.parse(carousel.dataset.responsive),
+      responsive: responsiveSettings,
       rows: parseInt(carousel.dataset.rows),
       slide: carousel.dataset.slide,
       slidesPerRow: parseInt(carousel.dataset.slidesperrow),
-      slidesToShow: parseInt(carousel.dataset.slidestoshow),
+      slidesToShow: slidesShowCount,
       slidesToScroll: parseInt(carousel.dataset.slidestoscroll),
       speed: parseInt(carousel.dataset.speed),
       swipe: carousel.dataset.swipe === 'true' ? true : false,
@@ -81,18 +117,71 @@ const initSlick = () => {
       rtl: carousel.dataset.rtl === 'true' ? true : false,
       waitForAnimate: true,
       zIndex: 2,
-    });
+    };
 
-    if(carousel.dataset.customcontrols === 'true') {
-      $carousel.slick("slickSetOption", "appendArrows", $(carousel).find('.slick-carousel-controls'), true);
-      $carousel.slick("slickSetOption", "appendDots", $(carousel).find('.slick-carousel-controls'), true);
+    // Append custom controls
+    if (customControls) {
+      slickOptions.appendArrows = controlsWrap;
+      slickOptions.appendDots = controlsWrap;
+
+      // Add appendArrows and appendDots to all responsive breakpoints
+      responsiveSettings.forEach(item => {
+        item.settings.appendArrows = controlsWrap;
+        item.settings.appendDots = controlsWrap;
+      });
+      slickOptions.responsive = responsiveSettings;
     }
+
+    // Init carousels
+    // eslint-disable-next-line no-unused-vars
+    const $carousel = $(carousel).find('.slick-carousel').slick(slickOptions);
   });
+};
+
+// Gallery block carousel
+const galleryCarousel = () => {
+  const carousels = [].slice.call(document.querySelectorAll('.wp-block-gallery.is-style-carousel'));
+  
+  if (carousels !== null) {
+    carousels.forEach(carousel => {
+      const classes = carousel.getAttribute('class').split(' ');
+      let columnClass = '';
+
+      for (let i = 0; i < classes.length; i++) {
+          if (classes[i].indexOf('columns-') !== -1) {
+              columnClass = classes[i];
+              break;
+          }
+      }
+
+      const colClass = columnClass.replace('columns-', '');
+      const cols = colClass === 'default' ? 3 : parseInt(colClass);
+      
+      carousel.classList.add('slick-carousel');
+      carousel.classList.add('equal-height-slides');
+
+      $(carousel).slick({
+        adaptiveHeight: true,
+        autoplay: false,
+        arrows: true,
+        dots: true,
+        draggable: true,
+        fade: false,
+        infinite: true,
+        mobileFirst: true,
+        slidesToShow: cols,
+        slidesToScroll: 1,
+        swipe: true,
+        swipeToSlide: false
+      });
+    });
+  }
 };
 
 $(document).ready(() => {
   slickCarouselEnable();
   initSlick();
+  galleryCarousel();
 });
 
 export default slickCarouselEnable;

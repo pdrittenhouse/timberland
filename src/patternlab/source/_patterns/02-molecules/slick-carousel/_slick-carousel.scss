@@ -189,6 +189,13 @@
     height: auto;
 
     &.slick-current {}
+    
+    &:not(.slick-current) {
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
 
     &.slick-active {}
   }

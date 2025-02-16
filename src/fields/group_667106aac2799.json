@@ -1130,7 +1130,6 @@
                     "collapsed": "field_66833cc0be19b",
                     "button_label": "Add Setting",
                     "rows_per_page": 20,
-                    "parent_repeater": "field_668319f13f174",
                     "sub_fields": [
                         {
                             "key": "field_66833cc0be19b",
@@ -1240,8 +1239,8 @@
                             "admin_only": 0,
                             "message": "",
                             "default_value": 1,
-                            "ui_on_text": "",
-                            "ui_off_text": "",
+                            "ui_on_text": "True",
+                            "ui_off_text": "False",
                             "ui": 1,
                             "parent_repeater": "field_66833bb4be19a"
                         },
@@ -1275,7 +1274,8 @@
                             "append": "",
                             "parent_repeater": "field_66833bb4be19a"
                         }
-                    ]
+                    ],
+                    "parent_repeater": "field_668319f13f174"
                 }
             ]
         }
@@ -1298,5 +1298,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1721013957
+    "modified": 1726421163
 }

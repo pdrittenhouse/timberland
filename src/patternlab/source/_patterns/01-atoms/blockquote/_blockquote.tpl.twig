@@ -6,6 +6,7 @@
  * Available variables for blockquote:
  *  - quote [string]: Blockquote text
  *  - citation [string]: Blockquote citation
+ *  - citation_image [object]: Blockquote citation image
  *  - citation_position [string: 'before', 'after']: Blockquote citation position
  *  - citation_link [string]: Blockquote citation link
  *  - blockquote_classes [array]: Additional component classes.
@@ -15,12 +16,38 @@
 
 {% set blockquote_classes = blockquote_classes|default([])|merge([
   'blockquote',
+  citation_position == 'before' ? 'citation-top' : 'citation-bottom',
   blockquote_other_classes,
 ]) | sort | join(' ') | trim %}
 
 <blockquote class="{{ blockquote_classes }}" {{ citation_link ? 'cite="' ~ citation_link ~ '"' }}>
   {% if citation and citation_position == 'before' %}
-    <cite>{{ citation }}</cite>
+    <cite>
+      {% if citation_image.src %}
+        <span class="cite-img">
+          {% include '@atoms/image/_image.tpl.twig' with {
+            imageStyleName: 'citation',
+            variant: citation_image.variant,
+            src: citation_image.src,
+            alt: citation_image.alt,
+            placeholder: citation_image.placeholder,
+            image_classes: [
+              'citation-image'
+            ],
+            image_other_classes: citation_image.image_other_classes,
+            width: citation_image.width,
+            height: citation_image.height,
+            background_color: citation_image.background_color,
+            text_color: citation_image.text_color,
+            text: citation_image.text,
+            format: citation_image.format
+          } %}
+        </span>
+      {% endif %}
+      <span class="cite-txt">
+        {{ citation }}
+      </span>
+    </cite>
   {% endif %}
   {% block quote %}
     {% if quote %}
@@ -28,6 +55,31 @@
     {% endif %}
   {% endblock quote %}
   {% if citation and citation_position == 'after' %}
-    <cite>{{ citation }}</cite>
+    <cite>
+      {% if citation_image.src %}
+        <span class="cite-img">
+          {% include '@atoms/image/_image.tpl.twig' with {
+            imageStyleName: 'citation',
+            variant: citation_image.variant,
+            src: citation_image.src,
+            alt: citation_image.alt,
+            placeholder: citation_image.placeholder,
+            image_classes: [
+              'citation-image'
+            ],
+            image_other_classes: citation_image.image_other_classes,
+            width: citation_image.width,
+            height: citation_image.height,
+            background_color: citation_image.background_color,
+            text_color: citation_image.text_color,
+            text: citation_image.text,
+            format: citation_image.format
+          } %}
+        </span>
+      {% endif %}
+      <span class="cite-txt">
+        {{ citation }}
+      </span>
+    </cite>
   {% endif %}
 </blockquote>

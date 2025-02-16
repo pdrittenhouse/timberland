@@ -5,6 +5,7 @@
 //   webpack.config.js: sass-loader.data|includePaths
 
 .flickity-carousel {
+  padding: rem-calc(0 70px);
   opacity: 0;
   transition: opacity, $transition-duration $transition-timing-function;
   will-change: opacity;
@@ -33,15 +34,6 @@
     position: relative;
 
     .button {
-      @include fontSize(0);
-      display: inline-block;
-      border: none;
-      border-radius: 50%;
-      width: rem-calc(8px);
-      height: rem-calc(8px);
-      margin: rem-calc(0 4px);
-      padding: 0;
-      background-color: c(gray, light);
 
       &:focus {
         outline: none;
@@ -61,6 +53,18 @@
 
         @include media-breakpoint-up(lg) {
           margin-top: rem-calc(30px);
+        }
+
+        .button {
+          @include fontSize(0);
+          display: inline-block;
+          border: none;
+          border-radius: 50%;
+          width: rem-calc(8px);
+          height: rem-calc(8px);
+          margin: rem-calc(0 4px);
+          padding: 0;
+          background-color: c(gray, light);
         }
       }
 
@@ -135,7 +139,7 @@
     max-width: calc(100% - 200px);
 
     .dot,
-    .flickity-page-dot {
+    .flickity-page-dot {  
       display: inline-block;
       width: rem-calc(8px);
       height: rem-calc(8px);
@@ -198,9 +202,7 @@
   .carousel-cell {
     width: 100%;
 
-    .flickity-cols-1 & {
-      width: 100%;
-    }
+    .flickity-cols-1 & {}
 
     .flickity-cols-2 & {
       width: calc(100% / 2);

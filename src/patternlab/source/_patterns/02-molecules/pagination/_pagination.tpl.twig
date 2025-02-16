@@ -23,7 +23,7 @@ see https://getbootstrap.com/docs/4.0/components/pagination/ for more details
         {% if page_icon %}
           <span aria-hidden="true">&laquo;</span>
         {% endif %}
-        <span {{ (page_icon) ? 'class="sr-only"' }}>{{ 'Previous' }}</span>
+        <span {{ (page_icon) ? 'class="sr-only"' : 'class="button-label"' }}>{{ 'Previous' }}</span>
       </a>
     </li>
 
@@ -36,7 +36,7 @@ see https://getbootstrap.com/docs/4.0/components/pagination/ for more details
         {% if page_icon %}
           <span aria-hidden="true">&raquo;</span>
         {% endif %}
-        <span {{ (page_icon) ? 'class="sr-only"' }}>{{ 'Next' }}</span>
+        <span {{ (page_icon) ? 'class="sr-only"' : 'class="button-label"' }}>{{ 'Next' }}</span>
       </a>
     </li>
 
