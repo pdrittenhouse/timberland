@@ -37,6 +37,7 @@
     item_other_classes,
   ]) | sort | join(' ') | trim %}
   {% set nav_item = {
+    item_element: 'span',
     item_classes: [
       item_classes
     ],
@@ -56,7 +57,7 @@
 {% endfor %}
 
 {% include '@atoms/list/_list.tpl.twig' with {
-  parent_element: 'ul',
+  parent_element: 'div',
   parent_classes: [social_nav_classes],
   list_id: nav_id,
   bullet_icons: true,
