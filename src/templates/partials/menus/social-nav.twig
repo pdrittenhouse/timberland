@@ -16,7 +16,10 @@
     } %}
 #}
 
+
+
     {# Set Icon Classes #}
+    {% set item_icon_classes = [] %}
     {% set icon_classes = [] %}
     {% set item_classes = [] %}
     {% for class in item.classes %}
@@ -37,13 +40,40 @@
         class == 'fa-solid' or 
         class == 'fa-thin'
       ) %}
+        {% set item_icon_classes = item_icon_classes|merge([class]) %}
+      {% elseif (
+        class starts with 'fa-' or 
+        class == 'fab' or 
+        class == 'fad' or 
+        class == 'fal' or 
+        class == 'far' or 
+        class == 'fas' or 
+        class == 'fat' or 
+        class == 'fa-brands' or 
+        class == 'fa-duotone' or 
+        class == 'fa-light' or 
+        class == 'fa-regular' or 
+        class == 'fa-sharp' or 
+        class == 'fa-solid' or 
+        class == 'fa-thin'
+      ) %}
         {% set icon_classes = icon_classes|merge([class]) %}
+        {# {{ function('print_r', '<pre>') }}
+        {{ function('print_r', 'icon: ') }}
+        {{ function('print_r', '<br>') }}
+        {{ function('print_r', icon_classes) }}
+        {{ function('print_r', '</pre>') }} #}
       {% else %}
         {% set item_classes = item_classes|merge([class]) %}
+        {# {{ function('print_r', '<pre>') }}
+        {{ function('print_r', 'item: ') }}
+        {{ function('print_r', '<br>') }}
+        {{ function('print_r', item_classes) }}
+        {{ function('print_r', '</pre>') }} #}
       {% endif %}
     {% endfor %}
 
-    {% set item_icon_classes = icon_classes | map(i => 'icon-' ~ i) %}  
+    {% set item_icon_classes = item_icon_classes | map(i => 'icon-' ~ i) %}  
 
     {% set nav_item = {
       item_classes: item_classes|merge(item_icon_classes),

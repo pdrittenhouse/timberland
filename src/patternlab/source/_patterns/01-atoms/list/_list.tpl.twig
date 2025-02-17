@@ -98,7 +98,7 @@
 
       <{{ element }} class="{{ item_classes }}" {{ line_height ? 'style="line-height:' ~ line_height ~ ';"' }} {{ item_attributes }}>
       {% if (item.item_icon and icon_position == 'before' and bullet_icon_position != 'after') or (bullet_icons == true and bullet_icon_position == 'before') %}
-{% if item.item_icon matches '/(fa[bdlrs] fa-(brand|solid|light|sharp|duotone|regular|thin))/' %} {# FontAwesome Icon #}
+        {% if item.item_icon matches '/(fa[bdlrs]|fa-.*?\\s+fa[bdlrs]|fa[bdlrs]\\s+fa-)/' %} {# FontAwesome Icon #}
           <span class="icon" style="font-size: {{ width }};"><i class="{{ item.item_icon }} color-fill--{{ item.icon_color }}" {{ icon_styles | length > 0 ? 'style="' ~ icon_styles ~ '"'}}></i></span>
         {% else %} {# Custom SVG Icon #}
           {% include '@atoms/svg/_svg~icon.tpl.twig' with {
@@ -117,7 +117,7 @@
         {{ lists.list(item.parent_classes, item.parent_other_classes, item.parent_element, item.list_id, item.bullet_icons, item.bullet_icon_position, item.bullet_icon_size, item.items, item.item_classes, item.item_other_classes, item.item_attributes, item.item_other_attributes, item.icon_styles, item.icon_other_styles, paths) }}
       {% endif %}
       {% if (item.item_icon and icon_position == 'after' and bullet_icon_position != 'before') or (bullet_icons == true and bullet_icon_position == 'after') %}
-{% if item.item_icon matches '/(fa[bdlrs] fa-(brand|solid|light|sharp|duotone|regular|thin))/' %} {# FontAwesome Icon #}
+        {% if item.item_icon matches '/(fa[bdlrs]|fa-.*?\\s+fa[bdlrs]|fa[bdlrs]\\s+fa-)/' %} {# FontAwesome Icon #}
           <span class="icon"style="font-size: {{ width }};"><i class="{{ item.item_icon }} color-fill--{{ item.icon_color }}"  {{ icon_styles | length > 0 ? 'style="' ~ icon_styles ~ '"'}}></i></span>
         {% else %} {# Custom SVG Icon #}
           {% include '@atoms/svg/_svg~icon.tpl.twig' with {

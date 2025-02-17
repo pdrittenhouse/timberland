@@ -74,7 +74,7 @@
         "wpackagist-plugin/pdf-shortcodes-ultimate": "^1.0",
         "wpackagist-plugin/twitters-bootstrap-shortcodes-ultimate": "^1.0",
         "philipnewcomer/acf-unique-id-field": "^2.0",
-        "log1x/acf-editor-palette": "^1.0",
+        "log1x/acf-editor-palette": "^1.2",
         "wpackagist-plugin/post-types-order": "1.9.9.1",
         "wpackagist-plugin/font-awesome": "^4.3",
         "wpackagist-plugin/webp-express": "^0.25.5",
