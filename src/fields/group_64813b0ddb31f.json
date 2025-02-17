@@ -1083,6 +1083,27 @@
                     "parent_repeater": "field_6488c019c2e7b"
                 }
             ]
+        },
+        {
+            "key": "field_67b280be8bae5",
+            "label": "Nav Classes",
+            "name": "nav_classes",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         }
     ],
     "location": [
@@ -1103,5 +1124,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1711384788
+    "modified": 1739751629
 }
