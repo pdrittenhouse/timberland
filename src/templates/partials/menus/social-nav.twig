@@ -19,46 +19,22 @@
 
 
     {# Set Icon Classes #}
+    {% set fa_prefixes = [
+      'fab', 'fad', 'fal', 'far', 'fas', 'fat',
+      'fa-brands', 'fa-duotone', 'fa-light', 'fa-regular',
+      'fa-sharp', 'fa-solid', 'fa-thin'
+    ] %}
+
     {% set icon_classes = [] %}
     {% set item_classes = [] %}
+
     {% for class in item.classes %}
-      {% if not (
-        class starts with 'menu-item' or 
-        class starts with 'fa-' or 
-        class == 'fab' or 
-        class == 'fad' or 
-        class == 'fal' or 
-        class == 'far' or 
-        class == 'fas' or 
-        class == 'fat' or 
-        class == 'fa-brands' or 
-        class == 'fa-duotone' or 
-        class == 'fa-light' or 
-        class == 'fa-regular' or 
-        class == 'fa-sharp' or 
-        class == 'fa-solid' or 
-        class == 'fa-thin'
-      ) %}
-        {% set icon_classes = icon_classes|merge([class]) %}
-      {% elseif (
-        class starts with 'fa-' or 
-        class == 'fab' or 
-        class == 'fad' or 
-        class == 'fal' or 
-        class == 'far' or 
-        class == 'fas' or 
-        class == 'fat' or 
-        class == 'fa-brands' or 
-        class == 'fa-duotone' or 
-        class == 'fa-light' or 
-        class == 'fa-regular' or 
-        class == 'fa-sharp' or 
-        class == 'fa-solid' or 
-        class == 'fa-thin'
-      ) %}
+      {% if class starts with 'menu-item' %}
+        {% set item_classes = item_classes|merge([class]) %}
+      {% elseif class starts with 'fa-' or class in fa_prefixes %}
         {% set icon_classes = icon_classes|merge([class]) %}
       {% else %}
-        {% set item_classes = item_classes|merge([class]) %}
+        {% set icon_classes = icon_classes|merge([class]) %}
       {% endif %}
     {% endfor %}
 
