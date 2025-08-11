@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * posts-loop~pagination
+ *   Posts loop pagination functionality.
+ *
+ * Available variables:
+ *  - posts: Array of post objects
+ *  - fields: Block field data
+ */
+#}    <div class="posts-loop--pagination">
+      {% include 'partials/menus/pagination.twig' with {
+        posts: posts,
+        pagination: posts.pagination({show_all: false, mid_size: 3, end_size: 2}),
+        hide_first: fields.pagination_display.hide_first,
+        hide_last: fields.pagination_display.hide_last,
+        hide_next: fields.pagination_display.hide_next,
+        hide_previous: fields.pagination_display.hide_previous,
+        hide_pages: fields.pagination_display.hide_pages,
+        first_label: fields.pagination_display.first_label,
+        last_label: fields.pagination_display.last_label,
+        next_label: fields.pagination_display.next_label,
+        previous_label: fields.pagination_display.previous_label
+      } %}
+    </div>

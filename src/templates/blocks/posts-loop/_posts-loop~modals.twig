@@ -1,0 +1,765 @@
+{#
+/**
+ * @file
+ * posts-loop~modals
+ *   Posts loop modals functionality.
+ *
+ * Available variables:
+ *  - posts: Array of post objects
+ *  - fields: Block field data
+ */
+#}    <div class="posts-loop--modals-wrapper">
+      {% for post in posts %}
+
+        {# Set custom header close button styles #}
+        {% set header_close_style = fields.modal.header_close_button.close | default('black') %}
+        {% if header_close_style != 'black' and fields.modal.header_close_button.close != 'black' and fields.modal.header_close_button.close != 'white' and fields.modal.header_close_button.style == 'custom' %}
+          {% set head_bg_color = fields.modal.header_close_button.background_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.modal.header_close_button.background_color['bg_custom_color'] ~ ';' %}
+          {% set head_text_color = fields.modal.header_close_button.text_color['color'] == 'custom' ? 'color: ' ~ fields.modal.header_close_button.text_color['custom_color'] ~ ';' %}
+          {% set head_transform = fields.modal.header_close_button['text_transform']['text_transform'] ? 'text-transform: ' ~ fields.modal.header_close_button['text_transform']['text_transform'] ~ ';' %}
+          {% set head_btn_padding_top  = fields.modal.header_close_button['padding']['padding']['top'] >= 0 ? 'padding-top: ' ~ fields.modal.header_close_button['padding']['padding']['top'] ~ 'px;' %}
+          {% set head_btn_padding_bottom = fields.modal.header_close_button['padding']['padding']['bottom'] >= 0 ? 'padding-bottom: ' ~ fields.modal.header_close_button['padding']['padding']['bottom'] ~ 'px;' %}
+          {% set head_btn_padding_left = fields.modal.header_close_button['padding']['padding']['left'] >= 0 ? 'padding-left: ' ~ fields.modal.header_close_button['padding']['padding']['left'] ~ 'px;' %}
+          {% set head_btn_padding_right = fields.modal.header_close_button['padding']['padding']['right'] >= 0 ? 'padding-right: ' ~ fields.modal.header_close_button['padding']['padding']['right'] ~ 'px;' %}
+          {% set head_btn_border_top_width = fields.modal.header_close_button['border']['top']['width'] >= 0 ? 'border-top-width: ' ~ fields.modal.header_close_button['border']['top']['width'] ~ 'px;' %}
+          {% set head_btn_border_top_style = fields.modal.header_close_button['border']['top']['style'] ? 'border-top-style: ' ~ fields.modal.header_close_button['border']['top']['style'] ~ ';' %}
+          {% set head_btn_border_top_color = fields.modal.header_close_button['border']['top']['color'] == 'custom' and fields.modal.header_close_button['border']['top']['custom_color'] ? 'border-top-color: ' ~ fields.modal.header_close_button['border']['top']['custom_color'] ~ ';' : fields.modal.header_close_button['border']['top']['color'] == 'palette' and fields.modal.header_close_button['border']['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.modal.header_close_button['border']['top']['theme_color'] ~ ');' %}
+          {% set head_btn_border_bottom_width = fields.modal.header_close_button['border']['bottom']['width'] >= 0 ? 'border-bottom-width: ' ~ fields.modal.header_close_button['border']['bottom']['width'] ~ 'px;' %}
+          {% set head_btn_border_bottom_style = fields.modal.header_close_button['border']['bottom']['style'] ? 'border-bottom-style: ' ~ fields.modal.header_close_button['border']['bottom']['style'] ~ ';' %}
+          {% set head_btn_border_bottom_color = fields.modal.header_close_button['border']['bottom']['color'] == 'custom' and fields.modal.header_close_button['border']['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.modal.header_close_button['border']['bottom']['custom_color'] ~ ';' : fields.modal.header_close_button['border']['bottom']['color'] == 'palette' and fields.modal.header_close_button['border']['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.modal.header_close_button['border']['bottom']['theme_color'] ~ ');' %}
+          {% set head_btn_border_left_width = fields.modal.header_close_button['border']['left']['width'] >= 0 ? 'border-left-width: ' ~ fields.modal.header_close_button['border']['left']['width'] ~ 'px;' %}
+          {% set head_btn_border_left_style = fields.modal.header_close_button['border']['left']['style'] ? 'border-left-style: ' ~ fields.modal.header_close_button['border']['left']['style'] ~ ';' %}
+          {% set head_btn_border_left_color = fields.modal.header_close_button['border']['left']['color'] == 'custom' and fields.modal.header_close_button['border']['left']['custom_color'] ? 'border-left-color: ' ~ fields.modal.header_close_button['border']['left']['custom_color'] ~ ';' : fields.modal.header_close_button['border']['left']['color'] == 'palette' and fields.modal.header_close_button['border']['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.modal.header_close_button['border']['left']['theme_color'] ~ ');' %}
+          {% set head_btn_border_right_width = fields.modal.header_close_button['border']['right']['width'] >= 0 ? 'border-right-width: ' ~ fields.modal.header_close_button['border']['right']['width'] ~ 'px;' %}
+          {% set head_btn_border_right_style = fields.modal.header_close_button['border']['right']['style'] ? 'border-right-style: ' ~ fields.modal.header_close_button['border']['right']['style'] ~ ';' %}
+          {% set head_btn_border_right_color = fields.modal.header_close_button['border']['right']['color'] == 'custom' and fields.modal.header_close_button['border']['right']['custom_color'] ? 'border-right-color: ' ~ fields.modal.header_close_button['border']['right']['custom_color'] ~ ';' : fields.modal.header_close_button['border']['right']['color'] == 'palette' and fields.modal.header_close_button['border']['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.modal.header_close_button['border']['right']['theme_color'] ~ ');' %}
+          {% set head_btn_border_top_left_radius = fields.modal.header_close_button['border_radius']['top_left'] >= 0 ? 'border-top-left-radius: ' ~ fields.modal.header_close_button['border_radius']['top_left'] ~ 'px;' %}
+          {% set head_btn_border_top_right_radius = fields.modal.header_close_button['border_radius']['top_right'] >= 0 ? 'border-top-right-radius: ' ~ fields.modal.header_close_button['border_radius']['top_right'] ~ 'px;' %}
+          {% set head_btn_border_bottom_left_radius = fields.modal.header_close_button['border_radius']['bottom_left'] >= 0 ? 'border-bottom-left-radius: ' ~ fields.modal.header_close_button['border_radius']['bottom_left'] ~ 'px;' %}
+          {% set head_btn_border_bottom_right_radius = fields.modal.header_close_button['border_radius']['bottom_right'] >= 0 ? 'border-bottom-right-radius: ' ~ fields.modal.header_close_button['border_radius']['bottom_right'] ~ 'px;' %}
+          {% set head_box_shadow_color = fields.modal.header_close_button['box_shadow']['color']['color'] == 'palette' and fields.modal.header_close_button['box_shadow']['color']['theme_color'] ? 'var(--' ~ fields.modal.header_close_button['box_shadow']['color']['theme_color'] ~ ')' : fields.modal.header_close_button['box_shadow']['color']['color'] == 'custom' and fields.modal.header_close_button['box_shadow']['color']['custom_color'] ? fields.modal.header_close_button['box_shadow']['color']['custom_color'] %}
+          {% set head_box_shadow_inset = fields.modal.header_close_button['box_shadow']['inset'] == true ? 'inset' %}
+          {% set head_btn_box_shadow = fields.modal.header_close_button['box_shadow']['horizontal_offset'] >= 0 or fields.modal.header_close_button['box_shadow']['vertical_offset'] >= 0 or fields.modal.header_close_button['box_shadow']['blur'] >= 0 or fields.modal.header_close_button['box_shadow']['spread'] >= 0 or box_shadow_color or box_shadow_inset == true ? 'box-shadow: ' ~ fields.modal.header_close_button['box_shadow']['horizontal_offset'] ~ 'px ' ~ fields.modal.header_close_button['box_shadow']['vertical_offset'] ~ 'px ' ~ fields.modal.header_close_button['box_shadow']['blur'] ~ 'px ' ~ fields.modal.header_close_button['box_shadow']['spread'] ~ 'px ' ~ box_shadow_color ~ ' ' ~ box_shadow_inset ~ ';' %}
+          {% set head_text_shadow_color = fields.modal.header_close_button['text_shadow']['color']['color'] == 'palette' and fields.modal.header_close_button['text_shadow']['color']['theme_color'] ? 'var(--' ~ fields.modal.header_close_button['text_shadow']['color']['theme_color'] ~ ')' : fields.modal.header_close_button['text_shadow']['color']['color'] == 'custom' and fields.modal.header_close_button['text_shadow']['color']['custom_color'] ? fields.modal.header_close_button['text_shadow']['color']['custom_color'] %}
+          {% set head_btn_text_shadow = fields.modal.header_close_button['text_shadow']['horizontal_offset'] >= 0 or fields.modal.header_close_button['text_shadow']['vertical_offset'] >= 0 or fields.modal.header_close_button['text_shadow']['blur'] >= 0 or text_shadow_color ? 'text-shadow: ' ~ fields.modal.header_close_button['text_shadow']['horizontal_offset'] ~ 'px ' ~ fields.modal.header_close_button['text_shadow']['vertical_offset'] ~ 'px ' ~ fields.modal.header_close_button['text_shadow']['blur'] ~ 'px ' ~ text_shadow_color ~ ';' %}
+        {% endif %}
+        {% set head_fontsize = fields.modal.header_close_button['font_size']['font_size']['value'] >= 0 ? 'font-size: ' ~ fields.modal.header_close_button['font_size']['font_size']['value'] ~ fields.modal.header_close_button['font_size']['font_size']['unit'] ~ ';' %}
+        {% set head_btn_width = fields.modal.header_close_button.button_width['width']['width']['value'] >= 0 ? 'width: ' ~ fields.modal.header_close_button.button_width['width']['width']['value']  ~ fields.modal.header_close_button.button_width['width']['width']['unit'] ~  ';' %}
+        {% set head_btn_min_width = fields.modal.header_close_button.button_width['width']['min_width'] >= 0 ? 'min-width: ' ~ fields.modal.header_close_button.button_width['width']['min_width']  ~ 'px;' %}
+        {% set head_btn_max_width = fields.modal.header_close_button.button_width['width']['max_width'] >= 0 ? 'max-width: ' ~ fields.modal.header_close_button.button_width['width']['max_width']  ~ 'px;' %}
+        {% set head_margin_top = fields.modal.header_close_button.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : fields.modal.header_close_button.margin['margin']['top']['top'] >= 0 ? 'margin-top: ' ~ fields.modal.header_close_button.margin['margin']['top']['top'] ~ 'px;' %}
+        {% set head_margin_bottom = fields.modal.header_close_button.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.modal.header_close_button.margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.modal.header_close_button.margin['margin']['bottom']['bottom'] ~ 'px;' %}
+        {% set head_margin_left = fields.modal.header_close_button.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : fields.modal.header_close_button.margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.modal.header_close_button.margin['margin']['left']['left'] ~ 'px;' %}
+        {% set head_margin_right = fields.modal.header_close_button.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : fields.modal.header_close_button.margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.modal.header_close_button.margin['margin']['right']['right'] ~ 'px;' %}
+
+        {# Set custom footer close button styles #}
+        {% if fields.modal.footer_button.close != 'black' and fields.modal.footer_button.close != 'white' and fields.modal.footer_button.style == 'custom'  %}
+          {% set foot_bg_color = fields.modal.footer_button.background_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.modal.footer_button.background_color['bg_custom_color'] ~ ';' %}
+          {% set foot_text_color = fields.modal.footer_button.text_color['color'] == 'custom' ? 'color: ' ~ fields.modal.footer_button.text_color['custom_color'] ~ ';' %}
+          {% set foot_transform = fields.modal.footer_button['text_transform']['text_transform'] ? 'text-transform: ' ~ fields.modal.footer_button['text_transform']['text_transform'] ~ ';' %}
+          {% set foot_btn_padding_top = fields.modal.footer_button['padding']['padding']['top'] >= 0 ? 'padding-top: ' ~ fields.modal.footer_button['padding']['padding']['top'] ~ 'px;' %}
+          {% set foot_btn_padding_bottom = fields.modal.footer_button['padding']['padding']['bottom'] >= 0 ? 'padding-bottom: ' ~ fields.modal.footer_button['padding']['padding']['bottom'] ~ 'px;' %}
+          {% set foot_btn_padding_left = fields.modal.footer_button['padding']['padding']['left'] >= 0 ? 'padding-left: ' ~ fields.modal.footer_button['padding']['padding']['left'] ~ 'px;' %}
+          {% set foot_btn_padding_right = fields.modal.footer_button['padding']['padding']['right'] >= 0 ? 'padding-right: ' ~ fields.modal.footer_button['padding']['padding']['right'] ~ 'px;' %}
+          {% set foot_btn_border_top_width = fields.modal.footer_button['border']['top']['width'] >= 0 ? 'border-top-width: ' ~ fields.modal.footer_button['border']['top']['width'] ~ 'px;' %}
+          {% set foot_btn_border_top_style = fields.modal.footer_button['border']['top']['style'] ? 'border-top-style: ' ~ fields.modal.footer_button['border']['top']['style'] ~ ';' %}
+          {% set foot_btn_border_top_color = fields.modal.footer_button['border']['top']['color'] == 'custom' and fields.modal.footer_button['border']['top']['custom_color'] ? 'border-top-color: ' ~ fields.modal.footer_button['border']['top']['custom_color'] ~ ';' : fields.modal.footer_button['border']['top']['color'] == 'palette' and fields.modal.footer_button['border']['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.modal.footer_button['border']['top']['theme_color'] ~ ');' %}
+          {% set foot_btn_border_bottom_width = fields.modal.footer_button['border']['bottom']['width'] >= 0 ? 'border-bottom-width: ' ~ fields.modal.footer_button['border']['bottom']['width'] ~ 'px;' %}
+          {% set foot_btn_border_bottom_style = fields.modal.footer_button['border']['bottom']['style'] ? 'border-bottom-style: ' ~ fields.modal.footer_button['border']['bottom']['style'] ~ ';' %}
+          {% set foot_btn_border_bottom_color = fields.modal.footer_button['border']['bottom']['color'] == 'custom' and fields.modal.footer_button['border']['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.modal.footer_button['border']['bottom']['custom_color'] ~ ';' : fields.modal.footer_button['border']['bottom']['color'] == 'palette' and fields.modal.footer_button['border']['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.modal.footer_button['border']['bottom']['theme_color'] ~ ');' %}
+          {% set foot_btn_border_left_width = fields.modal.footer_button['border']['left']['width'] >= 0 ? 'border-left-width: ' ~ fields.modal.footer_button['border']['left']['width'] ~ 'px;' %}
+          {% set foot_btn_border_left_style = fields.modal.footer_button['border']['left']['style'] ? 'border-left-style: ' ~ fields.modal.footer_button['border']['left']['style'] ~ ';' %}
+          {% set foot_btn_border_left_color = fields.modal.footer_button['border']['left']['color'] == 'custom' and fields.modal.footer_button['border']['left']['custom_color'] ? 'border-left-color: ' ~ fields.modal.footer_button['border']['left']['custom_color'] ~ ';' : fields.modal.footer_button['border']['left']['color'] == 'palette' and fields.modal.footer_button['border']['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.modal.footer_button['border']['left']['theme_color'] ~ ');' %}
+          {% set foot_btn_border_right_width = fields.modal.footer_button['border']['right']['width'] >= 0 ? 'border-right-width: ' ~ fields.modal.footer_button['border']['right']['width'] ~ 'px;' %}
+          {% set foot_btn_border_right_style = fields.modal.footer_button['border']['right']['style'] ? 'border-right-style: ' ~ fields.modal.footer_button['border']['right']['style'] ~ ';' %}
+          {% set foot_btn_border_right_color = fields.modal.footer_button['border']['right']['color'] == 'custom' and fields.modal.footer_button['border']['right']['custom_color'] ? 'border-right-color: ' ~ fields.modal.footer_button['border']['right']['custom_color'] ~ ';' : fields.modal.footer_button['border']['right']['color'] == 'palette' and fields.modal.footer_button['border']['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.modal.footer_button['border']['right']['theme_color'] ~ ');' %}
+          {% set foot_btn_border_top_left_radius = fields.modal.footer_button['border_radius']['top_left'] >= 0 ? 'border-top-left-radius: ' ~ fields.modal.footer_button['border_radius']['top_left'] ~ 'px;' %}
+          {% set foot_btn_border_top_right_radius = fields.modal.footer_button['border_radius']['top_right'] >= 0 ? 'border-top-right-radius: ' ~ fields.modal.footer_button['border_radius']['top_right'] ~ 'px;' %}
+          {% set foot_btn_border_bottom_left_radius = fields.modal.footer_button['border_radius']['bottom_left'] >= 0 ? 'border-bottom-left-radius: ' ~ fields.modal.footer_button['border_radius']['bottom_left'] ~ 'px;' %}
+          {% set foot_btn_border_bottom_right_radius = fields.modal.footer_button['border_radius']['bottom_right'] >= 0 ? 'border-bottom-right-radius: ' ~ fields.modal.footer_button['border_radius']['bottom_right'] ~ 'px;' %}
+          {% set foot_box_shadow_color = fields.modal.footer_button['box_shadow']['color']['color'] == 'palette' and fields.modal.footer_button['box_shadow']['color']['theme_color'] ? 'var(--' ~ fields.modal.footer_button['box_shadow']['color']['theme_color'] ~ ')' : fields.modal.footer_button['box_shadow']['color']['color'] == 'custom' and fields.modal.footer_button['box_shadow']['color']['custom_color'] ? fields.modal.footer_button['box_shadow']['color']['custom_color'] %}
+          {% set foot_box_shadow_inset = fields.modal.footer_button['box_shadow']['inset'] == true ? 'inset' %}
+          {% set foot_btn_box_shadow = fields.modal.footer_button['box_shadow']['horizontal_offset'] >= 0 or fields.modal.footer_button['box_shadow']['vertical_offset'] >= 0 or fields.modal.footer_button['box_shadow']['blur'] >= 0 or fields.modal.footer_button['box_shadow']['spread'] >= 0 or box_shadow_color or box_shadow_inset == true ? 'box-shadow: ' ~ fields.modal.footer_button['box_shadow']['horizontal_offset'] ~ 'px ' ~ fields.modal.footer_button['box_shadow']['vertical_offset'] ~ 'px ' ~ fields.modal.footer_button['box_shadow']['blur'] ~ 'px ' ~ fields.modal.footer_button['box_shadow']['spread'] ~ 'px ' ~ box_shadow_color ~ ' ' ~ box_shadow_inset ~ ';' %}
+          {% set foot_text_shadow_color = fields.modal.footer_button['text_shadow']['color']['color'] == 'palette' and fields.modal.footer_button['text_shadow']['color']['theme_color'] ? 'var(--' ~ fields.modal.footer_button['text_shadow']['color']['theme_color'] ~ ')' : fields.modal.footer_button['text_shadow']['color']['color'] == 'custom' and fields.modal.footer_button['text_shadow']['color']['custom_color'] ? fields.modal.footer_button['text_shadow']['color']['custom_color'] %}
+          {% set foot_btn_text_shadow = fields.modal.footer_button['text_shadow']['horizontal_offset'] >= 0 or fields.modal.footer_button['text_shadow']['vertical_offset'] >= 0 or fields.modal.footer_button['text_shadow']['blur'] >= 0 or text_shadow_color ? 'text-shadow: ' ~ fields.modal.footer_button['text_shadow']['horizontal_offset'] ~ 'px ' ~ fields.modal.footer_button['text_shadow']['vertical_offset'] ~ 'px ' ~ fields.modal.footer_button['text_shadow']['blur'] ~ 'px ' ~ text_shadow_color ~ ';' %}
+        {% endif %}
+        {% set foot_fontsize = fields.modal.footer_button['font_size']['font_size']['value'] >= 0 ? 'font-size: ' ~ fields.modal.footer_button['font_size']['font_size']['value'] ~ fields.modal.footer_button['font_size']['font_size']['unit'] ~ ';' %}
+        {% set foot_btn_width = fields.modal.footer_button.button_width['width']['width']['value'] >= 0 ? 'width: ' ~ fields.modal.footer_button.button_width['width']['width']['value']  ~ fields.modal.footer_button.button_width['width']['width']['unit'] ~  ';' %}
+        {% set foot_btn_min_width = fields.modal.footer_button.button_width['width']['min_width'] >= 0 ? 'min-width: ' ~ fields.modal.footer_button.button_width['width']['min_width']  ~ 'px;' %}
+        {% set foot_btn_max_width = fields.modal.footer_button.button_width['width']['max_width'] >= 0 ? 'max-width: ' ~ fields.modal.footer_button.button_width['width']['max_width']  ~ 'px;' %}
+        {% set foot_margin_top = fields.modal.footer_button.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : fields.modal.footer_button.margin['margin']['top']['top'] >= 0 ? 'margin-top: ' ~ fields.modal.footer_button.margin['margin']['top']['top'] ~ 'px;' %}
+        {% set foot_margin_bottom = fields.modal.footer_button.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.modal.footer_button.margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.modal.footer_button.margin['margin']['bottom']['bottom'] ~ 'px;' %}
+        {% set foot_margin_left = fields.modal.footer_button.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : fields.modal.footer_button.margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.modal.footer_button.margin['margin']['left']['left'] ~ 'px;' %}
+        {% set foot_margin_right = fields.modal.footer_button.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : fields.modal.footer_button.margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.modal.footer_button.margin['margin']['right']['right'] ~ 'px;' %}
+
+        {% set modal_dialog_bg_color = fields.modal.modal_bg_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.modal.modal_bg_color['bg_custom_color'] ~ ';' %}
+        {% set modal_dialog_text_color = fields.modal.modal_text_color['color'] == 'custom' ? 'color: ' ~ fields.modal.modal_text_color['custom_color'] ~ ';' %}
+        {% set modal_dialog_margin_top = fields.modal.modal_margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : fields.modal.modal_margin['margin']['top']['top'] >= 0 ? 'margin-top: ' ~ fields.modal.modal_margin['margin']['top']['top'] ~ 'px;' %}
+        {% set modal_dialog_margin_bottom = fields.modal.modal_margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.modal.modal_margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.modal.modal_margin['margin']['bottom']['bottom'] ~ 'px;' %}
+        {% set modal_dialog_margin_left = fields.modal.modal_margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : fields.modal.modal_margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.modal.modal_margin['margin']['left']['left'] ~ 'px;' %}
+        {% set modal_dialog_margin_right = fields.modal.modal_margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : fields.modal.modal_margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.modal.modal_margin['margin']['right']['right'] ~ 'px;' %}
+
+
+        {% embed '@molecules/modal/_modal.tpl.twig' with {
+          modal_attributes: [
+            fields.modal.backdrop_color['bg_color'] == 'custom' ? 'style="background-color:' ~ fields.modal.backdrop_color['bg_custom_color'] ~ ';"'
+          ],
+          modal_id: post.slug,
+          modal_title: fields.modal.title,
+          modal_center: fields.modal.center_modal,
+          animate: fields.modal.animate,
+          backdrop: fields.modal.backdrop,
+          backdrop_static: fields.modal.static_backdrop,
+          backdrop_color: fields.modal.backdrop_color['bg_color'] == 'palette' ? fields.modal.backdrop_color['bg_theme_color'],
+          modal_size: fields.modal.modal_size,
+          modal_fullscreen: fields.modal.full_screen,
+          modal_fullscreen_breakpoint: fields.modal.fullscreen_breakpoint['breakpoint'],
+          background_color: fields.modal.modal_bg_color['bg_color'] == 'palette' and fields.modal.modal_bg_color['bg_theme_color'] ? fields.modal.modal_bg_color['bg_theme_color'],
+          text_color: fields.modal.modal_text_color['color'] == 'palette' and fields.modal.modal_text_color['theme_color'] ? fields.modal.modal_text_color['theme_color'],
+          modal_dialog_attributes: [
+            modal_dialog_margin_top or modal_dialog_margin_bottom or modal_dialog_margin_left or modal_dialog_margin_right ? 'style="' ~ modal_dialog_margin_top ~ modal_dialog_margin_bottom ~ modal_dialog_margin_left ~ modal_dialog_margin_right ~ '"'
+          ],
+          modal_content_attributes: [
+            modal_dialog_bg_color or modal_dialog_text_color ? 'style="' ~ modal_dialog_bg_color ~ modal_dialog_text_color ~ '"'
+          ],
+          modal_title_attributes: [
+            modal_dialog_text_color ? 'style="' ~ modal_dialog_text_color ~ '"'
+          ],
+          modal_body_attributes: [
+            modal_dialog_text_color ? 'style="' ~ modal_dialog_text_color ~ '"'
+          ],
+          modal_close_header: fields.modal.header_close,
+          modal_close_header_button: {
+            button_element: fields.modal.header_close_button['element'],
+            button_size: fields.modal.header_close_button['size'],
+            button_block: fields.modal.header_close_button['full_width'],
+            button_text: fields.modal.header_close_button_text,
+            button_color: fields.modal.header_close_button.close != 'black' and fields.modal.header_close_button.close != 'white' and fields.modal.header_close_button.style != 'custom' ? fields.modal.header_close_button.style,
+            close_button: fields.modal.header_close_button.close,
+            button_outline: fields.modal.header_close_button.outline,
+            button_disabled: fields.modal.header_close_button.disabled,
+            nowrap: fields.modal.header_close_button.nowrap,
+            hide_label: fields.modal.header_close_button.hide_label,
+            button_classes: [
+              fields.modal.header_close_button.close != 'black' and fields.modal.header_close_button.close != 'white' and fields.modal.header_close_button.background_color['bg_color'] == 'palette' and fields.modal.header_close_button.background_color['bg_theme_color'] ? 'bg-' ~ fields.modal.header_close_button.background_color['bg_theme_color'],
+              fields.modal.header_close_button.close != 'black' and fields.modal.header_close_button.close != 'white' and fields.modal.header_close_button.text_color['color'] == 'palette' and fields.modal.header_close_button.text_color['theme_color'] ? 'text-' ~ fields.modal.header_close_button.text_color['theme_color'],
+              fields.modal.header_close_button.full_width != true and fields.modal.header_close_button.display['display'] is not null ? fields.modal.header_close_button.display['display']
+            ],
+            button_other_classes: fields.modal.header_close_button.classes,
+            button_attributes: [
+              head_bg_color or head_text_color or head_transform or head_btn_padding_top or head_btn_padding_bottom or head_btn_padding_left or head_btn_padding_right or head_btn_border_top_width or head_btn_border_top_style or head_btn_border_top_color or head_btn_border_bottom_width or head_btn_border_bottom_style or head_btn_border_bottom_color or head_btn_border_left_width or head_btn_border_left_style or head_btn_border_left_color or head_btn_border_right_width or head_btn_border_right_style or head_btn_border_right_color or head_btn_border_top_left_radius or head_btn_border_top_right_radius or head_btn_border_bottom_left_radius or head_btn_border_bottom_right_radius or head_btn_box_shadow or head_btn_text_shadow or head_fontsize or head_width or head_min_width or head_max_width or head_margin_top or head_margin_bottom or head_margin_left or head_margin_right ? 'style="' ~ head_bg_color ~ head_text_color ~ head_fontsize ~ head_transform ~ head_btn_padding_top ~ head_btn_padding_bottom ~ head_btn_padding_left ~ head_btn_padding_right ~ head_btn_border_top_width ~ head_btn_border_top_style ~ head_btn_border_top_color ~ head_btn_border_bottom_width ~ head_btn_border_bottom_style ~ head_btn_border_bottom_color ~ head_btn_border_left_width ~ head_btn_border_left_style ~ head_btn_border_left_color ~ head_btn_border_right_width ~ head_btn_border_right_style ~ head_btn_border_right_color ~ head_btn_border_top_left_radius ~ head_btn_border_top_right_radius ~ head_btn_border_bottom_left_radius ~ head_btn_border_bottom_right_radius ~ head_btn_box_shadow ~ head_btn_text_shadow ~ head_width ~ head_min_width ~ head_max_width ~ head_margin_top ~ head_margin_bottom ~ head_margin_left ~ head_margin_right ~ '"'
+            ]
+          },
+          show_modal_footer_close: fields.modal.footer_close,
+          modal_close_footer: {
+            button_element: fields.modal.footer_button.element,
+            button_text: fields.modal.footer_button_text,
+            button_color: fields.modal.footer_button.close != 'black' and fields.modal.footer_button.close != 'white' and fields.modal.footer_button.style != 'custom' ? fields.modal.footer_button.style,
+            button_size: fields.modal.footer_button.size,
+            button_outline: fields.modal.footer_button.outline,
+            button_block: fields.modal.footer_button.full_width,
+            button_disabled: fields.modal.footer_button.disabled,
+            nowrap: fields.modal.footer_button.nowrap,
+            close_button: fields.modal.footer_button.close | default('no-icon'),
+            hide_label: fields.modal.footer_button.hide_label,
+            button_classes: [
+              fields.modal.footer_button.close != 'black' and fields.modal.footer_button.close != 'white' and fields.modal.footer_button.background_color['bg_color'] == 'palette' and fields.modal.footer_button.background_color['bg_theme_color'] ? 'bg-' ~ fields.modal.footer_button.background_color['bg_theme_color'],
+              fields.modal.footer_button.close != 'black' and fields.modal.footer_button.close != 'white' and fields.modal.footer_button.text_color['color'] == 'palette' and fields.modal.footer_button.text_color['theme_color'] ? 'text-' ~ fields.modal.footer_button.text_color['theme_color'],
+              fields.modal.footer_button.full_width != true and fields.modal.footer_button.display['display'] is not null ? fields.modal.footer_button.display['display']
+            ],
+            button_other_classes: fields.modal.footer_button.classes,
+            button_attributes: [
+              foot_bg_color or foot_text_color or foot_transform or foot_btn_padding_top or foot_btn_padding_bottom or foot_btn_padding_left or foot_btn_padding_right or foot_btn_border_top_width or foot_btn_border_top_style or foot_btn_border_top_color or foot_btn_border_bottom_width or foot_btn_border_bottom_style or foot_btn_border_bottom_color or foot_btn_border_left_width or foot_btn_border_left_style or foot_btn_border_left_color or foot_btn_border_right_width or foot_btn_border_right_style or foot_btn_border_right_color or foot_btn_border_top_left_radius or foot_btn_border_top_right_radius or foot_btn_border_bottom_left_radius or foot_btn_border_bottom_right_radius or foot_btn_box_shadow or foot_btn_text_shadow or foot_fontsize or foot_btn_width or foot_btn_min_width or foot_btn_max_width or foot_margin_top or foot_margin_bottom or foot_margin_left or foot_margin_right ? 'style="' ~ foot_bg_color ~ foot_text_color ~ foot_fontsize ~ foot_transform ~ foot_btn_padding_top ~ foot_btn_padding_bottom ~ foot_btn_padding_left ~ foot_btn_padding_right ~ foot_btn_border_top_width ~ foot_btn_border_top_style ~ foot_btn_border_top_color ~ foot_btn_border_bottom_width ~ foot_btn_border_bottom_style ~ foot_btn_border_bottom_color ~ foot_btn_border_left_width ~ foot_btn_border_left_style ~ foot_btn_border_left_color ~ foot_btn_border_right_width ~ foot_btn_border_right_style ~ foot_btn_border_right_color ~ foot_btn_border_top_left_radius ~ foot_btn_border_top_right_radius ~ foot_btn_border_bottom_left_radius ~ foot_btn_border_bottom_right_radius ~ foot_btn_box_shadow ~ foot_btn_text_shadow ~ foot_btn_width ~ foot_btn_min_width ~ foot_btn_max_width ~ foot_margin_top ~ foot_margin_bottom ~ foot_margin_left ~ foot_margin_right ~'"'
+            ]
+          },
+          modal_classes: [
+            'block-modal',
+            fields.modal.layout.modal_layout != 'default' ? 'modal-' ~ fields.modal.layout.modal_layout,
+            block['className']
+          ],
+        } %}
+          {% block modal_body %}
+            {% if fields.modal_body_layout %}
+              <div class="modal-content">
+                {% for element in fields.modal_body_layout %}
+                  {% if element.acf_fc_layout == 'featured_image' and post.thumbnail.src %}
+                    {# Featured Image #}
+                    <div class="posts-loop--featured-image--wrapper">
+                      {% if fields.link_items != true and element.link_image == true %}
+                      <a class="posts-loop--post-thumbnail" href="{{ post.link }}">
+                        {% else %}
+                        <span class="posts-loop--post-thumbnail">
+                        {% endif %}
+                        <img src="{{ post.thumbnail.src }}" alt="{{ post.thumbnail.alt }}">
+                        {% if fields.link_items != true and element.link_image == true %}
+                      </a>
+                    {% else %}
+                      </span>
+                      {% endif %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'post_title' and post.post_title %}
+                    {# Post Title #}
+                    <div class="posts-loop--post-title--wrapper">
+                      {% if fields.link_items != true and element.link_title == true %}
+                      <a href="{{ post.link }}">
+                        {% endif %}
+                        <{{ element.title_element}} class="posts-loop--post-title">{{ post.title }}</{{ element.title_element }}>
+                      {% if fields.link_items != true and element.link_title == true %}
+                        </a>
+                      {% endif %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'post_excerpt' and (post.preview or function('get_the_excerpt')) %}
+                    {# Post Excerpt #}
+                    <div class="posts-loop--post-excerpt--wrapper">
+                      {# {% if post.post_type == 'page' %}
+                        <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
+                      {% elseif fields.link_items != true %}
+                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>
+                      {% else %}
+                        <div class="posts-loop--post-excerpt">
+                          <span class="excerpt">{{ post.preview.read_more('').length(element.length|number_format).force }}</span>
+                          {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}
+                        </div>
+                      {% endif %} #}
+                      {% if fields.link_items != true %}
+                        <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
+                      {% else %}
+                        <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
+                      {% endif %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'post_content' and post.content %}
+                    {# Post Content #}
+                    <div class="posts-loop--post-content--wrapper">
+                      <div class="posts-loop--post-content">{{ post.content }}</div>
+                    </div>
+                  {% elseif element.acf_fc_layout == 'link' and post.link %}
+                    {# Post Link #}
+                    <div class="posts-loop--post-link--wrapper">
+                      {% if element.label %}
+                        <span class="posts-loop--post-link--label">{{ element.label }}</span>
+                      {% endif %}
+                      {% if fields.link_items != true and element.link_link == true %}
+                      <a href="{{ post.link }}" class="posts-loop--post-link posts-loop--post-url">
+                        {% else %}
+                        <span class="posts-loop--post-url">
+                        {% endif %}
+                          {{ post.link }}
+                          {% if fields.link_items != true and element.link_link == true %}
+                      </a>
+                    {% else %}
+                      </span>
+                      {% endif %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'post_author' and post.authors %}
+                    {# Post Author #}
+                    <div class="posts-loop--post-author--wrapper">
+                      <div class="posts-loop--post-author">
+                        {% for author in post.authors %}
+                          {% for author_element in element.author_elements %}
+                            {% if author_element.acf_fc_layout == 'gravatar' and author.avatar %}
+                              {% if fields.link_items != true and element.link_author == true %}
+                                <a class="posts-loop--post-author--link posts-loop--post-author--gravatar" href="{{ author.link }}">
+                              {% else %}
+                                <span class="posts-loop--post-author--gravatar">
+                              {% endif %}
+                              <img src="{{ author.avatar }}" alt="{{ author.name }}">
+                              {% if fields.link_items != true and element.link_author == true %}
+                                </a>
+                              {% else %}
+                                </span>
+                              {% endif %}
+                            {% elseif author_element.acf_fc_layout == 'name' and author.name %}
+                              {% if author_element.label %}
+                                <span class="posts-loop--post-author--label">{{ author_element.label }}</span>
+                              {% endif %}
+                              {% if fields.link_items != true and element.link_author == true %}
+                                <a class="posts-loop--post-author--link posts-loop--post-author--name" href="{{ author.link }}">
+                              {% else %}
+                                <span class="posts-loop--post-author--name">
+                              {% endif %}
+                              {{ author.name }}
+                              {% if fields.link_items != true and element.link_author == true %}
+                                </a>
+                              {% else %}
+                                </span>
+                              {% endif %}
+                            {% elseif author_element.acf_fc_layout == 'email' and function('get_user_by', 'id', author.id).data.user_email %}
+                              {% if fields.link_items != true %}
+                                <a class="posts-loop--post-author--link posts-loop--post-author--email" href="mailto:{{ function('get_user_by', 'id', author.id).data.user_email }}">
+                              {% else %}
+                                <span class="posts-loop--post-author--email">
+                              {% endif %}
+                              {{ function('get_user_by', 'id', author.id).data.user_email }}
+                              {% if fields.link_items != true %}
+                                </a>
+                              {% else %}
+                                </span>
+                              {% endif %}
+                            {% endif %}
+                          {% endfor %}
+                        {% endfor %}
+                      </div>
+                    </div>
+                  {% elseif element.acf_fc_layout == 'post_date' and post.date %}
+                    {# Post Date #}
+                    <div class="posts-loop--post-date--wrapper">
+                      {% if element.label %}
+                        <span class="posts-loop--post-date--label">{{ element.label }}</span>
+                      {% endif %}
+                      {% if fields.link_items != true and element.link_date == true and post.type.slug == 'post' %}
+                      <a class="posts-loop--date--link posts-loop--post-date" href="/{{ post.date|date('Y') }}{{ element.link_to == 'month' or element.link_to == 'day' ? '/' ~ post.date|date('m') }}{{ element.link_to == 'day' ? '/' ~ post.date|date('d') }}">
+                        {% elseif fields.link_items != true and element.link_date == true and post.type.has_archive %}
+                        <a class="posts-loop--date--link posts-loop--post-date" href="/{{ post.type.has_archive }}/{{ post.date|date('Y') }}{{ element.link_to == 'month' or element.link_to == 'day' ? '/' ~ post.date|date('m') }}{{ element.link_to == 'day' ? '/' ~ post.date|date('d') }}">
+                          {% else %}
+                          <span class="posts-loop--post-date">
+                        {% endif %}
+                            {{ post.date|date(element.date_format) }}
+                            {% if fields.link_items != true and element.link_date == true and (post.type.slug == 'post' or post.type.has_archive) %}
+                        </a>
+                      {% else %}
+                        </span>
+                        {% endif %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'post_modified' and (post.modified_date or post.modified_author) %}
+                    {# Post Modified #}
+                    <div class="posts-loop--post-modified--wrapper">
+                      {% if function('in_array', 'label', element.modified_elements) and element.label %}
+                        <span class="posts-loop--post-modified--label">{{ element.label }}</span>
+                      {% endif %}
+                      {% if function('in_array', 'date', element.modified_elements) and post.modified_date %}
+                      {% if fields.link_items != true and element.link_date == true and post.type.slug == 'post' %}
+                      <a class="posts-loop--post-modified--link posts-loop--post-modified--date" href="/{{ post.modified_date|date('Y') }}{{ element.link_to == 'month' or element.link_to == 'day' ? '/' ~ post.modified_date|date('m') }}{{ element.link_to == 'day' ? '/' ~ post.modified_date|date('d') }}">
+                        {% elseif fields.link_items != true and element.link_date == true and post.type.has_archive %}
+                        <a class="posts-loop--post-modified--link posts-loop--post-modified--date" href="/{{ post.type.has_archive }}/{{ post.modified_date|date('Y') }}{{ element.link_to == 'month' or element.link_to == 'day' ? '/' ~ post.modified_date|date('m') }}{{ element.link_to == 'day' ? '/' ~ post.modified_date|date('d') }}">
+                          {% else %}
+                          <span class="posts-loop--post-modified--date">
+                          {% endif %}
+                            {{ post.modified_date|date(element.date_format) }}
+                            {% if fields.link_items != true and element.link_date == true and (post.type.slug == 'post' or post.type.has_archive) %}
+                        </a>
+                      {% else %}
+                        </span>
+                        {% endif %}
+
+                        {% endif %}
+                        {% if function('in_array', 'author', element.modified_elements) and  element.separator %}
+                          <span class="posts-loop--post-modified--separator">{{ element.separator }}</span>
+                        {% endif %}
+                        {% if function('in_array', 'author', element.modified_elements) and post.modified_author %}
+                          {% if fields.link_items != true and element.link_author == true %}
+                            <a class="posts-loop--post-modified--link posts-loop--post-modified--author" href="{{ post.modified_author.link }}">
+                          {% else %}
+                            <span class="posts-loop--post-modified--author">
+                          {% endif %}
+                          {{ post.modified_author.name }}
+                          {% if fields.link_items != true and element.link_author == true %}
+                            </a>
+                          {% else %}
+                            </span>
+                          {% endif %}
+                        {% endif %}
+                        {% if function('in_array', 'email', element.modified_elements) and function('get_user_by', 'id', post.modified_author.id).data.user_email %}
+                          {% if fields.link_items != true %}
+                            <a class="posts-loop--post-modified--link posts-loop--post-modified--author-email" href="mailto:{{ function('get_user_by', 'id', post.modified_author.id).data.user_email }}">
+                          {% else %}
+                            <span class="posts-loop--post-modified--author-email">
+                          {% endif %}
+                          {{ function('get_user_by', 'id', post.modified_author.id).data.user_email }}
+                          {% if fields.link_items != true %}
+                            </a>
+                          {% else %}
+                            </span>
+                          {% endif %}
+                        {% endif %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'post_type' and post.type %}
+                    {# Post Type #}
+                    <div class="posts-loop--post-type--wrapper">
+                      {% if element.label %}
+                        <span class="posts-loop--post-type--label">{{ element.label }}</span>
+                      {% endif %}
+                      {% if fields.link_items != true and element.link_post_type == true and post.type.has_archive %}
+                      <a class="posts-loop--post-type--link posts-loop--post-type" href="/{{ post.type.has_archive }}">
+                        {% elseif fields.link_items != true and element.link_post_type == true %}
+                        <a class="posts-loop--post-type--link posts-loop--post-type" href="{{ function('get_post_type_archive_link', post.type.slug) }}">
+                          {% else %}
+                          <span class="posts-loop--post-type">
+                        {% endif %}
+                            {% if element.name_format == 'name' %}
+                              {{ post.type.labels.name }}
+                            {% elseif element.name_format == 'singular_name' %}
+                              {{ post.type.labels.singular_name }}
+                            {% elseif element.name_format == 'menu_name' %}
+                              {{ post.type.labels.menu_name }}
+                            {% elseif element.name_format == 'name_admin_bar' %}
+                              {{ post.type.labels.name_admin_bar }}
+                            {% endif %}
+                            {% if fields.link_items != true and element.link_post_type == true %}
+                        </a>
+                      {% else %}
+                        </span>
+                        {% endif %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'post_parent' and post.parent %}
+                    {# Post Parent #}
+                    <div class="posts-loop--post-parent--wrapper">
+                      {% if element.label %}
+                        <span class="posts-loop--post-parent--label">{{ element.label }}</span>
+                      {% endif %}
+                      {% if fields.link_items != true and element.link_parent == true %}
+                      <a class="posts-loop--post-parent-link posts-loop--post-parent" href="{{ post.parent.link }}">
+                        {% else %}
+                        <span class="posts-loop--post-parent">
+                      {% endif %}
+                          {{ post.parent.title }}
+                          {% if fields.link_items != true and element.link_link == true %}
+                      </a>
+                    {% else %}
+                      </span>
+                      {% endif %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'children' and post.children %}
+                    {# Children #}
+                    <div class="posts-loop--post-children--wrapper">
+                      {% if element.label %}
+                        <span class="posts-loop--children--label">{{ element.label }}</span>
+                      {% endif %}
+                      {% for child in post.children %}
+                        {% if fields.link_items != true and element.link_children == true %}<a class="posts-loop--child--link posts-loop--child" href="/child/{{ child.slug }}">{% else %}<span class="posts-loop--child">{% endif %}{{ child.name }}{% if fields.link_items != true and element.link_children == true %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
+                      {% endfor %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'comment_count' and post.comment_count %}
+                    {# Comment Count #}
+                    <div class="posts-loop--comment-count--wrapper">
+                      {% if element.label %}
+                        <span class="posts-loop--comment-count--label">{{ element.label }}</span>
+                      {% endif %}
+                      <span class="posts-loop--comment-count">{{ post.comment_count }}</span>
+                    </div>
+                  {% elseif element.acf_fc_layout == 'terms' and post.terms({query:{taxonomy:element.taxonomy, orderby:element.order_by, order: element.order}}) %}
+                    {# Terms #}
+                    <div class="posts-loop--terms--wrapper">
+                      {% if element.label %}
+                        <span class="posts-loop--terms--label">{{ element.label }}</span>
+                      {% endif %}
+                      {% for term in post.terms({query:{taxonomy:element.taxonomy, orderby:element.order_by, order: element.order}}) %}
+                        {% if fields.link_items != true and element.link_terms == true %}<a class="posts-loop--term--link posts-loop--term" href="/{{ term.taxonomy }}/{{ term.slug }}">{% else %}<span class="posts-loop--term">{% endif %}{{ term.name }}{% if fields.link_items != true and element.link_terms == true %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
+                      {% endfor %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'categories' and post.categories %}
+                    {# Categories #}
+                    <div class="posts-loop--categories--wrapper">
+                      {% if element.label %}
+                        <span class="posts-loop--categories--label">{{ element.label }}</span>
+                      {% endif %}
+                      {% for category in post.categories %}
+                        {% if fields.link_items != true and element.link_categories == true %}<a class="posts-loop--category--link posts-loop--category" href="/{{ category.taxonomy }}/{{ category.slug }}">{% else %}<span class="posts-loop--category">{% endif %}{{ category.name }}{% if fields.link_items != true and element.link_categories == true %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
+                      {% endfor %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'tags' and post.tags %}
+                    {# Tags #}
+                    <div class="posts-loop--tags--wrapper">
+                      {% if element.label %}
+                        <span class="posts-loop--tags--label">{{ element.label }}</span>
+                      {% endif %}
+                      {% for tag in post.tags %}
+                        {% if fields.link_items != true and element.link_tags == true %}<a class="posts-loop--tag--link posts-loop--tag" href="/tag/{{ tag.slug }}">{% else %}<span class="posts-loop--tag">{% endif %}{{ tag.name }}{% if fields.link_items != true and element.link_tags == true %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endblock %}
+          {% block modal_footer %}
+            {% if fields.modal_footer_layout %}
+              <div class="modal-footer-content">
+                {% for element in fields.modal_footer_layout %}
+                  {% if element.acf_fc_layout == 'featured_image' and post.thumbnail.src %}
+                    {# Featured Image #}
+                    <div class="posts-loop--featured-image--wrapper">
+                      {% if fields.link_items != true and element.link_image == true %}
+                      <a class="posts-loop--post-thumbnail" href="{{ post.link }}">
+                        {% else %}
+                        <span class="posts-loop--post-thumbnail">
+                        {% endif %}
+                        <img src="{{ post.thumbnail.src }}" alt="{{ post.thumbnail.alt }}">
+                        {% if fields.link_items != true and element.link_image == true %}
+                      </a>
+                    {% else %}
+                      </span>
+                      {% endif %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'post_title' and post.post_title %}
+                    {# Post Title #}
+                    <div class="posts-loop--post-title--wrapper">
+                      {% if fields.link_items != true and element.link_title == true %}
+                      <a href="{{ post.link }}">
+                        {% endif %}
+                        <{{ element.title_element}} class="posts-loop--post-title">{{ post.title }}</{{ element.title_element }}>
+                      {% if fields.link_items != true and element.link_title == true %}
+                        </a>
+                      {% endif %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'post_excerpt' and (post.preview or function('get_the_excerpt')) %}
+                    {# Post Excerpt #}
+                    <div class="posts-loop--post-excerpt--wrapper">
+                      {# {% if post.post_type == 'page' %}
+                        <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
+                      {% elseif fields.link_items != true %}
+                        <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>
+                      {% else %}
+                        <div class="posts-loop--post-excerpt">
+                          <span class="excerpt">{{ post.preview.read_more('').length(element.length|number_format).force }}</span>
+                          {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}
+                        </div>
+                      {% endif %} #}
+                      {% if fields.link_items != true %}
+                        <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more"><a href="{{post.link}}">{{ element.read_more_label }}</a>{% endif %}</div>
+                      {% else %}
+                        <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(element.length|number_format) }}</span> {% if element.read_more_label %}<span class="read-more">{{ element.read_more_label }}</span>{% endif %}</div>
+                      {% endif %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'link' and post.link %}
+                    {# Post Link #}
+                    <div class="posts-loop--post-link--wrapper">
+                      {% if element.label %}
+                        <span class="posts-loop--post-link--label">{{ element.label }}</span>
+                      {% endif %}
+                      {% if fields.link_items != true and element.link_link == true %}
+                      <a href="{{ post.link }}" class="posts-loop--post-link posts-loop--post-url">
+                        {% else %}
+                        <span class="posts-loop--post-url">
+                        {% endif %}
+                          {{ post.link }}
+                          {% if fields.link_items != true and element.link_link == true %}
+                      </a>
+                    {% else %}
+                      </span>
+                      {% endif %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'post_author' and post.authors %}
+                    {# Post Author #}
+                    <div class="posts-loop--post-author--wrapper">
+                      <div class="posts-loop--post-author">
+                        {% for author in post.authors %}
+                          {% for author_element in element.author_elements %}
+                            {% if author_element.acf_fc_layout == 'gravatar' and author.avatar %}
+                              {% if fields.link_items != true and element.link_author == true %}
+                                <a class="posts-loop--post-author--link posts-loop--post-author--gravatar" href="{{ author.link }}">
+                              {% else %}
+                                <span class="posts-loop--post-author--gravatar">
+                              {% endif %}
+                              <img src="{{ author.avatar }}" alt="{{ author.name }}">
+                              {% if fields.link_items != true and element.link_author == true %}
+                                </a>
+                              {% else %}
+                                </span>
+                              {% endif %}
+                            {% elseif author_element.acf_fc_layout == 'name' and author.name %}
+                              {% if author_element.label %}
+                                <span class="posts-loop--post-author--label">{{ author_element.label }}</span>
+                              {% endif %}
+                              {% if fields.link_items != true and element.link_author == true %}
+                                <a class="posts-loop--post-author--link posts-loop--post-author--name" href="{{ author.link }}">
+                              {% else %}
+                                <span class="posts-loop--post-author--name">
+                              {% endif %}
+                              {{ author.name }}
+                              {% if fields.link_items != true and element.link_author == true %}
+                                </a>
+                              {% else %}
+                                </span>
+                              {% endif %}
+                            {% elseif author_element.acf_fc_layout == 'email' and function('get_user_by', 'id', author.id).data.user_email %}
+                              {% if fields.link_items != true %}
+                                <a class="posts-loop--post-author--link posts-loop--post-author--email" href="mailto:{{ function('get_user_by', 'id', author.id).data.user_email }}">
+                              {% else %}
+                                <span class="posts-loop--post-author--email">
+                              {% endif %}
+                              {{ function('get_user_by', 'id', author.id).data.user_email }}
+                              {% if fields.link_items != true %}
+                                </a>
+                              {% else %}
+                                </span>
+                              {% endif %}
+                            {% endif %}
+                          {% endfor %}
+                        {% endfor %}
+                      </div>
+                    </div>
+                  {% elseif element.acf_fc_layout == 'post_date' and post.date %}
+                    {# Post Date #}
+                    <div class="posts-loop--post-date--wrapper">
+                      {% if element.label %}
+                        <span class="posts-loop--post-date--label">{{ element.label }}</span>
+                      {% endif %}
+                      {% if fields.link_items != true and element.link_date == true and post.type.slug == 'post' %}
+                      <a class="posts-loop--date--link posts-loop--post-date" href="/{{ post.date|date('Y') }}{{ element.link_to == 'month' or element.link_to == 'day' ? '/' ~ post.date|date('m') }}{{ element.link_to == 'day' ? '/' ~ post.date|date('d') }}">
+                        {% elseif fields.link_items != true and element.link_date == true and post.type.has_archive %}
+                        <a class="posts-loop--date--link posts-loop--post-date" href="/{{ post.type.has_archive }}/{{ post.date|date('Y') }}{{ element.link_to == 'month' or element.link_to == 'day' ? '/' ~ post.date|date('m') }}{{ element.link_to == 'day' ? '/' ~ post.date|date('d') }}">
+                          {% else %}
+                          <span class="posts-loop--post-date">
+                        {% endif %}
+                            {{ post.date|date(element.date_format) }}
+                            {% if fields.link_items != true and element.link_date == true and (post.type.slug == 'post' or post.type.has_archive) %}
+                        </a>
+                      {% else %}
+                        </span>
+                        {% endif %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'post_modified' and (post.modified_date or post.modified_author) %}
+                    {# Post Modified #}
+                    <div class="posts-loop--post-modified--wrapper">
+                      {% if function('in_array', 'label', element.modified_elements) and element.label %}
+                        <span class="posts-loop--post-modified--label">{{ element.label }}</span>
+                      {% endif %}
+                      {% if function('in_array', 'date', element.modified_elements) and post.modified_date %}
+                      {% if fields.link_items != true and element.link_date == true and post.type.slug == 'post' %}
+                      <a class="posts-loop--post-modified--link posts-loop--post-modified--date" href="/{{ post.modified_date|date('Y') }}{{ element.link_to == 'month' or element.link_to == 'day' ? '/' ~ post.modified_date|date('m') }}{{ element.link_to == 'day' ? '/' ~ post.modified_date|date('d') }}">
+                        {% elseif fields.link_items != true and element.link_date == true and post.type.has_archive %}
+                        <a class="posts-loop--post-modified--link posts-loop--post-modified--date" href="/{{ post.type.has_archive }}/{{ post.modified_date|date('Y') }}{{ element.link_to == 'month' or element.link_to == 'day' ? '/' ~ post.modified_date|date('m') }}{{ element.link_to == 'day' ? '/' ~ post.modified_date|date('d') }}">
+                          {% else %}
+                          <span class="posts-loop--post-modified--date">
+                          {% endif %}
+                            {{ post.modified_date|date(element.date_format) }}
+                            {% if fields.link_items != true and element.link_date == true and (post.type.slug == 'post' or post.type.has_archive) %}
+                        </a>
+                      {% else %}
+                        </span>
+                        {% endif %}
+
+                        {% endif %}
+                        {% if function('in_array', 'author', element.modified_elements) and  element.separator %}
+                          <span class="posts-loop--post-modified--separator">{{ element.separator }}</span>
+                        {% endif %}
+                        {% if function('in_array', 'author', element.modified_elements) and post.modified_author %}
+                          {% if fields.link_items != true and element.link_author == true %}
+                            <a class="posts-loop--post-modified--link posts-loop--post-modified--author" href="{{ post.modified_author.link }}">
+                          {% else %}
+                            <span class="posts-loop--post-modified--author">
+                          {% endif %}
+                          {{ post.modified_author.name }}
+                          {% if fields.link_items != true and element.link_author == true %}
+                            </a>
+                          {% else %}
+                            </span>
+                          {% endif %}
+                        {% endif %}
+                        {% if function('in_array', 'email', element.modified_elements) and function('get_user_by', 'id', post.modified_author.id).data.user_email %}
+                          {% if fields.link_items != true %}
+                            <a class="posts-loop--post-modified--link posts-loop--post-modified--author-email" href="mailto:{{ function('get_user_by', 'id', post.modified_author.id).data.user_email }}">
+                          {% else %}
+                            <span class="posts-loop--post-modified--author-email">
+                          {% endif %}
+                          {{ function('get_user_by', 'id', post.modified_author.id).data.user_email }}
+                          {% if fields.link_items != true %}
+                            </a>
+                          {% else %}
+                            </span>
+                          {% endif %}
+                        {% endif %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'post_type' and post.type %}
+                    {# Post Type #}
+                    <div class="posts-loop--post-type--wrapper">
+                      {% if element.label %}
+                        <span class="posts-loop--post-type--label">{{ element.label }}</span>
+                      {% endif %}
+                      {% if fields.link_items != true and element.link_post_type == true and post.type.has_archive %}
+                      <a class="posts-loop--post-type--link posts-loop--post-type" href="/{{ post.type.has_archive }}">
+                        {% elseif fields.link_items != true and element.link_post_type == true %}
+                        <a class="posts-loop--post-type--link posts-loop--post-type" href="{{ function('get_post_type_archive_link', post.type.slug) }}">
+                          {% else %}
+                          <span class="posts-loop--post-type">
+                        {% endif %}
+                            {% if element.name_format == 'name' %}
+                              {{ post.type.labels.name }}
+                            {% elseif element.name_format == 'singular_name' %}
+                              {{ post.type.labels.singular_name }}
+                            {% elseif element.name_format == 'menu_name' %}
+                              {{ post.type.labels.menu_name }}
+                            {% elseif element.name_format == 'name_admin_bar' %}
+                              {{ post.type.labels.name_admin_bar }}
+                            {% endif %}
+                            {% if fields.link_items != true and element.link_post_type == true %}
+                        </a>
+                      {% else %}
+                        </span>
+                        {% endif %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'post_parent' and post.parent %}
+                    {# Post Parent #}
+                    <div class="posts-loop--post-parent--wrapper">
+                      {% if element.label %}
+                        <span class="posts-loop--post-parent--label">{{ element.label }}</span>
+                      {% endif %}
+                      {% if fields.link_items != true and element.link_parent == true %}
+                      <a class="posts-loop--post-parent-link posts-loop--post-parent" href="{{ post.parent.link }}">
+                        {% else %}
+                        <span class="posts-loop--post-parent">
+                      {% endif %}
+                          {{ post.parent.title }}
+                          {% if fields.link_items != true and element.link_link == true %}
+                      </a>
+                    {% else %}
+                      </span>
+                      {% endif %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'children' and post.children %}
+                    {# Children #}
+                    <div class="posts-loop--post-children--wrapper">
+                      {% if element.label %}
+                        <span class="posts-loop--children--label">{{ element.label }}</span>
+                      {% endif %}
+                      {% for child in post.children %}
+                        {% if fields.link_items != true and element.link_children == true %}<a class="posts-loop--child--link posts-loop--child" href="/child/{{ child.slug }}">{% else %}<span class="posts-loop--child">{% endif %}{{ child.name }}{% if fields.link_items != true and element.link_children == true %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
+                      {% endfor %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'comment_count' and post.comment_count %}
+                    {# Comment Count #}
+                    <div class="posts-loop--comment-count--wrapper">
+                      {% if element.label %}
+                        <span class="posts-loop--comment-count--label">{{ element.label }}</span>
+                      {% endif %}
+                      <span class="posts-loop--comment-count">{{ post.comment_count }}</span>
+                    </div>
+                  {% elseif element.acf_fc_layout == 'terms' and post.terms({query:{taxonomy:element.taxonomy, orderby:element.order_by, order: element.order}}) %}
+                    {# Terms #}
+                    <div class="posts-loop--terms--wrapper">
+                      {% if element.label %}
+                        <span class="posts-loop--terms--label">{{ element.label }}</span>
+                      {% endif %}
+                      {% for term in post.terms({query:{taxonomy:element.taxonomy, orderby:element.order_by, order: element.order}}) %}
+                        {% if fields.link_items != true and element.link_terms == true %}<a class="posts-loop--term--link posts-loop--term" href="/{{ term.taxonomy }}/{{ term.slug }}">{% else %}<span class="posts-loop--term">{% endif %}{{ term.name }}{% if fields.link_items != true and element.link_terms == true %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
+                      {% endfor %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'categories' and post.categories %}
+                    {# Categories #}
+                    <div class="posts-loop--categories--wrapper">
+                      {% if element.label %}
+                        <span class="posts-loop--categories--label">{{ element.label }}</span>
+                      {% endif %}
+                      {% for category in post.categories %}
+                        {% if fields.link_items != true and element.link_categories == true %}<a class="posts-loop--category--link posts-loop--category" href="/{{ category.taxonomy }}/{{ category.slug }}">{% else %}<span class="posts-loop--category">{% endif %}{{ category.name }}{% if fields.link_items != true and element.link_categories == true %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
+                      {% endfor %}
+                    </div>
+                  {% elseif element.acf_fc_layout == 'tags' and post.tags %}
+                    {# Tags #}
+                    <div class="posts-loop--tags--wrapper">
+                      {% if element.label %}
+                        <span class="posts-loop--tags--label">{{ element.label }}</span>
+                      {% endif %}
+                      {% for tag in post.tags %}
+                        {% if fields.link_items != true and element.link_tags == true %}<a class="posts-loop--tag--link posts-loop--tag" href="/tag/{{ tag.slug }}">{% else %}<span class="posts-loop--tag">{% endif %}{{ tag.name }}{% if fields.link_items != true and element.link_tags == true %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endblock %}
+        {% endembed %}
+
+      {% endfor %}
+    </div>

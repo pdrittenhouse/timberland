@@ -1,0 +1,98 @@
+{#
+/**
+ * @file
+ * posts-loop~load-more
+ *   Posts loop load more functionality.
+ *
+ * Available variables:
+ *  - posts: Array of post objects
+ *  - fields: Block field data
+ */
+#}    {# Alignment #}
+    {% if fields.load_more.load_more_alignment['hor_align'] %}
+      {% set load_more_btn_alignment = [] %}
+      {% for align in fields.load_more.load_more_alignment['hor_align'] %}
+        {% if align.breakpoint %}
+          {% set bp = '-' ~ align.breakpoint %}
+        {% else %}
+          {% set bp = '' %}
+        {% endif %}
+        {% if align.alignment %}
+          {% set talign = '-' ~ align.alignment %}
+        {% else %}
+          {% set talign = '' %}
+        {% endif %}
+        {% if talign %}
+          {% set load_more_btn_alignment = load_more_btn_alignment|default([])|merge([
+            'justify-content' ~ bp ~ talign
+          ]) %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    {# Set custom button styles #}
+    {% if fields.load_more.load_more_button.style == 'custom' %}
+      {% set load_more_btn_bg_color = fields.load_more.load_more_button.background_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.load_more.load_more_button.background_color['bg_custom_color'] ~ ';' %}
+      {% set load_more_btn_text_color = fields.load_more.load_more_button.text_color['color'] == 'custom' ? 'color: ' ~ fields.load_more.load_more_button.text_color['custom_color'] ~ ';' %}
+      {% set load_more_btn_transform = fields.load_more.load_more_button['text_transform']['text_transform'] ? 'text-transform: ' ~ fields.load_more.load_more_button['text_transform']['text_transform'] ~ ';' %}
+      {% set load_more_btn_padding_top  = fields.load_more.load_more_button['padding']['padding']['top'] is not empty ? 'padding-top: ' ~ fields.load_more.load_more_button['padding']['padding']['top'] ~ 'px;' %}
+      {% set load_more_btn_padding_bottom = fields.load_more.load_more_button['padding']['padding']['bottom'] is not empty ? 'padding-bottom: ' ~ fields.load_more.load_more_button['padding']['padding']['bottom'] ~ 'px;' %}
+      {% set load_more_btn_padding_left = fields.load_more.load_more_button['padding']['padding']['left'] is not empty ? 'padding-left: ' ~ fields.load_more.load_more_button['padding']['padding']['left'] ~ 'px;' %}
+      {% set load_more_btn_padding_right = fields.load_more.load_more_button['padding']['padding']['right'] is not empty ? 'padding-right: ' ~ fields.load_more.load_more_button['padding']['padding']['right'] ~ 'px;' %}
+      {% set load_more_btn_border_top_width = fields.load_more.load_more_button['border']['top']['width'] is not empty ? 'border-top-width: ' ~ fields.load_more.load_more_button['border']['top']['width'] ~ 'px;' %}
+      {% set load_more_btn_border_top_style = fields.load_more.load_more_button['border']['top']['style'] ? 'border-top-style: ' ~ fields.load_more.load_more_button['border']['top']['style'] ~ ';' %}
+      {% set load_more_btn_border_top_color = fields.load_more.load_more_button['border']['top']['color'] == 'custom' and fields.load_more.load_more_button['border']['top']['custom_color'] ? 'border-top-color: ' ~ fields.load_more.load_more_button['border']['top']['custom_color'] ~ ';' : fields.load_more.load_more_button['border']['top']['color'] == 'palette' and fields.load_more.load_more_button['border']['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.load_more.load_more_button['border']['top']['theme_color'] ~ ');' %}
+      {% set load_more_btn_border_bottom_width = fields.load_more.load_more_button['border']['bottom']['width'] is not empty ? 'border-bottom-width: ' ~ fields.load_more.load_more_button['border']['bottom']['width'] ~ 'px;' %}
+      {% set load_more_btn_border_bottom_style = fields.load_more.load_more_button['border']['bottom']['style'] ? 'border-bottom-style: ' ~ fields.load_more.load_more_button['border']['bottom']['style'] ~ ';' %}
+      {% set load_more_btn_border_bottom_color = fields.load_more.load_more_button['border']['bottom']['color'] == 'custom' and fields.load_more.load_more_button['border']['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.load_more.load_more_button['border']['bottom']['custom_color'] ~ ';' : fields.load_more.load_more_button['border']['bottom']['color'] == 'palette' and fields.load_more.load_more_button['border']['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.load_more.load_more_button['border']['bottom']['theme_color'] ~ ');' %}
+      {% set load_more_btn_border_left_width = fields.load_more.load_more_button['border']['left']['width'] is not empty ? 'border-left-width: ' ~ fields.load_more.load_more_button['border']['left']['width'] ~ 'px;' %}
+      {% set load_more_btn_border_left_style = fields.load_more.load_more_button['border']['left']['style'] ? 'border-left-style: ' ~ fields.load_more.load_more_button['border']['left']['style'] ~ ';' %}
+      {% set load_more_btn_border_left_color = fields.load_more.load_more_button['border']['left']['color'] == 'custom' and fields.load_more.load_more_button['border']['left']['custom_color'] ? 'border-left-color: ' ~ fields.load_more.load_more_button['border']['left']['custom_color'] ~ ';' : fields.load_more.load_more_button['border']['left']['color'] == 'palette' and fields.load_more.load_more_button['border']['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.load_more.load_more_button['border']['left']['theme_color'] ~ ');' %}
+      {% set load_more_btn_border_right_width = fields.load_more.load_more_button['border']['right']['width'] is not empty ? 'border-right-width: ' ~ fields.load_more.load_more_button['border']['right']['width'] ~ 'px;' %}
+      {% set load_more_btn_border_right_style = fields.load_more.load_more_button['border']['right']['style'] ? 'border-right-style: ' ~ fields.load_more.load_more_button['border']['right']['style'] ~ ';' %}
+      {% set load_more_btn_border_right_color = fields.load_more.load_more_button['border']['right']['color'] == 'custom' and fields.load_more.load_more_button['border']['right']['custom_color'] ? 'border-right-color: ' ~ fields.load_more.load_more_button['border']['right']['custom_color'] ~ ';' : fields.load_more.load_more_button['border']['right']['color'] == 'palette' and fields.load_more.load_more_button['border']['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.load_more.load_more_button['border']['right']['theme_color'] ~ ');' %}
+      {% set load_more_btn_border_top_left_radius = fields.load_more.load_more_button['border_radius']['top_left'] is not empty ? 'border-top-left-radius: ' ~ fields.load_more.load_more_button['border_radius']['top_left'] ~ 'px;' %}
+      {% set load_more_btn_border_top_right_radius = fields.load_more.load_more_button['border_radius']['top_right'] is not empty ? 'border-top-right-radius: ' ~ fields.load_more.load_more_button['border_radius']['top_right'] ~ 'px;' %}
+      {% set load_more_btn_border_bottom_left_radius = fields.load_more.load_more_button['border_radius']['bottom_left'] is not empty ? 'border-bottom-left-radius: ' ~ fields.load_more.load_more_button['border_radius']['bottom_left'] ~ 'px;' %}
+      {% set load_more_btn_border_bottom_right_radius = fields.load_more.load_more_button['border_radius']['bottom_right'] is not empty ? 'border-bottom-right-radius: ' ~ fields.load_more.load_more_button['border_radius']['bottom_right'] ~ 'px;' %}
+      {% set load_more_btn_box_shadow_color = fields.load_more.load_more_button['box_shadow']['color']['color'] == 'palette' and fields.load_more.load_more_button['box_shadow']['color']['theme_color'] ? 'var(--' ~ fields.load_more.load_more_button['box_shadow']['color']['theme_color'] ~ ')' : fields.load_more.load_more_button['box_shadow']['color']['color'] == 'custom' and fields.load_more.load_more_button['box_shadow']['color']['custom_color'] ? fields.load_more.load_more_button['box_shadow']['color']['custom_color'] %}
+      {% set load_more_btn_box_shadow_inset = fields.load_more.load_more_button['box_shadow']['inset'] == true ? 'inset' %}
+      {% set load_more_btn_box_shadow = fields.load_more.load_more_button['box_shadow']['horizontal_offset'] is not empty or fields.load_more.load_more_button['box_shadow']['vertical_offset'] is not empty or fields.load_more.load_more_button['box_shadow']['blur'] is not empty or fields.load_more.load_more_button['box_shadow']['spread'] is not empty or btn_box_shadow_color or btn_box_shadow_inset ? 'box-shadow: ' ~ fields.load_more.load_more_button['box_shadow']['horizontal_offset'] ~ 'px ' ~ fields.load_more.load_more_button['box_shadow']['vertical_offset'] ~ 'px ' ~ fields.load_more.load_more_button['box_shadow']['blur'] ~ 'px ' ~ fields.load_more.load_more_button['box_shadow']['spread'] ~ 'px ' ~ btn_box_shadow_color ~ ' ' ~ btn_box_shadow_inset ~ ';' %}
+      {% set load_more_btn_text_shadow_color = fields.load_more.load_more_button['text_shadow']['color']['color'] == 'palette' and fields.load_more.load_more_button['text_shadow']['color']['theme_color'] ? 'var(--' ~ fields.load_more.load_more_button['text_shadow']['color']['theme_color'] ~ ')' : fields.load_more.load_more_button['text_shadow']['color']['color'] == 'custom' and fields.load_more.load_more_button['text_shadow']['color']['custom_color'] ? fields.load_more.load_more_button['text_shadow']['color']['custom_color'] %}
+      {% set load_more_btn_text_shadow = fields.load_more.load_more_button['text_shadow']['horizontal_offset'] is not empty or fields.load_more.load_more_button['text_shadow']['vertical_offset'] is not empty or fields.load_more.load_more_button['text_shadow']['blur'] is not empty or btn_text_shadow_color ? 'text-shadow: ' ~ fields.load_more.load_more_button['text_shadow']['horizontal_offset'] ~ 'px ' ~ fields.load_more.load_more_button['text_shadow']['vertical_offset'] ~ 'px ' ~ fields.load_more.load_more_button['text_shadow']['blur'] ~ 'px ' ~ btn_text_shadow_color ~ ';' %}
+    {% endif %}
+    {% set load_more_btn_fontsize = fields.load_more.load_more_button['font_size']['font_size']['value'] is not empty ? 'font-size: ' ~ fields.load_more.load_more_button['font_size']['font_size']['value'] ~ fields.load_more.load_more_button['font_size']['font_size']['unit'] ~ ';' %}
+    {% set load_more_btn_width = fields.load_more.load_more_button.button_width.width['width']['value'] is not empty ? 'width: ' ~ fields.load_more.load_more_button.button_width.width['width']['value']  ~ fields.load_more.load_more_button.button_width.width['width']['unit'] ~  ';' %}
+    {% set load_more_btn_min_width = fields.load_more.load_more_button.button_width.width['min_width'] is not empty ? 'min-width: ' ~ fields.load_more.load_more_button.button_width.width['min_width']  ~ 'px;' %}
+    {% set load_more_btn_max_width = fields.load_more.load_more_button.button_width.width['max_width'] is not empty ? 'max-width: ' ~ fields.load_more.load_more_button.button_width.width['max_width']  ~ 'px;' %}
+    {% set load_more_btn_margin_top = fields.load_more.load_more_button.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : fields.load_more.load_more_button.margin['margin']['top']['top'] is not empty ? 'margin-top: ' ~ fields.load_more.load_more_button.margin['margin']['top']['top'] ~ 'px;' %}
+    {% set load_more_btn_margin_bottom = fields.load_more.load_more_button.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.load_more.load_more_button.margin['margin']['bottom']['bottom'] is not empty ? 'margin-bottom: ' ~ fields.load_more.load_more_button.margin['margin']['bottom']['bottom'] ~ 'px;' %}
+    {% set load_more_btn_margin_left = fields.load_more.load_more_button.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : fields.load_more.load_more_button.margin['margin']['left']['left'] is not empty ? 'margin-left: ' ~ fields.load_more.load_more_button.margin['margin']['left']['left'] ~ 'px;' %}
+    {% set load_more_btn_margin_right = fields.load_more.load_more_button.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : fields.load_more.load_more_button.margin['margin']['right']['right'] is not empty ? 'margin-right: ' ~ fields.load_more.load_more_button.margin['margin']['right']['right'] ~ 'px;' %}
+
+    <div class="load-more--wrapper d-flex {{ load_more_btn_alignment|length > 0 ? load_more_btn_alignment|sort|join(' ')|trim }}">
+      {% include '@atoms/button/_button.tpl.twig' with {
+        button_text: fields.load_more.load_more_button_text|default('Load More'),
+        button_color: fields.load_more.load_more_button.style != 'custom' ? fields.load_more.load_more_button.style | default('default'),
+        button_size: fields.load_more.load_more_button.size,
+        button_outline: fields.load_more.load_more_button.outline,
+        button_block: fields.load_more.load_more_button.full_width,
+        nowrap: fields.load_more.load_more_button.nowrap,
+        title: fields.load_more.load_more_button_text|default('Load More'),
+        button_classes: [
+          'load-more--button',
+          fields.load_more.load_more_button.background_color['bg_color'] == 'palette' and fields.load_more.load_more_button.background_color['bg_theme_color'] ? 'bg-' ~ fields.load_more.load_more_button.background_color['bg_theme_color'],
+          fields.load_more.load_more_button.text_color['color'] == 'palette' and fields.load_more.load_more_button.text_color['theme_color'] ? 'text-' ~ fields.load_more.load_more_button.text_color['theme_color'],
+          fields.load_more.load_more_button.full_width != true and fields.load_more.load_more_button.display['display'] is not null ? fields.load_more.load_more_button.display['display']
+        ],
+        button_attributes: [
+          load_more_btn_bg_color or load_more_btn_text_color or load_more_btn_transform or load_more_btn_btn_padding_top or load_more_btn_padding_bottom or load_more_btn_padding_left or load_more_btn_padding_right or load_more_btn_border_top_width or load_more_btn_border_top_style or load_more_btn_border_top_color or load_more_btn_border_bottom_width or load_more_btn_border_bottom_style or load_more_btn_border_bottom_color or load_more_btn_border_left_width or load_more_btn_border_left_style or load_more_btn_border_left_color or load_more_btn_border_right_width or load_more_btn_border_right_style or load_more_btn_border_right_color or load_more_btn_border_top_left_radius or load_more_btn_border_top_right_radius or load_more_btn_border_bottom_left_radius or load_more_btn_border_bottom_right_radius or load_more_btn_box_shadow or load_more_btn_text_shadow or load_more_btn_fontsize or load_more_btn_width or min_width or load_more_btn_max_width or load_more_btn_margin_top or load_more_btn_margin_bottom or load_more_btn_margin_left or load_more_btn_margin_right ? 'style="' ~ load_more_btn_bg_color ~ load_more_btn_text_color ~ load_more_btn_fontsize ~ load_more_btn_transform ~ load_more_btn_padding_top ~ load_more_btn_padding_bottom ~ load_more_btn_padding_left ~ load_more_btn_padding_right ~ load_more_btn_border_top_width ~ load_more_btn_border_top_style ~ load_more_btn_border_top_color ~ load_more_btn_border_bottom_width ~ load_more_btn_border_bottom_style ~ load_more_btn_border_bottom_color ~ load_more_btn_border_left_width ~ load_more_btn_border_left_style ~ load_more_btn_border_left_color ~ load_more_btn_border_right_width ~ load_more_btn_border_right_style ~ load_more_btn_border_right_color ~ load_more_btn_border_top_left_radius ~ load_more_btn_border_top_right_radius ~ load_more_btn_border_bottom_left_radius ~ load_more_btn_border_bottom_right_radius ~ load_more_btn_box_shadow ~ load_more_btn_text_shadow ~ load_more_btn_width ~ load_more_btn_min_width ~ load_more_btn_max_width ~ load_more_btn_margin_top ~ load_more_btn_margin_bottom ~ load_more_btn_margin_left ~ load_more_btn_margin_right ~ '"'
+        ]
+      } %}
+
+      {# {% include '@atoms/button/_button.tpl.twig' with {
+        button_color: 'primary',
+        button_text: fields.load_more.load_more_button_text|default('Load More'),
+        button_other_classes: 'load-more--button',
+      } %} #}
+    </div>
