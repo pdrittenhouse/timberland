@@ -1,0 +1,12 @@
+{% if element.acf_fc_layout == 'post_excerpt' and (post.preview or function('get_the_excerpt')) %}
+  {# Post Excerpt #}
+  <div class="posts-loop--post-excerpt--wrapper">
+    {% if post.post_type == 'page' %}
+      <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
+    {% elseif fields.link_items != true %}
+      <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>
+    {% else %}
+      <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>
+    {% endif %}
+  </div>
+{% endif %}

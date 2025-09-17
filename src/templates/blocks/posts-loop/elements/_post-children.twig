@@ -1,0 +1,34 @@
+{#
+/**
+ * @file
+ * Post Children Element
+ *   Display post children for posts in layout-driven sections.
+ *
+ * Available variables:
+ *  - post: Current post object
+ *  - element: Element configuration data
+ *  - fields: Block field data
+ */
+#}
+
+{% if element.acf_fc_layout == 'children' and post.children %}
+  <div class="posts-loop--post-children--wrapper">
+    {% if element.label %}
+      <span class="posts-loop--children--label">{{ element.label }}</span>
+    {% endif %}
+    {% for child in post.children %}
+      {% if fields.link_items != true and element.link_children == true %}
+        <a class="posts-loop--child--link posts-loop--child" href="/child/{{ child.slug }}">
+      {% else %}
+        <span class="posts-loop--child">
+      {% endif %}
+      {{ child.name }}
+      {% if fields.link_items != true and element.link_children == true %}
+        </a>
+      {% else %}
+        </span>
+      {% endif %}
+      {% if not loop.last %}, {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}

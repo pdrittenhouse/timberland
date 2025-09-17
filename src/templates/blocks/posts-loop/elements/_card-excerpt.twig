@@ -1,0 +1,7 @@
+{% if function('in_array', 'post_excerpt', fields.elements) %}
+  {% if fields.link_items != true %}
+    <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more"><a href="{{ post.link }}">{{ fields.element_excerpt.element_read_more_label }}</a></span>{% endif %}</div>
+  {% else %}
+    <div class="posts-loop--post-excerpt"><span class="post-excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span> {% if fields.element_excerpt.element_read_more_label %}<span class="read-more">{{ fields.element_excerpt.element_read_more_label }}</span>{% endif %}</div>
+  {% endif %}
+{% endif %}

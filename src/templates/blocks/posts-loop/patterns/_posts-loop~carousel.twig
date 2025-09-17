@@ -1,0 +1,508 @@
+{#
+/**
+ * @file
+ * posts-loop~carousel
+ *   Posts loop with carousel pattern.
+ *
+ * Available variables:
+ *  - posts: Array of post objects
+ *  - fields: Block field data
+ */
+#}
+    {% if fields.pattern == 'carousel' %}
+
+      {# Set and count posts for slides #}
+      {% set slideCount = [] %}
+      {% for post in posts %}
+        {% set slideCount = slideCount|merge([{
+          slide: i,
+          active: loop.first ? true
+        }]) %}
+      {% endfor %}
+
+      {# Slide Classes #}
+      {% set slide_classes = slide_classes|default([])|merge([
+        fields.slider.slider == 'bootstrap' ? 'carousel-item',
+        fields.slider.slider == 'flickity' ? 'carousel-cell',
+        fields.slider.slider == 'bootstrap' and fields.active == true ? 'active',
+        fields.slider.slider == 'slick' ? 'slick-slide'
+      ]) | sort | join(' ') | trim %}
+
+      {# Slide Attributes #}
+      {% set slide_attributes = slide_attributes|default([])|merge([
+        'slide_width' ? 'style="width: ' ~ slide_width ~ ';"'
+      ]) | sort | join(' ') | trim %}
+
+      {% if fields.include_cards == true %}
+
+        {% if fields.slider.slider == 'bootstrap' %}
+          {% embed '@molecules/carousel/_carousel.tpl.twig' with {
+            carousel_id: block['anchor'],
+            carousel_classes: [
+              slider_classes
+            ],
+            carousel_attributes: [
+              slider_width or slider_min_width or slider_max_width or slider_margin_top or slider_margin_bottom or slider_margin_left or slider_margin_right or slider_padding_top or slider_padding_bottom or slider_padding_left or slider_padding_right ? 'style="' ~ slider_width ~ slider_min_width ~ slider_max_width ~ slider_margin_top ~ slider_margin_bottom ~ slider_margin_left ~ slider_margin_right ~ slider_padding_top ~ slider_padding_bottom ~ slider_padding_left ~ slider_padding_right ~ '"'
+            ],
+            arrows: fields.slider.arrows,
+            indicators: fields.slider.dots,
+            crossfade: fields.slider.fade,
+            dark: fields.slider.dark,
+            touch: fields.slider.swipe == true ? 'true',
+            keyboard: fields.slider.keyboard == true ? 'true' : 'false',
+            wrap: fields.slider.loop == true ? 'true' : 'false',
+            pause: fields.slider.pause_on_hover == true ? 'hover' : 'false',
+            interval: fields.slider.autoplay == true and fields.slider.autoplay_speed ? fields.slider.autoplay_speed,
+            ride: fields.slider.autoplay == true and fields.slider.auto_start == true ? 'carousel' : fields.slider.autoplay == true ? 'true' : 'false',
+            slides: slideCount
+          } %}
+            {% block carousel_slides %}
+
+              {% for post in posts %}
+                {# Categories #}
+                {% if post.categories %}
+                  {% set catArr = [] %}
+                  {% for category in post.categories %}
+                    {% set catArr = catArr | merge([category.name]) %}
+                  {% endfor %}
+                {% endif %}
+
+                <div class="{{ slide_classes }} {{ fields.slider.initial_slide == loop.index0 ? 'active' }}" {{ slide_attributes }}>
+                  {# Include shared card element #}
+                  {% set card_attributes = [] %}
+                  {% if fields.include_modals == true %}
+                    {% set card_attributes = card_attributes|merge(['data-bs-toggle="modal"', 'data-bs-target="#' ~ post.slug ~ '"']) %}
+                  {% endif %}
+                  {% if catArr | length > 0 %}
+                    {% set card_attributes = card_attributes|merge(['data-categories="' ~ catArr | sort | join(', ') | trim ~ '"']) %}
+                  {% endif %}
+                  
+                  {% include 'blocks/posts-loop/elements/_card.twig' with {
+                    parent_block_data: parent_block_data,
+                    additional_attributes: card_attributes
+                  } %}
+                </div>
+              {% endfor %}
+
+            {% endblock carousel_slides %}
+          {% endembed %}
+        {% elseif fields.slider.slider == 'flickity' %}
+          {% embed '@molecules/flickity-carousel/_flickity-carousel.tpl.twig' with {
+            slide_width: slide_width,
+            contain: fields.slider.contain,
+            wrap_around: fields.slider.loop,
+            auto_play: fields.slider.autoplay == true and fields.slider.autoplay_speed ? fields.slider.autoplay_speed,
+            pause_auto_play_on_hover: fields.slider.pause_on_hover,
+            prev_next_buttons: fields.slider.arrows,
+            page_dots: fields.slider.dots,
+            draggable: fields.slider.swipe,
+            free_scroll: fields.slider.free_scroll,
+            group_cells: fields.slider.group_cells,
+            adapt_height: fields.slider.adapt_height,
+            right_to_left: fields.slider.right_to_left,
+            accessibility: fields.slider.keyboard,
+            set_gallery_size: fields.slider.gallery_size,
+            resize: fields.slider.resize,
+            cell_align: fields.slider.alignment,
+            slides: slideCount,
+            flickity_carousel_classes: [
+              slider_classes
+            ],
+            flickity_carousel_attributes: [
+              slider_width or slider_min_width or slider_max_width or slider_margin_top or slider_margin_bottom or slider_margin_left or slider_margin_right or slider_padding_top or slider_padding_bottom or slider_padding_left or slider_padding_right ? 'style="' ~ slider_width ~ slider_min_width ~ slider_max_width ~ slider_margin_top ~ slider_margin_bottom ~ slider_margin_left ~ slider_margin_right ~ slider_padding_top ~ slider_padding_bottom ~ slider_padding_left ~ slider_padding_right ~ '"'
+            ]
+          } %}
+            {% block slides %}
+              {% for post in posts %}
+                {# Categories #}
+                {% if post.categories %}
+                  {% set catArr = [] %}
+                  {% for category in post.categories %}
+                    {% set catArr = catArr | merge([category.name]) %}
+                  {% endfor %}
+                {% endif %}
+
+                <div class="{{ slide_classes }}" {{ slide_attributes }}>
+                  {# Include shared card element #}
+                  {% set card_attributes = [] %}
+                  {% if fields.include_modals == true %}
+                    {% set card_attributes = card_attributes|merge(['data-bs-toggle="modal"', 'data-bs-target="#' ~ post.slug ~ '"']) %}
+                  {% endif %}
+                  {% if catArr | length > 0 %}
+                    {% set card_attributes = card_attributes|merge(['data-categories="' ~ catArr | sort | join(', ') | trim ~ '"']) %}
+                  {% endif %}
+                  
+                  {% include 'blocks/posts-loop/elements/_card.twig' with {
+                    parent_block_data: parent_block_data,
+                    additional_attributes: card_attributes
+                  } %}
+                </div>
+              {% endfor %}
+
+            {% endblock slides %}
+          {% endembed %}
+        {% elseif fields.slider.slider == 'slick' %}
+          {% embed '@molecules/slick-carousel/_slick-carousel.tpl.twig' with {
+            slide_width: slide_width,
+            slides_to_show: fields.slider.slides_to_show,
+            slides_to_scroll: fields.slider.slides_to_scroll,
+            infinite: fields.slider.loop,
+            speed: fields.slider.animation_speed,
+            autoplay: fields.slider.autoplay,
+            autoplay_speed: fields.slider.autoplay_speed,
+            pause_on_hover: fields.slider.pause_on_hover,
+            pause_on_focus: fields.slider.pause_on_focus,
+            css_ease: fields.slider.css_ease,
+            ease: fields.slider.easing,
+            arrows: fields.slider.arrows,
+            dots: fields.slider.dots,
+            draggable: fields.slider.swipe,
+            swipe: fields.slider.swipe,
+            touch_move: fields.slider.swipe,
+            swipe_to_slide: fields.slider.swipe_to_slide,
+            touch_threshold: fields.slider.drag_threshold,
+            edge_friction: fields.slider.edge_friction,
+            center_mode: fields.slider.center_mode,
+            center_padding: fields.slider.center_padding,
+            variable_width: fields.slider.variable_width,
+            adaptive_height: fields.slider.adapt_height,
+            rows: fields.slider.rows,
+            slides_per_row: fields.slider.slides_per_row,
+            vertical: fields.slider.vertical,
+            vertical_swiping: fields.slider.vertical_swiping,
+            rtl: fields.slider.right_to_left,
+            accessibility: fields.slider.keyboard,
+            focus_on_select: fields.slider.focus_on_select,
+            lazy_load: fields.slider.lazy_load,
+            fade: fields.slider.fade,
+            use_css: fields.slider.use_css,
+            use_transform: fields.slider.use_transform,
+            edge_friction: fields.slider.edge_friction,
+            touch_threshold: fields.slider.drag_threshold,
+            easing: fields.slider.easing,
+            css_ease: fields.slider.css_ease,
+            asNavFor: fields.slider.as_nav_for,
+            responsive: fields.slider.responsive,
+            slides: slideCount,
+            slick_carousel_classes: [
+              slider_classes
+            ],
+            slick_carousel_attributes: [
+              slider_width or slider_min_width or slider_max_width or slider_margin_top or slider_margin_bottom or slider_margin_left or slider_margin_right or slider_padding_top or slider_padding_bottom or slider_padding_left or slider_padding_right ? 'style="' ~ slider_width ~ slider_min_width ~ slider_max_width ~ slider_margin_top ~ slider_margin_bottom ~ slider_margin_left ~ slider_margin_right ~ slider_padding_top ~ slider_padding_bottom ~ slider_padding_left ~ slider_padding_right ~ '"'
+            ]
+          } %}
+            {% block slides %}
+              {% for post in posts %}
+                {# Categories #}
+                {% if post.categories %}
+                  {% set catArr = [] %}
+                  {% for category in post.categories %}
+                    {% set catArr = catArr | merge([category.name]) %}
+                  {% endfor %}
+                {% endif %}
+
+                <div class="{{ slide_classes }}" {{ slide_attributes }}>
+                  {# Include shared card element #}
+                  {% set card_attributes = [] %}
+                  {% if fields.include_modals == true %}
+                    {% set card_attributes = card_attributes|merge(['data-bs-toggle="modal"', 'data-bs-target="#' ~ post.slug ~ '"']) %}
+                  {% endif %}
+                  {% if catArr | length > 0 %}
+                    {% set card_attributes = card_attributes|merge(['data-categories="' ~ catArr | sort | join(', ') | trim ~ '"']) %}
+                  {% endif %}
+                  
+                  {% include 'blocks/posts-loop/elements/_card.twig' with {
+                    parent_block_data: parent_block_data,
+                    additional_attributes: card_attributes
+                  } %}
+                </div>
+              {% endfor %}
+
+            {% endblock slides %}
+          {% endembed %}
+        {% endif %}
+
+      {% else %}
+
+        {% if fields.slider.slider == 'bootstrap' %}
+          {% embed '@molecules/carousel/_carousel.tpl.twig' with {
+            carousel_id: block['anchor'],
+            carousel_classes: [
+              slider_classes
+            ],
+            carousel_attributes: [
+              slider_width or slider_min_width or slider_max_width or slider_margin_top or slider_margin_bottom or slider_margin_left or slider_margin_right or slider_padding_top or slider_padding_bottom or slider_padding_left or slider_padding_right ? 'style="' ~ slider_width ~ slider_min_width ~ slider_max_width ~ slider_margin_top ~ slider_margin_bottom ~ slider_margin_left ~ slider_margin_right ~ slider_padding_top ~ slider_padding_bottom ~ slider_padding_left ~ slider_padding_right ~ '"'
+            ],
+            arrows: fields.slider.arrows,
+            indicators: fields.slider.dots,
+            crossfade: fields.slider.fade,
+            dark: fields.slider.dark,
+            touch: fields.slider.swipe == true ? 'true',
+            keyboard: fields.slider.keyboard == true ? 'true' : 'false',
+            wrap: fields.slider.loop == true ? 'true' : 'false',
+            pause: fields.slider.pause_on_hover == true ? 'hover' : 'false',
+            interval: fields.slider.autoplay == true and fields.slider.autoplay_speed ? fields.slider.autoplay_speed,
+            ride: fields.slider.autoplay == true and fields.slider.auto_start == true ? 'carousel' : fields.slider.autoplay == true ? 'true' : 'false',
+            slides: slideCount
+          } %}
+            {% block carousel_slides %}
+              {% for post in posts %}
+                {# Categories #}
+                {% if post.categories %}
+                  {% set catArr = [] %}
+                  {% for category in post.categories %}
+                    {% set catArr = catArr | merge([category.name]) %}
+                  {% endfor %}
+                {% endif %}
+
+                <div class="{{ slide_classes }} {{ fields.slider.initial_slide == loop.index0 ? 'active' }}" {{ slide_attributes }} {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
+                  {% if fields.link_items == true %}
+                    <a class="posts-loop--post" href="{{ post.link }}">
+                  {% else %}
+                    <div class="posts-loop--post">
+                  {% endif %}
+
+                    {% for element in fields.posts_query_layout %}
+                      {% if element.acf_fc_layout == 'featured_image' and post.thumbnail.src %}
+                        {% include 'blocks/posts-loop/elements/_post-featured-image.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_title' and post.post_title %}
+                        {% include 'blocks/posts-loop/elements/_post-title.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_excerpt' and post.post_excerpt %}
+                        {% include 'blocks/posts-loop/elements/_post-excerpt.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_content' and post.content %}
+                        {% include 'blocks/posts-loop/elements/_post-content.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_author' and post.authors %}
+                        {% include 'blocks/posts-loop/elements/_post-author.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_date' and post.date %}
+                        {% include 'blocks/posts-loop/elements/_post-date.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_modified' and post.modified_date %}
+                        {% include 'blocks/posts-loop/elements/_post-modified.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_type' and post.type %}
+                        {% include 'blocks/posts-loop/elements/_post-type.twig' %}
+                      {% elseif element.acf_fc_layout == 'comment_count' and post.comment_count %}
+                        {% include 'blocks/posts-loop/elements/_post-comment-count.twig' %}
+                      {% elseif element.acf_fc_layout == 'terms' and post.terms is not empty %}
+                        {% include 'blocks/posts-loop/elements/_post-terms.twig' %}
+                      {% elseif element.acf_fc_layout == 'categories' and post.categories %}
+                        {% include 'blocks/posts-loop/elements/_post-categories.twig' %}
+                      {% elseif element.acf_fc_layout == 'tags' and post.tags %}
+                        {% include 'blocks/posts-loop/elements/_post-tags.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_parent' and post.parent %}
+                        {% include 'blocks/posts-loop/elements/_post-parent.twig' %}
+                      {% elseif element.acf_fc_layout == 'children' and post.children %}
+                        {% include 'blocks/posts-loop/elements/_post-children.twig' %}
+                      {% elseif element.acf_fc_layout == 'link' and post.link %}
+                        {% include 'blocks/posts-loop/elements/_post-link.twig' %}
+                      {% endif %}
+                    {% endfor %}
+
+                  {% if fields.link_items == true %}
+                    </a>
+                  {% else %}
+                    </div>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            {% endblock carousel_slides %}
+          {% endembed %}
+        {% elseif fields.slider.slider == 'flickity' %}
+          {% embed '@molecules/flickity-carousel/_flickity-carousel.tpl.twig' with {
+            slide_width: slide_width,
+            contain: fields.slider.contain,
+            wrap_around: fields.slider.loop,
+            auto_play: fields.slider.autoplay == true and fields.slider.autoplay_speed ? fields.slider.autoplay_speed,
+            pause_auto_play_on_hover: fields.slider.pause_on_hover,
+            prev_next_buttons: fields.slider.arrows,
+            page_dots: fields.slider.dots,
+            draggable: fields.slider.swipe,
+            free_scroll: fields.slider.free_scroll,
+            group_cells: fields.slider.group_cells,
+            adapt_height: fields.slider.adapt_height,
+            right_to_left: fields.slider.right_to_left,
+            accessibility: fields.slider.keyboard,
+            set_gallery_size: fields.slider.gallery_size,
+            resize: fields.slider.resize,
+            cell_align: fields.slider.alignment,
+            slides: slideCount,
+            flickity_carousel_classes: [
+              slider_classes
+            ],
+            flickity_carousel_attributes: [
+              slider_width or slider_min_width or slider_max_width or slider_margin_top or slider_margin_bottom or slider_margin_left or slider_margin_right or slider_padding_top or slider_padding_bottom or slider_padding_left or slider_padding_right ? 'style="' ~ slider_width ~ slider_min_width ~ slider_max_width ~ slider_margin_top ~ slider_margin_bottom ~ slider_margin_left ~ slider_margin_right ~ slider_padding_top ~ slider_padding_bottom ~ slider_padding_left ~ slider_padding_right ~ '"'
+            ]
+          } %}
+            {% block slides %}
+              {% for post in posts %}
+                {# Categories #}
+                {% if post.categories %}
+                  {% set catArr = [] %}
+                  {% for category in post.categories %}
+                    {% set catArr = catArr | merge([category.name]) %}
+                  {% endfor %}
+                {% endif %}
+
+                <div class="{{ slide_classes }}" {{ slide_attributes }} {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
+                  {% if fields.link_items == true %}
+                    <a class="posts-loop--post" href="{{ post.link }}">
+                  {% else %}
+                    <div class="posts-loop--post">
+                  {% endif %}
+
+                    {% for element in fields.posts_query_layout %}
+                      {% if element.acf_fc_layout == 'featured_image' and post.thumbnail.src %}
+                        {% include 'blocks/posts-loop/elements/_post-featured-image.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_title' and post.post_title %}
+                        {% include 'blocks/posts-loop/elements/_post-title.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_excerpt' and post.post_excerpt %}
+                        {% include 'blocks/posts-loop/elements/_post-excerpt.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_content' and post.content %}
+                        {% include 'blocks/posts-loop/elements/_post-content.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_author' and post.authors %}
+                        {% include 'blocks/posts-loop/elements/_post-author.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_date' and post.date %}
+                        {% include 'blocks/posts-loop/elements/_post-date.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_modified' and post.modified_date %}
+                        {% include 'blocks/posts-loop/elements/_post-modified.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_type' and post.type %}
+                        {% include 'blocks/posts-loop/elements/_post-type.twig' %}
+                      {% elseif element.acf_fc_layout == 'comment_count' and post.comment_count %}
+                        {% include 'blocks/posts-loop/elements/_post-comment-count.twig' %}
+                      {% elseif element.acf_fc_layout == 'terms' and post.terms is not empty %}
+                        {% include 'blocks/posts-loop/elements/_post-terms.twig' %}
+                      {% elseif element.acf_fc_layout == 'categories' and post.categories %}
+                        {% include 'blocks/posts-loop/elements/_post-categories.twig' %}
+                      {% elseif element.acf_fc_layout == 'tags' and post.tags %}
+                        {% include 'blocks/posts-loop/elements/_post-tags.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_parent' and post.parent %}
+                        {% include 'blocks/posts-loop/elements/_post-parent.twig' %}
+                      {% elseif element.acf_fc_layout == 'children' and post.children %}
+                        {% include 'blocks/posts-loop/elements/_post-children.twig' %}
+                      {% elseif element.acf_fc_layout == 'link' and post.link %}
+                        {% include 'blocks/posts-loop/elements/_post-link.twig' %}
+                      {% endif %}
+                    {% endfor %}
+
+                  {% if fields.link_items == true %}
+                    </a>
+                  {% else %}
+                    </div>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            {% endblock slides %}
+          {% endembed %}
+        {% elseif fields.slider.slider == 'slick' %}
+          {% embed '@molecules/slick-carousel/_slick-carousel.tpl.twig' with {
+            slide_width: slide_width,
+            slides_to_show: fields.slider.slides_to_show,
+            slides_to_scroll: fields.slider.slides_to_scroll,
+            infinite: fields.slider.loop,
+            speed: fields.slider.animation_speed,
+            autoplay: fields.slider.autoplay,
+            autoplay_speed: fields.slider.autoplay_speed,
+            pause_on_hover: fields.slider.pause_on_hover,
+            pause_on_focus: fields.slider.pause_on_focus,
+            css_ease: fields.slider.css_ease,
+            ease: fields.slider.easing,
+            arrows: fields.slider.arrows,
+            dots: fields.slider.dots,
+            draggable: fields.slider.swipe,
+            swipe: fields.slider.swipe,
+            touch_move: fields.slider.swipe,
+            swipe_to_slide: fields.slider.swipe_to_slide,
+            touch_threshold: fields.slider.drag_threshold,
+            edge_friction: fields.slider.edge_friction,
+            center_mode: fields.slider.center_mode,
+            center_padding: fields.slider.center_padding,
+            variable_width: fields.slider.variable_width,
+            adaptive_height: fields.slider.adapt_height,
+            rows: fields.slider.rows,
+            slides_per_row: fields.slider.slides_per_row,
+            vertical: fields.slider.vertical,
+            vertical_swiping: fields.slider.vertical_swiping,
+            rtl: fields.slider.right_to_left,
+            accessibility: fields.slider.keyboard,
+            focus_on_select: fields.slider.focus_on_select,
+            lazy_load: fields.slider.lazy_load,
+            fade: fields.slider.fade,
+            use_css: fields.slider.use_css,
+            use_transform: fields.slider.use_transform,
+            edge_friction: fields.slider.edge_friction,
+            touch_threshold: fields.slider.drag_threshold,
+            easing: fields.slider.easing,
+            css_ease: fields.slider.css_ease,
+            asNavFor: fields.slider.as_nav_for,
+            responsive: fields.slider.responsive,
+            slides: slideCount,
+            slick_carousel_classes: [
+              slider_classes
+            ],
+            slick_carousel_attributes: [
+              slider_width or slider_min_width or slider_max_width or slider_margin_top or slider_margin_bottom or slider_margin_left or slider_margin_right or slider_padding_top or slider_padding_bottom or slider_padding_left or slider_padding_right ? 'style="' ~ slider_width ~ slider_min_width ~ slider_max_width ~ slider_margin_top ~ slider_margin_bottom ~ slider_margin_left ~ slider_margin_right ~ slider_padding_top ~ slider_padding_bottom ~ slider_padding_left ~ slider_padding_right ~ '"'
+            ]
+          } %}
+            {% block slides %}
+              {% for post in posts %}
+                {# Categories #}
+                {% if post.categories %}
+                  {% set catArr = [] %}
+                  {% for category in post.categories %}
+                    {% set catArr = catArr | merge([category.name]) %}
+                  {% endfor %}
+                {% endif %}
+
+                <div class="{{ slide_classes }}" {{ slide_attributes }} {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
+                  {% if fields.link_items == true %}
+                    <a class="posts-loop--post" href="{{ post.link }}">
+                  {% else %}
+                    <div class="posts-loop--post">
+                  {% endif %}
+
+                    {% for element in fields.posts_query_layout %}
+                      {% if element.acf_fc_layout == 'featured_image' and post.thumbnail.src %}
+                        {% include 'blocks/posts-loop/elements/_post-featured-image.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_title' and post.post_title %}
+                        {% include 'blocks/posts-loop/elements/_post-title.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_excerpt' and post.post_excerpt %}
+                        {% include 'blocks/posts-loop/elements/_post-excerpt.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_content' and post.content %}
+                        {% include 'blocks/posts-loop/elements/_post-content.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_author' and post.authors %}
+                        {% include 'blocks/posts-loop/elements/_post-author.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_date' and post.date %}
+                        {% include 'blocks/posts-loop/elements/_post-date.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_modified' and post.modified_date %}
+                        {% include 'blocks/posts-loop/elements/_post-modified.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_type' and post.type %}
+                        {% include 'blocks/posts-loop/elements/_post-type.twig' %}
+                      {% elseif element.acf_fc_layout == 'comment_count' and post.comment_count %}
+                        {% include 'blocks/posts-loop/elements/_post-comment-count.twig' %}
+                      {% elseif element.acf_fc_layout == 'terms' and post.terms is not empty %}
+                        {% include 'blocks/posts-loop/elements/_post-terms.twig' %}
+                      {% elseif element.acf_fc_layout == 'categories' and post.categories %}
+                        {% include 'blocks/posts-loop/elements/_post-categories.twig' %}
+                      {% elseif element.acf_fc_layout == 'tags' and post.tags %}
+                        {% include 'blocks/posts-loop/elements/_post-tags.twig' %}
+                      {% elseif element.acf_fc_layout == 'post_parent' and post.parent %}
+                        {% include 'blocks/posts-loop/elements/_post-parent.twig' %}
+                      {% elseif element.acf_fc_layout == 'children' and post.children %}
+                        {% include 'blocks/posts-loop/elements/_post-children.twig' %}
+                      {% elseif element.acf_fc_layout == 'link' and post.link %}
+                        {% include 'blocks/posts-loop/elements/_post-link.twig' %}
+                      {% endif %}
+                    {% endfor %}
+
+                  {% if fields.link_items == true %}
+                    </a>
+                  {% else %}
+                    </div>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            {% endblock slides %}
+          {% endembed %}
+        {% endif %}
+
+      {% endif %}
+
+    {% endif %}

@@ -1,0 +1,41 @@
+{#
+/**
+ * @file
+ * Card Post Type Element
+ *   Display post type for posts in card contexts (label/subtitle areas).
+ *
+ * Available variables:
+ *  - post: Current post object
+ *  - fields: Block field data
+ *  - location: Card location ('label' or 'subtitle')
+ */
+#}
+
+{% if function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == location %}
+  <div class="posts-loop--post-type--wrapper">
+    {% if fields.element_post_type.label %}
+      <span class="posts-loop--post-type--label">{{ fields.element_post_type.label }}</span>
+    {% endif %}
+    {% if fields.link_items != true and fields.element_post_type.link_post_type == true and post.type.has_archive %}
+      <a class="posts-loop--post-type--link posts-loop--post-type" href="/{{ post.type.has_archive }}">
+    {% elseif fields.link_items != true and fields.element_post_type.link_post_type == true %}
+      <a class="posts-loop--post-type--link posts-loop--post-type" href="{{ function('get_post_type_archive_link', post.type.slug) }}">
+    {% else %}
+      <span class="posts-loop--post-type">
+    {% endif %}
+    {% if fields.element_post_type.name_format == 'name' %}
+      {{ post.type.labels.name }}
+    {% elseif fields.element_post_type.name_format == 'singular_name' %}
+      {{ post.type.labels.singular_name }}
+    {% elseif fields.element_post_type.name_format == 'menu_name' %}
+      {{ post.type.labels.menu_name }}
+    {% elseif fields.element_post_type.name_format == 'name_admin_bar' %}
+      {{ post.type.labels.name_admin_bar }}
+    {% endif %}
+    {% if fields.link_items != true and fields.element_post_type.link_post_type == true %}
+      </a>
+    {% else %}
+      </span>
+    {% endif %}
+  </div>
+{% endif %}

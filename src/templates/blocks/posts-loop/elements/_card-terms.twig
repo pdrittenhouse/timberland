@@ -1,0 +1,23 @@
+{#
+/**
+ * @file
+ * Card Terms Element
+ *   Display custom taxonomy terms for posts in card contexts (label/subtitle areas).
+ *
+ * Available variables:
+ *  - post: Current post object
+ *  - fields: Block field data
+ *  - location: Card location ('label' or 'subtitle')
+ */
+#}
+
+{% if function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == location %}
+  <div class="posts-loop--terms--wrapper">
+    {% if fields.element_terms.label %}
+      <span class="posts-loop--terms--label">{{ fields.element_terms.label }}</span>
+    {% endif %}
+    {% for term in post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) %}
+      {% if fields.link_items != true and fields.element_terms.link_terms == true %}<a class="posts-loop--term--link posts-loop--term" href="/{{ term.taxonomy }}/{{ term.slug }}">{% else %}<span class="posts-loop--term">{% endif %}{{ term.name }}{% if fields.link_items != true and fields.element_terms.link_terms == true %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}

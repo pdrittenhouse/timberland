@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Post Terms Element
+ *   Display custom taxonomy terms for posts in layout-driven sections.
+ *
+ * Available variables:
+ *  - post: Current post object
+ *  - element: Element configuration data
+ *  - fields: Block field data
+ */
+#}
+
+{% if element.acf_fc_layout == 'terms' and post.terms({query:{taxonomy:element.taxonomy, orderby:element.order_by, order: element.order}}) %}
+  {# Terms #}
+  <div class="posts-loop--terms--wrapper">
+    {% if element.label %}
+      <span class="posts-loop--terms--label">{{ element.label }}</span>
+    {% endif %}
+    {% for term in post.terms({query:{taxonomy:element.taxonomy, orderby:element.order_by, order: element.order}}) %}
+      {% if fields.link_items != true and element.link_terms == true %}<a class="posts-loop--term--link posts-loop--term" href="/{{ term.taxonomy }}/{{ term.slug }}">{% else %}<span class="posts-loop--term">{% endif %}{{ term.name }}{% if fields.link_items != true and element.link_terms == true %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}

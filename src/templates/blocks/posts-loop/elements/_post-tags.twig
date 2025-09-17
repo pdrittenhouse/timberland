@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Post Tags Element
+ *   Display post tags with optional label and linking.
+ *
+ * Available variables:
+ *  - post: Current post object
+ *  - element: Element configuration
+ *  - fields: Block field data
+ */
+#}
+
+{% if element.acf_fc_layout == 'tags' and post.tags %}
+  {# Tags #}
+  <div class="posts-loop--tags--wrapper">
+    {% if element.label %}
+      <span class="posts-loop--tags--label">{{ element.label }}</span>
+    {% endif %}
+    {% for tag in post.tags %}
+      {% if fields.link_items != true and element.link_tags == true %}<a class="posts-loop--tag--link posts-loop--tag" href="/tag/{{ tag.slug }}">{% else %}<span class="posts-loop--tag">{% endif %}{{ tag.name }}{% if fields.link_items != true and element.link_tags == true %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}

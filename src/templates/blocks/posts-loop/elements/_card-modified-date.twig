@@ -1,0 +1,51 @@
+{% if function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == location %}
+  <div class="posts-loop--post-modified--wrapper">
+    {% if function('in_array', 'label', fields.element_modified.modified_elements) and fields.element_modified.label %}
+      <span class="posts-loop--post-modified--label">{{ fields.element_modified.label }}</span>
+    {% endif %}
+    {% if function('in_array', 'date', fields.element_modified.modified_elements) and post.modified_date %}
+      {% if fields.link_items != true and fields.element_modified.link_date == true and post.type.slug == 'post' %}
+        <a class="posts-loop--post-modified--link posts-loop--post-modified--date" href="/{{ post.modified_date|date('Y') }}{{ fields.element_modified.link_to == 'month' or fields.element_modified.link_to == 'day' ? '/' ~ post.modified_date|date('m') }}{{ fields.element_modified.link_to == 'day' ? '/' ~ post.modified_date|date('d') }}">
+      {% elseif fields.link_items != true and fields.element_modified.link_date == true and post.type.has_archive %}
+        <a class="posts-loop--post-modified--link posts-loop--post-modified--date" href="/{{ post.type.has_archive }}/{{ post.modified_date|date('Y') }}{{ fields.element_modified.link_to == 'month' or fields.element_modified.link_to == 'day' ? '/' ~ post.modified_date|date('m') }}{{ fields.element_modified.link_to == 'day' ? '/' ~ post.modified_date|date('d') }}">
+      {% else %}
+        <span class="posts-loop--post-modified--date">
+      {% endif %}
+      {{ post.modified_date|date(fields.element_modified.date_format) }}
+      {% if fields.link_items != true and fields.element_modified.link_date == true and (post.type.slug == 'post' or post.type.has_archive) %}
+        </a>
+      {% else %}
+        </span>
+      {% endif %}
+    {% endif %}
+    {% if function('in_array', 'author', fields.element_modified.modified_elements) and  fields.element_modified.separator %}
+      <span class="posts-loop--post-modified--separator">{{ fields.element_modified.separator }}</span>
+    {% endif %}
+    {% if function('in_array', 'author', fields.element_modified.modified_elements) and post.modified_author %}
+      {% if fields.link_items != true and fields.element_modified.link_author == true %}
+        <a class="posts-loop--post-modified--link posts-loop--post-modified--author" href="{{ post.modified_author.link }}">
+      {% else %}
+        <span class="posts-loop--post-modified--author">
+      {% endif %}
+      {{ post.modified_author.name }}
+      {% if fields.link_items != true and fields.element_modified.link_author == true %}
+        </a>
+      {% else %}
+        </span>
+      {% endif %}
+    {% endif %}
+    {% if function('in_array', 'email', fields.element_modified.modified_elements) and function('get_user_by', 'id', post.modified_author.id).data.user_email %}
+      {% if fields.link_items != true %}
+        <a class="posts-loop--post-modified--link posts-loop--post-modified--author-email" href="mailto:{{ function('get_user_by', 'id', post.modified_author.id).data.user_email }}">
+      {% else %}
+        <span class="posts-loop--post-modified--author-email">
+      {% endif %}
+      {{ function('get_user_by', 'id', post.modified_author.id).data.user_email }}
+      {% if fields.link_items != true %}
+        </a>
+      {% else %}
+        </span>
+      {% endif %}
+    {% endif %}
+  </div>
+{% endif %}

@@ -1,0 +1,6 @@
+{% if element.acf_fc_layout == 'post_content' and post.content %}
+  {# Post Content #}
+  <div class="posts-loop--post-content--wrapper">
+    <div class="posts-loop--post-content">{{ post.content }}</div>
+  </div>
+{% endif %}

@@ -1,0 +1,19 @@
+{% if element.acf_fc_layout == 'link' and post.link %}
+  {# Post Link #}
+  <div class="posts-loop--post-link--wrapper">
+    {% if element.label %}
+      <span class="posts-loop--post-link--label">{{ element.label }}</span>
+    {% endif %}
+    {% if fields.link_items != true and element.link_link == true %}
+      <a href="{{ post.link }}" class="posts-loop--post-link posts-loop--post-url">
+    {% else %}
+      <span class="posts-loop--post-url">
+    {% endif %}
+    {{ post.link }}
+    {% if fields.link_items != true and element.link_link == true %}
+      </a>
+    {% else %}
+      </span>
+    {% endif %}
+  </div>
+{% endif %}

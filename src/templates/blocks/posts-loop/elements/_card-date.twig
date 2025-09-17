@@ -1,0 +1,33 @@
+{#
+/**
+ * @file
+ * _card-date.twig
+ *   Card-specific post date element for posts loop.
+ *   Uses fields.element_date structure for card positioning logic.
+ *
+ * Available variables:
+ *  - post: Post object
+ *  - fields: Block field data (for fields.element_date and fields.link_items)
+ *  - location: Card location ('label' or 'subtitle') - passed as parameter
+ */
+#}
+
+{% if function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == location %}
+  {# Post Date #}
+  {% if fields.element_date.label %}
+    <span class="posts-loop--post-date--label">{{ fields.element_date.label }}</span>
+  {% endif %}
+  {% if fields.link_items != true and fields.element_date.link_date == true and post.type.slug == 'post' %}
+    <a class="posts-loop--date--link posts-loop--post-date" href="/{{ post.date|date('Y') }}{{ fields.element_date.link_to == 'month' or fields.element_date.link_to == 'day' ? '/' ~ post.date|date('m') }}{{ fields.element_date.link_to == 'day' ? '/' ~ post.date|date('d') }}">
+  {% elseif fields.link_items != true and fields.element_date.link_date == true and post.type.has_archive %}
+    <a class="posts-loop--date--link posts-loop--post-date" href="/{{ post.type.has_archive }}/{{ post.date|date('Y') }}{{ fields.element_date.link_to == 'month' or fields.element_date.link_to == 'day' ? '/' ~ post.date|date('m') }}{{ fields.element_date.link_to == 'day' ? '/' ~ post.date|date('d') }}">
+  {% else %}
+    <span class="posts-loop--post-date">
+  {% endif %}
+    {{ post.date|date(fields.element_date.date_format) }}
+  {% if fields.link_items != true and fields.element_date.link_date == true and (post.type.slug == 'post' or post.type.has_archive) %}
+    </a>
+  {% else %}
+    </span>
+  {% endif %}
+{% endif %}

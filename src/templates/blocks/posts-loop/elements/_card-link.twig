@@ -1,0 +1,33 @@
+{#
+/**
+ * @file
+ * _card-link.twig
+ *   Card-specific post link element for posts loop.
+ *   Uses fields.element_link structure for card positioning logic.
+ *
+ * Available variables:
+ *  - post: Post object
+ *  - fields: Block field data (for fields.element_link and fields.link_items)
+ *  - location: Card location ('label' or 'subtitle') - passed as parameter
+ */
+#}
+
+{% if function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == location %}
+  {# Post Link #}
+  <div class="posts-loop--post-link--wrapper">
+    {% if fields.element_link.label %}
+      <span class="posts-loop--post-link--label">{{ fields.element_link.label }}</span>
+    {% endif %}
+    {% if fields.link_items != true and fields.element_link.link_link == true %}
+      <a href="{{ post.link }}" class="posts-loop--post-link posts-loop--post-url">
+    {% else %}
+      <span class="posts-loop--post-url">
+    {% endif %}
+    {{ post.link }}
+    {% if fields.link_items != true and fields.element_link.link_link == true %}
+      </a>
+    {% else %}
+      </span>
+    {% endif %}
+  </div>
+{% endif %}

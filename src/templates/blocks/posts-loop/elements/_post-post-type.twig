@@ -1,0 +1,42 @@
+{#
+/**
+ * @file
+ * Post Type Element
+ *   Display post type for posts in layout-driven sections.
+ *
+ * Available variables:
+ *  - post: Current post object
+ *  - element: Element configuration data
+ *  - fields: Block field data
+ */
+#}
+
+{% if element.acf_fc_layout == 'post_type' and post.type %}
+  {# Post Type #}
+  <div class="posts-loop--post-type--wrapper">
+    {% if element.label %}
+      <span class="posts-loop--post-type--label">{{ element.label }}</span>
+    {% endif %}
+    {% if fields.link_items != true and element.link_post_type == true and post.type.has_archive %}
+      <a class="posts-loop--post-type--link posts-loop--post-type" href="/{{ post.type.has_archive }}">
+    {% elseif fields.link_items != true and element.link_post_type == true %}
+      <a class="posts-loop--post-type--link posts-loop--post-type" href="{{ function('get_post_type_archive_link', post.type.slug) }}">
+    {% else %}
+      <span class="posts-loop--post-type">
+    {% endif %}
+    {% if element.name_format == 'name' %}
+      {{ post.type.labels.name }}
+    {% elseif element.name_format == 'singular_name' %}
+      {{ post.type.labels.singular_name }}
+    {% elseif element.name_format == 'menu_name' %}
+      {{ post.type.labels.menu_name }}
+    {% elseif element.name_format == 'name_admin_bar' %}
+      {{ post.type.labels.name_admin_bar }}
+    {% endif %}
+    {% if fields.link_items != true and element.link_post_type == true %}
+      </a>
+    {% else %}
+      </span>
+    {% endif %}
+  </div>
+{% endif %}

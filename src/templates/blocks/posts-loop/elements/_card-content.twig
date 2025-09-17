@@ -1,0 +1,3 @@
+{% if function('in_array', 'post_content', fields.elements) %}
+  <div class="posts-loop--post-content">{{ post.content }}</div>
+{% endif %}

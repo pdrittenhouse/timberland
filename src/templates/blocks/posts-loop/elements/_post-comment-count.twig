@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Post Comment Count Element
+ *   Display comment count for posts in layout-driven sections.
+ *
+ * Available variables:
+ *  - post: Current post object
+ *  - element: Element configuration data
+ *  - fields: Block field data
+ */
+#}
+
+{% if element.acf_fc_layout == 'comment_count' and post.comment_count %}
+  <div class="posts-loop--comment-count--wrapper">
+    {% if element.label %}
+      <span class="posts-loop--comment-count--label">{{ element.label }}</span>
+    {% endif %}
+    <span class="posts-loop--comment-count">{{ post.comment_count }}</span>
+  </div>
+{% endif %}

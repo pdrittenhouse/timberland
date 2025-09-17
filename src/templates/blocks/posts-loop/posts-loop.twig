@@ -3,6 +3,13 @@
  * Block Name: Posts Loop
  *
  * This is the template that displays the  block.
+ * 
+ * TODO: Add modal trigger support to non-card patterns
+ * - Currently only card, card-grid, and carousel patterns have modal triggers
+ * - Need to add fields.include_modals conditional support to:
+ *   - none pattern (main post link wrapper)
+ *   - list pattern (main post link wrapper)
+ *   - Any individual element links (titles, images, etc.) that should trigger modals
  */
 #}
 
@@ -254,50 +261,57 @@
   <div class="posts-loop--posts-wrapper">
     {# No Pattern #}
     {% if fields.pattern == 'none' %}
-      {% include 'blocks/posts-loop/_posts-loop~none.twig' %}
+      {# Available Elements: Featured Image, Post Title, Post Excerpt, Post Content, Link, Post Author, Post Date, Post Modified, Post Type, Post Parent, Children, Comment Count, Terms, Categories, Tags #}
+      {% include 'blocks/posts-loop/patterns/_posts-loop~none.twig' %}
     {% endif %}
 
     {# Card #}
     {% if fields.pattern == 'card' %}
-      {% include 'blocks/posts-loop/_posts-loop~card.twig' %}
+      {# Available Elements: Featured Image, Post Title, Post Excerpt, Post Content, Link, Post Author, Post Date, Post Modified, Post Type, Post Parent, Children, Comment Count, Terms, Categories, Tags #}
+      {% include 'blocks/posts-loop/patterns/_posts-loop~card.twig' %}
     {% endif %}
 
     {# Card Grid #}
     {% if fields.pattern == 'card-grid' %}
-      {% include 'blocks/posts-loop/_posts-loop~card-grid.twig' %}
+      {# Available Elements: Featured Image, Post Title, Post Excerpt, Post Content, Link, Post Author, Post Date, Post Modified, Post Type, Post Parent, Children, Comment Count, Terms, Categories, Tags #}
+      {% include 'blocks/posts-loop/patterns/_posts-loop~card-grid.twig' %}
     {% endif %}
 
     {# Carousel #}
     {% if fields.pattern == 'carousel' %}
-      {% include 'blocks/posts-loop/_posts-loop~carousel.twig' %}
+      {# Available Elements: Featured Image, Post Title, Post Excerpt, Post Content, Link, Post Author, Post Date, Post Modified, Post Type, Post Parent, Children, Comment Count, Terms, Categories, Tags #}
+      {% include 'blocks/posts-loop/patterns/_posts-loop~carousel.twig' %}
     {% endif %}
 
     {# Feature #}
     {% if fields.pattern == 'feature' %}
-      {% include 'blocks/posts-loop/_posts-loop~feature.twig' %}
+      {# Available Elements: Featured Image, Post Title, Post Excerpt, Post Content, Link, Post Author, Post Date, Post Modified, Post Type, Post Parent, Children, Comment Count, Terms, Categories, Tags #}
+      {% include 'blocks/posts-loop/patterns/_posts-loop~feature.twig' %}
     {% endif %}
 
     {# Promo #}
     {% if fields.pattern == 'promo' %}
-      {% include 'blocks/posts-loop/_posts-loop~promo.twig' %}
+      {# Available Elements: Featured Image, Post Title, Post Excerpt, Post Content, Link, Post Author, Post Date, Post Modified, Post Type, Post Parent, Children, Comment Count, Terms, Categories, Tags #}
+      {% include 'blocks/posts-loop/patterns/_posts-loop~promo.twig' %}
     {% endif %}
 
     {# List #}
     {% if fields.pattern == 'list' %}
-      {% include 'blocks/posts-loop/_posts-loop~list.twig' %}
+      {# Available Elements: Featured Image, Post Title, Post Excerpt, Post Content, Link, Post Author, Post Date, Post Modified, Post Type, Post Parent, Children, Comment Count, Terms, Categories, Tags #}
+      {% include 'blocks/posts-loop/patterns/_posts-loop~list.twig' %}
     {% endif %}
   </div>
 
   {% if fields.include_modals == true %}
-    {% include 'blocks/posts-loop/_posts-loop~modals.twig' %}
+    {% include 'blocks/posts-loop/patterns/_posts-loop~modals.twig' %}
   {% endif %}
 
   {% if fields.include_load_more == true and fields.include_pagination != true %}
-    {% include 'blocks/posts-loop/_posts-loop~load-more.twig' %}
+    {% include 'blocks/posts-loop/patterns/_posts-loop~load-more.twig' %}
   {% endif %}
 
   {% if fields.include_pagination == true and fields.include_load_more != true %}
-    {% include 'blocks/posts-loop/_posts-loop~pagination.twig' %}
+    {% include 'blocks/posts-loop/patterns/_posts-loop~pagination.twig' %}
   {% endif %}
 
 </div>

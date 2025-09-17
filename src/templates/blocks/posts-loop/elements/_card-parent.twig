@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Card Post Parent Element
+ *   Display post parent for posts in card contexts (label/subtitle areas).
+ *
+ * Available variables:
+ *  - post: Current post object
+ *  - fields: Block field data
+ *  - location: Card location ('label' or 'subtitle')
+ */
+#}
+
+{% if function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == location %}
+  <div class="posts-loop--post-parent--wrapper">
+    {% if fields.element_post_parent.label %}
+      <span class="posts-loop--post-parent--label">{{ fields.element_post_parent.label }}</span>
+    {% endif %}
+    {% if fields.link_items != true and fields.element_post_parent.link_parent == true %}
+      <a class="posts-loop--post-parent-link posts-loop--post-parent" href="{{ post.parent.link }}">
+    {% else %}
+      <span class="posts-loop--post-parent">
+    {% endif %}
+    {{ post.parent.title }}
+    {% if fields.link_items != true and fields.element_post_parent.link_parent == true %}
+      </a>
+    {% else %}
+      </span>
+    {% endif %}
+  </div>
+{% endif %}

@@ -1,0 +1,23 @@
+{#
+/**
+ * @file
+ * Card Categories Element
+ *   Display post categories in card contexts (label/subtitle areas).
+ *
+ * Available variables:
+ *  - post: Current post object
+ *  - fields: Block field data
+ *  - location: Card location ('label' or 'subtitle')
+ */
+#}
+
+{% if function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == location %}
+  <div class="posts-loop--categories--wrapper">
+    {% if fields.element_categories.label %}
+      <span class="posts-loop--categories--label">{{ fields.element_categories.label }}</span>
+    {% endif %}
+    {% for category in post.categories %}
+      {% if fields.link_items != true and fields.element_categories.link_categories == true %}<a class="posts-loop--category--link posts-loop--category" href="/{{ category.taxonomy }}/{{ category.slug }}">{% else %}<span class="posts-loop--category">{% endif %}{{ category.name }}{% if fields.link_items != true and fields.element_categories.link_categories == true %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}

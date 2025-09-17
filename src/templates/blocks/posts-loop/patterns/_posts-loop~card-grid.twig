@@ -1,0 +1,240 @@
+{#
+/**
+ * @file
+ * posts-loop~card-grid
+ *   Posts loop with card-grid pattern.
+ *
+ * Available variables:
+ *  - posts: Array of post objects
+ *  - fields: Block field data
+ */
+#}
+      {# Row Columns #}
+      {% if fields.card_grid.type == 'row' and fields.card_grid.row_column_count %}
+        {% set row_cols = [] %}
+        {% for col in fields.card_grid.row_column_count %}
+          {% if col.breakpoint %}
+            {% set bp = '-' ~ col.breakpoint %}
+          {% else %}
+            {% set bp = '' %}
+          {% endif %}
+          {% if col.value %}
+            {% set column = '-' ~ col.value %}
+          {% else %}
+            {% set column = '' %}
+          {% endif %}
+          {% if column %}
+            {% set row_cols = row_cols|default([])|merge([
+              'row-cols' ~ bp ~ column
+            ]) %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+
+      {# Row Gutters #}
+      {% if fields.card_grid.type == 'row' and fields.card_grid.row_gutter['gutters'] %}
+        {% set row_gutters = [] %}
+        {% for gutter in fields.card_grid.row_gutter['gutters'] %}
+          {% if gutter.breakpoint %}
+            {% set bp = '-' ~ gutter.breakpoint %}
+          {% else %}
+            {% set bp = '' %}
+          {% endif %}
+          {% if gutter.value %}
+            {% set gap = '-' ~ gutter.value %}
+          {% else %}
+            {% set gap = '' %}
+          {% endif %}
+          {% if gap %}
+            {% set row_gutters = row_gutters|default([])|merge([
+              'g' ~ bp ~ gap
+            ]) %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+
+      {% set card_grid_styles = card_grid_styles|default([])|merge([
+        fields.card_grid.card_grid_width['width']['width']['value'] ? 'width: ' ~ fields.card_grid.card_grid_width['width']['width']['value'] ~ fields.card_grid.card_grid_width['width']['width']['unit'] ~ ';',
+        fields.card_grid.card_grid_width['width']['min_width'] ? 'min-width: ' ~ fields.card_grid.card_grid_width['width']['min_width'] ~ 'px;',
+        fields.card_grid.card_grid_width['width']['max_width'] ? 'max-width: ' ~ fields.card_grid.card_grid_width['width']['max_width'] ~ 'px;',
+        fields.card_grid.card_grid_margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : fields.card_grid.card_grid_margin['margin']['top']['top'] >= 0 ? 'margin-top: ' ~ fields.card_grid.card_grid_margin['margin']['top']['top'] ~ 'px;',
+        fields.card_grid.card_grid_margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.card_grid.card_grid_margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.card_grid.card_grid_margin['margin']['bottom']['bottom'] ~ 'px;',
+        fields.card_grid.card_grid_margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : fields.card_grid.card_grid_margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.card_grid.card_grid_margin['margin']['left']['left'] ~ 'px;',
+        fields.card_grid.card_grid_margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : fields.card_grid.card_grid_margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.card_grid.card_grid_margin['margin']['right']['right'] ~ 'px;'
+      ]) | sort | join(' ') | trim %}
+
+      {% set grid_id = fields.card_grid.card_grid_id['id_type'] == 'generated' ? 'cardgrid' ~ fields.card_grid.card_grid_id['id_gen'] : fields.card_grid.card_grid_id['id_type'] == 'custom' ? fields.card_grid.card_grid_id['id'] %}
+
+      {% set card_grid_attributes = card_grid_attributes|default([])|merge([
+        grid_id ? 'id="' ~ grid_id ~ '"',
+        card_grid_styles ? 'style="' ~ card_grid_styles ~ '"'
+      ]) | sort | join(' ') | trim %}
+
+      {# Set Gutter Styling: Overrides _flex-card-grid.scss styles #}
+      {% if fields.card_grid.type == 'grid' and fields.card_grid.gutter is not empty %}
+        <style type="text/css">
+          #{{ grid_id }} .card-grid > .card {
+          {{ fields.card_grid.gutter == 0 ? 'margin-left: 0;' : 'margin-left: ' ~ fields.card_grid.gutter / 2 ~ 'px;' }}
+          {{ fields.card_grid.gutter == 0 ? 'margin-right: 0;' : 'margin-right: ' ~ fields.card_grid.gutter / 2 ~ 'px;' }}
+          {{ fields.card_grid.gutter == 0 ? 'margin-top: 0;' : 'margin-top: ' ~ fields.card_grid.gutter ~ 'px;' }}
+          }
+
+          {% if fields.card_grid.mobile_columns == true %}
+          @media only screen and (max-width: {{ sass_data.scssBreakpoints['md'] }}) {
+          #{{ grid_id }} .card-grid > .card,
+          #{{ grid_id }} .card-grid > .card:after,
+          #{{ grid_id }} .card-grid > .placecard {
+                           flex-basis: calc((100% - {{ fields.card_grid.gutter }}px) / 2);
+                         }
+          }
+          {% endif %}
+
+          {% if fields.card_grid.column_count == 2 or fields.card_grid.column_count == 3 %}
+          @media only screen and (min-width: {{ sass_data.scssBreakpoints['md'] }}) {
+          #{{ grid_id }} .card-grid > .card,
+          #{{ grid_id }} .card-grid > .card:after,
+          #{{ grid_id }} .card-grid > .placecard {
+                           flex-basis: calc((100% - ({{ fields.card_grid.column_count - 1 }} * {{ fields.card_grid.gutter }}px)) / {{ fields.card_grid.column_count }});
+                         }
+
+          #{{ grid_id }} .card-grid > .card.featured {
+                           flex-basis: calc(((100% - ({{ fields.card_grid.column_count - 1 }} * {{ fields.card_grid.gutter }}px)) / {{ fields.card_grid.column_count }}) * 2);
+                         }
+          }
+          {% endif %}
+
+          {% if fields.card_grid.column_count == 4 or fields.card_grid.column_count == 5 %}
+          @media only screen and (min-width: {{ sass_data.scssBreakpoints['md'] }}) and (max-width: {{ sass_data.scssBreakpoints['xl'] }}) {
+          #{{ grid_id }} .card-grid > .card,
+          #{{ grid_id }} .card-grid > .card:after,
+          #{{ grid_id }} .card-grid > .placecard {
+                           flex-basis: calc((100% - {{ fields.card_grid.gutter }}px) / 2);
+                         }
+
+          #{{ grid_id }} .card-grid > .card.featured {
+                           flex-basis: 100%;
+                         }
+          }
+
+          @media only screen and (min-width: {{ sass_data.scssBreakpoints['xl'] }}) {
+          #{{ grid_id }} .card-grid > .card,
+          #{{ grid_id }} .card-grid > .card:after,
+          #{{ grid_id }} .card-grid > .placecard {
+                           flex-basis: calc((100% - ({{ fields.card_grid.column_count - 1 }} * {{ fields.card_grid.gutter }}px)) / {{ fields.card_grid.column_count }});
+                         }
+
+          #{{ grid_id }} .card-grid > .card.featured {
+                           flex-basis: calc(((100% - ({{ fields.card_grid.column_count - 1 }} * {{ fields.card_grid.gutter }}px)) / {{ fields.card_grid.column_count }}) * 2);
+                         }
+          }
+          {% endif %}
+
+          {% if fields.card_grid.column_count == 6 %}
+          @media only screen and (min-width: {{ sass_data.scssBreakpoints['md'] }}) and (max-width: {{ sass_data.scssBreakpoints['xl'] }}) {
+          #{{ grid_id }} .card-grid > .card,
+          #{{ grid_id }} .card-grid > .card:after,
+          #{{ grid_id }} .card-grid > .placecard {
+                           flex-basis: calc((100% - {{ fields.card_grid.gutter }}px) / 2);
+                         }
+
+          #{{ grid_id }} .card-grid > .card.featured {
+                           flex-basis: 100%;
+                         }
+          }
+
+          @media only screen and (min-width: {{ sass_data.scssBreakpoints['xl'] }}) {
+          #{{ grid_id }} .card-grid > .card,
+          #{{ grid_id }} .card-grid > .card:after,
+          #{{ grid_id }} .card-grid > .placecard {
+                           flex-basis: calc((100% - ({{ fields.card_grid.gutter }}px * 2)) / 3);
+                         }
+
+          #{{ grid_id }} .card-grid > .card.featured {
+                           flex-basis: 100%;
+                         }
+          }
+
+          @media only screen and (min-width: {{ sass_data.scssBreakpoints['xxl'] }}) {
+          #{{ grid_id }} .card-grid > .card,
+          #{{ grid_id }} .card-grid > .card:after,
+          #{{ grid_id }} .card-grid > .placecard {
+                           flex-basis: calc((100% - ({{ fields.card_grid.column_count - 1 }} * {{ fields.card_grid.gutter }}px)) / {{ fields.card_grid.column_count }});
+                         }
+
+          #{{ grid_id }} .card-grid > .card.featured {
+                           flex-basis: calc(((100% - ({{ fields.card_grid.column_count - 1 }} * {{ fields.card_grid.gutter }}px)) / {{ fields.card_grid.column_count }}) * 2);
+                         }
+          }
+          {% endif %}
+        </style>
+      {% endif %}
+
+      {# Set Grid Styles #}
+      {% set grid_styles = grid_styles|default([])|merge([
+        fields.card_grid.type == 'grid' and fields.card_grid.alignment ? 'justify-content: ' ~ fields.card_grid.alignment ~ ';',
+        fields.card_grid.type == 'grid' and fields.card_grid.equal_height ? 'align-items: stretch;'
+      ]) | sort | join(' ') | trim %}
+
+      {% embed '@organisms/card-grid/_card-grid.tpl.twig' with {
+        type: fields.card_grid.type | default('grid'),
+        columns: fields.card_grid.type != 'row' ? fields.card_grid.column_count,
+        placecard: fields.card_grid.placecard,
+        singlerow: fields.card_grid.single_row,
+        mobilecolumns: fields.card_grid.mobile_columns,
+        vertical_offset: fields.card_grid.vertical_offset,
+        card_grid_title: fields.card_grid.title,
+        card_grid_classes: [
+          fields.card_grid.placecard == true ? 'has-placecard'
+        ],
+        card_grid_other_attributes: card_grid_attributes,
+        grid_classes: [
+          fields.card_grid.numbered_cards == true ? 'card-count',
+          row_cols|length > 0 ? row_cols|sort|join(' ')|trim : fields.card_grid.type == 'row' and row_cols|length <= 0 ? 'row-cols-2',
+          row_gutters|length > 0 ? row_gutters|sort|join(' ')|trim : fields.card_grid.type == 'row' and row_gutters|length <= 0 ? 'g-3',
+        ],
+        grid_attributes: [
+          grid_styles ? 'style="' ~ grid_styles ~ '"'
+        ]
+      } %}
+        {% block card_grid_cards %}
+
+          {% for post in posts %}
+
+            {# Categories #}
+            {% if post.categories %}
+              {% set catArr = [] %}
+              {% for category in post.categories %}
+                {% set catArr = catArr | merge([category.name]) %}
+              {% endfor %}
+            {% endif %}
+
+            {% if fields.card_grid.type == 'row' %}
+              <div class="col">
+            {% endif %}
+
+            {# Include shared card element #}
+            {% set card_attributes = [] %}
+            {% if fields.include_modals == true %}
+              {% set card_attributes = card_attributes|merge(['data-bs-toggle="modal"', 'data-bs-target="#' ~ post.slug ~ '"']) %}
+            {% endif %}
+            {% if catArr | length > 0 %}
+              {% set card_attributes = card_attributes|merge(['data-categories="' ~ catArr | sort | join(', ') | trim ~ '"']) %}
+            {% endif %}
+            
+            {% include 'blocks/posts-loop/elements/_card.twig' with {
+              parent_block_data: {'name': 'acf/card-grid'},
+              additional_attributes: card_attributes
+            } %}
+
+            {% if fields.card_grid.type == 'row' %}
+              </div>
+            {% endif %}
+
+          {% endfor %}
+
+        {% endblock %}
+      {% endembed %}
+
+
+
+

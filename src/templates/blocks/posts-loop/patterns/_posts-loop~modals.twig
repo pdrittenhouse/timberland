@@ -1,0 +1,262 @@
+{#
+/**
+ * @file
+ * posts-loop~modals
+ *   Posts loop modals functionality.
+ *
+ * Available variables:
+ *  - posts: Array of post objects
+ *  - fields: Block field data
+ */
+#}    <div class="posts-loop--modals-wrapper">
+      {% for post in posts %}
+
+        {# Set custom header close button styles #}
+        {% set header_close_style = fields.modal.header_close_button.close | default('black') %}
+        {% if header_close_style != 'black' and fields.modal.header_close_button.close != 'black' and fields.modal.header_close_button.close != 'white' and fields.modal.header_close_button.style == 'custom' %}
+          {% set head_bg_color = fields.modal.header_close_button.background_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.modal.header_close_button.background_color['bg_custom_color'] ~ ';' %}
+          {% set head_text_color = fields.modal.header_close_button.text_color['color'] == 'custom' ? 'color: ' ~ fields.modal.header_close_button.text_color['custom_color'] ~ ';' %}
+          {% set head_transform = fields.modal.header_close_button['text_transform']['text_transform'] ? 'text-transform: ' ~ fields.modal.header_close_button['text_transform']['text_transform'] ~ ';' %}
+          {% set head_btn_padding_top  = fields.modal.header_close_button['padding']['padding']['top'] >= 0 ? 'padding-top: ' ~ fields.modal.header_close_button['padding']['padding']['top'] ~ 'px;' %}
+          {% set head_btn_padding_bottom = fields.modal.header_close_button['padding']['padding']['bottom'] >= 0 ? 'padding-bottom: ' ~ fields.modal.header_close_button['padding']['padding']['bottom'] ~ 'px;' %}
+          {% set head_btn_padding_left = fields.modal.header_close_button['padding']['padding']['left'] >= 0 ? 'padding-left: ' ~ fields.modal.header_close_button['padding']['padding']['left'] ~ 'px;' %}
+          {% set head_btn_padding_right = fields.modal.header_close_button['padding']['padding']['right'] >= 0 ? 'padding-right: ' ~ fields.modal.header_close_button['padding']['padding']['right'] ~ 'px;' %}
+          {% set head_btn_border_top_width = fields.modal.header_close_button['border']['top']['width'] >= 0 ? 'border-top-width: ' ~ fields.modal.header_close_button['border']['top']['width'] ~ 'px;' %}
+          {% set head_btn_border_top_style = fields.modal.header_close_button['border']['top']['style'] ? 'border-top-style: ' ~ fields.modal.header_close_button['border']['top']['style'] ~ ';' %}
+          {% set head_btn_border_top_color = fields.modal.header_close_button['border']['top']['color'] == 'custom' and fields.modal.header_close_button['border']['top']['custom_color'] ? 'border-top-color: ' ~ fields.modal.header_close_button['border']['top']['custom_color'] ~ ';' : fields.modal.header_close_button['border']['top']['color'] == 'palette' and fields.modal.header_close_button['border']['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.modal.header_close_button['border']['top']['theme_color'] ~ ');' %}
+          {% set head_btn_border_bottom_width = fields.modal.header_close_button['border']['bottom']['width'] >= 0 ? 'border-bottom-width: ' ~ fields.modal.header_close_button['border']['bottom']['width'] ~ 'px;' %}
+          {% set head_btn_border_bottom_style = fields.modal.header_close_button['border']['bottom']['style'] ? 'border-bottom-style: ' ~ fields.modal.header_close_button['border']['bottom']['style'] ~ ';' %}
+          {% set head_btn_border_bottom_color = fields.modal.header_close_button['border']['bottom']['color'] == 'custom' and fields.modal.header_close_button['border']['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.modal.header_close_button['border']['bottom']['custom_color'] ~ ';' : fields.modal.header_close_button['border']['bottom']['color'] == 'palette' and fields.modal.header_close_button['border']['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.modal.header_close_button['border']['bottom']['theme_color'] ~ ');' %}
+          {% set head_btn_border_left_width = fields.modal.header_close_button['border']['left']['width'] >= 0 ? 'border-left-width: ' ~ fields.modal.header_close_button['border']['left']['width'] ~ 'px;' %}
+          {% set head_btn_border_left_style = fields.modal.header_close_button['border']['left']['style'] ? 'border-left-style: ' ~ fields.modal.header_close_button['border']['left']['style'] ~ ';' %}
+          {% set head_btn_border_left_color = fields.modal.header_close_button['border']['left']['color'] == 'custom' and fields.modal.header_close_button['border']['left']['custom_color'] ? 'border-left-color: ' ~ fields.modal.header_close_button['border']['left']['custom_color'] ~ ';' : fields.modal.header_close_button['border']['left']['color'] == 'palette' and fields.modal.header_close_button['border']['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.modal.header_close_button['border']['left']['theme_color'] ~ ');' %}
+          {% set head_btn_border_right_width = fields.modal.header_close_button['border']['right']['width'] >= 0 ? 'border-right-width: ' ~ fields.modal.header_close_button['border']['right']['width'] ~ 'px;' %}
+          {% set head_btn_border_right_style = fields.modal.header_close_button['border']['right']['style'] ? 'border-right-style: ' ~ fields.modal.header_close_button['border']['right']['style'] ~ ';' %}
+          {% set head_btn_border_right_color = fields.modal.header_close_button['border']['right']['color'] == 'custom' and fields.modal.header_close_button['border']['right']['custom_color'] ? 'border-right-color: ' ~ fields.modal.header_close_button['border']['right']['custom_color'] ~ ';' : fields.modal.header_close_button['border']['right']['color'] == 'palette' and fields.modal.header_close_button['border']['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.modal.header_close_button['border']['right']['theme_color'] ~ ');' %}
+          {% set head_btn_border_top_left_radius = fields.modal.header_close_button['border_radius']['top_left'] >= 0 ? 'border-top-left-radius: ' ~ fields.modal.header_close_button['border_radius']['top_left'] ~ 'px;' %}
+          {% set head_btn_border_top_right_radius = fields.modal.header_close_button['border_radius']['top_right'] >= 0 ? 'border-top-right-radius: ' ~ fields.modal.header_close_button['border_radius']['top_right'] ~ 'px;' %}
+          {% set head_btn_border_bottom_left_radius = fields.modal.header_close_button['border_radius']['bottom_left'] >= 0 ? 'border-bottom-left-radius: ' ~ fields.modal.header_close_button['border_radius']['bottom_left'] ~ 'px;' %}
+          {% set head_btn_border_bottom_right_radius = fields.modal.header_close_button['border_radius']['bottom_right'] >= 0 ? 'border-bottom-right-radius: ' ~ fields.modal.header_close_button['border_radius']['bottom_right'] ~ 'px;' %}
+          {% set head_box_shadow_color = fields.modal.header_close_button['box_shadow']['color']['color'] == 'palette' and fields.modal.header_close_button['box_shadow']['color']['theme_color'] ? 'var(--' ~ fields.modal.header_close_button['box_shadow']['color']['theme_color'] ~ ')' : fields.modal.header_close_button['box_shadow']['color']['color'] == 'custom' and fields.modal.header_close_button['box_shadow']['color']['custom_color'] ? fields.modal.header_close_button['box_shadow']['color']['custom_color'] %}
+          {% set head_box_shadow_inset = fields.modal.header_close_button['box_shadow']['inset'] == true ? 'inset' %}
+          {% set head_btn_box_shadow = fields.modal.header_close_button['box_shadow']['horizontal_offset'] >= 0 or fields.modal.header_close_button['box_shadow']['vertical_offset'] >= 0 or fields.modal.header_close_button['box_shadow']['blur'] >= 0 or fields.modal.header_close_button['box_shadow']['spread'] >= 0 or box_shadow_color or box_shadow_inset == true ? 'box-shadow: ' ~ fields.modal.header_close_button['box_shadow']['horizontal_offset'] ~ 'px ' ~ fields.modal.header_close_button['box_shadow']['vertical_offset'] ~ 'px ' ~ fields.modal.header_close_button['box_shadow']['blur'] ~ 'px ' ~ fields.modal.header_close_button['box_shadow']['spread'] ~ 'px ' ~ box_shadow_color ~ ' ' ~ box_shadow_inset ~ ';' %}
+          {% set head_text_shadow_color = fields.modal.header_close_button['text_shadow']['color']['color'] == 'palette' and fields.modal.header_close_button['text_shadow']['color']['theme_color'] ? 'var(--' ~ fields.modal.header_close_button['text_shadow']['color']['theme_color'] ~ ')' : fields.modal.header_close_button['text_shadow']['color']['color'] == 'custom' and fields.modal.header_close_button['text_shadow']['color']['custom_color'] ? fields.modal.header_close_button['text_shadow']['color']['custom_color'] %}
+          {% set head_btn_text_shadow = fields.modal.header_close_button['text_shadow']['horizontal_offset'] >= 0 or fields.modal.header_close_button['text_shadow']['vertical_offset'] >= 0 or fields.modal.header_close_button['text_shadow']['blur'] >= 0 or text_shadow_color ? 'text-shadow: ' ~ fields.modal.header_close_button['text_shadow']['horizontal_offset'] ~ 'px ' ~ fields.modal.header_close_button['text_shadow']['vertical_offset'] ~ 'px ' ~ fields.modal.header_close_button['text_shadow']['blur'] ~ 'px ' ~ text_shadow_color ~ ';' %}
+        {% endif %}
+        {% set head_fontsize = fields.modal.header_close_button['font_size']['font_size']['value'] >= 0 ? 'font-size: ' ~ fields.modal.header_close_button['font_size']['font_size']['value'] ~ fields.modal.header_close_button['font_size']['font_size']['unit'] ~ ';' %}
+        {% set head_btn_width = fields.modal.header_close_button.button_width['width']['width']['value'] >= 0 ? 'width: ' ~ fields.modal.header_close_button.button_width['width']['width']['value']  ~ fields.modal.header_close_button.button_width['width']['width']['unit'] ~  ';' %}
+        {% set head_btn_min_width = fields.modal.header_close_button.button_width['width']['min_width'] >= 0 ? 'min-width: ' ~ fields.modal.header_close_button.button_width['width']['min_width']  ~ 'px;' %}
+        {% set head_btn_max_width = fields.modal.header_close_button.button_width['width']['max_width'] >= 0 ? 'max-width: ' ~ fields.modal.header_close_button.button_width['width']['max_width']  ~ 'px;' %}
+        {% set head_margin_top = fields.modal.header_close_button.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : fields.modal.header_close_button.margin['margin']['top']['top'] >= 0 ? 'margin-top: ' ~ fields.modal.header_close_button.margin['margin']['top']['top'] ~ 'px;' %}
+        {% set head_margin_bottom = fields.modal.header_close_button.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.modal.header_close_button.margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.modal.header_close_button.margin['margin']['bottom']['bottom'] ~ 'px;' %}
+        {% set head_margin_left = fields.modal.header_close_button.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : fields.modal.header_close_button.margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.modal.header_close_button.margin['margin']['left']['left'] ~ 'px;' %}
+        {% set head_margin_right = fields.modal.header_close_button.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : fields.modal.header_close_button.margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.modal.header_close_button.margin['margin']['right']['right'] ~ 'px;' %}
+
+        {# Set custom footer close button styles #}
+        {% if fields.modal.footer_button.close != 'black' and fields.modal.footer_button.close != 'white' and fields.modal.footer_button.style == 'custom'  %}
+          {% set foot_bg_color = fields.modal.footer_button.background_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.modal.footer_button.background_color['bg_custom_color'] ~ ';' %}
+          {% set foot_text_color = fields.modal.footer_button.text_color['color'] == 'custom' ? 'color: ' ~ fields.modal.footer_button.text_color['custom_color'] ~ ';' %}
+          {% set foot_transform = fields.modal.footer_button['text_transform']['text_transform'] ? 'text-transform: ' ~ fields.modal.footer_button['text_transform']['text_transform'] ~ ';' %}
+          {% set foot_btn_padding_top = fields.modal.footer_button['padding']['padding']['top'] >= 0 ? 'padding-top: ' ~ fields.modal.footer_button['padding']['padding']['top'] ~ 'px;' %}
+          {% set foot_btn_padding_bottom = fields.modal.footer_button['padding']['padding']['bottom'] >= 0 ? 'padding-bottom: ' ~ fields.modal.footer_button['padding']['padding']['bottom'] ~ 'px;' %}
+          {% set foot_btn_padding_left = fields.modal.footer_button['padding']['padding']['left'] >= 0 ? 'padding-left: ' ~ fields.modal.footer_button['padding']['padding']['left'] ~ 'px;' %}
+          {% set foot_btn_padding_right = fields.modal.footer_button['padding']['padding']['right'] >= 0 ? 'padding-right: ' ~ fields.modal.footer_button['padding']['padding']['right'] ~ 'px;' %}
+          {% set foot_btn_border_top_width = fields.modal.footer_button['border']['top']['width'] >= 0 ? 'border-top-width: ' ~ fields.modal.footer_button['border']['top']['width'] ~ 'px;' %}
+          {% set foot_btn_border_top_style = fields.modal.footer_button['border']['top']['style'] ? 'border-top-style: ' ~ fields.modal.footer_button['border']['top']['style'] ~ ';' %}
+          {% set foot_btn_border_top_color = fields.modal.footer_button['border']['top']['color'] == 'custom' and fields.modal.footer_button['border']['top']['custom_color'] ? 'border-top-color: ' ~ fields.modal.footer_button['border']['top']['custom_color'] ~ ';' : fields.modal.footer_button['border']['top']['color'] == 'palette' and fields.modal.footer_button['border']['top']['theme_color'] ? 'border-top-color: var(--' ~ fields.modal.footer_button['border']['top']['theme_color'] ~ ');' %}
+          {% set foot_btn_border_bottom_width = fields.modal.footer_button['border']['bottom']['width'] >= 0 ? 'border-bottom-width: ' ~ fields.modal.footer_button['border']['bottom']['width'] ~ 'px;' %}
+          {% set foot_btn_border_bottom_style = fields.modal.footer_button['border']['bottom']['style'] ? 'border-bottom-style: ' ~ fields.modal.footer_button['border']['bottom']['style'] ~ ';' %}
+          {% set foot_btn_border_bottom_color = fields.modal.footer_button['border']['bottom']['color'] == 'custom' and fields.modal.footer_button['border']['bottom']['custom_color'] ? 'border-bottom-color: ' ~ fields.modal.footer_button['border']['bottom']['custom_color'] ~ ';' : fields.modal.footer_button['border']['bottom']['color'] == 'palette' and fields.modal.footer_button['border']['bottom']['theme_color'] ? 'border-bottom-color: var(--' ~ fields.modal.footer_button['border']['bottom']['theme_color'] ~ ');' %}
+          {% set foot_btn_border_left_width = fields.modal.footer_button['border']['left']['width'] >= 0 ? 'border-left-width: ' ~ fields.modal.footer_button['border']['left']['width'] ~ 'px;' %}
+          {% set foot_btn_border_left_style = fields.modal.footer_button['border']['left']['style'] ? 'border-left-style: ' ~ fields.modal.footer_button['border']['left']['style'] ~ ';' %}
+          {% set foot_btn_border_left_color = fields.modal.footer_button['border']['left']['color'] == 'custom' and fields.modal.footer_button['border']['left']['custom_color'] ? 'border-left-color: ' ~ fields.modal.footer_button['border']['left']['custom_color'] ~ ';' : fields.modal.footer_button['border']['left']['color'] == 'palette' and fields.modal.footer_button['border']['left']['theme_color'] ? 'border-left-color: var(--' ~ fields.modal.footer_button['border']['left']['theme_color'] ~ ');' %}
+          {% set foot_btn_border_right_width = fields.modal.footer_button['border']['right']['width'] >= 0 ? 'border-right-width: ' ~ fields.modal.footer_button['border']['right']['width'] ~ 'px;' %}
+          {% set foot_btn_border_right_style = fields.modal.footer_button['border']['right']['style'] ? 'border-right-style: ' ~ fields.modal.footer_button['border']['right']['style'] ~ ';' %}
+          {% set foot_btn_border_right_color = fields.modal.footer_button['border']['right']['color'] == 'custom' and fields.modal.footer_button['border']['right']['custom_color'] ? 'border-right-color: ' ~ fields.modal.footer_button['border']['right']['custom_color'] ~ ';' : fields.modal.footer_button['border']['right']['color'] == 'palette' and fields.modal.footer_button['border']['right']['theme_color'] ? 'border-right-color: var(--' ~ fields.modal.footer_button['border']['right']['theme_color'] ~ ');' %}
+          {% set foot_btn_border_top_left_radius = fields.modal.footer_button['border_radius']['top_left'] >= 0 ? 'border-top-left-radius: ' ~ fields.modal.footer_button['border_radius']['top_left'] ~ 'px;' %}
+          {% set foot_btn_border_top_right_radius = fields.modal.footer_button['border_radius']['top_right'] >= 0 ? 'border-top-right-radius: ' ~ fields.modal.footer_button['border_radius']['top_right'] ~ 'px;' %}
+          {% set foot_btn_border_bottom_left_radius = fields.modal.footer_button['border_radius']['bottom_left'] >= 0 ? 'border-bottom-left-radius: ' ~ fields.modal.footer_button['border_radius']['bottom_left'] ~ 'px;' %}
+          {% set foot_btn_border_bottom_right_radius = fields.modal.footer_button['border_radius']['bottom_right'] >= 0 ? 'border-bottom-right-radius: ' ~ fields.modal.footer_button['border_radius']['bottom_right'] ~ 'px;' %}
+          {% set foot_box_shadow_color = fields.modal.footer_button['box_shadow']['color']['color'] == 'palette' and fields.modal.footer_button['box_shadow']['color']['theme_color'] ? 'var(--' ~ fields.modal.footer_button['box_shadow']['color']['theme_color'] ~ ')' : fields.modal.footer_button['box_shadow']['color']['color'] == 'custom' and fields.modal.footer_button['box_shadow']['color']['custom_color'] ? fields.modal.footer_button['box_shadow']['color']['custom_color'] %}
+          {% set foot_box_shadow_inset = fields.modal.footer_button['box_shadow']['inset'] == true ? 'inset' %}
+          {% set foot_btn_box_shadow = fields.modal.footer_button['box_shadow']['horizontal_offset'] >= 0 or fields.modal.footer_button['box_shadow']['vertical_offset'] >= 0 or fields.modal.footer_button['box_shadow']['blur'] >= 0 or fields.modal.footer_button['box_shadow']['spread'] >= 0 or box_shadow_color or box_shadow_inset == true ? 'box-shadow: ' ~ fields.modal.footer_button['box_shadow']['horizontal_offset'] ~ 'px ' ~ fields.modal.footer_button['box_shadow']['vertical_offset'] ~ 'px ' ~ fields.modal.footer_button['box_shadow']['blur'] ~ 'px ' ~ fields.modal.footer_button['box_shadow']['spread'] ~ 'px ' ~ box_shadow_color ~ ' ' ~ box_shadow_inset ~ ';' %}
+          {% set foot_text_shadow_color = fields.modal.footer_button['text_shadow']['color']['color'] == 'palette' and fields.modal.footer_button['text_shadow']['color']['theme_color'] ? 'var(--' ~ fields.modal.footer_button['text_shadow']['color']['theme_color'] ~ ')' : fields.modal.footer_button['text_shadow']['color']['color'] == 'custom' and fields.modal.footer_button['text_shadow']['color']['custom_color'] ? fields.modal.footer_button['text_shadow']['color']['custom_color'] %}
+          {% set foot_btn_text_shadow = fields.modal.footer_button['text_shadow']['horizontal_offset'] >= 0 or fields.modal.footer_button['text_shadow']['vertical_offset'] >= 0 or fields.modal.footer_button['text_shadow']['blur'] >= 0 or text_shadow_color ? 'text-shadow: ' ~ fields.modal.footer_button['text_shadow']['horizontal_offset'] ~ 'px ' ~ fields.modal.footer_button['text_shadow']['vertical_offset'] ~ 'px ' ~ fields.modal.footer_button['text_shadow']['blur'] ~ 'px ' ~ text_shadow_color ~ ';' %}
+        {% endif %}
+        {% set foot_fontsize = fields.modal.footer_button['font_size']['font_size']['value'] >= 0 ? 'font-size: ' ~ fields.modal.footer_button['font_size']['font_size']['value'] ~ fields.modal.footer_button['font_size']['font_size']['unit'] ~ ';' %}
+        {% set foot_btn_width = fields.modal.footer_button.button_width['width']['width']['value'] >= 0 ? 'width: ' ~ fields.modal.footer_button.button_width['width']['width']['value']  ~ fields.modal.footer_button.button_width['width']['width']['unit'] ~  ';' %}
+        {% set foot_btn_min_width = fields.modal.footer_button.button_width['width']['min_width'] >= 0 ? 'min-width: ' ~ fields.modal.footer_button.button_width['width']['min_width']  ~ 'px;' %}
+        {% set foot_btn_max_width = fields.modal.footer_button.button_width['width']['max_width'] >= 0 ? 'max-width: ' ~ fields.modal.footer_button.button_width['width']['max_width']  ~ 'px;' %}
+        {% set foot_margin_top = fields.modal.footer_button.margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : fields.modal.footer_button.margin['margin']['top']['top'] >= 0 ? 'margin-top: ' ~ fields.modal.footer_button.margin['margin']['top']['top'] ~ 'px;' %}
+        {% set foot_margin_bottom = fields.modal.footer_button.margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.modal.footer_button.margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.modal.footer_button.margin['margin']['bottom']['bottom'] ~ 'px;' %}
+        {% set foot_margin_left = fields.modal.footer_button.margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : fields.modal.footer_button.margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.modal.footer_button.margin['margin']['left']['left'] ~ 'px;' %}
+        {% set foot_margin_right = fields.modal.footer_button.margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : fields.modal.footer_button.margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.modal.footer_button.margin['margin']['right']['right'] ~ 'px;' %}
+
+        {% set modal_dialog_bg_color = fields.modal.modal_bg_color['bg_color'] == 'custom' ? 'background-color: ' ~ fields.modal.modal_bg_color['bg_custom_color'] ~ ';' %}
+        {% set modal_dialog_text_color = fields.modal.modal_text_color['color'] == 'custom' ? 'color: ' ~ fields.modal.modal_text_color['custom_color'] ~ ';' %}
+        {% set modal_dialog_margin_top = fields.modal.modal_margin['margin']['top']['auto'] == true ? 'margin-top: auto;' : fields.modal.modal_margin['margin']['top']['top'] >= 0 ? 'margin-top: ' ~ fields.modal.modal_margin['margin']['top']['top'] ~ 'px;' %}
+        {% set modal_dialog_margin_bottom = fields.modal.modal_margin['margin']['bottom']['auto'] == true ? 'margin-bottom: auto;' : fields.modal.modal_margin['margin']['bottom']['bottom'] >= 0 ? 'margin-bottom: ' ~ fields.modal.modal_margin['margin']['bottom']['bottom'] ~ 'px;' %}
+        {% set modal_dialog_margin_left = fields.modal.modal_margin['margin']['left']['auto'] == true ? 'margin-left: auto;' : fields.modal.modal_margin['margin']['left']['left'] >= 0 ? 'margin-left: ' ~ fields.modal.modal_margin['margin']['left']['left'] ~ 'px;' %}
+        {% set modal_dialog_margin_right = fields.modal.modal_margin['margin']['right']['auto'] == true ? 'margin-right: auto;' : fields.modal.modal_margin['margin']['right']['right'] >= 0 ? 'margin-right: ' ~ fields.modal.modal_margin['margin']['right']['right'] ~ 'px;' %}
+
+
+        {% embed '@molecules/modal/_modal.tpl.twig' with {
+          modal_attributes: [
+            fields.modal.backdrop_color['bg_color'] == 'custom' ? 'style="background-color:' ~ fields.modal.backdrop_color['bg_custom_color'] ~ ';"'
+          ],
+          modal_id: post.slug,
+          modal_title: fields.modal.title,
+          modal_center: fields.modal.center_modal,
+          animate: fields.modal.animate,
+          backdrop: fields.modal.backdrop,
+          backdrop_static: fields.modal.static_backdrop,
+          backdrop_color: fields.modal.backdrop_color['bg_color'] == 'palette' ? fields.modal.backdrop_color['bg_theme_color'],
+          modal_size: fields.modal.modal_size,
+          modal_fullscreen: fields.modal.full_screen,
+          modal_fullscreen_breakpoint: fields.modal.fullscreen_breakpoint['breakpoint'],
+          background_color: fields.modal.modal_bg_color['bg_color'] == 'palette' and fields.modal.modal_bg_color['bg_theme_color'] ? fields.modal.modal_bg_color['bg_theme_color'],
+          text_color: fields.modal.modal_text_color['color'] == 'palette' and fields.modal.modal_text_color['theme_color'] ? fields.modal.modal_text_color['theme_color'],
+          modal_dialog_attributes: [
+            modal_dialog_margin_top or modal_dialog_margin_bottom or modal_dialog_margin_left or modal_dialog_margin_right ? 'style="' ~ modal_dialog_margin_top ~ modal_dialog_margin_bottom ~ modal_dialog_margin_left ~ modal_dialog_margin_right ~ '"'
+          ],
+          modal_content_attributes: [
+            modal_dialog_bg_color or modal_dialog_text_color ? 'style="' ~ modal_dialog_bg_color ~ modal_dialog_text_color ~ '"'
+          ],
+          modal_title_attributes: [
+            modal_dialog_text_color ? 'style="' ~ modal_dialog_text_color ~ '"'
+          ],
+          modal_body_attributes: [
+            modal_dialog_text_color ? 'style="' ~ modal_dialog_text_color ~ '"'
+          ],
+          modal_close_header: fields.modal.header_close,
+          modal_close_header_button: {
+            button_element: fields.modal.header_close_button['element'],
+            button_size: fields.modal.header_close_button['size'],
+            button_block: fields.modal.header_close_button['full_width'],
+            button_text: fields.modal.header_close_button_text,
+            button_color: fields.modal.header_close_button.close != 'black' and fields.modal.header_close_button.close != 'white' and fields.modal.header_close_button.style != 'custom' ? fields.modal.header_close_button.style,
+            close_button: fields.modal.header_close_button.close,
+            button_outline: fields.modal.header_close_button.outline,
+            button_disabled: fields.modal.header_close_button.disabled,
+            nowrap: fields.modal.header_close_button.nowrap,
+            hide_label: fields.modal.header_close_button.hide_label,
+            button_classes: [
+              fields.modal.header_close_button.close != 'black' and fields.modal.header_close_button.close != 'white' and fields.modal.header_close_button.background_color['bg_color'] == 'palette' and fields.modal.header_close_button.background_color['bg_theme_color'] ? 'bg-' ~ fields.modal.header_close_button.background_color['bg_theme_color'],
+              fields.modal.header_close_button.close != 'black' and fields.modal.header_close_button.close != 'white' and fields.modal.header_close_button.text_color['color'] == 'palette' and fields.modal.header_close_button.text_color['theme_color'] ? 'text-' ~ fields.modal.header_close_button.text_color['theme_color'],
+              fields.modal.header_close_button.full_width != true and fields.modal.header_close_button.display['display'] is not null ? fields.modal.header_close_button.display['display']
+            ],
+            button_other_classes: fields.modal.header_close_button.classes,
+            button_attributes: [
+              head_bg_color or head_text_color or head_transform or head_btn_padding_top or head_btn_padding_bottom or head_btn_padding_left or head_btn_padding_right or head_btn_border_top_width or head_btn_border_top_style or head_btn_border_top_color or head_btn_border_bottom_width or head_btn_border_bottom_style or head_btn_border_bottom_color or head_btn_border_left_width or head_btn_border_left_style or head_btn_border_left_color or head_btn_border_right_width or head_btn_border_right_style or head_btn_border_right_color or head_btn_border_top_left_radius or head_btn_border_top_right_radius or head_btn_border_bottom_left_radius or head_btn_border_bottom_right_radius or head_btn_box_shadow or head_btn_text_shadow or head_fontsize or head_width or head_min_width or head_max_width or head_margin_top or head_margin_bottom or head_margin_left or head_margin_right ? 'style="' ~ head_bg_color ~ head_text_color ~ head_fontsize ~ head_transform ~ head_btn_padding_top ~ head_btn_padding_bottom ~ head_btn_padding_left ~ head_btn_padding_right ~ head_btn_border_top_width ~ head_btn_border_top_style ~ head_btn_border_top_color ~ head_btn_border_bottom_width ~ head_btn_border_bottom_style ~ head_btn_border_bottom_color ~ head_btn_border_left_width ~ head_btn_border_left_style ~ head_btn_border_left_color ~ head_btn_border_right_width ~ head_btn_border_right_style ~ head_btn_border_right_color ~ head_btn_border_top_left_radius ~ head_btn_border_top_right_radius ~ head_btn_border_bottom_left_radius ~ head_btn_border_bottom_right_radius ~ head_btn_box_shadow ~ head_btn_text_shadow ~ head_width ~ head_min_width ~ head_max_width ~ head_margin_top ~ head_margin_bottom ~ head_margin_left ~ head_margin_right ~ '"'
+            ]
+          },
+          show_modal_footer_close: fields.modal.footer_close,
+          modal_close_footer: {
+            button_element: fields.modal.footer_button.element,
+            button_text: fields.modal.footer_button_text,
+            button_color: fields.modal.footer_button.close != 'black' and fields.modal.footer_button.close != 'white' and fields.modal.footer_button.style != 'custom' ? fields.modal.footer_button.style,
+            button_size: fields.modal.footer_button.size,
+            button_outline: fields.modal.footer_button.outline,
+            button_block: fields.modal.footer_button.full_width,
+            button_disabled: fields.modal.footer_button.disabled,
+            nowrap: fields.modal.footer_button.nowrap,
+            close_button: fields.modal.footer_button.close | default('no-icon'),
+            hide_label: fields.modal.footer_button.hide_label,
+            button_classes: [
+              fields.modal.footer_button.close != 'black' and fields.modal.footer_button.close != 'white' and fields.modal.footer_button.background_color['bg_color'] == 'palette' and fields.modal.footer_button.background_color['bg_theme_color'] ? 'bg-' ~ fields.modal.footer_button.background_color['bg_theme_color'],
+              fields.modal.footer_button.close != 'black' and fields.modal.footer_button.close != 'white' and fields.modal.footer_button.text_color['color'] == 'palette' and fields.modal.footer_button.text_color['theme_color'] ? 'text-' ~ fields.modal.footer_button.text_color['theme_color'],
+              fields.modal.footer_button.full_width != true and fields.modal.footer_button.display['display'] is not null ? fields.modal.footer_button.display['display']
+            ],
+            button_other_classes: fields.modal.footer_button.classes,
+            button_attributes: [
+              foot_bg_color or foot_text_color or foot_transform or foot_btn_padding_top or foot_btn_padding_bottom or foot_btn_padding_left or foot_btn_padding_right or foot_btn_border_top_width or foot_btn_border_top_style or foot_btn_border_top_color or foot_btn_border_bottom_width or foot_btn_border_bottom_style or foot_btn_border_bottom_color or foot_btn_border_left_width or foot_btn_border_left_style or foot_btn_border_left_color or foot_btn_border_right_width or foot_btn_border_right_style or foot_btn_border_right_color or foot_btn_border_top_left_radius or foot_btn_border_top_right_radius or foot_btn_border_bottom_left_radius or foot_btn_border_bottom_right_radius or foot_btn_box_shadow or foot_btn_text_shadow or foot_fontsize or foot_btn_width or foot_btn_min_width or foot_btn_max_width or foot_margin_top or foot_margin_bottom or foot_margin_left or foot_margin_right ? 'style="' ~ foot_bg_color ~ foot_text_color ~ foot_fontsize ~ foot_transform ~ foot_btn_padding_top ~ foot_btn_padding_bottom ~ foot_btn_padding_left ~ foot_btn_padding_right ~ foot_btn_border_top_width ~ foot_btn_border_top_style ~ foot_btn_border_top_color ~ foot_btn_border_bottom_width ~ foot_btn_border_bottom_style ~ foot_btn_border_bottom_color ~ foot_btn_border_left_width ~ foot_btn_border_left_style ~ foot_btn_border_left_color ~ foot_btn_border_right_width ~ foot_btn_border_right_style ~ foot_btn_border_right_color ~ foot_btn_border_top_left_radius ~ foot_btn_border_top_right_radius ~ foot_btn_border_bottom_left_radius ~ foot_btn_border_bottom_right_radius ~ foot_btn_box_shadow ~ foot_btn_text_shadow ~ foot_btn_width ~ foot_btn_min_width ~ foot_btn_max_width ~ foot_margin_top ~ foot_margin_bottom ~ foot_margin_left ~ foot_margin_right ~'"'
+            ]
+          },
+          modal_classes: [
+            'block-modal',
+            fields.modal.layout.modal_layout != 'default' ? 'modal-' ~ fields.modal.layout.modal_layout,
+            block['className']
+          ],
+        } %}
+          {% block modal_body %}
+            {% if fields.modal_body_layout %}
+              <div class="modal-content">
+                {% for element in fields.modal_body_layout %}
+                  {% if element.acf_fc_layout == 'featured_image' and post.thumbnail.src %}
+                    {% include 'blocks/posts-loop/elements/_featured-image.twig' %}
+                  {% elseif element.acf_fc_layout == 'post_title' and post.post_title %}
+                    {% include 'blocks/posts-loop/elements/_post-title.twig' %}
+                  {% elseif element.acf_fc_layout == 'post_excerpt' and (post.preview or function('get_the_excerpt')) %}
+                    {% include 'blocks/posts-loop/elements/_post-excerpt.twig' %}
+                  {% elseif element.acf_fc_layout == 'post_content' and post.content %}
+                    {% include 'blocks/posts-loop/elements/_post-content.twig' %}
+                  {% elseif element.acf_fc_layout == 'link' and post.link %}
+                    {% include 'blocks/posts-loop/elements/_post-link.twig' %}
+                  {% elseif element.acf_fc_layout == 'post_author' and post.authors %}
+                    {% include 'blocks/posts-loop/elements/_post-author.twig' %}
+                  {% elseif element.acf_fc_layout == 'post_date' %}
+                    {% include 'blocks/posts-loop/elements/_post-date.twig' %}
+                  {% elseif element.acf_fc_layout == 'post_modified' and (post.modified_date or post.modified_author) %}
+                    {% include 'blocks/posts-loop/elements/_post-modified-date.twig' %}
+                  {% elseif element.acf_fc_layout == 'post_type' and post.type %}
+                    {% include 'blocks/posts-loop/elements/_post-post-type.twig' %}
+                  {% elseif element.acf_fc_layout == 'post_parent' and post.parent %}
+                    {% include 'blocks/posts-loop/elements/_post-parent.twig' %}
+                  {% elseif element.acf_fc_layout == 'children' and post.children %}
+                    {% include 'blocks/posts-loop/elements/_post-children.twig' %}
+                  {% elseif element.acf_fc_layout == 'comment_count' and post.comment_count %}
+                    {% include 'blocks/posts-loop/elements/_post-comment-count.twig' %}
+                  {% elseif element.acf_fc_layout == 'terms' and post.terms({query:{taxonomy:element.taxonomy, orderby:element.order_by, order: element.order}}) %}
+                    {% include 'blocks/posts-loop/elements/_post-terms.twig' %}
+                  {% elseif element.acf_fc_layout == 'categories' and post.categories %}
+                    {% include 'blocks/posts-loop/elements/_post-categories.twig' %}
+                  {% elseif element.acf_fc_layout == 'tags' and post.tags %}
+                    {% include 'blocks/posts-loop/elements/_post-tags.twig' %}
+                  {% endif %}
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endblock %}
+          {% block modal_footer %}
+            {% if fields.modal_footer_layout %}
+              <div class="modal-footer-content">
+                {% for element in fields.modal_footer_layout %}
+                  {% if element.acf_fc_layout == 'featured_image' and post.thumbnail.src %}
+                    {% include 'blocks/posts-loop/elements/_featured-image.twig' %}
+                  {% elseif element.acf_fc_layout == 'post_title' and post.post_title %}
+                    {% include 'blocks/posts-loop/elements/_post-title.twig' %}
+                  {% elseif element.acf_fc_layout == 'post_excerpt' and (post.preview or function('get_the_excerpt')) %}
+                    {% include 'blocks/posts-loop/elements/_post-excerpt.twig' %}
+                  {% elseif element.acf_fc_layout == 'post_content' and post.content %}
+                    {% include 'blocks/posts-loop/elements/_post-content.twig' %}
+                  {% elseif element.acf_fc_layout == 'link' and post.link %}
+                    {% include 'blocks/posts-loop/elements/_post-link.twig' %}
+                  {% elseif element.acf_fc_layout == 'post_author' and post.authors %}
+                    {% include 'blocks/posts-loop/elements/_post-author.twig' %}
+                  {% elseif element.acf_fc_layout == 'post_date' %}
+                    {% include 'blocks/posts-loop/elements/_post-date.twig' %}
+                  {% elseif element.acf_fc_layout == 'post_modified' and (post.modified_date or post.modified_author) %}
+                    {% include 'blocks/posts-loop/elements/_post-modified-date.twig' %}
+                  {% elseif element.acf_fc_layout == 'post_type' and post.type %}
+                    {% include 'blocks/posts-loop/elements/_post-post-type.twig' %}
+                  {% elseif element.acf_fc_layout == 'post_parent' and post.parent %}
+                    {% include 'blocks/posts-loop/elements/_post-parent.twig' %}
+                  {% elseif element.acf_fc_layout == 'children' and post.children %}
+                    {% include 'blocks/posts-loop/elements/_post-children.twig' %}
+                  {% elseif element.acf_fc_layout == 'comment_count' and post.comment_count %}
+                    {% include 'blocks/posts-loop/elements/_post-comment-count.twig' %}
+                  {% elseif element.acf_fc_layout == 'terms' and post.terms({query:{taxonomy:element.taxonomy, orderby:element.order_by, order: element.order}}) %}
+                    {% include 'blocks/posts-loop/elements/_post-terms.twig' %}
+                  {% elseif element.acf_fc_layout == 'categories' and post.categories %}
+                    {% include 'blocks/posts-loop/elements/_post-categories.twig' %}
+                  {% elseif element.acf_fc_layout == 'tags' and post.tags %}
+                    {% include 'blocks/posts-loop/elements/_post-tags.twig' %}
+                  {% endif %}
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endblock %}
+        {% endembed %}
+
+      {% endfor %}
+    </div>

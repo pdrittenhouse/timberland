@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Post Categories Element
+ *   Display post categories with optional label and linking.
+ *
+ * Available variables:
+ *  - post: Current post object
+ *  - element: Element configuration
+ *  - fields: Block field data
+ */
+#}
+
+{% if element.acf_fc_layout == 'categories' and post.categories %}
+  {# Categories #}
+  <div class="posts-loop--categories--wrapper">
+    {% if element.label %}
+      <span class="posts-loop--categories--label">{{ element.label }}</span>
+    {% endif %}
+    {% for category in post.categories %}
+      {% if fields.link_items != true and element.link_categories == true %}<a class="posts-loop--category--link posts-loop--category" href="/{{ category.taxonomy }}/{{ category.slug }}">{% else %}<span class="posts-loop--category">{% endif %}{{ category.name }}{% if fields.link_items != true and element.link_categories == true %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}

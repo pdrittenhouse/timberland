@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Card Comment Count Element
+ *   Display comment count for posts in card contexts (label/subtitle areas).
+ *
+ * Available variables:
+ *  - post: Current post object
+ *  - fields: Block field data
+ *  - location: Card location ('label' or 'subtitle')
+ */
+#}
+
+{% if function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == location %}
+  <div class="posts-loop--comment-count--wrapper">
+    {% if fields.element_comment_count.element_comment_count_label %}
+      <span class="posts-loop--comment-count--label">{{ fields.element_comment_count.element_comment_count_label }}</span>
+    {% endif %}
+    <span class="posts-loop--comment-count">{{ post.comment_count }}</span>
+  </div>
+{% endif %}

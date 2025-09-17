@@ -1,0 +1,70 @@
+{#
+/**
+ * @file
+ * posts-loop~none
+ *   Posts loop with no pattern.
+ *
+ * Available variables:
+ *  - posts: Array of post objects
+ *  - fields: Block field data
+ */
+#}
+
+{% for post in posts %}
+
+  {# Categories #}
+  {% if post.categories %}
+    {% set catArr = [] %}
+    {% for category in post.categories %}
+      {% set catArr = catArr | merge([category.name]) %}
+    {% endfor %}
+  {% endif %}
+
+  {% if fields.link_items == true %}
+    {# TODO: Add modal trigger support - add fields.include_modals conditional for data-bs-toggle="modal" and data-bs-target="#{{ post.slug }}" #}
+    <a class="posts-loop--post" href="{{ post.link }}" {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
+  {% else %}
+    <div class="posts-loop--post"  {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
+  {% endif %}
+
+    {% for element in fields.posts_query_layout %}
+      {% if element.acf_fc_layout == 'featured_image' and post.thumbnail.src %}
+        {% include 'blocks/posts-loop/elements/_featured-image.twig' %}
+      {% elseif element.acf_fc_layout == 'post_title' and post.post_title %}
+        {% include 'blocks/posts-loop/elements/_post-title.twig' %}
+      {% elseif element.acf_fc_layout == 'post_excerpt' and (post.preview or function('get_the_excerpt')) %}
+        {% include 'blocks/posts-loop/elements/_post-excerpt.twig' %}
+      {% elseif element.acf_fc_layout == 'post_content' and post.content %}
+        {% include 'blocks/posts-loop/elements/_post-content.twig' %}
+      {% elseif element.acf_fc_layout == 'link' and post.link %}
+        {% include 'blocks/posts-loop/elements/_post-link.twig' %}
+      {% elseif element.acf_fc_layout == 'post_author' and post.authors %}
+        {% include 'blocks/posts-loop/elements/_post-author.twig' %}
+      {% elseif element.acf_fc_layout == 'post_date' %}
+        {% include 'blocks/posts-loop/elements/_post-date.twig' %}
+      {% elseif element.acf_fc_layout == 'post_modified' and (post.modified_date or post.modified_author) %}
+        {% include 'blocks/posts-loop/elements/_post-modified-date.twig' %}
+      {% elseif element.acf_fc_layout == 'post_type' and post.type %}
+        {% include 'blocks/posts-loop/elements/_post-post-type.twig' %}
+      {% elseif element.acf_fc_layout == 'post_parent' and post.parent %}
+        {% include 'blocks/posts-loop/elements/_post-parent.twig' %}
+      {% elseif element.acf_fc_layout == 'children' and post.children %}
+        {% include 'blocks/posts-loop/elements/_post-children.twig' %}
+      {% elseif element.acf_fc_layout == 'comment_count' and post.comment_count %}
+        {% include 'blocks/posts-loop/elements/_post-comment-count.twig' %}
+      {% elseif element.acf_fc_layout == 'terms' and post.terms({query:{taxonomy:element.taxonomy, orderby:element.order_by, order: element.order}}) %}
+        {% include 'blocks/posts-loop/elements/_post-terms.twig' %}
+      {% elseif element.acf_fc_layout == 'categories' and post.categories %}
+        {% include 'blocks/posts-loop/elements/_post-categories.twig' %}
+      {% elseif element.acf_fc_layout == 'tags' and post.tags %}
+        {% include 'blocks/posts-loop/elements/_post-tags.twig' %}
+      {% endif %}
+    {% endfor %}
+
+  {% if fields.link_items == true %}
+    </a>
+  {% else %}
+    </div>
+  {% endif %}
+
+{% endfor %}

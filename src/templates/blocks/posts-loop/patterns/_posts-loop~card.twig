@@ -1,0 +1,34 @@
+{#
+/**
+ * @file
+ * posts-loop~card
+ *   Posts loop with card pattern.
+ *
+ * Available variables:
+ *  - posts: Array of post objects
+ *  - fields: Block field data
+ */
+#}
+{% for post in posts %}
+  {# Categories #}
+  {% if post.categories %}
+    {% set catArr = [] %}
+    {% for category in post.categories %}
+      {% set catArr = catArr | merge([category.name]) %}
+    {% endfor %}
+  {% endif %}
+
+  {# Include shared card element #}
+  {% set card_attributes = [] %}
+  {% if fields.include_modals == true %}
+    {% set card_attributes = card_attributes|merge(['data-bs-toggle="modal"', 'data-bs-target="#' ~ post.slug ~ '"']) %}
+  {% endif %}
+  {% if catArr | length > 0 %}
+    {% set card_attributes = card_attributes|merge(['data-categories="' ~ catArr | sort | join(', ') | trim ~ '"']) %}
+  {% endif %}
+  
+  {% include 'blocks/posts-loop/elements/_card.twig' with {
+    parent_block_data: parent_block_data,
+    additional_attributes: card_attributes
+  } %}
+{% endfor %}
