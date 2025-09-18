@@ -1,0 +1,444 @@
+<h2>Basic Bootstrap Table</h2>
+{% include '@atoms/table/_table.tpl.twig' with {
+  table_id: 'basicTable',
+  caption: 'Basic Bootstrap Table Example',
+  rows: [
+    {
+      cells: [
+        { content: 'Name', element: 'th', scope: 'col' },
+        { content: 'Age', element: 'th', scope: 'col' },
+        { content: 'City', element: 'th', scope: 'col' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'John Doe' },
+        { content: '30' },
+        { content: 'New York' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'Jane Smith' },
+        { content: '25' },
+        { content: 'Los Angeles' }
+      ]
+    }
+  ]
+} %}
+
+<h2 class="mt-5">Striped and Hoverable Table</h2>
+{% include '@atoms/table/_table.tpl.twig' with {
+  table_id: 'stripedTable',
+  table_striped: true,
+  table_hover: true,
+  caption: 'Striped and Hoverable Table',
+  rows: [
+    {
+      cells: [
+        { content: 'Product', element: 'th', scope: 'col' },
+        { content: 'Price', element: 'th', scope: 'col' },
+        { content: 'Stock', element: 'th', scope: 'col' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'Widget A' },
+        { content: '$19.99' },
+        { content: '25' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'Widget B' },
+        { content: '$29.99' },
+        { content: '10' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'Widget C' },
+        { content: '$39.99' },
+        { content: '5' }
+      ]
+    }
+  ]
+} %}
+
+<h2 class="mt-5">Bordered and Small Table</h2>
+{% include '@atoms/table/_table.tpl.twig' with {
+  table_id: 'borderedTable',
+  table_bordered: true,
+  table_small: true,
+  caption: 'Compact Bordered Table',
+  rows: [
+    {
+      cells: [
+        { content: 'ID', element: 'th', scope: 'col' },
+        { content: 'Status', element: 'th', scope: 'col' },
+        { content: 'Priority', element: 'th', scope: 'col' }
+      ]
+    },
+    {
+      cells: [
+        { content: '001' },
+        { content: 'Active' },
+        { content: 'High' }
+      ]
+    },
+    {
+      cells: [
+        { content: '002' },
+        { content: 'Pending' },
+        { content: 'Medium' }
+      ]
+    }
+  ]
+} %}
+
+<h2 class="mt-5">Table Variants</h2>
+{% include '@atoms/table/_table.tpl.twig' with {
+  table_id: 'primaryTable',
+  table_variant: 'primary',
+  caption: 'Primary Variant Table',
+  rows: [
+    {
+      cells: [
+        { content: 'Header 1', element: 'th', scope: 'col' },
+        { content: 'Header 2', element: 'th', scope: 'col' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'Primary data 1' },
+        { content: 'Primary data 2' }
+      ]
+    }
+  ]
+} %}
+
+{% include '@atoms/table/_table.tpl.twig' with {
+  table_id: 'successTable',
+  table_variant: 'success',
+  table_classes: ['mt-3'],
+  caption: 'Success Variant Table',
+  rows: [
+    {
+      cells: [
+        { content: 'Task', element: 'th', scope: 'col' },
+        { content: 'Status', element: 'th', scope: 'col' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'Deploy application' },
+        { content: 'Completed' }
+      ]
+    }
+  ]
+} %}
+
+<h2 class="mt-5">Responsive Table</h2>
+{% include '@atoms/table/_table.tpl.twig' with {
+  table_id: 'responsiveTable',
+  table_responsive: true,
+  table_striped: true,
+  caption: 'Responsive Table (scroll horizontally on small screens)',
+  rows: [
+    {
+      cells: [
+        { content: 'Name', element: 'th', scope: 'col' },
+        { content: 'Email', element: 'th', scope: 'col' },
+        { content: 'Phone', element: 'th', scope: 'col' },
+        { content: 'Department', element: 'th', scope: 'col' },
+        { content: 'Start Date', element: 'th', scope: 'col' },
+        { content: 'Salary', element: 'th', scope: 'col' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'John Doe' },
+        { content: 'john.doe@company.com' },
+        { content: '(555) 123-4567' },
+        { content: 'Engineering' },
+        { content: '2023-01-15' },
+        { content: '$85,000' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'Jane Smith' },
+        { content: 'jane.smith@company.com' },
+        { content: '(555) 987-6543' },
+        { content: 'Marketing' },
+        { content: '2023-03-22' },
+        { content: '$72,000' }
+      ]
+    }
+  ]
+} %}
+
+<h2 class="mt-5">Responsive Table (Medium Breakpoint)</h2>
+{% include '@atoms/table/_table.tpl.twig' with {
+  table_id: 'responsiveMdTable',
+  table_responsive: 'md',
+  table_hover: true,
+  caption: 'Responsive from medium breakpoint up',
+  rows: [
+    {
+      cells: [
+        { content: 'Quarter', element: 'th', scope: 'col' },
+        { content: 'Revenue', element: 'th', scope: 'col' },
+        { content: 'Expenses', element: 'th', scope: 'col' },
+        { content: 'Profit', element: 'th', scope: 'col' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'Q1 2023', element: 'th', scope: 'row' },
+        { content: '$250,000' },
+        { content: '$180,000' },
+        { content: '$70,000' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'Q2 2023', element: 'th', scope: 'row' },
+        { content: '$280,000' },
+        { content: '$190,000' },
+        { content: '$90,000' }
+      ]
+    }
+  ]
+} %}
+
+<h2 class="mt-5">Table with Vertical Alignment</h2>
+{% include '@atoms/table/_table.tpl.twig' with {
+  table_id: 'alignmentTable',
+  table_bordered: true,
+  table_vertical_align: 'middle',
+  caption: 'Table with middle vertical alignment',
+  rows: [
+    {
+      cells: [
+        { content: 'Content', element: 'th', scope: 'col' },
+        { content: 'Alignment', element: 'th', scope: 'col' },
+        { content: 'Notes', element: 'th', scope: 'col' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'This is a cell with quite a bit of content to demonstrate vertical alignment behavior in table cells.' },
+        { content: 'Middle', vertical_align: 'middle' },
+        { content: 'Default alignment from table' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'Short content' },
+        { content: 'Top', vertical_align: 'top' },
+        { content: 'Cell-specific alignment overrides table setting' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'Another cell with multiple lines of content to show how the vertical alignment affects the display of table cell content.' },
+        { content: 'Bottom', vertical_align: 'bottom' },
+        { content: 'Individual cell control' }
+      ]
+    }
+  ]
+} %}
+
+<h2 class="mt-5">Complex Table with Header, Body, and Footer</h2>
+{% include '@atoms/table/_table.tpl.twig' with {
+  table_id: 'complexTable',
+  table_striped: true,
+  table_bordered: true,
+  caption: 'Sales Report Q4 2023',
+  caption_top: true,
+  thead: {
+    rows: [
+      {
+        cells: [
+          { content: 'Product', element: 'th', scope: 'col' },
+          { content: 'Q1', element: 'th', scope: 'col' },
+          { content: 'Q2', element: 'th', scope: 'col' },
+          { content: 'Q3', element: 'th', scope: 'col' },
+          { content: 'Q4', element: 'th', scope: 'col' },
+          { content: 'Total', element: 'th', scope: 'col' }
+        ]
+      }
+    ]
+  },
+  tbody: {
+    rows: [
+      {
+        cells: [
+          { content: 'Widget A', element: 'th', scope: 'row' },
+          { content: '$1,200' },
+          { content: '$1,350' },
+          { content: '$1,100' },
+          { content: '$1,500' },
+          { content: '$5,150' }
+        ]
+      },
+      {
+        cells: [
+          { content: 'Widget B', element: 'th', scope: 'row' },
+          { content: '$800' },
+          { content: '$900' },
+          { content: '$750' },
+          { content: '$950' },
+          { content: '$3,400' }
+        ]
+      },
+      {
+        row_classes: ['table-warning'],
+        cells: [
+          { content: 'Widget C', element: 'th', scope: 'row' },
+          { content: '$600' },
+          { content: '$650' },
+          { content: '$700' },
+          { content: '$800' },
+          { content: '$2,750' }
+        ]
+      }
+    ]
+  },
+  tfoot: {
+    rows: [
+      {
+        row_classes: ['table-dark'],
+        cells: [
+          { content: 'Total', element: 'th', scope: 'row' },
+          { content: '$2,600' },
+          { content: '$2,900' },
+          { content: '$2,550' },
+          { content: '$3,250' },
+          { content: '$11,300' }
+        ]
+      }
+    ]
+  }
+} %}
+
+<h2 class="mt-5">Table with Colspan and Rowspan</h2>
+{% include '@atoms/table/_table.tpl.twig' with {
+  table_id: 'spanTable',
+  table_bordered: true,
+  caption: 'Complex Table Layout with Spans',
+  thead: {
+    rows: [
+      {
+        cells: [
+          { content: 'Name', element: 'th', scope: 'col', rowspan: 2 },
+          { content: 'Contact Information', element: 'th', scope: 'colgroup', colspan: 2 },
+          { content: 'Details', element: 'th', scope: 'col', rowspan: 2 }
+        ]
+      },
+      {
+        cells: [
+          { content: 'Email', element: 'th', scope: 'col' },
+          { content: 'Phone', element: 'th', scope: 'col' }
+        ]
+      }
+    ]
+  },
+  tbody: {
+    rows: [
+      {
+        cells: [
+          { content: 'John Doe', element: 'th', scope: 'row' },
+          { content: 'john@example.com' },
+          { content: '555-1234' },
+          { content: 'Manager' }
+        ]
+      },
+      {
+        cells: [
+          { content: 'Jane Smith', element: 'th', scope: 'row' },
+          { content: 'jane@example.com' },
+          { content: '555-5678' },
+          { content: 'Developer' }
+        ]
+      },
+      {
+        row_classes: ['table-info'],
+        cells: [
+          { content: 'Department Total', element: 'th', scope: 'row', colspan: 3 },
+          { content: '2 employees' }
+        ]
+      }
+    ]
+  }
+} %}
+
+<h2 class="mt-5">Borderless and Active Table</h2>
+{% include '@atoms/table/_table.tpl.twig' with {
+  table_id: 'borderlessTable',
+  table_borderless: true,
+  table_active: true,
+  caption: 'Borderless Active Table',
+  rows: [
+    {
+      cells: [
+        { content: 'Setting', element: 'th', scope: 'col' },
+        { content: 'Value', element: 'th', scope: 'col' },
+        { content: 'Description', element: 'th', scope: 'col' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'Debug Mode' },
+        { content: 'Enabled' },
+        { content: 'Shows detailed error messages' }
+      ]
+    },
+    {
+      row_classes: ['table-danger'],
+      cells: [
+        { content: 'Cache' },
+        { content: 'Disabled' },
+        { content: 'Performance may be affected' }
+      ]
+    }
+  ]
+} %}
+
+<div class="mb-3 p-3 bg-light border rounded">
+  <h3>Bootstrap 5.0 Table Pattern Usage</h3>
+  <p>This table pattern now supports all Bootstrap 5.0 table features:</p>
+
+  <h4>Bootstrap Table Options:</h4>
+  <ul>
+    <li><code>table_striped</code> [bool]: Adds .table-striped for zebra-striped rows</li>
+    <li><code>table_hover</code> [bool]: Adds .table-hover for hoverable rows</li>
+    <li><code>table_active</code> [bool]: Adds .table-active for active table state</li>
+    <li><code>table_bordered</code> [bool]: Adds .table-bordered for borders on all sides</li>
+    <li><code>table_borderless</code> [bool]: Adds .table-borderless to remove borders</li>
+    <li><code>table_small</code> [bool]: Adds .table-sm for compact table</li>
+    <li><code>table_variant</code> [string]: Table variant (primary, secondary, success, danger, warning, info, light, dark)</li>
+    <li><code>table_responsive</code> [bool|string]: Makes table responsive (.table-responsive or .table-responsive-{breakpoint})</li>
+    <li><code>table_vertical_align</code> [string]: Vertical alignment for all cells (top, middle, bottom)</li>
+    <li><code>caption_top</code> [bool]: Positions caption at top with .caption-top</li>
+  </ul>
+
+  <h4>Cell-Level Options:</h4>
+  <ul>
+    <li><code>vertical_align</code> [string]: Individual cell vertical alignment (overrides table setting)</li>
+    <li><code>row_classes</code>: Can include Bootstrap variant classes like 'table-warning', 'table-danger', etc.</li>
+    <li><code>cell_classes</code>: Can include Bootstrap alignment classes like 'align-top', 'align-middle', etc.</li>
+  </ul>
+
+  <h4>Example Usage:</h4>
+  <pre><code>{% verbatim %}{% include '@atoms/table/_table.tpl.twig' with {
+  table_striped: true,
+  table_hover: true,
+  table_responsive: 'md',
+  table_variant: 'primary',
+  caption: 'My Bootstrap Table',
+  caption_top: true,
+  rows: [...]
+} %}{% endverbatim %}</code></pre>
+</div>

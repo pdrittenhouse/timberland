@@ -1,0 +1,1334 @@
+{
+    "key": "group_67409f8a12b45",
+    "title": "Block: Table",
+    "fields": [
+        {
+            "key": "field_67409f8a12b46",
+            "label": "table_id",
+            "name": "table_id",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "clone": [
+                "group_63464d79a3c59"
+            ],
+            "display": "seamless",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 0
+        },
+        {
+            "key": "field_67409f8a12b47",
+            "label": "Bootstrap Table Options",
+            "name": "bootstrap_options",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "Configure Bootstrap 5.0 table styling options",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_67409f8a12b48",
+                    "label": "Striped Rows",
+                    "name": "table_striped",
+                    "aria-label": "",
+                    "type": "true_false",
+                    "instructions": "Add zebra-striping to table rows",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 1,
+                    "ui_on_text": "",
+                    "ui_off_text": ""
+                },
+                {
+                    "key": "field_67409f8a12b49",
+                    "label": "Hoverable Rows",
+                    "name": "table_hover",
+                    "aria-label": "",
+                    "type": "true_false",
+                    "instructions": "Enable hover state on table rows",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 1,
+                    "ui_on_text": "",
+                    "ui_off_text": ""
+                },
+                {
+                    "key": "field_67409f8a12b4a",
+                    "label": "Bordered",
+                    "name": "table_bordered",
+                    "aria-label": "",
+                    "type": "true_false",
+                    "instructions": "Add borders on all sides of table and cells",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 1,
+                    "ui_on_text": "",
+                    "ui_off_text": ""
+                },
+                {
+                    "key": "field_67409f8a12b4b",
+                    "label": "Small/Compact",
+                    "name": "table_small",
+                    "aria-label": "",
+                    "type": "true_false",
+                    "instructions": "Make table more compact by cutting cell padding in half",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 1,
+                    "ui_on_text": "",
+                    "ui_off_text": ""
+                },
+                {
+                    "key": "field_67409f8a12b4c",
+                    "label": "Borderless",
+                    "name": "table_borderless",
+                    "aria-label": "",
+                    "type": "true_false",
+                    "instructions": "Remove all borders from table",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 1,
+                    "ui_on_text": "",
+                    "ui_off_text": ""
+                },
+                {
+                    "key": "field_67409f8a12b4d",
+                    "label": "Active State",
+                    "name": "table_active",
+                    "aria-label": "",
+                    "type": "true_false",
+                    "instructions": "Highlight the table with an active state",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 1,
+                    "ui_on_text": "",
+                    "ui_off_text": ""
+                },
+                {
+                    "key": "field_67409f8a12b4e",
+                    "label": "Table Variant",
+                    "name": "table_variant",
+                    "aria-label": "",
+                    "type": "select",
+                    "instructions": "Choose a contextual color variant for the table",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "": "Default",
+                        "primary": "Primary",
+                        "secondary": "Secondary",
+                        "success": "Success",
+                        "danger": "Danger",
+                        "warning": "Warning",
+                        "info": "Info",
+                        "light": "Light",
+                        "dark": "Dark"
+                    },
+                    "default_value": "",
+                    "allow_null": 0,
+                    "multiple": 0,
+                    "ui": 0,
+                    "return_format": "value",
+                    "ajax": 0,
+                    "placeholder": ""
+                },
+                {
+                    "key": "field_67409f8a12b4f",
+                    "label": "Responsive",
+                    "name": "table_responsive",
+                    "aria-label": "",
+                    "type": "select",
+                    "instructions": "Make table scroll horizontally on smaller devices",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "": "Not Responsive",
+                        "true": "Always Responsive",
+                        "sm": "Responsive below SM (576px)",
+                        "md": "Responsive below MD (768px)",
+                        "lg": "Responsive below LG (992px)",
+                        "xl": "Responsive below XL (1200px)",
+                        "xxl": "Responsive below XXL (1400px)"
+                    },
+                    "default_value": "",
+                    "allow_null": 0,
+                    "multiple": 0,
+                    "ui": 0,
+                    "return_format": "value",
+                    "ajax": 0,
+                    "placeholder": ""
+                },
+                {
+                    "key": "field_67409f8a12b50",
+                    "label": "Vertical Alignment",
+                    "name": "table_vertical_align",
+                    "aria-label": "",
+                    "type": "select",
+                    "instructions": "Set vertical alignment for all table cells",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "": "Default",
+                        "top": "Top",
+                        "middle": "Middle",
+                        "bottom": "Bottom"
+                    },
+                    "default_value": "",
+                    "allow_null": 0,
+                    "multiple": 0,
+                    "ui": 0,
+                    "return_format": "value",
+                    "ajax": 0,
+                    "placeholder": ""
+                }
+            ]
+        },
+        {
+            "key": "field_67409f8a12b51",
+            "label": "Table Caption",
+            "name": "caption_group",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "Optional table caption",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_67409f8a12b52",
+                    "label": "Caption Text",
+                    "name": "caption",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "75",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_67409f8a12b53",
+                    "label": "Caption Position",
+                    "name": "caption_top",
+                    "aria-label": "",
+                    "type": "true_false",
+                    "instructions": "Position caption above table (default is below)",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "Top",
+                    "default_value": 1,
+                    "ui": 1,
+                    "ui_on_text": "",
+                    "ui_off_text": ""
+                }
+            ]
+        },
+        {
+            "key": "field_67409f8a12b54",
+            "label": "Table Structure",
+            "name": "table_structure",
+            "aria-label": "",
+            "type": "radio",
+            "instructions": "Choose how to structure your table data",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "simple": "Simple (header + data rows)",
+                "advanced": "Advanced (separate header, body, footer)"
+            },
+            "allow_null": 0,
+            "other_choice": 0,
+            "default_value": "simple",
+            "layout": "horizontal",
+            "return_format": "value",
+            "save_other_choice": 0
+        },
+        {
+            "key": "field_67409f8a12b55",
+            "label": "Table Rows",
+            "name": "rows",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Add table rows (first row typically contains headers)",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_67409f8a12b54",
+                        "operator": "==",
+                        "value": "simple"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "min": 1,
+            "max": 0,
+            "layout": "block",
+            "button_label": "Add Row",
+            "collapsed": "",
+            "sub_fields": [
+                {
+                    "key": "field_67409f8a12b56",
+                    "label": "Row Classes",
+                    "name": "row_classes",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "Additional CSS classes for this row (e.g., table-warning, table-success)",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "table-warning, table-success, etc.",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_67409f8a12b57",
+                    "label": "Cells",
+                    "name": "cells",
+                    "aria-label": "",
+                    "type": "repeater",
+                    "instructions": "Add cells to this row",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "min": 1,
+                    "max": 0,
+                    "layout": "table",
+                    "button_label": "Add Cell",
+                    "collapsed": "",
+                    "sub_fields": [
+                        {
+                            "key": "field_67409f8a12b58",
+                            "label": "Content",
+                            "name": "content",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "maxlength": "",
+                            "rows": 2,
+                            "new_lines": ""
+                        },
+                        {
+                            "key": "field_67409f8a12b59",
+                            "label": "Element",
+                            "name": "element",
+                            "aria-label": "",
+                            "type": "select",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "td": "Data Cell (td)",
+                                "th": "Header Cell (th)"
+                            },
+                            "default_value": "td",
+                            "allow_null": 0,
+                            "multiple": 0,
+                            "ui": 0,
+                            "return_format": "value",
+                            "ajax": 0,
+                            "placeholder": ""
+                        },
+                        {
+                            "key": "field_67409f8a12b5a",
+                            "label": "Scope",
+                            "name": "scope",
+                            "aria-label": "",
+                            "type": "select",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_67409f8a12b59",
+                                        "operator": "==",
+                                        "value": "th"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "": "None",
+                                "col": "Column",
+                                "row": "Row",
+                                "colgroup": "Column Group",
+                                "rowgroup": "Row Group"
+                            },
+                            "default_value": "",
+                            "allow_null": 0,
+                            "multiple": 0,
+                            "ui": 0,
+                            "return_format": "value",
+                            "ajax": 0,
+                            "placeholder": ""
+                        },
+                        {
+                            "key": "field_67409f8a12b5b",
+                            "label": "Colspan",
+                            "name": "colspan",
+                            "aria-label": "",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "min": 1,
+                            "max": "",
+                            "step": ""
+                        },
+                        {
+                            "key": "field_67409f8a12b5c",
+                            "label": "Rowspan",
+                            "name": "rowspan",
+                            "aria-label": "",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "min": 1,
+                            "max": "",
+                            "step": ""
+                        },
+                        {
+                            "key": "field_67409f8a12b5d",
+                            "label": "Vertical Align",
+                            "name": "vertical_align",
+                            "aria-label": "",
+                            "type": "select",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "": "Default",
+                                "top": "Top",
+                                "middle": "Middle",
+                                "bottom": "Bottom"
+                            },
+                            "default_value": "",
+                            "allow_null": 0,
+                            "multiple": 0,
+                            "ui": 0,
+                            "return_format": "value",
+                            "ajax": 0,
+                            "placeholder": ""
+                        },
+                        {
+                            "key": "field_67409f8a12b5e",
+                            "label": "Cell Classes",
+                            "name": "cell_classes",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "align-top, table-primary, etc.",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "field_67409f8a12b5f",
+            "label": "Table Header",
+            "name": "thead",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "Table header section",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_67409f8a12b54",
+                        "operator": "==",
+                        "value": "advanced"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_67409f8a12b60",
+                    "label": "Header Rows",
+                    "name": "rows",
+                    "aria-label": "",
+                    "type": "repeater",
+                    "instructions": "Add header rows",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "min": 0,
+                    "max": 0,
+                    "layout": "block",
+                    "button_label": "Add Header Row",
+                    "collapsed": "",
+                    "sub_fields": [
+                        {
+                            "key": "field_67409f8a12b61",
+                            "label": "Row Classes",
+                            "name": "row_classes",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": ""
+                        },
+                        {
+                            "key": "field_67409f8a12b62",
+                            "label": "Cells",
+                            "name": "cells",
+                            "aria-label": "",
+                            "type": "repeater",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "min": 1,
+                            "max": 0,
+                            "layout": "table",
+                            "button_label": "Add Cell",
+                            "collapsed": "",
+                            "sub_fields": [
+                                {
+                                    "key": "field_67409f8a12b63",
+                                    "label": "Content",
+                                    "name": "content",
+                                    "aria-label": "",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "maxlength": ""
+                                },
+                                {
+                                    "key": "field_67409f8a12b64",
+                                    "label": "Element",
+                                    "name": "element",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "th": "Header Cell (th)",
+                                        "td": "Data Cell (td)"
+                                    },
+                                    "default_value": "th",
+                                    "allow_null": 0,
+                                    "multiple": 0,
+                                    "ui": 0,
+                                    "return_format": "value",
+                                    "ajax": 0,
+                                    "placeholder": ""
+                                },
+                                {
+                                    "key": "field_67409f8a12b65",
+                                    "label": "Scope",
+                                    "name": "scope",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "col": "Column",
+                                        "row": "Row",
+                                        "colgroup": "Column Group",
+                                        "rowgroup": "Row Group"
+                                    },
+                                    "default_value": "col",
+                                    "allow_null": 0,
+                                    "multiple": 0,
+                                    "ui": 0,
+                                    "return_format": "value",
+                                    "ajax": 0,
+                                    "placeholder": ""
+                                },
+                                {
+                                    "key": "field_67409f8a12b66",
+                                    "label": "Colspan",
+                                    "name": "colspan",
+                                    "aria-label": "",
+                                    "type": "number",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "min": 1,
+                                    "max": "",
+                                    "step": ""
+                                },
+                                {
+                                    "key": "field_67409f8a12b67",
+                                    "label": "Rowspan",
+                                    "name": "rowspan",
+                                    "aria-label": "",
+                                    "type": "number",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "min": 1,
+                                    "max": "",
+                                    "step": ""
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "field_67409f8a12b68",
+            "label": "Table Body",
+            "name": "tbody",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "Table body section",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_67409f8a12b54",
+                        "operator": "==",
+                        "value": "advanced"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_67409f8a12b69",
+                    "label": "Body Rows",
+                    "name": "rows",
+                    "aria-label": "",
+                    "type": "repeater",
+                    "instructions": "Add body rows",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "min": 1,
+                    "max": 0,
+                    "layout": "block",
+                    "button_label": "Add Body Row",
+                    "collapsed": "",
+                    "sub_fields": [
+                        {
+                            "key": "field_67409f8a12b6a",
+                            "label": "Row Classes",
+                            "name": "row_classes",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": ""
+                        },
+                        {
+                            "key": "field_67409f8a12b6b",
+                            "label": "Cells",
+                            "name": "cells",
+                            "aria-label": "",
+                            "type": "repeater",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "min": 1,
+                            "max": 0,
+                            "layout": "table",
+                            "button_label": "Add Cell",
+                            "collapsed": "",
+                            "sub_fields": [
+                                {
+                                    "key": "field_67409f8a12b6c",
+                                    "label": "Content",
+                                    "name": "content",
+                                    "aria-label": "",
+                                    "type": "textarea",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "placeholder": "",
+                                    "maxlength": "",
+                                    "rows": 2,
+                                    "new_lines": ""
+                                },
+                                {
+                                    "key": "field_67409f8a12b6d",
+                                    "label": "Element",
+                                    "name": "element",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "td": "Data Cell (td)",
+                                        "th": "Header Cell (th)"
+                                    },
+                                    "default_value": "td",
+                                    "allow_null": 0,
+                                    "multiple": 0,
+                                    "ui": 0,
+                                    "return_format": "value",
+                                    "ajax": 0,
+                                    "placeholder": ""
+                                },
+                                {
+                                    "key": "field_67409f8a12b6e",
+                                    "label": "Scope",
+                                    "name": "scope",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_67409f8a12b6d",
+                                                "operator": "==",
+                                                "value": "th"
+                                            }
+                                        ]
+                                    ],
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "": "None",
+                                        "col": "Column",
+                                        "row": "Row",
+                                        "colgroup": "Column Group",
+                                        "rowgroup": "Row Group"
+                                    },
+                                    "default_value": "row",
+                                    "allow_null": 0,
+                                    "multiple": 0,
+                                    "ui": 0,
+                                    "return_format": "value",
+                                    "ajax": 0,
+                                    "placeholder": ""
+                                },
+                                {
+                                    "key": "field_67409f8a12b6f",
+                                    "label": "Colspan",
+                                    "name": "colspan",
+                                    "aria-label": "",
+                                    "type": "number",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "min": 1,
+                                    "max": "",
+                                    "step": ""
+                                },
+                                {
+                                    "key": "field_67409f8a12b70",
+                                    "label": "Rowspan",
+                                    "name": "rowspan",
+                                    "aria-label": "",
+                                    "type": "number",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "min": 1,
+                                    "max": "",
+                                    "step": ""
+                                },
+                                {
+                                    "key": "field_67409f8a12b71",
+                                    "label": "Vertical Align",
+                                    "name": "vertical_align",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "": "Default",
+                                        "top": "Top",
+                                        "middle": "Middle",
+                                        "bottom": "Bottom"
+                                    },
+                                    "default_value": "",
+                                    "allow_null": 0,
+                                    "multiple": 0,
+                                    "ui": 0,
+                                    "return_format": "value",
+                                    "ajax": 0,
+                                    "placeholder": ""
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "field_67409f8a12b72",
+            "label": "Table Footer",
+            "name": "tfoot",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "Table footer section (optional)",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_67409f8a12b54",
+                        "operator": "==",
+                        "value": "advanced"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_67409f8a12b73",
+                    "label": "Footer Rows",
+                    "name": "rows",
+                    "aria-label": "",
+                    "type": "repeater",
+                    "instructions": "Add footer rows",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "min": 0,
+                    "max": 0,
+                    "layout": "block",
+                    "button_label": "Add Footer Row",
+                    "collapsed": "",
+                    "sub_fields": [
+                        {
+                            "key": "field_67409f8a12b74",
+                            "label": "Row Classes",
+                            "name": "row_classes",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": ""
+                        },
+                        {
+                            "key": "field_67409f8a12b75",
+                            "label": "Cells",
+                            "name": "cells",
+                            "aria-label": "",
+                            "type": "repeater",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "min": 1,
+                            "max": 0,
+                            "layout": "table",
+                            "button_label": "Add Cell",
+                            "collapsed": "",
+                            "sub_fields": [
+                                {
+                                    "key": "field_67409f8a12b76",
+                                    "label": "Content",
+                                    "name": "content",
+                                    "aria-label": "",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "maxlength": ""
+                                },
+                                {
+                                    "key": "field_67409f8a12b77",
+                                    "label": "Element",
+                                    "name": "element",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "th": "Header Cell (th)",
+                                        "td": "Data Cell (td)"
+                                    },
+                                    "default_value": "th",
+                                    "allow_null": 0,
+                                    "multiple": 0,
+                                    "ui": 0,
+                                    "return_format": "value",
+                                    "ajax": 0,
+                                    "placeholder": ""
+                                },
+                                {
+                                    "key": "field_67409f8a12b78",
+                                    "label": "Scope",
+                                    "name": "scope",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "": "None",
+                                        "col": "Column",
+                                        "row": "Row",
+                                        "colgroup": "Column Group",
+                                        "rowgroup": "Row Group"
+                                    },
+                                    "default_value": "row",
+                                    "allow_null": 0,
+                                    "multiple": 0,
+                                    "ui": 0,
+                                    "return_format": "value",
+                                    "ajax": 0,
+                                    "placeholder": ""
+                                },
+                                {
+                                    "key": "field_67409f8a12b79",
+                                    "label": "Colspan",
+                                    "name": "colspan",
+                                    "aria-label": "",
+                                    "type": "number",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "min": 1,
+                                    "max": "",
+                                    "step": ""
+                                },
+                                {
+                                    "key": "field_67409f8a12b7a",
+                                    "label": "Rowspan",
+                                    "name": "rowspan",
+                                    "aria-label": "",
+                                    "type": "number",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "min": 1,
+                                    "max": "",
+                                    "step": ""
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "field_67409f8a12b7b",
+            "label": "Background Color",
+            "name": "bg_color",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "clone": [
+                "group_634653996a829"
+            ],
+            "display": "group",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1
+        },
+        {
+            "key": "field_67409f8a12b7c",
+            "label": "Margin",
+            "name": "margin",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "clone": [
+                "group_6347289eccec8"
+            ],
+            "display": "group",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1
+        },
+        {
+            "key": "field_67409f8a12b7d",
+            "label": "Padding",
+            "name": "padding",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "clone": [
+                "group_634728b1e7498"
+            ],
+            "display": "group",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "block",
+                "operator": "==",
+                "value": "acf\/table"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0
+}
