@@ -1,0 +1,33 @@
+{#
+/**
+ * Block Name: Table Row
+ *
+ * This is the template that displays the table row block.
+ */
+#}
+
+
+{# Row variant styles #}
+{% set row_variant_color = fields.row_variant.color == 'custom' and fields.row_variant.custom_color ? 'background-color: ' ~ fields.row_variant.custom_color ~ ';' %}
+
+{# Build row classes #}
+{% set row_classes = [
+  block.className,
+  fields.row_variant.color == 'palette' and fields.row_variant.theme_color ? 'table-' ~ fields.row_variant.theme_color,
+  fields.row_active ? 'table-active'
+] | filter(v => v) | join(' ') %}
+
+{# Build row styles #}
+{% set row_styles = [
+  row_variant_color
+] | filter(v => v) | join(' ') %}
+
+{# Build row attributes #}
+{% set row_attributes = [
+  row_styles | length >= 1 ? 'style="' ~ row_styles ~ '"'
+] | filter(v => v) | join(' ') %}
+
+{# Render table row with InnerBlocks for cells #}
+<tr class="{{ row_classes }}" {{ row_attributes }}>
+  <InnerBlocks allowedBlocks="{{ ['acf/table-cell'] | json_encode() | escape('html_attr') }}" template="{{ [['acf/table-cell'], ['acf/table-cell'], ['acf/table-cell']] | json_encode() | escape('html_attr') }}" templateLock="false" />
+</tr>

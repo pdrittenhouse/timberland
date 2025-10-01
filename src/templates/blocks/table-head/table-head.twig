@@ -1,0 +1,34 @@
+{#
+/**
+ * Block Name: Table Head
+ *
+ * This is the template that displays the table header block (thead).
+ */
+#}
+
+
+
+{# Section variant styles #}
+{% set section_variant_color = fields.section_variant.color == 'custom' and fields.section_variant.custom_color ? 'background-color: ' ~ fields.section_variant.custom_color ~ ';' %}
+
+{# Block wrapper classes #}
+{% set block_classes = [
+  block.className,
+  fields.section_variant.color == 'palette' and fields.section_variant.theme_color ? 'table-' ~ fields.section_variant.theme_color
+] | filter(v => v) | join(' ') | trim %}
+
+{# Build section styles #}
+{% set section_styles = [
+  section_variant_color
+] | filter(v => v) | join(' ') %}
+
+{# Build section attributes #}
+{% set section_attributes = [
+  section_styles | length >= 1 ? 'style="' ~ section_styles ~ '"'
+] | filter(v => v) | join(' ') %}
+
+{# Use neutral wrapper in editor, semantic thead on frontend #}
+{% set wrapper = is_preview ? 'div' : 'thead' %}
+<{{ wrapper }}{% if block_classes %} class="{{ block_classes }}"{% endif %} {{ section_attributes }}>
+  <InnerBlocks allowedBlocks="{{ ['acf/table-row'] | json_encode() | escape('html_attr') }}" template="{{ [['acf/table-row']] | json_encode() | escape('html_attr') }}" templateLock="false" />
+</{{ wrapper }}>

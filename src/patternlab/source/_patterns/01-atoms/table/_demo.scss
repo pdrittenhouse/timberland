@@ -1,0 +1,36 @@
+.table {
+  // Demo-specific enhancements for pattern library examples
+
+  // Custom table identification classes for demos
+  &-id {
+    &--basicTable {
+      // Basic demo table has no special styling (uses Bootstrap defaults)
+    }
+
+    &--stripedTable {
+      // Striped demo table uses Bootstrap .table-striped
+    }
+
+    &--complexTable {
+      // Complex demo table shows advanced features
+      caption {
+        font-size: 1.1em;
+        font-weight: 600;
+      }
+    }
+  }
+
+  // Demo utilities for showcasing features
+  &-cell {
+    // Custom demo classes for specific examples
+    &--numeric {
+      text-align: right;
+      font-family: monospace;
+    }
+
+    &--highlighted {
+      background-color: #fff3cd !important;
+      border-color: #ffeaa7 !important;
+    }
+  }
+}

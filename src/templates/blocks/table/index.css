@@ -1,0 +1,10 @@
+/**
+ * Table Block - Editor Styles
+ *
+ * Styles that appear only in the WordPress editor
+ */
+
+/* Editor-specific table preview styles */
+.wp-block-acf-table {
+  /* Add any editor-specific styling here */
+}

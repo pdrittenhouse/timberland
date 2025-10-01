@@ -1,0 +1,166 @@
+{#
+/**
+ * Block Name: Table
+ *
+ * This is the template that displays the table block.
+ */
+#}
+
+
+{# Prepare table variables from ACF fields #}
+{% set table_id = fields.table_id.id ? fields.table_id.id : fields.table_id.id_gen ? 'table-' ~ fields.table_id.id_gen %}
+
+{# Bootstrap table options #}
+{% set table_striped = fields.table_striped %}
+{% set table_hover = fields.table_hover %}
+{% set table_bordered = fields.table_bordered %}
+{% set table_small = fields.table_small %}
+{% set table_borderless = fields.table_borderless %}
+{% set table_responsive = fields.table_responsive %}
+{% set table_vertical_align = fields.table_vertical_align %}
+
+{# Border options #}
+{% set table_border_collapse = fields.table_border_collapse %}
+{% set table_border_spacing = fields.table_border_spacing %}
+
+{# Table variant styles #}
+{% set table_variant = fields.table_variant.color == 'palette' and fields.table_variant.theme_color ? fields.table_variant.theme_color %}
+{% set table_variant_color = fields.table_variant.color == 'custom' and fields.table_variant.custom_color ? 'background-color: ' ~ fields.table_variant.custom_color ~ ';' %}
+
+{# Caption options #}
+{% set caption = fields.caption_group.caption %}
+{% set caption_top = fields.caption_group.caption_top %}
+
+{# Inner blocks mode: table structure is now handled by inner blocks #}
+{# Legacy fields kept for backward compatibility but no longer used #}
+
+
+{# Margin styling #}
+{% set margin_top = fields.margin.margin.top.auto == true ? 'margin-top: auto;' : fields.margin.margin.top.top >= 0 ? 'margin-top: ' ~ fields.margin.margin.top.top ~ 'px;' %}
+{% set margin_bottom = fields.margin.margin.bottom.auto == true ? 'margin-bottom: auto;' : fields.margin.margin.bottom.bottom >= 0 ? 'margin-bottom: ' ~ fields.margin.margin.bottom.bottom ~ 'px;' %}
+{% set margin_left = fields.margin.margin.left.auto == true ? 'margin-left: auto;' : fields.margin.margin.left.left >= 0 ? 'margin-left: ' ~ fields.margin.margin.left.left ~ 'px;' %}
+{% set margin_right = fields.margin.margin.right.auto == true ? 'margin-right: auto;' : fields.margin.margin.right.right >= 0 ? 'margin-right: ' ~ fields.margin.margin.right.right ~ 'px;' %}
+
+{# Padding styling #}
+{% set padding_top = fields.padding.padding.top >= 0 ? 'padding-top: ' ~ fields.padding.padding.top ~ 'px;' %}
+{% set padding_bottom = fields.padding.padding.bottom >= 0 ? 'padding-bottom: ' ~ fields.padding.padding.bottom ~ 'px;' %}
+{% set padding_left = fields.padding.padding.left >= 0 ? 'padding-left: ' ~ fields.padding.padding.left ~ 'px;' %}
+{% set padding_right = fields.padding.padding.right >= 0 ? 'padding-right: ' ~ fields.padding.padding.right ~ 'px;' %}
+
+{# Width styling #}
+{% set table_width = fields.width.width.width.value and fields.width.width.width.value != '' ? 'width: ' ~ fields.width.width.width.value ~ fields.width.width.width.unit ~ ';' %}
+{% set table_min_width = fields.width.width.min_width and fields.width.width.min_width != '' ? 'min-width: ' ~ fields.width.width.min_width ~ 'px;' %}
+{% set table_max_width = fields.width.width.max_width and fields.width.width.max_width != '' ? 'max-width: ' ~ fields.width.width.max_width ~ 'px;' %}
+
+{# Block wrapper classes #}
+{% set block_classes = [
+  block.className
+] | sort | join(' ') | trim %}
+
+
+{# Block wrapper styles #}
+{% set block_styles = [
+  margin_top,
+  margin_bottom,
+  margin_left,
+  margin_right,
+  padding_top,
+  padding_bottom,
+  padding_left,
+  padding_right,
+  table_width,
+  table_min_width,
+  table_max_width
+] | sort | join(' ') | trim %}
+
+<div{% if block_classes %} class="{{ block_classes }}"{% endif %}{% if block_styles %} style="{{ block_styles }}"{% endif %}>
+  {# Custom table implementation with inner blocks #}
+
+  {# Build table classes #}
+  {% set table_classes = [
+    'table',
+    table_id ? 'table-id--' ~ table_id : '',
+    table_striped ? 'table-striped',
+    table_hover ? 'table-hover',
+    table_bordered ? 'table-bordered',
+    table_borderless ? 'table-borderless',
+    table_small ? 'table-sm',
+    table_variant ? 'table-' ~ table_variant,
+    table_vertical_align ? 'align-' ~ table_vertical_align,
+    table_border_collapse == false ? 'table-border-separate',
+    table_border_spacing and table_border_spacing > 0 ? 'table-border-spacing-' ~ table_border_spacing
+  ] | sort | join(' ') | trim %}
+
+  {# Build table styles #}
+  {% set table_style_rules = [] %}
+
+  {# Add custom color variant #}
+  {% if table_variant_color %}
+    {% set table_style_rules = table_style_rules|merge([table_variant_color]) %}
+  {% endif %}
+
+  {# Add border spacing styles #}
+  {% if table_border_collapse == false %}
+    {% set table_style_rules = table_style_rules|merge(['border-collapse: separate']) %}
+
+    {% if table_border_spacing and table_border_spacing > 0 %}
+      {% set table_style_rules = table_style_rules|merge(['border-spacing: ' ~ table_border_spacing ~ 'px']) %}
+    {% endif %}
+  {% elseif table_border_collapse == true %}
+    {% set table_style_rules = table_style_rules|merge(['border-collapse: collapse']) %}
+  {% endif %}
+
+  {% set table_styles = table_style_rules | sort | join('; ') | trim %}
+
+  {# Build table attributes #}
+  {% set table_attributes = [
+    table_styles | length >= 1 ? 'style="' ~ table_styles ~ '"'
+  ] | sort | join(' ') | trim %}
+
+  {# Responsive wrapper #}
+  {% if table_responsive %}
+    {% if table_responsive == true %}
+      {% set responsive_class = 'table-responsive' %}
+    {% else %}
+      {% set responsive_class = 'table-responsive-' ~ table_responsive %}
+    {% endif %}
+    <div class="{{ responsive_class }}">
+  {% endif %}
+
+  {# Use neutral wrapper in editor, semantic table on frontend #}
+  {% set table_wrapper = is_preview ? 'div' : 'table' %}
+  <{{ table_wrapper }}{% if table_id %} id="{{ table_id }}"{% endif %} class="{{ table_classes }}" {{ table_attributes }}>
+
+    {% if caption %}
+      {% set caption_bootstrap_classes = [] %}
+
+      {% if caption_top %}
+        {% set caption_bootstrap_classes = caption_bootstrap_classes|merge(['caption-top']) %}
+      {% endif %}
+
+      {% set caption_classes = caption_bootstrap_classes | sort | join(' ') | trim %}
+
+      {# Use neutral wrapper for caption in editor too #}
+      {% set caption_wrapper = is_preview ? 'div' : 'caption' %}
+      <{{ caption_wrapper }}{% if caption_classes %} class="{{ caption_classes }}"{% endif %}>{{ caption }}</{{ caption_wrapper }}>
+    {% endif %}
+
+    {# InnerBlocks content managed by JavaScript placeholder interface #}
+    <InnerBlocks allowedBlocks="{{ ['acf/table-head', 'acf/table-body', 'acf/table-foot'] | json_encode() | escape('html_attr') }}" templateLock="all" />
+
+  </{{ table_wrapper }}>
+
+  {% if table_responsive %}
+    </div>
+  {% endif %}
+
+</div>
+
+{% if is_preview %}
+  <div class="mt-2 p-2 bg-info-subtle border border-info rounded-1 text-center">
+    <small class="text-info-emphasis">
+      <strong>Editor Preview:</strong> Tables may render differently in the editor than on the front-end due to editor styling constraints. Preview the page to see final table appearance.
+      {% if table_id %}<br><strong>Table ID:</strong> {{ table_id }}{% endif %}
+    </small>
+  </div>
+{% endif %}

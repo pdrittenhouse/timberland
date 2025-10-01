@@ -1,0 +1,11 @@
+/**
+ * Table Block - Frontend Styles
+ *
+ * Styles that appear on both frontend and in the editor
+ */
+
+/* Table block wrapper */
+.wp-block-acf-table {
+  /* Custom table block styling can go here */
+  /* Bootstrap table classes will handle the table styling */
+}

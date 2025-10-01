@@ -1,0 +1,64 @@
+{#
+/**
+ * Block Name: Table Cell
+ *
+ * This is the template that displays the table cell block.
+ *
+ * @todo Remove/update text align implementation once added to table pattern
+ */
+#}
+
+
+{# Cell configuration from ACF fields #}
+{% set element = fields.element | default('td') %}
+
+{# Cell variant styles #}
+{% set cell_variant_color = fields.cell_variant.color == 'custom' and fields.cell_variant.custom_color ? 'background-color: ' ~ fields.cell_variant.custom_color ~ ';' %}
+
+{# Cell padding styles #}
+{% set cell_padding_top = fields.cell_padding.padding.top and fields.cell_padding.padding.top != '' ? 'padding-top: ' ~ fields.cell_padding.padding.top ~ 'px' %}
+{% set cell_padding_bottom = fields.cell_padding.padding.bottom and fields.cell_padding.padding.bottom != '' ? 'padding-bottom: ' ~ fields.cell_padding.padding.bottom ~ 'px' %}
+{% set cell_padding_left = fields.cell_padding.padding.left and fields.cell_padding.padding.left != '' ? 'padding-left: ' ~ fields.cell_padding.padding.left ~ 'px' %}
+{% set cell_padding_right = fields.cell_padding.padding.right and fields.cell_padding.padding.right != '' ? 'padding-right: ' ~ fields.cell_padding.padding.right ~ 'px' %}
+
+{# Cell width styles #}
+{% set cell_width = fields.cell_width.width.width.value and fields.cell_width.width.width.value != '' ? 'width: ' ~ fields.cell_width.width.width.value ~ fields.cell_width.width.width.unit %}
+{% set cell_min_width = fields.cell_width.width.min_width and fields.cell_width.width.min_width != '' ? 'min-width: ' ~ fields.cell_width.width.min_width ~ 'px' %}
+{% set cell_max_width = fields.cell_width.width.max_width and fields.cell_width.width.max_width != '' ? 'max-width: ' ~ fields.cell_width.width.max_width ~ 'px' %}
+
+{# Cell alignment styles #}
+{% set cell_text_align_css = fields.cell_text_align.text_align ? 'text-align: ' ~ fields.cell_text_align.text_align %}
+
+{# Build cell classes #}
+{% set cell_classes = [
+  block.className,
+  fields.vertical_align ? 'align-' ~ fields.vertical_align,
+  fields.cell_variant.color == 'palette' and fields.cell_variant.theme_color ? 'table-' ~ fields.cell_variant.theme_color,
+  fields.cell_active ? 'table-active'
+] | filter(v => v) | join(' ') %}
+
+{# Build cell styles array for extensibility #}
+{% set cell_styles = [
+  cell_variant_color,
+  cell_padding_top,
+  cell_padding_bottom,
+  cell_padding_left,
+  cell_padding_right,
+  cell_width,
+  cell_min_width,
+  cell_max_width,
+  cell_text_align_css
+] | filter(v => v) | join('; ') %}
+
+{# Build cell attributes #}
+{% set cell_attributes = [
+  fields.colspan ? 'colspan="' ~ fields.colspan ~ '"',
+  fields.rowspan ? 'rowspan="' ~ fields.rowspan ~ '"',
+  fields.scope and element == 'th' ? 'scope="' ~ fields.scope ~ '"',
+  cell_styles | length >= 1 ? 'style="' ~ cell_styles ~ '"'
+] | filter(v => v) | join(' ') %}
+
+{# Render table cell with InnerBlocks for flexible content #}
+<{{ element }} class="{{ cell_classes }}" {{ cell_attributes }}>
+  <InnerBlocks template="{{ [['core/paragraph']] | json_encode() | escape('html_attr') }}" />
+</{{ element }}>

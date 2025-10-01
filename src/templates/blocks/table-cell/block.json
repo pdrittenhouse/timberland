@@ -1,0 +1,46 @@
+{
+  "name": "acf/table-cell",
+  "title": "Table Cell",
+  "description": "A table cell block that can contain any content.",
+  "category": "dream",
+  "icon": "editor-table",
+  "keywords": ["table", "cell", "td", "th"],
+  "attributes": {},
+  "usesContext": [ "acf/fields" ],
+  "supports": {
+    "jsx": true,
+    "align": false,
+    "alignContent": false,
+    "alignText": false,
+    "anchor": false,
+    "className": true,
+    "multiple": true,
+    "html": false,
+    "inserter": true,
+    "fullHeight": false,
+    "color": {
+      "text": false,
+      "background": false,
+      "link": false,
+      "gradients": false,
+      "linkColor": false
+    },
+    "typography": {
+      "fontSize": false
+    }
+  },
+  "styles": [
+    { "name": "default", "label": "Default", "isDefault": true }
+  ],
+  "editorScript": "./index.js",
+  "script": "./script.js",
+  "editorStyle": "./index.css",
+  "style": "./style.css",
+  "acf": {
+    "mode": "preview",
+    "renderCallback": "dream_block_render",
+    "postTypes": true,
+    "reusable": false,
+    "parent": "acf/table-row"
+  }
+}

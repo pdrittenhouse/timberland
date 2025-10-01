@@ -1,0 +1,288 @@
+{
+    "key": "group_67409f8a12b82",
+    "title": "Block: Table Cell",
+    "fields": [
+        {
+            "key": "field_67409f8a12b83",
+            "label": "Element",
+            "name": "element",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Choose whether this is a data cell (td) or header cell (th)",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "choices": {
+                "td": "Data Cell (td)",
+                "th": "Header Cell (th)"
+            },
+            "default_value": "td",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "allow_in_bindings": 1,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0
+        },
+        {
+            "key": "field_67409f8a12b84",
+            "label": "Scope",
+            "name": "scope",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Scope attribute for header cells",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_67409f8a12b83",
+                        "operator": "==",
+                        "value": "th"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "choices": {
+                "col": "Column",
+                "row": "Row",
+                "colgroup": "Column Group",
+                "rowgroup": "Row Group"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "allow_in_bindings": 1,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0
+        },
+        {
+            "key": "field_67409f8a12b85",
+            "label": "Colspan",
+            "name": "colspan",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "Number of columns this cell should span",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "default_value": "",
+            "min": 1,
+            "max": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "step": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_67409f8a12b86",
+            "label": "Rowspan",
+            "name": "rowspan",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "Number of rows this cell should span",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "default_value": "",
+            "min": 1,
+            "max": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "step": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_cell_text_align",
+            "label": "Text Align",
+            "name": "cell_text_align",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "Text alignment for cell content",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "clone": [
+                "group_634831f382bce"
+            ],
+            "display": "group",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1
+        },
+        {
+            "key": "field_67409f8a12b87",
+            "label": "Vertical Align",
+            "name": "vertical_align",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Vertical alignment for this cell",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "choices": {
+                "top": "Top",
+                "middle": "Middle",
+                "bottom": "Bottom"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "allow_in_bindings": 1,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0
+        },
+        {
+            "key": "field_67409f8a12b91",
+            "label": "Cell Variant",
+            "name": "cell_variant",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "Choose a contextual color variant for this cell",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "-7",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "clone": [
+                "group_6346513f54d9a"
+            ],
+            "display": "group",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1
+        },
+        {
+            "key": "field_67409f8a12b93",
+            "label": "Active State",
+            "name": "cell_active",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Highlight this cell with an active state",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 1,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_67409f8a12b97",
+            "label": "Cell Padding",
+            "name": "cell_padding",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "Override default cell padding with custom values. For best results ensure all cell in a row have equal padding.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "clone": [
+                "group_634728b1e7498"
+            ],
+            "display": "group",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1
+        },
+        {
+            "key": "field_67409f8a12b98",
+            "label": "Cell Width",
+            "name": "cell_width",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "NOTE: Setting a width will affect all cells in a column. All column cells will adapt to the widest cell.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "clone": [
+                "group_6347179ab71c8"
+            ],
+            "display": "group",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "block",
+                "operator": "==",
+                "value": "acf\/table-cell"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1758735793
+}

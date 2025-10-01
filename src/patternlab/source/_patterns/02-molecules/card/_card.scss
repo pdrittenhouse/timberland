@@ -14,6 +14,13 @@
   text-align: var(--card-text-align);
   color: var(--card-text-color);
 
+  &.vertically-center-content {
+    @include flexbox;
+    @include flex-flow(column nowrap);
+    @include justify-content(center);
+    @include align-items(center);
+  }
+
   &.flip-card {
     transform-style: preserve-3d;
     perspective: 1000px;

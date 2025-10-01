@@ -1,0 +1,9 @@
+{
+  "demo": {
+    "title": "table",
+    "text": {
+      "lead": "A flexible table component with support for headers, footers, and dynamic cell attributes.",
+      "summary": "Use <code>@include atoms/table/_table.tpl.twig</code> to create semantic HTML tables with full attribute support."
+    }
+  }
+}

@@ -1,0 +1,313 @@
+{#
+/**
+ * @file
+ * table
+ *
+ * Available variables for table:
+ *  - table_classes [array]: Classes applied to table element.
+ *  - table_other_classes [string]: Other classes applied to table element.
+ *  - table_id [string]: Unique ID for table.
+ *  - table_attributes [array]: Table attributes.
+ *  - table_other_attributes [string]: Other table attributes.
+ *
+ * Bootstrap 5.0 Table Options:
+ *  - table_striped [bool]: Add .table-striped for zebra-striped rows.
+ *  - table_hover [bool]: Add .table-hover for hoverable rows.
+ *  - table_active [bool]: Add .table-active for active table state.
+ *  - table_bordered [bool]: Add .table-bordered for borders on all sides.
+ *  - table_borderless [bool]: Add .table-borderless to remove borders.
+ *  - table_small [bool]: Add .table-sm for compact table.
+ *  - table_variant [string]: Table variant (primary, secondary, success, danger, warning, info, light, dark).
+ *  - table_responsive [bool|string]: Make table responsive (.table-responsive or .table-responsive-{breakpoint}).
+ *  - table_vertical_align [string]: Vertical alignment (top, middle, bottom) - applies to all cells.
+ *
+ * Border Options:
+ *  - table_border_collapse [bool]: Controls border-collapse CSS property (true = collapse, false = separate).
+ *  - table_border_spacing [number]: Border spacing value in pixels (only applies when border_collapse is false).
+ *
+ * Caption Options:
+ *  - caption [string]: Table caption text.
+ *  - caption_classes [array]: Caption classes.
+ *  - caption_other_classes [string]: Other caption classes.
+ *  - caption_attributes [array]: Caption attributes.
+ *  - caption_other_attributes [string]: Other caption attributes.
+ *  - caption_top [bool]: Position caption at top (.caption-top).
+ *
+ * Section Configuration:
+ *  - thead [object]: Table header configuration.
+ *  - thead.thead_classes [array]: Thead classes.
+ *  - thead.thead_other_classes [string]: Other thead classes.
+ *  - thead.thead_attributes [array]: Thead attributes.
+ *  - thead.thead_other_attributes [string]: Other thead attributes.
+ *  - thead.rows [array]: Array of header rows.
+ *  - tbody [object]: Table body configuration.
+ *  - tbody.tbody_classes [array]: Tbody classes.
+ *  - tbody.tbody_other_classes [string]: Other tbody classes.
+ *  - tbody.tbody_attributes [array]: Tbody attributes.
+ *  - tbody.tbody_other_attributes [string]: Other tbody attributes.
+ *  - tbody.rows [array]: Array of body rows.
+ *  - tfoot [object]: Table footer configuration.
+ *  - tfoot.tfoot_classes [array]: Tfoot classes.
+ *  - tfoot.tfoot_other_classes [string]: Other tfoot classes.
+ *  - tfoot.tfoot_attributes [array]: Tfoot attributes.
+ *  - tfoot.tfoot_other_attributes [string]: Other tfoot attributes.
+ *  - tfoot.rows [array]: Array of footer rows.
+ *
+ * Row and Cell Configuration:
+ *  - rows [array]: Array of table rows (used when thead/tbody not specified).
+ *  - rows.row.row_classes [array]: Row classes.
+ *  - rows.row.row_other_classes [string]: Other row classes.
+ *  - rows.row.row_attributes [array]: Row attributes.
+ *  - rows.row.row_other_attributes [string]: Other row attributes.
+ *  - rows.row.cells [array]: Array of cells in the row.
+ *  - rows.row.cells.cell.content [string]: Cell content.
+ *  - rows.row.cells.cell.element [string]: Cell element (th or td).
+ *  - rows.row.cells.cell.cell_classes [array]: Cell classes.
+ *  - rows.row.cells.cell.cell_other_classes [string]: Other cell classes.
+ *  - rows.row.cells.cell.cell_attributes [array]: Cell attributes.
+ *  - rows.row.cells.cell.cell_other_attributes [string]: Other cell attributes.
+ *  - rows.row.cells.cell.colspan [number]: Cell colspan attribute.
+ *  - rows.row.cells.cell.rowspan [number]: Cell rowspan attribute.
+ *  - rows.row.cells.cell.scope [string]: Cell scope attribute (for th elements).
+ *  - rows.row.cells.cell.headers [string]: Cell headers attribute.
+ *  - rows.row.cells.cell.vertical_align [string]: Cell vertical alignment (top, middle, bottom).
+ *
+ * @todo Add text/horizontal alignment support for cells to match block implementation
+ */
+#}
+
+{% import _self as tables %}
+
+{{ tables.table(table_classes, table_other_classes, table_id, table_attributes, table_other_attributes, table_striped, table_hover, table_active, table_bordered, table_borderless, table_small, table_variant, table_responsive, table_vertical_align, table_border_collapse, table_border_spacing, caption, caption_classes, caption_other_classes, caption_attributes, caption_other_attributes, caption_top, thead, tbody, tfoot, rows) }}
+
+{% macro table(table_classes, table_other_classes, table_id, table_attributes, table_other_attributes, table_striped, table_hover, table_active, table_bordered, table_borderless, table_small, table_variant, table_responsive, table_vertical_align, table_border_collapse, table_border_spacing, caption, caption_classes, caption_other_classes, caption_attributes, caption_other_attributes, caption_top, thead, tbody, tfoot, rows) %}
+
+  {% import _self as tables %}
+
+  {% if rows or thead or tbody or tfoot %}
+
+    {% set bootstrap_classes = [] %}
+
+    {% if table_striped %}
+      {% set bootstrap_classes = bootstrap_classes|merge(['table-striped']) %}
+    {% endif %}
+
+    {% if table_hover %}
+      {% set bootstrap_classes = bootstrap_classes|merge(['table-hover']) %}
+    {% endif %}
+
+    {% if table_active %}
+      {% set bootstrap_classes = bootstrap_classes|merge(['table-active']) %}
+    {% endif %}
+
+    {% if table_bordered %}
+      {% set bootstrap_classes = bootstrap_classes|merge(['table-bordered']) %}
+    {% endif %}
+
+    {% if table_borderless %}
+      {% set bootstrap_classes = bootstrap_classes|merge(['table-borderless']) %}
+    {% endif %}
+
+    {% if table_small %}
+      {% set bootstrap_classes = bootstrap_classes|merge(['table-sm']) %}
+    {% endif %}
+
+    {% if table_variant %}
+      {% set bootstrap_classes = bootstrap_classes|merge(['table-' ~ table_variant]) %}
+    {% endif %}
+
+    {% if table_vertical_align %}
+      {% set bootstrap_classes = bootstrap_classes|merge(['align-' ~ table_vertical_align]) %}
+    {% endif %}
+
+    {# Border spacing and collapse classes #}
+    {% if table_border_collapse == false %}
+      {% set bootstrap_classes = bootstrap_classes|merge(['table-border-separate']) %}
+    {% endif %}
+
+    {% if table_border_spacing and table_border_spacing > 0 %}
+      {% set bootstrap_classes = bootstrap_classes|merge(['table-border-spacing-' ~ table_border_spacing]) %}
+    {% endif %}
+
+    {% set table_classes = table_classes|default([])|merge([
+      'table',
+      table_id ? 'table-id--' ~ table_id : '',
+    ])|merge(bootstrap_classes)|merge([
+      table_other_classes,
+    ]) | sort | join(' ') | trim %}
+
+    {# Build table styles including border spacing #}
+    {% set table_styles = [] %}
+
+    {% if table_border_collapse == false %}
+      {% set table_styles = table_styles|merge(['border-collapse: separate']) %}
+
+      {% if table_border_spacing and table_border_spacing > 0 %}
+        {% set table_styles = table_styles|merge(['border-spacing: ' ~ table_border_spacing ~ 'px']) %}
+      {% endif %}
+    {% elseif table_border_collapse == true %}
+      {% set table_styles = table_styles|merge(['border-collapse: collapse']) %}
+    {% endif %}
+
+    {% set table_attributes = table_attributes|default([])|merge([
+      table_styles | length > 0 ? 'style="' ~ (table_styles | join('; ')) ~ '"' : '',
+      table_other_attributes,
+    ]) | filter(v => v) | sort | join(' ') | trim %}
+
+    {% if table_responsive %}
+      {% if table_responsive == true %}
+        {% set responsive_class = 'table-responsive' %}
+      {% else %}
+        {% set responsive_class = 'table-responsive-' ~ table_responsive %}
+      {% endif %}
+      <div class="{{ responsive_class }}">
+    {% endif %}
+
+    <table{% if table_id %} id="{{ table_id }}"{% endif %}{% if table_classes %} class="{{ table_classes }}"{% endif %}{% if table_attributes %} {{ table_attributes }}{% endif %}>
+
+      {% if caption %}
+        {% set caption_bootstrap_classes = [] %}
+
+        {% if caption_top %}
+          {% set caption_bootstrap_classes = caption_bootstrap_classes|merge(['caption-top']) %}
+        {% endif %}
+
+        {% set caption_classes = caption_classes|default([])|merge(caption_bootstrap_classes)|merge([
+          caption_other_classes,
+        ]) | sort | join(' ') | trim %}
+
+        {% set caption_attributes = caption_attributes|default([])|merge([
+          caption_other_attributes,
+        ]) | sort | join(' ') | trim %}
+
+        <caption{% if caption_classes %} class="{{ caption_classes }}"{% endif %}{% if caption_attributes %} {{ caption_attributes }}{% endif %}>{{ caption }}</caption>
+      {% endif %}
+
+      {% if thead and thead.rows %}
+        {{ tables.table_section('thead', thead.thead_classes, thead.thead_other_classes, thead.thead_attributes, thead.thead_other_attributes, thead.rows) }}
+      {% endif %}
+
+      {% if tbody and tbody.rows %}
+        {{ tables.table_section('tbody', tbody.tbody_classes, tbody.tbody_other_classes, tbody.tbody_attributes, tbody.tbody_other_attributes, tbody.rows) }}
+      {% elseif rows %}
+        {{ tables.table_section('tbody', [], '', [], '', rows) }}
+      {% endif %}
+
+      {% if tfoot and tfoot.rows %}
+        {{ tables.table_section('tfoot', tfoot.tfoot_classes, tfoot.tfoot_other_classes, tfoot.tfoot_attributes, tfoot.tfoot_other_attributes, tfoot.rows) }}
+      {% endif %}
+
+    </table>
+
+    {% if table_responsive %}
+      </div>
+    {% endif %}
+
+  {% endif %}
+{% endmacro %}
+
+{% macro table_section(section_element, section_classes, section_other_classes, section_attributes, section_other_attributes, section_rows) %}
+
+  {% import _self as tables %}
+
+  {% if section_rows %}
+
+    {% set section_classes = section_classes|default([])|merge([
+      section_other_classes,
+    ]) | sort | join(' ') | trim %}
+
+    {% set section_attributes = section_attributes|default([])|merge([
+      section_other_attributes,
+    ]) | sort | join(' ') | trim %}
+
+    <{{ section_element }}{% if section_classes %} class="{{ section_classes }}"{% endif %}{% if section_attributes %} {{ section_attributes }}{% endif %}>
+      {% for row in section_rows %}
+        {{ tables.table_row(row, loop.index) }}
+      {% endfor %}
+    </{{ section_element }}>
+
+  {% endif %}
+{% endmacro %}
+
+{% macro table_row(row, row_index) %}
+
+  {% import _self as tables %}
+
+  {% if row.cells %}
+
+    {% set row_count = row_index %}
+
+    {% set row_classes = row.row_classes|default([])|merge([
+      'table-row--row-' ~ row_count,
+      row.row_other_classes,
+    ]) | sort | join(' ') | trim %}
+
+    {% set row_attributes = row.row_attributes|default([])|merge([
+      row.row_other_attributes,
+    ]) | sort | join(' ') | trim %}
+
+    <tr{% if row_classes %} class="{{ row_classes }}"{% endif %}{% if row_attributes %} {{ row_attributes }}{% endif %}>
+      {% for cell in row.cells %}
+        {{ tables.table_cell(cell, loop.index, row_count) }}
+      {% endfor %}
+    </tr>
+
+  {% endif %}
+{% endmacro %}
+
+{% macro table_cell(cell, cell_index, row_index) %}
+
+  {% if cell.content is defined %}
+
+    {% set cell_count = cell_index %}
+    {% set row_count = row_index %}
+
+    {% set element = cell.element | default('td') %}
+
+    {% set cell_bootstrap_classes = [] %}
+
+    {% if cell.vertical_align %}
+      {% set cell_bootstrap_classes = cell_bootstrap_classes|merge(['align-' ~ cell.vertical_align]) %}
+    {% endif %}
+
+    {% set cell_classes = cell.cell_classes|default([])|merge([
+      'table-cell--cell-' ~ cell_count,
+      'table-cell--row-' ~ row_count,
+    ])|merge(cell_bootstrap_classes)|merge([
+      cell.cell_other_classes,
+    ]) | sort | join(' ') | trim %}
+
+    {% set cell_attributes = cell.cell_attributes|default([]) %}
+
+    {% if cell.colspan %}
+      {% set cell_attributes = cell_attributes|merge(['colspan="' ~ cell.colspan ~ '"']) %}
+    {% endif %}
+
+    {% if cell.rowspan %}
+      {% set cell_attributes = cell_attributes|merge(['rowspan="' ~ cell.rowspan ~ '"']) %}
+    {% endif %}
+
+    {% if cell.scope and element == 'th' %}
+      {% set cell_attributes = cell_attributes|merge(['scope="' ~ cell.scope ~ '"']) %}
+    {% endif %}
+
+    {% if cell.headers %}
+      {% set cell_attributes = cell_attributes|merge(['headers="' ~ cell.headers ~ '"']) %}
+    {% endif %}
+
+    {# Handle cell styles array for extensibility #}
+    {% if cell.styles %}
+      {% set cell_styles = cell.styles | filter(v => v) | join('; ') %}
+      {% if cell_styles %}
+        {% set cell_attributes = cell_attributes|merge(['style="' ~ cell_styles ~ '"']) %}
+      {% endif %}
+    {% endif %}
+
+    {% set cell_attributes = cell_attributes|merge([
+      cell.cell_other_attributes,
+    ]) | sort | join(' ') | trim %}
+
+    <{{ element }}{% if cell_classes %} class="{{ cell_classes }}"{% endif %}{% if cell_attributes %} {{ cell_attributes }}{% endif %}>{{ cell.content }}</{{ element }}>
+
+  {% endif %}
+{% endmacro %}

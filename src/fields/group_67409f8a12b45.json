@@ -1,0 +1,473 @@
+{
+    "key": "group_67409f8a12b45",
+    "title": "Block: Table",
+    "fields": [
+        {
+            "key": "field_67409f8a12b46",
+            "label": "Table ID",
+            "name": "table_id",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "clone": [
+                "group_63464d79a3c59"
+            ],
+            "display": "seamless",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 0
+        },
+        {
+            "key": "field_67409f8a12b51",
+            "label": "Table Caption",
+            "name": "caption_group",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "Optional table caption",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_67409f8a12b52",
+                    "label": "Caption Text",
+                    "name": "caption",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "-3",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 1,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_67409f8a12b53",
+                    "label": "Caption Position",
+                    "name": "caption_top",
+                    "aria-label": "",
+                    "type": "true_false",
+                    "instructions": "Position caption above table (default is below)",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "message": "Top",
+                    "default_value": 1,
+                    "allow_in_bindings": 1,
+                    "ui_on_text": "",
+                    "ui_off_text": "",
+                    "ui": 1
+                }
+            ]
+        },
+        {
+            "key": "field_include_header",
+            "label": "Include Header",
+            "name": "include_header",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Add a header section (thead) to the table",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 1,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_include_footer",
+            "label": "Include Footer",
+            "name": "include_footer",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Add a footer section (tfoot) to the table",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 1,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_67409f8a12b48",
+            "label": "Striped Rows",
+            "name": "table_striped",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Add zebra-striping to table rows",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 1,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_67409f8a12b49",
+            "label": "Hoverable Rows",
+            "name": "table_hover",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Enable hover state on table rows",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 1,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_67409f8a12b4a",
+            "label": "Bordered",
+            "name": "table_bordered",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Add borders on all sides of table and cells",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 1,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_67409f8a12b4b",
+            "label": "Small\/Compact",
+            "name": "table_small",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Make table more compact by cutting cell padding in half",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 1,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_67409f8a12b4c",
+            "label": "Borderless",
+            "name": "table_borderless",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Remove all borders from table",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "-6",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 1,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_67409f8a12b4e",
+            "label": "Table Variant",
+            "name": "table_variant",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "Choose a contextual color variant for the table",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "clone": [
+                "group_6346513f54d9a"
+            ],
+            "display": "group",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1
+        },
+        {
+            "key": "field_67409f8a12b4f",
+            "label": "Responsive",
+            "name": "table_responsive",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Make table scroll horizontally on smaller devices",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "choices": {
+                "true": "Always Responsive",
+                "sm": "Responsive below SM (576px)",
+                "md": "Responsive below MD (768px)",
+                "lg": "Responsive below LG (992px)",
+                "xl": "Responsive below XL (1200px)",
+                "xxl": "Responsive below XXL (1400px)"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "allow_in_bindings": 1,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0
+        },
+        {
+            "key": "field_67409f8a12b50",
+            "label": "Vertical Alignment",
+            "name": "table_vertical_align",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Set vertical alignment for all table cells",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "-5",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "choices": {
+                "top": "Top",
+                "middle": "Middle",
+                "bottom": "Bottom"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "allow_in_bindings": 1,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0
+        },
+        {
+            "key": "field_67409f8a12b95",
+            "label": "Border Collapse",
+            "name": "table_border_collapse",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Control how table borders are displayed (collapse borders together or keep them separate)",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "message": "Collapse borders",
+            "default_value": 1,
+            "allow_in_bindings": 1,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_67409f8a12b96",
+            "label": "Border Spacing",
+            "name": "table_border_spacing",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "Space between table borders in pixels (only applies when border collapse is off)",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_67409f8a12b95",
+                        "operator": "!=",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "default_value": 0,
+            "min": 0,
+            "max": 50,
+            "allow_in_bindings": 1,
+            "placeholder": 0,
+            "step": 1,
+            "prepend": "",
+            "append": "px"
+        },
+        {
+            "key": "field_67409f8a12b7c",
+            "label": "Margin",
+            "name": "margin",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "clone": [
+                "group_6347289eccec8"
+            ],
+            "display": "group",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1
+        },
+        {
+            "key": "field_67409f8a12b7d",
+            "label": "Padding",
+            "name": "padding",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "clone": [
+                "group_634728b1e7498"
+            ],
+            "display": "group",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1
+        },
+        {
+            "key": "field_table_width",
+            "label": "Width",
+            "name": "width",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "Set the table width constraints",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "clone": [
+                "group_6347179ab71c8"
+            ],
+            "display": "group",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "block",
+                "operator": "==",
+                "value": "acf\/table"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1758735648
+}
