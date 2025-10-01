@@ -406,6 +406,208 @@
   ]
 } %}
 
+<h2 class="mt-5">Border Spacing and Collapse Examples</h2>
+{% include '@atoms/table/_table.tpl.twig' with {
+  table_id: 'borderSpacingTable',
+  table_bordered: true,
+  table_border_collapse: false,
+  table_border_spacing: 8,
+  caption: 'Table with Border Spacing (8px)',
+  rows: [
+    {
+      cells: [
+        { content: 'Name', element: 'th', scope: 'col' },
+        { content: 'Age', element: 'th', scope: 'col' },
+        { content: 'City', element: 'th', scope: 'col' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'John Doe' },
+        { content: '30' },
+        { content: 'New York' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'Jane Smith' },
+        { content: '25' },
+        { content: 'Los Angeles' }
+      ]
+    }
+  ]
+} %}
+
+{% include '@atoms/table/_table.tpl.twig' with {
+  table_id: 'largeBorderSpacingTable',
+  table_bordered: true,
+  table_border_collapse: false,
+  table_border_spacing: 15,
+  table_classes: ['mt-3'],
+  caption: 'Table with Larger Border Spacing (15px)',
+  rows: [
+    {
+      cells: [
+        { content: 'Product', element: 'th', scope: 'col' },
+        { content: 'Price', element: 'th', scope: 'col' },
+        { content: 'Stock', element: 'th', scope: 'col' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'Widget A' },
+        { content: '$19.99' },
+        { content: '25' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'Widget B' },
+        { content: '$29.99' },
+        { content: '10' }
+      ]
+    }
+  ]
+} %}
+
+{% include '@atoms/table/_table.tpl.twig' with {
+  table_id: 'collapsedBorderTable',
+  table_bordered: true,
+  table_border_collapse: true,
+  table_classes: ['mt-3'],
+  caption: 'Table with Collapsed Borders (Default Bootstrap)',
+  rows: [
+    {
+      cells: [
+        { content: 'Item', element: 'th', scope: 'col' },
+        { content: 'Status', element: 'th', scope: 'col' },
+        { content: 'Priority', element: 'th', scope: 'col' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'Task 1' },
+        { content: 'Complete' },
+        { content: 'High' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'Task 2' },
+        { content: 'In Progress' },
+        { content: 'Medium' }
+      ]
+    }
+  ]
+} %}
+
+<h2 class="mt-5">Cell Padding Examples</h2>
+<p>Examples showing custom cell padding (Note: These examples demonstrate the data structure - actual padding requires ACF blocks in WordPress)</p>
+
+{% include '@atoms/table/_table.tpl.twig' with {
+  table_id: 'cellPaddingTable',
+  table_bordered: true,
+  caption: 'Table with Custom Cell Padding',
+  rows: [
+    {
+      cells: [
+        { content: 'Default Padding', element: 'th', scope: 'col' },
+        { content: 'Large Padding', element: 'th', scope: 'col' },
+        { content: 'Custom Padding', element: 'th', scope: 'col' }
+      ]
+    },
+    {
+      cells: [
+        { content: 'Standard cell with default padding' },
+        {
+          content: 'This cell has large padding (20px)',
+          cell_classes: 'bg-light',
+          styles: ['padding: 20px']
+        },
+        {
+          content: 'Custom top/bottom padding (30px)',
+          cell_classes: 'bg-warning-subtle',
+          styles: ['padding-top: 30px', 'padding-bottom: 30px', 'padding-left: 8px', 'padding-right: 8px']
+        }
+      ]
+    },
+    {
+      cells: [
+        { content: 'Regular content' },
+        {
+          content: 'Asymmetric padding demo',
+          styles: ['padding-top: 5px', 'padding-bottom: 25px', 'padding-left: 30px', 'padding-right: 10px', 'background-color: #f8f9fa']
+        },
+        {
+          content: 'Minimal padding override',
+          styles: ['padding: 2px']
+        }
+      ]
+    }
+  ]
+} %}
+
+<h2 class="mt-5">Cell Width Examples</h2>
+<p>Examples showing custom cell widths using CSS (Note: These examples demonstrate the data structure - actual width control requires ACF blocks in WordPress)</p>
+
+{% include '@atoms/table/_table.tpl.twig' with {
+  table_id: 'cellWidthTable',
+  table_bordered: true,
+  caption: 'Table with Custom Cell Widths',
+  rows: [
+    {
+      cells: [
+        { content: 'Fixed Width (200px)', element: 'th', scope: 'col', styles: ['width: 200px'] },
+        { content: 'Percentage Width (40%)', element: 'th', scope: 'col', styles: ['width: 40%'] },
+        { content: 'Auto Width', element: 'th', scope: 'col', styles: ['width: auto'] }
+      ]
+    },
+    {
+      cells: [
+        {
+          content: 'This cell is exactly 200 pixels wide',
+          styles: ['width: 200px', 'background-color: #e3f2fd']
+        },
+        {
+          content: 'This cell takes up 40% of the available table width',
+          styles: ['width: 40%', 'background-color: #f3e5f5']
+        },
+        {
+          content: 'This cell adjusts automatically to fit its content',
+          styles: ['width: auto', 'background-color: #e8f5e8']
+        }
+      ]
+    },
+    {
+      cells: [
+        {
+          content: 'Min/Max Width Demo',
+          styles: ['min-width: 150px', 'max-width: 250px', 'background-color: #fff3e0']
+        },
+        {
+          content: 'This cell uses rem units for responsive width',
+          styles: ['width: 20rem', 'background-color: #fce4ec']
+        },
+        {
+          content: 'Viewport width example',
+          styles: ['width: 15vw', 'background-color: #f1f8e9']
+        }
+      ]
+    }
+  ]
+} %}
+
+<div class="alert alert-info mt-3">
+  <h5>Width Unit Options Available:</h5>
+  <ul class="mb-0">
+    <li><strong>px</strong> - Fixed pixels (e.g., 200px)</li>
+    <li><strong>%</strong> - Percentage of parent (e.g., 25%)</li>
+    <li><strong>em</strong> - Relative to font size (e.g., 15em)</li>
+    <li><strong>rem</strong> - Relative to root font size (e.g., 20rem)</li>
+    <li><strong>vw</strong> - Percentage of viewport width (e.g., 15vw)</li>
+  </ul>
+</div>
+
 <div class="mb-3 p-3 bg-light border rounded">
   <h3>Bootstrap 5.0 Table Pattern Usage</h3>
   <p>This table pattern now supports all Bootstrap 5.0 table features:</p>
@@ -424,11 +626,32 @@
     <li><code>caption_top</code> [bool]: Positions caption at top with .caption-top</li>
   </ul>
 
+  <h4>Border Options:</h4>
+  <ul>
+    <li><code>table_border_collapse</code> [bool]: Controls border-collapse CSS property (true = collapse, false = separate)</li>
+    <li><code>table_border_spacing</code> [number]: Border spacing value in pixels (only applies when border_collapse is false)</li>
+  </ul>
+
   <h4>Cell-Level Options:</h4>
   <ul>
     <li><code>vertical_align</code> [string]: Individual cell vertical alignment (overrides table setting)</li>
     <li><code>row_classes</code>: Can include Bootstrap variant classes like 'table-warning', 'table-danger', etc.</li>
     <li><code>cell_classes</code>: Can include Bootstrap alignment classes like 'align-top', 'align-middle', etc.</li>
+    <li><code>styles</code> [array]: Array of CSS style declarations for individual cells (e.g., ['padding: 20px', 'background-color: #f8f9fa'])</li>
+  </ul>
+
+  <h4>ACF Block Features:</h4>
+  <ul>
+    <li><strong>Table Cell Padding:</strong> Each table cell block includes a padding module for custom padding control</li>
+    <li><strong>Table Cell Width:</strong> Each table cell block includes a width module with support for:
+      <ul>
+        <li>Width value + unit (%, px, em, rem, vw)</li>
+        <li>Min-width (px)</li>
+        <li>Max-width (px)</li>
+      </ul>
+    </li>
+    <li><strong>Extensible Styles:</strong> Cell templates use a styles array approach for easy extension with additional CSS properties</li>
+    <li><strong>Modern CSS:</strong> Uses CSS width properties instead of deprecated HTML width attributes</li>
   </ul>
 
   <h4>Example Usage:</h4>
@@ -437,6 +660,8 @@
   table_hover: true,
   table_responsive: 'md',
   table_variant: 'primary',
+  table_border_collapse: false,
+  table_border_spacing: 10,
   caption: 'My Bootstrap Table',
   caption_top: true,
   rows: [...]

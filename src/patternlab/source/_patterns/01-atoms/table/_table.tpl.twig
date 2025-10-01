@@ -21,6 +21,10 @@
  *  - table_responsive [bool|string]: Make table responsive (.table-responsive or .table-responsive-{breakpoint}).
  *  - table_vertical_align [string]: Vertical alignment (top, middle, bottom) - applies to all cells.
  *
+ * Border Options:
+ *  - table_border_collapse [bool]: Controls border-collapse CSS property (true = collapse, false = separate).
+ *  - table_border_spacing [number]: Border spacing value in pixels (only applies when border_collapse is false).
+ *
  * Caption Options:
  *  - caption [string]: Table caption text.
  *  - caption_classes [array]: Caption classes.
@@ -67,14 +71,16 @@
  *  - rows.row.cells.cell.scope [string]: Cell scope attribute (for th elements).
  *  - rows.row.cells.cell.headers [string]: Cell headers attribute.
  *  - rows.row.cells.cell.vertical_align [string]: Cell vertical alignment (top, middle, bottom).
+ *
+ * @todo Add text/horizontal alignment support for cells to match block implementation
  */
 #}
 
 {% import _self as tables %}
 
-{{ tables.table(table_classes, table_other_classes, table_id, table_attributes, table_other_attributes, table_striped, table_hover, table_active, table_bordered, table_borderless, table_small, table_variant, table_responsive, table_vertical_align, caption, caption_classes, caption_other_classes, caption_attributes, caption_other_attributes, caption_top, thead, tbody, tfoot, rows) }}
+{{ tables.table(table_classes, table_other_classes, table_id, table_attributes, table_other_attributes, table_striped, table_hover, table_active, table_bordered, table_borderless, table_small, table_variant, table_responsive, table_vertical_align, table_border_collapse, table_border_spacing, caption, caption_classes, caption_other_classes, caption_attributes, caption_other_attributes, caption_top, thead, tbody, tfoot, rows) }}
 
-{% macro table(table_classes, table_other_classes, table_id, table_attributes, table_other_attributes, table_striped, table_hover, table_active, table_bordered, table_borderless, table_small, table_variant, table_responsive, table_vertical_align, caption, caption_classes, caption_other_classes, caption_attributes, caption_other_attributes, caption_top, thead, tbody, tfoot, rows) %}
+{% macro table(table_classes, table_other_classes, table_id, table_attributes, table_other_attributes, table_striped, table_hover, table_active, table_bordered, table_borderless, table_small, table_variant, table_responsive, table_vertical_align, table_border_collapse, table_border_spacing, caption, caption_classes, caption_other_classes, caption_attributes, caption_other_attributes, caption_top, thead, tbody, tfoot, rows) %}
 
   {% import _self as tables %}
 
@@ -114,6 +120,15 @@
       {% set bootstrap_classes = bootstrap_classes|merge(['align-' ~ table_vertical_align]) %}
     {% endif %}
 
+    {# Border spacing and collapse classes #}
+    {% if table_border_collapse == false %}
+      {% set bootstrap_classes = bootstrap_classes|merge(['table-border-separate']) %}
+    {% endif %}
+
+    {% if table_border_spacing and table_border_spacing > 0 %}
+      {% set bootstrap_classes = bootstrap_classes|merge(['table-border-spacing-' ~ table_border_spacing]) %}
+    {% endif %}
+
     {% set table_classes = table_classes|default([])|merge([
       'table',
       table_id ? 'table-id--' ~ table_id : '',
@@ -121,9 +136,23 @@
       table_other_classes,
     ]) | sort | join(' ') | trim %}
 
+    {# Build table styles including border spacing #}
+    {% set table_styles = [] %}
+
+    {% if table_border_collapse == false %}
+      {% set table_styles = table_styles|merge(['border-collapse: separate']) %}
+
+      {% if table_border_spacing and table_border_spacing > 0 %}
+        {% set table_styles = table_styles|merge(['border-spacing: ' ~ table_border_spacing ~ 'px']) %}
+      {% endif %}
+    {% elseif table_border_collapse == true %}
+      {% set table_styles = table_styles|merge(['border-collapse: collapse']) %}
+    {% endif %}
+
     {% set table_attributes = table_attributes|default([])|merge([
+      table_styles | length > 0 ? 'style="' ~ (table_styles | join('; ')) ~ '"' : '',
       table_other_attributes,
-    ]) | sort | join(' ') | trim %}
+    ]) | filter(v => v) | sort | join(' ') | trim %}
 
     {% if table_responsive %}
       {% if table_responsive == true %}
@@ -264,6 +293,14 @@
 
     {% if cell.headers %}
       {% set cell_attributes = cell_attributes|merge(['headers="' ~ cell.headers ~ '"']) %}
+    {% endif %}
+
+    {# Handle cell styles array for extensibility #}
+    {% if cell.styles %}
+      {% set cell_styles = cell.styles | filter(v => v) | join('; ') %}
+      {% if cell_styles %}
+        {% set cell_attributes = cell_attributes|merge(['style="' ~ cell_styles ~ '"']) %}
+      {% endif %}
     {% endif %}
 
     {% set cell_attributes = cell_attributes|merge([

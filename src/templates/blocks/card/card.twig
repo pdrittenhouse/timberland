@@ -183,6 +183,7 @@
     block_context['acf/fields']['type'] == 'grid' and fields.featured == true ? 'featured',
     block['className'],
     block['align'] ? 'align-' ~ block['align'],
+    fields.vertically_center_content == true ? 'vertically-center-content' : ''
   ],
   card_styles: [
     fields.flip_card != true ? card_bg_image_size,

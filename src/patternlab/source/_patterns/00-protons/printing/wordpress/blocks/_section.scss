@@ -2,6 +2,17 @@
   position: relative;
   z-index: z('site-content');
 
+  &.has-defined-height {
+
+   .block-section--wrapper {
+
+     >.container,
+     >.container-fluid {
+       height: 100%;
+     }
+   }
+ }
+
   &--wrapper {
 
       > .container,

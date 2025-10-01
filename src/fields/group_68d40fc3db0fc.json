@@ -1,0 +1,61 @@
+{
+    "key": "group_68d40fc3db0fc",
+    "title": "Module: Vertical Align",
+    "fields": [
+        {
+            "key": "field_68d40fc3dd980",
+            "label": "Text Align",
+            "name": "vertical_align",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "choices": {
+                "left": "Left",
+                "right": "Right",
+                "middle": "Middle",
+                "baseline": "Baseline",
+                "sub": "Sub",
+                "super": "Super",
+                "text-top": "Text Top",
+                "text-bottom": "Text Bottom"
+            },
+            "default_value": "null",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "allow_in_bindings": 1,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "block-modules"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1758728413
+}

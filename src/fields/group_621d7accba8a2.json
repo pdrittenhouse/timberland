@@ -18,9 +18,7 @@
             },
             "admin_only": 0,
             "choices": {
-                "default": "Default",
-                "border-left": "Border Left",
-                "citation-image-divider": "Citation Image Divider"
+                "default": "Default"
             },
             "default_value": "default",
             "return_format": "value",
@@ -140,5 +138,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1722965005
+    "modified": 1759282695
 }

@@ -1,16 +1,32 @@
-// Table pattern JavaScript
-// Add any table-specific JavaScript functionality here
+/**
+ * table
+ */
 
-export default class Table {
-  constructor(element) {
-    this.element = element;
-    this.init();
+import $ from 'jquery';
+
+// Module styles
+import './_table.scss';
+
+export const name = 'table';
+
+const tableEnable = () => {
+  // Find our component within the DOM
+  const $table = $('.table');
+
+  // Bail if component does not exist
+  if (!$table.length) {
+    return;
   }
 
-  init() {
-    // Initialize table functionality
-    // Example: Add sorting, filtering, or other interactive features
-  }
+  // An example of what could be done with this component
+  $table.map((i, table) => {
+    $(table).addClass('js-table-exists');
+    return $table;
+  });
+};
 
-  // Add table methods here
-}
+$(document).ready(() => {
+  tableEnable();
+});
+
+export default tableEnable;
