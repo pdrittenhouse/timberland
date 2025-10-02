@@ -33,6 +33,11 @@ add_action('admin_head', 'fix_svg');
 // Fix to add width and height metadata to svg to prevent woocommerce regenerate images error
 function update_svg_metadata()
 {
+  // Check global flag first - if set, skip entirely
+  if (get_option('svg_metadata_updated')) {
+    return;
+  }
+
   // Get all attachments of 'image/svg+xml' MIME type
   $args = array(
     'post_type' => 'attachment',
@@ -46,22 +51,51 @@ function update_svg_metadata()
     // Get the attachment ID
     $attachment_id = $attachment->ID;
 
+    // Check if this SVG already has metadata (individual check)
+    $existing_metadata = wp_get_attachment_metadata($attachment_id);
+    if (!empty($existing_metadata['width']) && !empty($existing_metadata['height'])) {
+      // This SVG already has metadata, skip it
+      continue;
+    }
+
     // Get the path to the SVG file
     $file_path = get_attached_file($attachment_id);
     if (file_exists($file_path)) {
       // Get the SVG dimensions using SimpleXML
       $svg = simplexml_load_file($file_path);
-      $attributes = $svg->attributes();
-      $width = (int)$attributes['width'];
-      $height = (int)$attributes['height'];
+      if ($svg !== false) {
+        $attributes = $svg->attributes();
+        $width = (int)$attributes['width'];
+        $height = (int)$attributes['height'];
 
-      // Update the attachment metadata
-      $metadata = array(
-        'width' => $width,
-        'height' => $height,
-      );
-      wp_update_attachment_metadata($attachment_id, $metadata);
+        // Only update if we got valid dimensions
+        if ($width > 0 && $height > 0) {
+          // Update the attachment metadata
+          $metadata = array(
+            'width' => $width,
+            'height' => $height,
+          );
+          wp_update_attachment_metadata($attachment_id, $metadata);
+        }
+      }
     }
   }
+
+  // Set flag after processing to prevent running again
+  update_option('svg_metadata_updated', true);
 }
 add_action('init', 'update_svg_metadata');
+
+// Clear flag when new SVG is uploaded
+add_action('add_attachment', function($attachment_id) {
+  if (get_post_mime_type($attachment_id) === 'image/svg+xml') {
+    delete_option('svg_metadata_updated');
+  }
+});
+
+// Clear flag when SVG is updated/replaced
+add_action('attachment_updated', function($attachment_id) {
+  if (get_post_mime_type($attachment_id) === 'image/svg+xml') {
+    delete_option('svg_metadata_updated');
+  }
+});
