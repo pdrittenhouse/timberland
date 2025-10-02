@@ -85,46 +85,75 @@ $(document).ready(() => {
 // }
 
 const scopedBlocks = [
-  {
-    block: 'acf/column',
-    parent: 'acf/row',
-  },
-  {
-    block: 'acf/accordion-item',
-    parent: 'acf/accordion',
-  },
-  {
-    block: 'acf/button-text',
-    parent: 'acf/button',
-  },
-  {
-    block: 'acf/group',
-    parent: 'acf/button-group',
-  },
-  {
-    block: 'acf/slide',
-    parent: 'acf/slider',
-  },
-  {
-    block: 'acf/tab',
-    parent: 'acf/tabs',
-  },
+ {
+   block: 'acf/column',
+   parent: 'acf/row',
+ },
+ {
+   block: 'acf/accordion-item',
+   parent: 'acf/accordion',
+ },
+ {
+   block: 'acf/button-text',
+   parent: 'acf/button',
+ },
+ {
+   block: 'acf/group',
+   parent: 'acf/button-group',
+ },
+ {
+   block: 'acf/slide',
+   parent: 'acf/slider',
+ },
+ {
+   block: 'acf/tab',
+   parent: 'acf/tabs',
+ },
+ {
+   block: 'acf/table-head',
+   parent: 'acf/table',
+ },
+ {
+   block: 'acf/table-body',
+   parent: 'acf/table',
+ },
+ {
+   block: 'acf/table-foot',
+   parent: 'acf/table',
+ },
+ {
+   block: 'acf/table-row',
+   parent: ['acf/table-head', 'acf/table-body', 'acf/table-foot'],
+ },
+ {
+   block: 'acf/table-cell',
+   parent: 'acf/table-row',
+ },
 ];
 
 let blocks = [];
 
 scopedBlocks.forEach(block => {
-  blocks = [...blocks, block.block];
+ blocks = [...blocks, block.block];
 });
 
-function addParentAttribute(settings, name) {
-  if (!blocks.includes(name)) {
-    return settings;
-  }
+// Build a map: blockName -> Set of parent names
+const parentsByBlock = scopedBlocks.reduce((acc, { block, parent }) => {
+ const list = Array.isArray(parent) ? parent : [parent];
+ acc[block] = acc[block] || new Set();
+ list.forEach((p) => acc[block].add(p));
+ return acc;
+}, {});
 
-  return Object.assign(settings, {
-    parent: [scopedBlocks.find(scopedBlock => scopedBlock.block === name).parent],
-  });
+function addParentAttribute(settings, name) {
+ const parents = parentsByBlock[name];
+ if (!parents) {
+   return settings;
+ }
+
+ return Object.assign(settings, {
+   parent: Array.from(parents),
+ });
 }
 
 wp.hooks.addFilter('blocks.registerBlockType', 'dream/updater', addParentAttribute);
