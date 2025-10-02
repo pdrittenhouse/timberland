@@ -377,6 +377,27 @@
             "ui_off_text": ""
         },
         {
+            "key": "field_68dddba7eb327",
+            "label": "Vertically Center Content",
+            "name": "vertically_center_content",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "message": "",
+            "default_value": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
             "key": "field_63980a5e74085",
             "label": "Background Image",
             "name": "card_bg_image",
@@ -1206,5 +1227,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1711229810
+    "modified": 1759370389
 }
