@@ -190,3 +190,20 @@ input[type="submit"] {
     }
   }
 }
+
+.flickity-carousel--wrapper .flickity-carousel,
+.slick-carousel-wrapper .slick-carousel {
+  opacity: 1;
+}
+
+
+.wp-block-acf-table-row .acf-innerblocks-container {
+  @include flexbox;
+  @include justify-content(flex-start);
+  @include align-items(flex-start);
+
+
+  .wp-block-acf-table-cell {
+    @include flex(0 1 auto);
+  }
+}
