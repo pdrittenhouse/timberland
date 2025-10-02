@@ -79,6 +79,12 @@ if( function_exists('acf_add_options_page') ) {
     'parent_slug'   => 'theme-general-options',
   ));
 
+  acf_add_options_sub_page(array(
+    'page_title'    => 'Cache Options',
+    'menu_title'    => 'Cache Options',
+    'parent_slug'   => 'theme-general-options',
+  ));
+
   // Hidden Fields
   acf_add_options_page(array(
     'page_title'    => 'Block Modules',
@@ -90,6 +96,103 @@ if( function_exists('acf_add_options_page') ) {
   ));
 
 }
+
+/**
+ * Cache Management
+ */
+
+// Clear Timber cache
+function dream_clear_timber_cache() {
+  if (function_exists('timber_clear_cache_timber')) {
+    timber_clear_cache_timber();
+  }
+
+  // Alternative method if the function doesn't exist
+  $cache_dir = WP_CONTENT_DIR . '/cache/timber';
+  if (is_dir($cache_dir)) {
+    $files = glob($cache_dir . '/*');
+    foreach ($files as $file) {
+      if (is_file($file)) {
+        unlink($file);
+      }
+    }
+  }
+
+  return true;
+}
+
+// Handle cache clear action
+add_action('admin_post_dream_clear_timber_cache', function() {
+  // Check nonce for security
+  if (!isset($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'dream_clear_timber_cache')) {
+    wp_die('Security check failed');
+  }
+
+  // Check user capability
+  if (!current_user_can('manage_options')) {
+    wp_die('Unauthorized');
+  }
+
+  // Clear the cache
+  dream_clear_timber_cache();
+
+  // Redirect back with success message
+  wp_redirect(add_query_arg(
+    array('page' => 'acf-options-cache-options', 'cache_cleared' => 'timber'),
+    admin_url('admin.php')
+  ));
+  exit;
+});
+
+// Add cache clear buttons to ACF options page
+add_action('acf/input/admin_head', function() {
+  $screen = get_current_screen();
+
+  // Only on Cache options page
+  if ($screen && $screen->id === 'theme-options_page_acf-options-cache-options') {
+    ?>
+    <script type="text/javascript">
+    jQuery(document).ready(function($) {
+      // Wait for ACF fields to load, then add button
+      function addCacheButton() {
+        if ($('.acf-fields').length || $('.wrap form').length) {
+          var buttonsHtml = '<div class="acf-field" style="margin: 20px 0;">';
+          buttonsHtml += '<div class="acf-label"><label>Clear Cache</label></div>';
+          buttonsHtml += '<div class="acf-input">';
+          buttonsHtml += '<a href="<?php echo wp_nonce_url(admin_url("admin-post.php?action=dream_clear_timber_cache"), "dream_clear_timber_cache"); ?>" class="button button-secondary" style="margin-right: 10px;">Clear Timber Cache</a>';
+          buttonsHtml += '<p class="description">Clear the Timber/Twig template cache to see template changes immediately.</p>';
+          buttonsHtml += '</div>';
+          buttonsHtml += '</div>';
+
+          if ($('.acf-fields').length) {
+            $('.acf-fields').prepend(buttonsHtml);
+          } else {
+            $('.wrap form').prepend(buttonsHtml);
+          }
+        } else {
+          // Retry if ACF fields aren't loaded yet
+          setTimeout(addCacheButton, 100);
+        }
+      }
+
+      addCacheButton();
+
+      // Show success message if cache was cleared
+      <?php if (isset($_GET['cache_cleared']) && $_GET['cache_cleared'] === 'timber'): ?>
+      $('<div class="notice notice-success is-dismissible"><p>Timber cache cleared successfully!</p></div>').insertAfter('.wrap h1');
+      <?php endif; ?>
+    });
+    </script>
+    <style>
+    .acf-field .button-secondary {
+      height: auto;
+      padding: 8px 15px;
+      font-size: 14px;
+    }
+    </style>
+    <?php
+  }
+});
 
 /**
  * Add options to timber context

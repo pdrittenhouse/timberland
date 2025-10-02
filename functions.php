@@ -54,13 +54,21 @@ Timber::$autoescape = false;
 
 /**
  * Enable caching
+ * Note: You can clear cache anytime from Theme Options > Cache
  */
-define('ENABLE_CACHE', false);
-define('TIMBER_CACHE', false);
-define('CACHE_EXPIRATION_TIME', 2592000); // 1 month
-// define('CACHE_EXPIRATION_TIME', 604800); // 1 week
+// Enable in production, disable in development
+if (!defined('WP_DEBUG') || !WP_DEBUG) {
+  define('ENABLE_CACHE', true);
+  define('TIMBER_CACHE', true);
+} else {
+  define('ENABLE_CACHE', false);
+  define('TIMBER_CACHE', false);
+}
+
+define('CACHE_EXPIRATION_TIME', 3600); // 1 hour (recommended for development with cache clear button)
 // define('CACHE_EXPIRATION_TIME', 86400); // 1 day
-// define('CACHE_EXPIRATION_TIME', 3600); // 1 hour
+// define('CACHE_EXPIRATION_TIME', 604800); // 1 week
+// define('CACHE_EXPIRATION_TIME', 2592000); // 1 month
 define('TIMBER_CACHE_TIME', CACHE_EXPIRATION_TIME);
 
 /**
