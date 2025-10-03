@@ -103,11 +103,14 @@ if( function_exists('acf_add_options_page') ) {
 
 // Clear Timber cache
 function dream_clear_timber_cache() {
+  global $wpdb;
+
+  // Clear Timber file cache if it exists
   if (function_exists('timber_clear_cache_timber')) {
     timber_clear_cache_timber();
   }
 
-  // Alternative method if the function doesn't exist
+  // Clear Timber file cache directory
   $cache_dir = WP_CONTENT_DIR . '/cache/timber';
   if (is_dir($cache_dir)) {
     $files = glob($cache_dir . '/*');
@@ -116,6 +119,14 @@ function dream_clear_timber_cache() {
         unlink($file);
       }
     }
+  }
+
+  // Clear block transient cache (dream_block_*)
+  $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_dream_block_%' OR option_name LIKE '_transient_timeout_dream_block_%'");
+
+  // Clear any WordPress object cache
+  if (function_exists('wp_cache_flush')) {
+    wp_cache_flush();
   }
 
   return true;
