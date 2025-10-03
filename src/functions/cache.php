@@ -134,6 +134,14 @@ add_action('acf/input/admin_head', function() {
 add_action('save_post', function($post_id) {
 	delete_transient('dream_post_blocks_' . $post_id);
 
+	// Clear block template cache for this specific post
+	global $wpdb;
+	$wpdb->query($wpdb->prepare(
+		"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+		'_transient_dream_block_' . $post_id . '_%',
+		'_transient_timeout_dream_block_' . $post_id . '_%'
+	));
+
 	// If this is a pattern (wp_block post type), clear pattern cache
 	if (get_post_type($post_id) === 'wp_block') {
 		delete_transient('dream_pattern_blocks_' . $post_id);
@@ -144,6 +152,14 @@ add_action('save_post', function($post_id) {
 add_action('wp_trash_post', function($post_id) {
 	delete_transient('dream_post_blocks_' . $post_id);
 
+	// Clear block template cache for this specific post
+	global $wpdb;
+	$wpdb->query($wpdb->prepare(
+		"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+		'_transient_dream_block_' . $post_id . '_%',
+		'_transient_timeout_dream_block_' . $post_id . '_%'
+	));
+
 	if (get_post_type($post_id) === 'wp_block') {
 		delete_transient('dream_pattern_blocks_' . $post_id);
 	}
@@ -152,6 +168,14 @@ add_action('wp_trash_post', function($post_id) {
 // Clear post-specific block cache when post is deleted
 add_action('delete_post', function($post_id) {
 	delete_transient('dream_post_blocks_' . $post_id);
+
+	// Clear block template cache for this specific post
+	global $wpdb;
+	$wpdb->query($wpdb->prepare(
+		"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+		'_transient_dream_block_' . $post_id . '_%',
+		'_transient_timeout_dream_block_' . $post_id . '_%'
+	));
 
 	if (get_post_type($post_id) === 'wp_block') {
 		delete_transient('dream_pattern_blocks_' . $post_id);
@@ -165,6 +189,9 @@ add_action('wp_update_nav_menu', function() {
 	$wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_timeout_dream_post_blocks_%'");
 	$wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_dream_pattern_blocks_%'");
 	$wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_timeout_dream_pattern_blocks_%'");
+	// Also clear block template cache since menu changes affect rendered output
+	$wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_dream_block_%'");
+	$wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_timeout_dream_block_%'");
 });
 
 // Clear all post block caches when widgets are updated (blocks can be in widgets)
@@ -174,6 +201,9 @@ add_action('update_option_sidebars_widgets', function() {
 	$wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_timeout_dream_post_blocks_%'");
 	$wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_dream_pattern_blocks_%'");
 	$wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_timeout_dream_pattern_blocks_%'");
+	// Also clear block template cache since widget changes affect rendered output
+	$wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_dream_block_%'");
+	$wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_timeout_dream_block_%'");
 });
 
 // Clear parent block metadata cache when theme is switched

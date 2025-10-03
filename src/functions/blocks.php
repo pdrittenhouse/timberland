@@ -71,12 +71,19 @@ function gets_the_block_parent_data( $parsed_block, $source_block, $parent_block
 
 // Replace ACF field ID's with names in parent block data
 function replace_acf_keys_with_names( $data ) {
+  // Static cache to avoid repeated get_field_object() calls
+  static $field_cache = [];
 
   $data_with_names = array();
 
   foreach( $data as $key => $val ) {
     if( is_array( $val ) ) {
-      $field_obj = get_field_object( $key );
+      // Check cache first
+      if (!isset($field_cache[$key])) {
+        $field_cache[$key] = get_field_object( $key );
+      }
+      $field_obj = $field_cache[$key];
+
       if( $field_obj ) {
         $data_with_names[ $field_obj[ 'name' ] ] = replace_acf_keys_with_names( $val );
       }
@@ -86,7 +93,13 @@ function replace_acf_keys_with_names( $data ) {
         $field_full_key = $key;
         $field_keys_arr = explode( "_", $field_full_key );
         $child_field_key = $field_keys_arr[2]."_".$field_keys_arr[3];
-        $field_obj = get_field_object( $child_field_key );
+
+        // Check cache first
+        if (!isset($field_cache[$child_field_key])) {
+          $field_cache[$child_field_key] = get_field_object( $child_field_key );
+        }
+        $field_obj = $field_cache[$child_field_key];
+
         if( $field_obj ) {
           $data_with_names[ $field_obj[ 'name' ] ] = $data[ $key ];
         }
@@ -96,7 +109,12 @@ function replace_acf_keys_with_names( $data ) {
         break;
       }
       else if( substr( $key, 0, 5 ) == "field" ) {
-        $field_obj = get_field_object( $key );
+        // Check cache first
+        if (!isset($field_cache[$key])) {
+          $field_cache[$key] = get_field_object( $key );
+        }
+        $field_obj = $field_cache[$key];
+
         if( $field_obj ) {
           $data_with_names[ $field_obj[ 'name' ] ] = $data[ $key ];
         }
@@ -109,6 +127,348 @@ function replace_acf_keys_with_names( $data ) {
 }
 
 /**
+ * Get base block context (cached statically to avoid rebuilding for every block)
+ *
+ * @return array Base context with menus and paths
+ */
+function get_block_context_base() {
+	static $base_context = null;
+
+	if ($base_context === null) {
+		$base_context = [
+			// Menus (needed for blocks in widget areas)
+			'menu_primary' => new \Timber\Menu('primary'),
+			'menu_secondary' => new \Timber\Menu('secondary'),
+			'menu_footer' => new \Timber\Menu('footer'),
+			'menu_social' => new \Timber\Menu('social'),
+			'menu_utility' => new \Timber\Menu('utility'),
+			// Paths (needed for blocks in widget areas)
+			'paths' => [
+				'assets' => get_template_directory_uri() . '/dist/wp',
+				'scripts' => get_template_directory_uri() . '/dist/wp/css',
+				'styles' => get_template_directory_uri() . '/dist/wp/js',
+				'images' => get_template_directory_uri() . '/dist/wp/img',
+				'fonts' => get_template_directory_uri() . '/dist/wp/fonts',
+				'patternlab' => get_template_directory_uri() . '/dist/pl'
+			]
+		];
+	}
+
+	return $base_context;
+}
+
+/**
+ * Build WP_Query arguments for posts loop block
+ *
+ * @param array $data Posts loop block field data
+ * @return array WP_Query arguments
+ */
+function build_posts_loop_query($data) {
+	// WP Query Args
+	$queryArgs = array(
+		'post_type' => $data['post_type'],
+		'order'     => !empty($data['sort']) ? $data['sort']['order'] : '',
+		'orderby' => !empty($data['sort']) ? $data['sort']['order_by'] : '',
+	);
+
+	// Ignore Sticky Posts
+	if ($data['ignore_sticky_posts'] === true) {
+		$queryArgs['ignore_sticky_posts'] = $data['ignore_sticky_posts'];
+	}
+
+	// Set Pagination Paramerters
+	if ( !is_archive() && !empty($data['pagination']) ) {
+		$queryArgs['posts_per_page'] = $data['pagination']['posts_per_page'];
+	} elseif ( !empty($data['pagination']) ) {
+		$queryArgs['posts_per_archive_page'] = $data['pagination']['posts_per_page'];
+	}
+	if ( !empty($data['pagination']) && $data['pagination']['nopaging'] === true ) {
+		$queryArgs['nopaging'] = $data['pagination']['nopaging'];
+	}
+	if ( !empty($data['pagination']) && !empty($data['pagination']['offset']) ) {
+		$queryArgs['offset'] = intval($data['pagination']['offset']);
+	}
+	global $paged;
+	if (!isset($paged) || !$paged) {
+		$paged = 1;
+	}
+	if ( !empty($data['pagination']) && !empty($data['pagination']['page']) && !is_page() ) {
+		$queryArgs['paged'] = $paged;
+	} elseif ( !empty($data['pagination']) && !empty($data['pagination']['page']) && is_page() ) {
+		$queryArgs['paged'] = $paged;
+	}
+
+	// If the selection type is "query", set query specific parameters
+	if ( $data['selection_type'] == 'query' ) {}
+
+	// If the selection type is "query", set parent parameters
+	if ( $data['selection_type'] == 'query' && !empty($data['post_parent']['parent']) && $data['post_parent']['include_parent'] === 'inc' ) {
+		$queryArgs['post_parent__in'] = $data['post_parent']['parent'];
+	}
+	if ( $data['selection_type'] == 'query' && !empty($data['post_parent']['parent']) && $data['post_parent']['include_parent'] === 'exc' ) {
+		$queryArgs['post_parent__not_in'] = $data['post_parent']['parent'];
+	}
+
+	// If the selection type is "query", set date parameters
+	if ( $data['selection_type'] == 'query' && !empty($data['date']['year']) ) {
+		$queryArgs['year'] = intval($data['date']['year']);
+	}
+	if ( $data['selection_type'] == 'query' && !empty($data['date']['monthnum']) ) {
+		$queryArgs['monthnum'] = intval($data['date']['monthnum']);
+	}
+	if ( $data['selection_type'] == 'query' && !empty($data['date']['w']) ) {
+		$queryArgs['w'] = intval($data['date']['w']);
+	}
+	if ( $data['selection_type'] == 'query' && !empty($data['date']['day']) ) {
+		$queryArgs['day'] = intval($data['date']['day']);
+	}
+	if ( $data['selection_type'] == 'query' && !empty($data['date']['hour']) ) {
+		$queryArgs['hour'] = intval($data['date']['hour']);
+	}
+	if ( $data['selection_type'] == 'query' && !empty($data['date']['minute']) ) {
+		$queryArgs['minute'] = intval($data['date']['minute']);
+	}
+	if ( $data['selection_type'] == 'query' && !empty($data['date']['second']) ) {
+		$queryArgs['second'] = intval($data['date']['second']);
+	}
+	if ( $data['selection_type'] == 'query' && !empty($data['date']['m']) ) {
+		$queryArgs['m'] = intval($data['date']['m']);
+	}
+
+	// date_query Array
+	$dateQueryArr = array();
+
+	// If the selection type is "query", format and set date_query parameters
+	if ( $data['selection_type'] == 'query' && !empty($data['date']['date_query']['date_query'])) {
+		foreach($data['date']['date_query']['date_query'] as & $date_query) {
+
+			// date_query Args
+			$dateQueryArgs = array();
+
+			if (!empty($date_query['year'])) {
+				$dateQueryArgs['year'] = intval($date_query['year']);
+			}
+			if (!empty($date_query['month'])) {
+				$dateQueryArgs['month'] = intval($date_query['month']);
+			}
+			if (!empty($date_query['week'])) {
+				$dateQueryArgs['week'] = intval($date_query['week']);
+			}
+			if (!empty($date_query['day'])) {
+				$dateQueryArgs['day'] = intval($date_query['day']);
+			}
+			if (!empty($date_query['hour'])) {
+				$dateQueryArgs['hour'] = intval($date_query['hour']);
+			}
+			if (!empty($date_query['minute'])) {
+				$dateQueryArgs['minute'] = intval($date_query['minute']);
+			}
+			if (!empty($date_query['second'])) {
+				$dateQueryArgs['second'] = intval($date_query['second']);
+			}
+
+			if ($date_query['after']['type'] === true) {
+				$dateQueryArgs['after'] = $date_query['after']['after'];
+			} else {
+				// date_query['after'] Args
+				$dateQueryAfterArgs = array();
+
+				if (!empty($date_query['after']['year'])) {
+					$dateQueryAfterArgs['year'] = intval($date_query['after']['year']);
+				}
+
+				if (!empty($date_query['after']['month'])) {
+					$dateQueryAfterArgs['month'] = intval($date_query['after']['month']);
+				}
+
+				if (!empty($date_query['after']['day'])) {
+					$dateQueryAfterArgs['day'] = intval($date_query['after']['day']);
+				}
+
+				if (!empty($date_query['after']['year']) || !empty($date_query['after']['month']) || !empty($date_query['after']['day'])) {
+					array_push($dateQueryArgs, $dateQueryAfterArgs);
+				}
+			}
+
+			if ($date_query['before']['type'] === true) {
+				$dateQueryArgs['before'] = $date_query['before']['before'];
+			} else {
+				// date_query['before'] Args
+				$dateQueryBeforeArgs = array();
+
+				if (!empty($date_query['before']['year'])) {
+					$dateQueryBeforeArgs['year'] = intval($date_query['before']['year']);
+				}
+
+				if (!empty($date_query['before']['month'])) {
+					$dateQueryBeforeArgs['month'] = intval($date_query['before']['month']);
+				}
+
+				if (!empty($date_query['before']['day'])) {
+					$dateQueryBeforeArgs['day'] = intval($date_query['before']['day']);
+				}
+
+				if (!empty($date_query['before']['year']) || !empty($date_query['before']['month']) || !empty($date_query['before']['day'])) {
+					array_push($dateQueryArgs, $dateQueryBeforeArgs);
+				}
+			}
+
+			array_push($dateQueryArr, $dateQueryArgs);
+		}
+		if (!empty($data['date']['date_query']['relation'])) {
+			$dateQueryArr['relation'] = $data['date']['date_query']['relation'];
+		}
+		if (!empty($data['date']['date_query']['compare'])) {
+			$dateQueryArr['compare'] = $data['date']['date_query']['compare'];
+		}
+		if (!empty($data['date']['date_query']['column'])) {
+			$dateQueryArr['column'] = $data['date']['date_query']['column'];
+		}
+		$dateQueryArr['inclusive'] = $data['date']['date_query']['inclusive'];
+		$queryArgs['date_query'] = $dateQueryArr;
+	}
+
+	// If the selection type is "query", set custom field parameters
+	if ( $data['selection_type'] == 'query' && !empty($data['custom_fields']['meta_key']) ) {
+		$queryArgs['meta_key'] = $data['custom_fields']['meta_key'];
+	}
+	if ( $data['selection_type'] == 'query' && !empty($data['custom_fields']['meta_value']) ) {
+		$queryArgs['meta_value'] = $data['custom_fields']['meta_value'];
+	}
+	if ( $data['selection_type'] == 'query' && !empty($data['custom_fields']['meta_value_num']) ) {
+		$queryArgs['meta_value_num'] = intval($data['custom_fields']['meta_value_num']);
+	}
+	if ( $data['selection_type'] == 'query' && !empty($data['custom_fields']['meta_compare']) && (!empty($data['custom_fields']['meta_key']) || !empty($data['custom_fields']['meta_value']) || !empty($data['custom_fields']['meta_value_num'])) ) {
+		$queryArgs['meta_compare'] = $data['custom_fields']['meta_compare'];
+	}
+
+	// meta_query Array
+	$metaQueryArr = array();
+
+	// If the selection type is "query", format and set meta_query parameters
+	if ( $data['selection_type'] == 'query' && !empty($data['custom_fields']['meta_query']['meta_query'])) {
+		foreach($data['custom_fields']['meta_query']['meta_query'] as & $meta_query) {
+
+			// meta_query Args
+			$metaQueryArgs = array();
+
+			if (!empty($meta_query['key'])) {
+				$metaQueryArgs['key'] = $meta_query['key'];
+			}
+			if ( ($meta_query['compare'] === 'IN' || $meta_query['compare'] === 'NOT IN' || $meta_query['compare'] === 'BETWEEN' || $meta_query['compare'] === 'NOT BETWEEN') && !empty($meta_query['values']) ) {
+				$values = array();
+				foreach ($meta_query['values'] as $value) {
+					array_push($values, $value['value']);
+				}
+				$metaQueryArgs['value'] = $values;
+			} elseif (!empty($meta_query['value']) ) {
+				$metaQueryArgs['value'] = $meta_query['value'];
+			}
+			if (!empty($meta_query['type'])) {
+				$metaQueryArgs['type'] = $meta_query['type'];
+			}
+			if (!empty($meta_query['compare'])) {
+				$metaQueryArgs['compare'] = $meta_query['compare'];
+			}
+
+			array_push($metaQueryArr, $metaQueryArgs);
+		}
+		if (!empty($data['custom_fields']['meta_query']['relation'])) {
+			$metaQueryArr['relation'] = $data['custom_fields']['meta_query']['relation'];
+		}
+		$queryArgs['meta_query'] = $metaQueryArr;
+	}
+
+	// If the selection type is "query", set taxonomy parameters
+	if ( $data['selection_type'] == 'query' && !empty($data['taxonomies']['taxonomies'])) {
+		// Merge taxonomy terms into single array
+		foreach ($data['taxonomies']['taxonomies'] as & $taxonomy) {
+			if (is_array($taxonomy['terms'])) {
+				$taxonomy['terms'] = array_column($taxonomy['terms'], 'term');
+			}
+		}
+		// Prepend relation value to taxonomy array
+		array_unshift($data['taxonomies']['taxonomies'], $data['taxonomies']['relation']);
+		$queryArgs['tax_query'] = $data['taxonomies']['taxonomies'];
+	}
+
+	// If the selection type is "query", set category parameters
+	if ( $data['selection_type'] == 'query' && !empty($data['categories']['category']) && $data['categories']['include_cats'] === 'inc' ) {
+		$queryArgs['category__in'] = $data['categories']['category'];
+	}
+	if ( $data['selection_type'] == 'query' && !empty($data['categories']['category']) && $data['categories']['include_cats'] === 'exc' ) {
+		$queryArgs['category__not_in'] = $data['categories']['category'];
+	}
+
+	// If the selection type is "query", set tag parameters
+	if ( $data['selection_type'] == 'query' && !empty($data['tags']['tags']) && $data['tags']['include_tags'] === 'inc' ) {
+		$queryArgs['tag__in'] = $data['tags']['tags'];
+	}
+	if ( $data['selection_type'] == 'query' && !empty($data['tags']['tags']) && $data['tags']['include_tags'] === 'exc' ) {
+		$queryArgs['tag__not_in'] = $data['tags']['tags'];
+	}
+
+	// If the selection type is "query", set author parameters
+	if ( $data['selection_type'] == 'query' && !empty($data['authors']['author']) && $data['authors']['include_author'] === 'inc' ) {
+		$queryArgs['author__in'] = $data['authors']['author'];
+	}
+	if ( $data['selection_type'] == 'query' && !empty($data['authors']['author']) && $data['authors']['include_author'] === 'exc' ) {
+		$queryArgs['author__not_in'] = $data['authors']['author'];
+	}
+
+	// If the selection type is "query", set comment count parameters
+	if ( $data['selection_type'] == 'query' && !empty($data['comment_count']['value']) ) {
+		$queryArgs['comment_count'] = array(
+			'value' => intval($data['comment_count']['value']),
+			'compare' => $data['comment_count']['compare']
+		);
+	}
+
+	// If the selection type is "query", set post status parameters
+	if ( !empty($data['post_status']) && $data['post_status']['all'] == true ) {
+		$queryArgs['post_status'] = 'all';
+	} elseif (!empty($data['post_status']['status'])) {
+		$queryArgs['post_status'] = $data['post_status']['status'];
+	}
+
+	// If the selection type is "query", set password parameters
+	if (!empty($data['password']) && $data['password']['has_password'] === true) {
+		$queryArgs['has_password'] = $data['password']['has_password'];
+	}
+	if (!empty($data['password']['post_password'])) {
+		$queryArgs['post_password'] = $data['password']['post_password'];
+	}
+
+	// If the selection type is "query", set mime type parameters
+	if ( $data['selection_type'] == 'query' && !empty($data['post_mime_type']) ) {
+		$queryArgs['post_mime_type'] = $data['post_mime_type'];
+	}
+
+	// If the selection type is "query", set permissions parameters
+	if ( $data['selection_type'] == 'query' && !empty($data['permissions']) ) {
+		$queryArgs['perm'] = $data['permissions'];
+	}
+
+	// If the selection type is "query", set search parameters
+	if ( $data['selection_type'] == 'query' && !empty($data['search']) && $data['search']['s'] === true ) {
+		$queryArgs['s'] = get_search_query();
+	}
+	if ( $data['selection_type'] == 'query' && !empty($data['search']) && $data['search']['exact'] === true ) {
+		$queryArgs['exact'] = $data['search']['exact'];
+	}
+	if ( $data['selection_type'] == 'query' && !empty($data['search']) && $data['search']['sentence'] === true ) {
+		$queryArgs['sentence'] = $data['search']['sentence'];
+	}
+
+	// If the selection type is "select", set selection specific parameters
+	if ( $data['selection_type'] == 'select' ) {
+		$queryArgs['post__in'] = $data['select_posts'];
+	}
+
+	return $queryArgs;
+}
+
+/**
  *  This is the callback that displays the block.
  *
  * @param   array  $block      The block settings and attributes.
@@ -117,8 +477,8 @@ function replace_acf_keys_with_names( $data ) {
  */
 // Render Callback Function
 function dream_block_render($block, $content = '', $is_preview = false, $post_id, $wp_block, $acf_context) {
-  
-  $context = Timber::context();
+
+  $context = array_merge(Timber::context(), get_block_context_base());
 
   // Post data
   $context['block_post'] = new Timber\Post();
@@ -135,8 +495,8 @@ function dream_block_render($block, $content = '', $is_preview = false, $post_id
   // Store block context
   $context['block_context'] = $acf_context;
 
-  // Replace acf keys with human readable acf field names
-  if( !empty( $context['block_context']['acf/fields'] ) ) {
+  // Replace acf keys with human readable acf field names (only if filter enabled and data exists)
+  if( !empty( $context['block_context']['acf/fields'] ) && apply_filters('dream_use_acf_field_names', false) ) {
     $context['block_context']['acf/fields'] = replace_acf_keys_with_names( $context['block_context']['acf/fields'] );
   }
 
@@ -145,58 +505,42 @@ function dream_block_render($block, $content = '', $is_preview = false, $post_id
     $context[ 'parent_block_data' ] = $wp_block->parsed_block[ 'parent_block_data' ];
   }
 
-  // Replace acf keys with human readable acf field names
-  if( !empty( $context[ 'parent_block_data' ][ 'data' ] ) ) {
+  // Replace acf keys with human readable acf field names (only if filter enabled and data exists)
+  if( !empty( $context[ 'parent_block_data' ][ 'data' ] ) && apply_filters('dream_use_acf_field_names', false) ) {
     $context[ 'parent_block_data' ][ 'data' ] = replace_acf_keys_with_names( $context[ 'parent_block_data' ][ 'data' ] );
   }
 
-  // Menus
-  // Passing menus into the block context to ensure they work in widget areas
-  // Copied from config.php
-  $context['menu_primary'] = new \Timber\Menu( 'primary' );
-  $context['menu_secondary'] = new \Timber\Menu( 'secondary' );
-  $context['menu_footer'] = new \Timber\Menu( 'footer' );
-  $context['menu_social'] = new \Timber\Menu( 'social' );
-  $context['menu_utility'] = new \Timber\Menu( 'utility' );
-
-  // Paths
-  // Passing paths into the block context to ensure they work in widget areas
-  // Copied from vars.php
-  $context['paths'] = [
-    'assets' => get_template_directory_uri() . '/dist/wp',
-    'scripts' => get_template_directory_uri() . '/dist/wp/css',
-    'styles' => get_template_directory_uri() . '/dist/wp/js',
-    'images' => get_template_directory_uri() . '/dist/wp/img',
-    'fonts' => get_template_directory_uri() . '/dist/wp/fonts',
-    'patternlab' => get_template_directory_uri() . '/dist/pl'
-  ];
+  // Note: Menus and Paths are now provided by get_block_context_base() to avoid rebuilding for every block
 
   /**
    * Posts query data
   */
 
   if ( $block['name'] === 'acf/posts-loop' ) {
+    // Reuse already-fetched fields from $context['fields'] (avoids 19 redundant DB queries)
+    $fields = $context['fields'];
+
     // Field $data that gets exposed to the render template
     $data = array(
-      'selection_type' => get_field( 'selection_type' ),
-      'categories' => get_field( 'categories' ),
-      'tags' => get_field( 'tags' ),
-      'authors' => get_field( 'authors' ),
-      'pagination' => get_field( 'pagination' ),
-      'ignore_sticky_posts' => get_field( 'ignore_sticky_posts' ),
-      'select_posts' => get_field('select_posts'),
-      'post_type' => get_field( 'post_type'),
-      'sort' => get_field( 'sort_order' ),
-      'taxonomies' => get_field( 'taxonomies'),
-      'date' => get_field( 'date' ),
-      'comment_count' => get_field( 'comment_count' ),
-      'post_status' => get_field( 'post_status' ),
-      'password' => get_field( 'password' ),
-      'post_parent' => get_field( 'post_parent' ),
-      'post_mime_type' => get_field( 'post_mime_type' ),
-      'permissions' => get_field( 'permissions' ),
-      'custom_fields' => get_field( 'custom_fields' ),
-      'search' => get_field( 'search' )
+      'selection_type' => $fields['selection_type'] ?? null,
+      'categories' => $fields['categories'] ?? null,
+      'tags' => $fields['tags'] ?? null,
+      'authors' => $fields['authors'] ?? null,
+      'pagination' => $fields['pagination'] ?? null,
+      'ignore_sticky_posts' => $fields['ignore_sticky_posts'] ?? null,
+      'select_posts' => $fields['select_posts'] ?? null,
+      'post_type' => $fields['post_type'] ?? null,
+      'sort' => $fields['sort_order'] ?? null,
+      'taxonomies' => $fields['taxonomies'] ?? null,
+      'date' => $fields['date'] ?? null,
+      'comment_count' => $fields['comment_count'] ?? null,
+      'post_status' => $fields['post_status'] ?? null,
+      'password' => $fields['password'] ?? null,
+      'post_parent' => $fields['post_parent'] ?? null,
+      'post_mime_type' => $fields['post_mime_type'] ?? null,
+      'permissions' => $fields['permissions'] ?? null,
+      'custom_fields' => $fields['custom_fields'] ?? null,
+      'search' => $fields['search'] ?? null
     );
 
     // print_r('<pre>');
@@ -227,306 +571,7 @@ function dream_block_render($block, $content = '', $is_preview = false, $post_id
       $class_name .= ' ' . $block['class_name'];
     }
 
-    // WP Query Args
-    $queryArgs = array(
-      'post_type' => $data['post_type'],
-      'order'     => !empty($data['sort']) ? $data['sort']['order'] : '',
-      'orderby' => !empty($data['sort']) ? $data['sort']['order_by'] : '',
-    );
-
-    // Ignore Sticky Posts
-    if ($data['ignore_sticky_posts'] === true) {
-      $queryArgs['ignore_sticky_posts'] = $data['ignore_sticky_posts'];
-    }
-
-    // Set Pagination Paramerters
-    if ( !is_archive() && !empty($data['pagination']) ) {
-      $queryArgs['posts_per_page'] = $data['pagination']['posts_per_page'];
-    } elseif ( !empty($data['pagination']) ) {
-      $queryArgs['posts_per_archive_page'] = $data['pagination']['posts_per_page'];
-    }
-    if ( !empty($data['pagination']) && $data['pagination']['nopaging'] === true ) {
-      $queryArgs['nopaging'] = $data['pagination']['nopaging'];
-    }
-    if ( !empty($data['pagination']) && !empty($data['pagination']['offset']) ) {
-      $queryArgs['offset'] = intval($data['pagination']['offset']);
-    }
-    global $paged;
-    if (!isset($paged) || !$paged) {
-      $paged = 1;
-    }
-    if ( !empty($data['pagination']) && !empty($data['pagination']['page']) && !is_page() ) {
-      $queryArgs['paged'] = $paged;
-    } elseif ( !empty($data['pagination']) && !empty($data['pagination']['page']) && is_page() ) {
-      $queryArgs['paged'] = $paged;
-    }
-
-    // If the selection type is "query", set query specific parameters
-    if ( $data['selection_type'] == 'query' ) {}
-
-    // If the selection type is "query", set parent parameters
-    if ( $data['selection_type'] == 'query' && !empty($data['post_parent']['parent']) && $data['post_parent']['include_parent'] === 'inc' ) {
-      $queryArgs['post_parent__in'] = $data['post_parent']['parent'];
-    }
-    if ( $data['selection_type'] == 'query' && !empty($data['post_parent']['parent']) && $data['post_parent']['include_parent'] === 'exc' ) {
-      $queryArgs['post_parent__not_in'] = $data['post_parent']['parent'];
-    }
-
-    // If the selection type is "query", set date parameters
-    if ( $data['selection_type'] == 'query' && !empty($data['date']['year']) ) {
-      $queryArgs['year'] = intval($data['date']['year']);
-    }
-    if ( $data['selection_type'] == 'query' && !empty($data['date']['monthnum']) ) {
-      $queryArgs['monthnum'] = intval($data['date']['monthnum']);
-    }
-    if ( $data['selection_type'] == 'query' && !empty($data['date']['w']) ) {
-      $queryArgs['w'] = intval($data['date']['w']);
-    }
-    if ( $data['selection_type'] == 'query' && !empty($data['date']['day']) ) {
-      $queryArgs['day'] = intval($data['date']['day']);
-    }
-    if ( $data['selection_type'] == 'query' && !empty($data['date']['hour']) ) {
-      $queryArgs['hour'] = intval($data['date']['hour']);
-    }
-    if ( $data['selection_type'] == 'query' && !empty($data['date']['minute']) ) {
-      $queryArgs['minute'] = intval($data['date']['minute']);
-    }
-    if ( $data['selection_type'] == 'query' && !empty($data['date']['second']) ) {
-      $queryArgs['second'] = intval($data['date']['second']);
-    }
-    if ( $data['selection_type'] == 'query' && !empty($data['date']['m']) ) {
-      $queryArgs['m'] = intval($data['date']['m']);
-    }
-
-    // date_query Array
-    $dateQueryArr = array();
-
-    // If the selection type is "query", format and set date_query parameters
-    if ( $data['selection_type'] == 'query' && !empty($data['date']['date_query']['date_query'])) {
-      foreach($data['date']['date_query']['date_query'] as & $date_query) {
-
-        // date_query Args
-        $dateQueryArgs = array();
-
-        if (!empty($date_query['year'])) {
-          $dateQueryArgs['year'] = intval($date_query['year']);
-        }
-        if (!empty($date_query['month'])) {
-          $dateQueryArgs['month'] = intval($date_query['month']);
-        }
-        if (!empty($date_query['week'])) {
-          $dateQueryArgs['week'] = intval($date_query['week']);
-        }
-        if (!empty($date_query['day'])) {
-          $dateQueryArgs['day'] = intval($date_query['day']);
-        }
-        if (!empty($date_query['hour'])) {
-          $dateQueryArgs['hour'] = intval($date_query['hour']);
-        }
-        if (!empty($date_query['minute'])) {
-          $dateQueryArgs['minute'] = intval($date_query['minute']);
-        }
-        if (!empty($date_query['second'])) {
-          $dateQueryArgs['second'] = intval($date_query['second']);
-        }
-
-        if ($date_query['after']['type'] === true) {
-          $dateQueryArgs['after'] = $date_query['after']['after'];
-        } else {
-          // date_query['after'] Args
-          $dateQueryAfterArgs = array();
-
-          if (!empty($date_query['after']['year'])) {
-            $dateQueryAfterArgs['year'] = intval($date_query['after']['year']);
-          }
-
-          if (!empty($date_query['after']['month'])) {
-            $dateQueryAfterArgs['month'] = intval($date_query['after']['month']);
-          }
-
-          if (!empty($date_query['after']['day'])) {
-            $dateQueryAfterArgs['day'] = intval($date_query['after']['day']);
-          }
-
-          if (!empty($date_query['after']['year']) || !empty($date_query['after']['month']) || !empty($date_query['after']['day'])) {
-            array_push($dateQueryArgs, $dateQueryAfterArgs);
-          }
-        }
-
-        if ($date_query['before']['type'] === true) {
-          $dateQueryArgs['before'] = $date_query['before']['before'];
-        } else {
-          // date_query['before'] Args
-          $dateQueryBeforeArgs = array();
-
-          if (!empty($date_query['before']['year'])) {
-            $dateQueryBeforeArgs['year'] = intval($date_query['before']['year']);
-          }
-
-          if (!empty($date_query['before']['month'])) {
-            $dateQueryBeforeArgs['month'] = intval($date_query['before']['month']);
-          }
-
-          if (!empty($date_query['before']['day'])) {
-            $dateQueryBeforeArgs['day'] = intval($date_query['before']['day']);
-          }
-
-          if (!empty($date_query['before']['year']) || !empty($date_query['before']['month']) || !empty($date_query['before']['day'])) {
-            array_push($dateQueryArgs, $dateQueryBeforeArgs);
-          }
-        }
-
-        array_push($dateQueryArr, $dateQueryArgs);
-      }
-      if (!empty($data['date']['date_query']['relation'])) {
-        $dateQueryArr['relation'] = $data['date']['date_query']['relation'];
-      }
-      if (!empty($data['date']['date_query']['compare'])) {
-        $dateQueryArr['compare'] = $data['date']['date_query']['compare'];
-      }
-      if (!empty($data['date']['date_query']['column'])) {
-        $dateQueryArr['column'] = $data['date']['date_query']['column'];
-      }
-      $dateQueryArr['inclusive'] = $data['date']['date_query']['inclusive'];
-      $queryArgs['date_query'] = $dateQueryArr;
-    }
-
-    // If the selection type is "query", set custom field parameters
-    if ( $data['selection_type'] == 'query' && !empty($data['custom_fields']['meta_key']) ) {
-      $queryArgs['meta_key'] = $data['custom_fields']['meta_key'];
-    }
-    if ( $data['selection_type'] == 'query' && !empty($data['custom_fields']['meta_value']) ) {
-      $queryArgs['meta_value'] = $data['custom_fields']['meta_value'];
-    }
-    if ( $data['selection_type'] == 'query' && !empty($data['custom_fields']['meta_value_num']) ) {
-      $queryArgs['meta_value_num'] = intval($data['custom_fields']['meta_value_num']);
-    }
-    if ( $data['selection_type'] == 'query' && !empty($data['custom_fields']['meta_compare']) && (!empty($data['custom_fields']['meta_key']) || !empty($data['custom_fields']['meta_value']) || !empty($data['custom_fields']['meta_value_num'])) ) {
-      $queryArgs['meta_compare'] = $data['custom_fields']['meta_compare'];
-    }
-
-    // meta_query Array
-    $metaQueryArr = array();
-
-    // If the selection type is "query", format and set meta_query parameters
-    if ( $data['selection_type'] == 'query' && !empty($data['custom_fields']['meta_query']['meta_query'])) {
-      foreach($data['custom_fields']['meta_query']['meta_query'] as & $meta_query) {
-
-        // meta_query Args
-        $metaQueryArgs = array();
-
-        if (!empty($meta_query['key'])) {
-          $metaQueryArgs['key'] = $meta_query['key'];
-        }
-        if ( ($meta_query['compare'] === 'IN' || $meta_query['compare'] === 'NOT IN' || $meta_query['compare'] === 'BETWEEN' || $meta_query['compare'] === 'NOT BETWEEN') && !empty($meta_query['values']) ) {
-          $values = array();
-          foreach ($meta_query['values'] as $value) {
-            array_push($values, $value['value']);
-          }
-          $metaQueryArgs['value'] = $values;
-        } elseif (!empty($meta_query['value']) ) {
-          $metaQueryArgs['value'] = $meta_query['value'];
-        }
-        if (!empty($meta_query['type'])) {
-          $metaQueryArgs['type'] = $meta_query['type'];
-        }
-        if (!empty($meta_query['compare'])) {
-          $metaQueryArgs['compare'] = $meta_query['compare'];
-        }
-
-        array_push($metaQueryArr, $metaQueryArgs);
-      }
-      if (!empty($data['custom_fields']['meta_query']['relation'])) {
-        $metaQueryArr['relation'] = $data['custom_fields']['meta_query']['relation'];
-      }
-      $queryArgs['meta_query'] = $metaQueryArr;
-    }
-
-    // If the selection type is "query", set taxonomy parameters
-    if ( $data['selection_type'] == 'query' && !empty($data['taxonomies']['taxonomies'])) {
-      // Merge taxonomy terms into single array
-      foreach ($data['taxonomies']['taxonomies'] as & $taxonomy) {
-        if (is_array($taxonomy['terms'])) {
-          $taxonomy['terms'] = array_column($taxonomy['terms'], 'term');
-        }
-      }
-      // Prepend relation value to taxonomy array
-      array_unshift($data['taxonomies']['taxonomies'], $data['taxonomies']['relation']);
-      $queryArgs['tax_query'] = $data['taxonomies']['taxonomies'];
-    }
-
-    // If the selection type is "query", set category parameters
-    if ( $data['selection_type'] == 'query' && !empty($data['categories']['category']) && $data['categories']['include_cats'] === 'inc' ) {
-      $queryArgs['category__in'] = $data['categories']['category'];
-    }
-    if ( $data['selection_type'] == 'query' && !empty($data['categories']['category']) && $data['categories']['include_cats'] === 'exc' ) {
-      $queryArgs['category__not_in'] = $data['categories']['category'];
-    }
-
-    // If the selection type is "query", set tag parameters
-    if ( $data['selection_type'] == 'query' && !empty($data['tags']['tags']) && $data['tags']['include_tags'] === 'inc' ) {
-      $queryArgs['tag__in'] = $data['tags']['tags'];
-    }
-    if ( $data['selection_type'] == 'query' && !empty($data['tags']['tags']) && $data['tags']['include_tags'] === 'exc' ) {
-      $queryArgs['tag__not_in'] = $data['tags']['tags'];
-    }
-
-    // If the selection type is "query", set author parameters
-    if ( $data['selection_type'] == 'query' && !empty($data['authors']['author']) && $data['authors']['include_author'] === 'inc' ) {
-      $queryArgs['author__in'] = $data['authors']['author'];
-    }
-    if ( $data['selection_type'] == 'query' && !empty($data['authors']['author']) && $data['authors']['include_author'] === 'exc' ) {
-      $queryArgs['author__not_in'] = $data['authors']['author'];
-    }
-
-    // If the selection type is "query", set comment count parameters
-    if ( $data['selection_type'] == 'query' && !empty($data['comment_count']['value']) ) {
-      $queryArgs['comment_count'] = array(
-        'value' => intval($data['comment_count']['value']),
-        'compare' => $data['comment_count']['compare']
-      );
-    }
-
-    // If the selection type is "query", set post status parameters
-    if ( !empty($data['post_status']) && $data['post_status']['all'] == true ) {
-      $queryArgs['post_status'] = 'all';
-    } elseif (!empty($data['post_status']['status'])) {
-      $queryArgs['post_status'] = $data['post_status']['status'];
-    }
-
-    // If the selection type is "query", set password parameters
-    if (!empty($data['password']) && $data['password']['has_password'] === true) {
-      $queryArgs['has_password'] = $data['password']['has_password'];
-    }
-    if (!empty($data['password']['post_password'])) {
-      $queryArgs['post_password'] = $data['password']['post_password'];
-    }
-
-    // If the selection type is "query", set mime type parameters
-    if ( $data['selection_type'] == 'query' && !empty($data['post_mime_type']) ) {
-      $queryArgs['post_mime_type'] = $data['post_mime_type'];
-    }
-
-    // If the selection type is "query", set permissions parameters
-    if ( $data['selection_type'] == 'query' && !empty($data['permissions']) ) {
-      $queryArgs['perm'] = $data['permissions'];
-    }
-
-    // If the selection type is "query", set search parameters
-    if ( $data['selection_type'] == 'query' && !empty($data['search']) && $data['search']['s'] === true ) {
-      $queryArgs['s'] = get_search_query();
-    }
-    if ( $data['selection_type'] == 'query' && !empty($data['search']) && $data['search']['exact'] === true ) {
-      $queryArgs['exact'] = $data['search']['exact'];
-    }
-    if ( $data['selection_type'] == 'query' && !empty($data['search']) && $data['search']['sentence'] === true ) {
-      $queryArgs['sentence'] = $data['search']['sentence'];
-    }
-
-    // If the selection type is "select", set selection specific parameters
-    if ( $data['selection_type'] == 'select' ) {
-      $queryArgs['post__in'] = $data['select_posts'];
-    }
+    $queryArgs = build_posts_loop_query($data);
 
     // Create a new WP_Query instance
     // $posts = new WP_Query( $queryArgs );
