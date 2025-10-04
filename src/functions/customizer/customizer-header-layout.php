@@ -475,7 +475,7 @@ add_action( 'customize_register', 'theme_customize_register_header_layout' );
 class headerLayout extends TimberSite {
 
   function __construct() {
-    add_filter( 'timber_context', [$this, 'add_to_context'] );
+    add_filter( 'timber/context', [$this, 'add_to_context'], 25 );
     parent::__construct();
   }
 

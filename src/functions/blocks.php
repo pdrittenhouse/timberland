@@ -135,23 +135,14 @@ function get_block_context_base() {
 	static $base_context = null;
 
 	if ($base_context === null) {
-		$base_context = [
-			// Menus (needed for blocks in widget areas)
-			'menu_primary' => new \Timber\Menu('primary'),
-			'menu_secondary' => new \Timber\Menu('secondary'),
-			'menu_footer' => new \Timber\Menu('footer'),
-			'menu_social' => new \Timber\Menu('social'),
-			'menu_utility' => new \Timber\Menu('utility'),
-			// Paths (needed for blocks in widget areas)
-			'paths' => [
-				'assets' => get_template_directory_uri() . '/dist/wp',
-				'scripts' => get_template_directory_uri() . '/dist/wp/css',
-				'styles' => get_template_directory_uri() . '/dist/wp/js',
-				'images' => get_template_directory_uri() . '/dist/wp/img',
-				'fonts' => get_template_directory_uri() . '/dist/wp/fonts',
-				'patternlab' => get_template_directory_uri() . '/dist/pl'
+		$base_context = array_merge(
+			// Menus - shared config from StarterSite::get_theme_menus()
+			StarterSite::get_theme_menus(),
+			[
+				// Paths - shared config from StarterSite::get_theme_paths()
+				'paths' => StarterSite::get_theme_paths()
 			]
-		];
+		);
 	}
 
 	return $base_context;

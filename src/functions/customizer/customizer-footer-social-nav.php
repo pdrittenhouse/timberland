@@ -733,7 +733,7 @@ function theme_get_customizer_footer_social_nav() {
 class footerSocialNav extends TimberSite {
 
   function __construct() {
-    add_filter( 'timber_context', [$this, 'add_to_context'] );
+    add_filter( 'timber/context', [$this, 'add_to_context'], 25 );
     parent::__construct();
   }
 

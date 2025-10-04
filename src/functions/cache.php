@@ -40,6 +40,9 @@ function dream_clear_timber_cache() {
 	$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_dream_post_blocks_%' OR option_name LIKE '_transient_timeout_dream_post_blocks_%'");
 	$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_dream_pattern_blocks_%' OR option_name LIKE '_transient_timeout_dream_pattern_blocks_%'");
 
+	// Clear SASS data cache (all versions - mtime-based keys)
+	$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_theme_sass_data_%' OR option_name LIKE '_transient_timeout_theme_sass_data_%'");
+
 	// Clear any WordPress object cache
 	if (function_exists('wp_cache_flush')) {
 		wp_cache_flush();

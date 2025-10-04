@@ -7,7 +7,7 @@ class StarterSite extends Timber\Site {
     /** Add timber support. */
     public function __construct() {
         add_action( 'after_setup_theme', array( $this, 'theme_supports' ) );
-        add_filter( 'timber/context', array( $this, 'add_to_context' ) );
+        add_filter( 'timber/context', array( $this, 'add_to_context' ), 5 );
         add_filter( 'timber/twig', array( $this, 'add_to_twig' ) );
         add_action( 'init', array( $this, 'register_post_types' ) );
         add_action( 'init', array( $this, 'register_taxonomies' ) );
@@ -84,6 +84,50 @@ class StarterSite extends Timber\Site {
       ) );
     }
 
+    /**
+     * Get theme paths
+     *
+     * Shared configuration for theme asset paths.
+     * Used by both Timber context and block context.
+     *
+     * @return array Associative array of theme paths
+     */
+    public static function get_theme_paths() {
+        return [
+            'assets' => get_template_directory_uri() . '/dist/wp',
+            'scripts' => get_template_directory_uri() . '/dist/wp/css',
+            'styles' => get_template_directory_uri() . '/dist/wp/js',
+            'images' => get_template_directory_uri() . '/dist/wp/img',
+            'fonts' => get_template_directory_uri() . '/dist/wp/fonts',
+            'patternlab' => get_template_directory_uri() . '/dist/pl'
+        ];
+    }
+
+    /**
+     * Get all theme menus with static caching
+     *
+     * This function loads all theme menus once per request and caches them
+     * to prevent duplicate database queries across global context and block context.
+     *
+     * @return array Associative array of menu objects
+     */
+    public static function get_theme_menus() {
+        static $menus = null;
+
+        if ($menus === null) {
+            $menus = [
+                'menu' => new \Timber\Menu(),
+                'menu_primary' => new \Timber\Menu('primary'),
+                'menu_secondary' => new \Timber\Menu('secondary'),
+                'menu_footer' => new \Timber\Menu('footer'),
+                'menu_social' => new \Timber\Menu('social'),
+                'menu_utility' => new \Timber\Menu('utility'),
+            ];
+        }
+
+        return $menus;
+    }
+
     /** This is where you add some context
      *
      * @param string $context context['this'] Being the Twig's {{ this }}.
@@ -116,14 +160,16 @@ class StarterSite extends Timber\Site {
         $header_bg_path = parse_url($header_bg_src);
         $context['header_bg'] = $header_bg_path['path'];
 
-        // Menus
-        // Replicate in block context [blocks.php] when updating
-        $context['menu'] = new Timber\Menu();
-        $context['menu_primary'] = new \Timber\Menu( 'primary' );
-        $context['menu_secondary'] = new \Timber\Menu( 'secondary' );
-        $context['menu_footer'] = new \Timber\Menu( 'footer' );
-        $context['menu_social'] = new \Timber\Menu( 'social' );
-        $context['menu_utility'] = new \Timber\Menu( 'utility' );
+        // Legacy menu loading (replaced by get_theme_menus() helper)
+        // $context['menu'] = new Timber\Menu();
+        // $context['menu_primary'] = new \Timber\Menu( 'primary' );
+        // $context['menu_secondary'] = new \Timber\Menu( 'secondary' );
+        // $context['menu_footer'] = new \Timber\Menu( 'footer' );
+        // $context['menu_social'] = new \Timber\Menu( 'social' );
+        // $context['menu_utility'] = new \Timber\Menu( 'utility' );
+
+        // Menus - uses get_theme_menus() for centralized, cached menu loading
+        $context = array_merge($context, self::get_theme_menus());
 
         // TODO: Set link target, title attribute and css classes screen attributes
 

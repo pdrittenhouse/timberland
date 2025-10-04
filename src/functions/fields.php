@@ -100,7 +100,7 @@ if( function_exists('acf_add_options_page') ) {
 /**
  * Add options to timber context
  */
-add_filter( 'timber_context', 'dream_timber_context'  );
+add_filter( 'timber/context', 'dream_timber_context', 20 );
 function dream_timber_context( $context ) {
   if (class_exists('ACF')) {
     $context['options'] = get_fields('option');
