@@ -26,7 +26,7 @@ module.exports = {
     path: paths.build,
     filename: 'js/[name].bundle.js',
     //publicPath: '/dist/wp/',
-    publicPath: '/wp-content/themes/updater-starter/dist/wp/',
+    publicPath: '/wp-content/themes/timberland/dist/wp/', // TODO: Make this dynamic based on theme name
   },
   module: {
     rules: [
