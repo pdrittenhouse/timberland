@@ -4,6 +4,9 @@
 
 import $ from 'jquery';
 
+// Bootstrap CSS components this pattern uses
+import '../../00-protons/printing/libs/bootstrap-components/button-group.scss';
+
 // Module styles
 import './_button-group.scss';
 

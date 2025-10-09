@@ -4,6 +4,13 @@
 
 import $ from 'jquery';
 
+// Bootstrap CSS components this pattern uses
+import '../../00-protons/printing/libs/bootstrap-components/carousel.scss';
+
+// Bootstrap JS
+// eslint-disable-next-line no-unused-vars
+import Carousel from 'bootstrap/js/src/carousel';
+
 // Module styles
 import './_carousel.scss';
 

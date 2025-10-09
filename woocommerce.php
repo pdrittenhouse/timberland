@@ -34,5 +34,10 @@ if ( is_singular( 'product' ) ) {
     $context['title'] = single_term_title( '', false );
   }
 
+  // Enqueue Bootstrap components used in woo/archive.twig and woo/tease-product.twig
+  enqueue_bootstrap_component('card');
+  enqueue_bootstrap_component('modal');
+  enqueue_bootstrap_component('close');
+
   Timber::render( 'woo/archive.twig', $context );
 }

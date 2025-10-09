@@ -4,6 +4,13 @@
 
 import $ from 'jquery';
 
+// Bootstrap CSS components this pattern uses
+import '../../00-protons/printing/libs/bootstrap-components/nav.scss';
+
+// Bootstrap JS
+// eslint-disable-next-line no-unused-vars
+import Tab from 'bootstrap/js/src/tab';
+
 // Module styles
 import './_nav.scss';
 

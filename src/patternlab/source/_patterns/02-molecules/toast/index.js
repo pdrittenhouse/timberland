@@ -4,7 +4,13 @@
 
 import $ from 'jquery';
 
-import Toast from 'bootstrap/js/src/popover';
+// Bootstrap CSS components this pattern uses
+import '../../00-protons/printing/libs/bootstrap-components/toast.scss';
+import '../../00-protons/printing/libs/bootstrap-components/close.scss';  // For toast close button
+
+// Bootstrap JS
+// eslint-disable-next-line no-unused-vars
+import Toast from 'bootstrap/js/src/toast';
 
 // Module styles
 import './_toast.scss';

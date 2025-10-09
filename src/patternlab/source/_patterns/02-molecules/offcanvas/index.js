@@ -4,6 +4,14 @@
 
 import $ from 'jquery';
 
+// Bootstrap CSS components this pattern uses
+import '../../00-protons/printing/libs/bootstrap-components/offcanvas.scss';
+import '../../00-protons/printing/libs/bootstrap-components/close.scss';  // For offcanvas close button
+
+// Bootstrap JS
+// eslint-disable-next-line no-unused-vars
+import Offcanvas from 'bootstrap/js/src/offcanvas';
+
 // Module styles
 import './_offcanvas.scss';
 

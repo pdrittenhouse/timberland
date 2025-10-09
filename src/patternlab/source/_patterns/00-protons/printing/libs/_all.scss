@@ -1,4 +1,7 @@
-@import 'bootstrap';
+// Bootstrap critical (always loaded) - components loaded conditionally by patterns
+// REMOVED: bootstrap-critical is now a separate webpack entry to prevent duplication in dream.css
+// It will be enqueued separately by bootstrap-loader.php
+
 @import 'font-awesome';
 @import 'hamburgers';
 @import 'simple-lightbox';

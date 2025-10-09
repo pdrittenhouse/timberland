@@ -4,6 +4,13 @@
 
 import $ from 'jquery';
 
+// Bootstrap CSS components this pattern uses
+import '../../00-protons/printing/libs/bootstrap-components/accordion.scss';  // Collapse styles are part of accordion
+
+// Bootstrap JS
+// eslint-disable-next-line no-unused-vars
+import Collapse from 'bootstrap/js/src/collapse';
+
 // Module styles
 import './_collapse.scss';
 

@@ -7,6 +7,10 @@ import $ from 'jquery';
 import 'responsive-tabs/css/responsive-tabs.css';
 // import 'responsive-tabs/css/style.css';
 
+// Bootstrap JS (for Bootstrap tab mode)
+// eslint-disable-next-line no-unused-vars
+import Tab from 'bootstrap/js/src/tab';
+
 // Module styles
 import './_tabs.scss';
 

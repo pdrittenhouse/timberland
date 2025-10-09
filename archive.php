@@ -16,6 +16,9 @@
 
 $templates = array( 'pages/archive.twig', 'pages/index.twig' );
 
+// Enqueue Bootstrap components used in pages/archive.twig
+enqueue_bootstrap_component('pagination');
+
 $context = Timber::context();
 
 $context['title'] = 'Archive';

@@ -4,6 +4,14 @@
 
 import $ from 'jquery';
 
+// Bootstrap CSS components this pattern uses
+import '../../00-protons/printing/libs/bootstrap-components/modal.scss';
+import '../../00-protons/printing/libs/bootstrap-components/close.scss';  // For modal close button
+
+// Bootstrap JS
+// eslint-disable-next-line no-unused-vars
+import Modal from 'bootstrap/js/src/modal';
+
 // Module styles
 import './_modal.scss';
 

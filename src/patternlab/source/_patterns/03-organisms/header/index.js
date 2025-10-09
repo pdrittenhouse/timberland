@@ -7,6 +7,15 @@ import $ from 'jquery';
 // Hamburgers
 import 'hamburgers/_sass/hamburgers/hamburgers.scss';
 
+// Bootstrap CSS components this pattern uses
+import '../../00-protons/printing/libs/bootstrap-components/navbar.scss';
+import '../../00-protons/printing/libs/bootstrap-components/nav.scss';
+import '../../00-protons/printing/libs/bootstrap-components/dropdown.scss';
+
+// Bootstrap JS
+// eslint-disable-next-line no-unused-vars
+import Dropdown from 'bootstrap/js/src/dropdown';
+
 // Module styles
 import './_header.scss';
 

@@ -1,0 +1,33 @@
+// Bootstrap Critical - Always Loaded
+// These are foundation styles needed on every page
+
+// IMPORTANT: Bootstrap's non-printing code (functions/variables/mixins) is already
+// available via webpack's additionalData which automatically imports 00-protons/variables
+// to every SCSS file. That file already includes non-printing/libs/_bootstrap.scss.
+//
+// We only import the CSS-generating (printing) components here:
+
+// Root variables
+@import "~bootstrap/scss/root";
+
+// Base resets
+@import "~bootstrap/scss/reboot";
+
+// Typography
+@import "~bootstrap/scss/type";
+
+// Layout system (ALWAYS needed)
+@import "~bootstrap/scss/containers";
+@import "~bootstrap/scss/grid";
+
+// Transitions (global)
+@import "~bootstrap/scss/transitions";
+
+// Placeholders
+@import "~bootstrap/scss/placeholders";
+
+// Helpers (MUST be loaded)
+@import "~bootstrap/scss/helpers";
+
+// Utilities API (MUST be last)
+@import "~bootstrap/scss/utilities/api";

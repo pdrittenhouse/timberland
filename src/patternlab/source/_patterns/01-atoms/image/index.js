@@ -7,6 +7,9 @@ import $ from 'jquery';
 // Module styles
 import './_image.scss';
 
+// Bootstrap components
+import '../../00-protons/printing/libs/bootstrap-components/images.scss';
+
 export const name = 'image';
 
 const imageEnable = () => {

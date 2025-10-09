@@ -7,6 +7,14 @@ import $ from 'jquery';
 // Module styles
 import './_button.scss';
 
+// Bootstrap components
+import '../../00-protons/printing/libs/bootstrap-components/buttons.scss';
+import '../../00-protons/printing/libs/bootstrap-components/tooltip.scss';
+import '../../00-protons/printing/libs/bootstrap-components/popover.scss';
+
+// Bootstrap JS
+// eslint-disable-next-line no-unused-vars
+import Button from 'bootstrap/js/src/button';
 import Tooltip from 'bootstrap/js/src/tooltip';
 import Popover from 'bootstrap/js/src/popover';
 
@@ -28,27 +36,22 @@ const buttonEnable = () => {
   });
 };
 
-const tooltips = () => {
+// Initialize tooltips
+const initTooltips = () => {
   const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-  // eslint-disable-next-line no-unused-vars, no-undef
-  const tooltipList = tooltipTriggerList.map(tooltipTriggerEl => {
-    return new Tooltip(tooltipTriggerEl);
-  });
-}
+  tooltipTriggerList.map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl));
+};
 
-const popovers = () => {
+// Initialize popovers
+const initPopovers = () => {
   const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-  // eslint-disable-next-line no-unused-vars, no-undef
-  const popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-    return new Popover(popoverTriggerEl);
-  })
-}
-
+  popoverTriggerList.map(popoverTriggerEl => new Popover(popoverTriggerEl));
+};
 
 $(document).ready(() => {
   buttonEnable();
-  tooltips();
-  popovers();
+  initTooltips();
+  initPopovers();
 });
 
 export default buttonEnable;

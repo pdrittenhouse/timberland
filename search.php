@@ -11,6 +11,9 @@
 
 $templates = array( 'pages/search.twig', 'pages/archive.twig', 'pages/index.twig' );
 
+// Enqueue Bootstrap components used in pages/search.twig
+enqueue_bootstrap_component('pagination');
+
 $context = Timber::context();
 if (get_search_query()) {
   $context['title'] = 'Search results for ' . get_search_query();

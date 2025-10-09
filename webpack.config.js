@@ -9,11 +9,13 @@ const mqpacker = require('mqpacker');
 const sassExportData = require('@theme-tools/sass-export-data');
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
+const BootstrapManifestPlugin = require('./webpack-plugins/BootstrapManifestPlugin');
+const path = require('path');
 const { ProgressPlugin, ProvidePlugin } = require('webpack');
 // const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const paths = require('./paths');
 // const os = require('os');
-// const fs = require('fs');
+const fs = require('fs');
 // const crypto = require('crypto');
 
 module.exports = {
@@ -26,7 +28,7 @@ module.exports = {
     path: paths.build,
     filename: 'js/[name].bundle.js',
     //publicPath: '/dist/wp/',
-    publicPath: '/wp-content/themes/timberland/dist/wp/', // TODO: Make this dynamic based on theme name
+    publicPath: `/wp-content/themes/${path.basename(__dirname)}/dist/wp/`,
   },
   module: {
     rules: [
@@ -271,12 +273,69 @@ module.exports = {
       },
       runTasksInSeries: false,
     }),
+    // Generate Bootstrap component manifest
+    new BootstrapManifestPlugin({
+      patternsPath: paths.patterns,
+      blocksPath: path.resolve(__dirname, 'src/templates/blocks'),
+      outputPath: 'bootstrap-manifest.json'
+    }),
     // new BundleAnalyzerPlugin(),
   ],
   optimization: {
     usedExports: true, // Enable tree shaking
     concatenateModules: true, // Concatenate modules | REMOVE IF PROBLEMS OCCUR
     minimize: true, // minify
+
+    // Split Bootstrap CSS into separate files for conditional loading
+    splitChunks: {
+      cacheGroups: {
+        // Extract critical Bootstrap into separate file
+        bootstrapCritical: {
+          test: /_bootstrap-critical\.scss$/,
+          name: 'bootstrap-critical',
+          chunks: 'all',
+          enforce: true,
+          priority: 30
+        },
+
+        // Extract individual Bootstrap component wrapper files
+        bootstrapComponents: {
+          // Match wrapper files in bootstrap-components directory
+          test: /[\\/]bootstrap-components[\\/]([a-z-]+)\.scss$/,
+          name(module, chunks, cacheGroupKey) {
+            // Extract component name from the module identifier
+            const moduleId = module.identifier();
+            const match = moduleId.match(/bootstrap-components[\\/]([a-z-]+)\.scss/);
+            if (match && match[1]) {
+              return `bootstrap-${match[1]}`;
+            }
+            return 'bootstrap-unknown';
+          },
+          chunks: 'all',
+          enforce: true,
+          priority: 20,
+          reuseExistingChunk: false // Don't merge with existing chunks
+        },
+
+        // Extract individual Bootstrap JS components
+        bootstrapJs: {
+          test: /[\\/]node_modules[\\/]bootstrap[\\/]js[\\/]dist[\\/]([a-z-]+)\.js$/,
+          name(module) {
+            // Extract component name from the module identifier
+            const moduleId = module.identifier();
+            const match = moduleId.match(/bootstrap[\\/]js[\\/]dist[\\/]([a-z-]+)\.js/);
+            if (match && match[1]) {
+              return `bootstrap-${match[1]}`;
+            }
+            return 'bootstrap-unknown';
+          },
+          chunks: 'all',
+          enforce: true,
+          priority: 25,
+          reuseExistingChunk: false
+        }
+      }
+    }
   },
   // performance: {
   //   hints: "warning", // "error" or false are also valid options

@@ -32,6 +32,9 @@ $context['posts'] = new Timber\PostQuery($args);
 $context['form_action'] = esc_url( site_url( 'wp-login.php?action=postpass', 'login_post' ) );
 $context['sidebar'] = Timber::get_sidebar('sidebar.php');
 
+// Enqueue Bootstrap components (pagination used if posts query has multiple pages)
+enqueue_bootstrap_component('pagination');
+
 if ( post_password_required( $timber_post->ID ) ) {
   Timber::render( 'pages/password.twig', $context );
 } else {

@@ -4,12 +4,17 @@
 
 import $ from 'jquery';
 
+// Import critical Bootstrap CSS first (will be extracted by splitChunks)
+import './printing/libs/_bootstrap-critical.scss';
+
 import './_base.scss';
 
 /**
- * Bootstrap Javascript
+ * Global Bootstrap JavaScript Components
+ * Scrollspy is loaded globally because it's used for scroll tracking
  */
-require('bootstrap');
+// eslint-disable-next-line no-unused-vars
+import Scrollspy from 'bootstrap/js/src/scrollspy';
 
 // Import AOS
 // import AOS from 'aos';
@@ -90,6 +95,9 @@ const smoothScroll = () => {
     });
   }
 };
+
+// Scrollspy is auto-initialized via data-bs-spy="scroll" attribute
+// Just importing it makes it available
 
 // Global function to limit input fields to numbers only
 // used in /src/functions/forms/

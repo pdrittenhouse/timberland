@@ -4,6 +4,9 @@
 
 import $ from 'jquery';
 
+// Bootstrap CSS components this pattern uses
+import '../../00-protons/printing/libs/bootstrap-components/nav.scss';
+
 // Module styles
 import './_social-nav.scss';
 

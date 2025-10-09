@@ -18,6 +18,9 @@ $context['posts'] = new Timber\PostQuery();
 $context['post'] = new Timber\Post();
 $templates = array( 'pages/index.twig' );
 
+// Enqueue Bootstrap components used in pages/index.twig
+enqueue_bootstrap_component('pagination');
+
 if ( is_home() ) {
 	array_unshift( $templates, 'pages/index.twig' );
 }

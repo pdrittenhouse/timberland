@@ -3,6 +3,15 @@
  */
 import $ from 'jquery';
 
+// Bootstrap CSS components this pattern uses
+import '../../00-protons/printing/libs/bootstrap-components/alert.scss';
+import '../../00-protons/printing/libs/bootstrap-components/close.scss';  // For dismissible alerts
+
+// Bootstrap JS
+// eslint-disable-next-line no-unused-vars
+import Alert from 'bootstrap/js/src/alert';
+
+// Module styles
 import './_alert.scss';
 
 export const name = 'alert';

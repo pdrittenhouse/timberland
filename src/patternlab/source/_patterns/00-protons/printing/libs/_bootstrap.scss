@@ -9,16 +9,16 @@
 // _component.scss file. All are included here for simplicity.
 
 // Layout & components
-@import "~bootstrap/scss/root";
-@import "~bootstrap/scss/reboot";
-@import "~bootstrap/scss/type";
-@import "~bootstrap/scss/images";
-@import "~bootstrap/scss/containers";
-@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/root"; // critical
+@import "~bootstrap/scss/reboot"; // critical
+@import "~bootstrap/scss/type"; // critical
+@import "~bootstrap/scss/images"; // critical
+@import "~bootstrap/scss/containers"; // critical
+@import "~bootstrap/scss/grid"; // critical
 @import "~bootstrap/scss/tables";
-@import "~bootstrap/scss/forms";
-@import "~bootstrap/scss/buttons";
-@import "~bootstrap/scss/transitions";
+@import "~bootstrap/scss/forms"; // critical
+@import "~bootstrap/scss/buttons"; // critical
+@import "~bootstrap/scss/transitions"; // critical
 @import "~bootstrap/scss/dropdown";
 @import "~bootstrap/scss/button-group";
 @import "~bootstrap/scss/nav";
@@ -39,11 +39,11 @@
 @import "~bootstrap/scss/carousel";
 @import "~bootstrap/scss/spinners";
 @import "~bootstrap/scss/offcanvas";
-@import "~bootstrap/scss/placeholders";
+@import "~bootstrap/scss/placeholders"; // critical
 
 // Helpers
-@import "~bootstrap/scss/helpers";
+@import "~bootstrap/scss/helpers"; // critical
 
 // Utilities
-@import "~bootstrap/scss/utilities/api";
+@import "~bootstrap/scss/utilities/api"; // critical
 // scss-docs-end import-stack

@@ -4,6 +4,13 @@
 
 import $ from 'jquery';
 
+// Bootstrap CSS components this pattern uses
+import '../../00-protons/printing/libs/bootstrap-components/accordion.scss';
+
+// Bootstrap JS
+// eslint-disable-next-line no-unused-vars
+import Collapse from 'bootstrap/js/src/collapse';
+
 // Module styles
 import './_accordion.scss';
 
@@ -40,10 +47,7 @@ const toggleActiveClass = () => {
 
       accordion.addEventListener('shown.bs.collapse', () => {
         const panelButton = $('.collapse.show').prev('.accordion-header').find('.accordion-button');
-        // const panelButton = openPanel.previousSibling('.accordion-header').querySelector('.accordion-button');
         panelButton.addClass('active');
-        // console.log(accordion);
-        // console.log(button.classList.contains('active'));
       });
     });
   }

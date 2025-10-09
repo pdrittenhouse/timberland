@@ -82,6 +82,7 @@ $dream_includes = array(
   "customizer.php",
   "gzip.php",
   "cache.php",
+  "bootstrap-loader.php",
   "scripts.php",
   "styles.php",
   "vars.php",

@@ -43,6 +43,12 @@ function dream_clear_timber_cache() {
 	// Clear SASS data cache (all versions - mtime-based keys)
 	$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_theme_sass_data_%' OR option_name LIKE '_transient_timeout_theme_sass_data_%'");
 
+	// Clear Bootstrap manifest cache (all versions - mtime-based keys)
+	$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_bootstrap_manifest_%' OR option_name LIKE '_transient_timeout_bootstrap_manifest_%'");
+
+	// Clear Bootstrap components cache (per-post detection)
+	$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_bootstrap_components_%' OR option_name LIKE '_transient_timeout_bootstrap_components_%'");
+
 	// Clear any WordPress object cache
 	if (function_exists('wp_cache_flush')) {
 		wp_cache_flush();

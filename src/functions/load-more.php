@@ -4,6 +4,8 @@
 
 function dream_post_loop_load_more()
 {
+    // Enqueue Bootstrap components used in AJAX-loaded card patterns
+    enqueue_bootstrap_component('card');
 
     $rendered_posts = !empty($_POST['posts_per_page']) ? absint($_POST['posts_per_page']) : absint(get_option('posts_per_page'));
     $display_posts = !empty($_POST['posts_per_page']) ? $rendered_posts : 0;
