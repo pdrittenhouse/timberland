@@ -10,19 +10,46 @@ const sassExportData = require('@theme-tools/sass-export-data');
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
 const BootstrapManifestPlugin = require('./webpack-plugins/BootstrapManifestPlugin');
+const PatternManifestPlugin = require('./webpack-plugins/PatternManifestPlugin');
 const path = require('path');
 const { ProgressPlugin, ProvidePlugin } = require('webpack');
 // const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const paths = require('./paths');
 // const os = require('os');
 const fs = require('fs');
+const glob = require('glob');
 // const crypto = require('crypto');
+
+// Dynamically generate pattern entries BEFORE config export
+// This ensures all entry points exist before webpack processes them
+const patternEntries = {};
+const patternFiles = glob.sync(`${paths.patterns}/0[1-5]-*/*/index.js`);
+
+console.log(`[Pattern Entries] Found ${patternFiles.length} patterns`);
+
+patternFiles.forEach(filePath => {
+  // Extract pattern info from path
+  // Example: /path/to/02-molecules/card/index.js -> molecules/card
+  const match = filePath.match(/0[1-5]-(atoms|molecules|organisms|templates|pages)\/([^\/]+)\/index\.js$/);
+
+  if (match && match[1] && match[2]) {
+    const level = match[1]; // atoms, molecules, organisms, templates, pages
+    const patternName = match[2]; // card, button, etc.
+    const entryName = `patterns/${level}/${patternName}`;
+
+    // Add as entry point (wrap in array to match webpack entry format)
+    patternEntries[entryName] = [filePath];
+
+    console.log(`[Pattern Entries] Added entry: ${entryName}`);
+  }
+});
 
 module.exports = {
   entry: {
     dream: [`${paths.src}/index.js`],
     admin: [`${paths.src}/admin.js`],
     editor: [`${paths.src}/editor.js`],
+    ...patternEntries, // Add all pattern entries
   },
   output: {
     path: paths.build,
@@ -151,7 +178,7 @@ module.exports = {
     // Extract CSS into separate files
     new MiniCssExtractPlugin({
       filename: 'css/[name].css',
-      chunkFilename: '[id].css',
+      chunkFilename: 'css/[name].css',
     }),
     // Manage postcss assets
     // @link https://css-tricks.com/images-in-postcss/
@@ -279,6 +306,13 @@ module.exports = {
       blocksPath: path.resolve(__dirname, 'src/templates/blocks'),
       outputPath: 'bootstrap-manifest.json'
     }),
+    // Generate Pattern dependencies manifest
+    new PatternManifestPlugin({
+      patternsPath: paths.patterns,
+      blocksPath: path.resolve(__dirname, 'src/templates/blocks'),
+      templatesPath: path.resolve(__dirname, 'src/templates'),
+      outputPath: 'pattern-manifest.json'
+    }),
     // new BundleAnalyzerPlugin(),
   ],
   optimization: {
@@ -292,7 +326,7 @@ module.exports = {
         // Extract critical Bootstrap into separate file
         bootstrapCritical: {
           test: /_bootstrap-critical\.scss$/,
-          name: 'bootstrap-critical',
+          name: 'bootstrap/critical',
           chunks: 'all',
           enforce: true,
           priority: 30
@@ -307,9 +341,9 @@ module.exports = {
             const moduleId = module.identifier();
             const match = moduleId.match(/bootstrap-components[\\/]([a-z-]+)\.scss/);
             if (match && match[1]) {
-              return `bootstrap-${match[1]}`;
+              return `bootstrap/${match[1]}`;
             }
-            return 'bootstrap-unknown';
+            return 'bootstrap/unknown';
           },
           chunks: 'all',
           enforce: true,
@@ -325,15 +359,19 @@ module.exports = {
             const moduleId = module.identifier();
             const match = moduleId.match(/bootstrap[\\/]js[\\/]dist[\\/]([a-z-]+)\.js/);
             if (match && match[1]) {
-              return `bootstrap-${match[1]}`;
+              return `bootstrap/${match[1]}`;
             }
-            return 'bootstrap-unknown';
+            return 'bootstrap/unknown';
           },
           chunks: 'all',
           enforce: true,
           priority: 25,
           reuseExistingChunk: false
-        }
+        },
+
+        // NOTE: Pattern CSS/JS splitting removed
+        // Patterns are now separate webpack entry points (see lines 26-46)
+        // Each pattern gets its own bundle automatically via the entry configuration
       }
     }
   },

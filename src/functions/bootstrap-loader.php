@@ -79,7 +79,7 @@ class Dream_Bootstrap_Loader {
 
 		// 1. Always enqueue critical Bootstrap
 		wp_enqueue_style('bootstrap-critical',
-			get_template_directory_uri() . '/dist/wp/css/bootstrap-critical.css',
+			get_template_directory_uri() . '/dist/wp/css/bootstrap/critical.css',
 			[],
 			$version
 		);
@@ -380,28 +380,18 @@ class Dream_Bootstrap_Loader {
 
 		// Enqueue CSS if exists
 		$css_handle = "bootstrap-{$component}";
-		$css_file = get_template_directory() . "/dist/wp/css/{$css_handle}.css";
+		$css_file = get_template_directory() . "/dist/wp/css/bootstrap/{$component}.css";
 
 		if (file_exists($css_file)) {
 			wp_enqueue_style($css_handle,
-				get_template_directory_uri() . "/dist/wp/css/{$css_handle}.css",
+				get_template_directory_uri() . "/dist/wp/css/bootstrap/{$component}.css",
 				['bootstrap-critical'], // Depend on critical
 				$version
 			);
 		}
 
-		// Enqueue JS if exists
-		$js_handle = "bootstrap-{$component}-js";
-		$js_file = get_template_directory() . "/dist/wp/js/bootstrap-{$component}.bundle.js";
-
-		if (file_exists($js_file)) {
-			wp_enqueue_script($js_handle,
-				get_template_directory_uri() . "/dist/wp/js/bootstrap-{$component}.bundle.js",
-				['jquery'],
-				$version,
-				true  // Load in footer
-			);
-		}
+		// NOTE: Bootstrap JS is bundled into pattern JS files
+		// No separate Bootstrap JS enqueuing needed - it loads with the patterns that use it
 
 		$this->enqueued_components[] = $component;
 	}

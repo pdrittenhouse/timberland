@@ -592,6 +592,120 @@ Fixed Bootstrap JavaScript to properly load with all dependencies by changing im
 
 ---
 
+### Enhancement 7: Yeoman Pattern Generator Automation ✅ COMPLETE
+**Status:** ✅ Complete
+**Date:** Oct 9, 2025
+
+Enhanced the Yeoman pattern generator to automatically include Bootstrap component selection and import generation.
+
+**Features Implemented:**
+
+**1. Dynamic Component Detection**
+- Automatically reads available Bootstrap CSS components from `00-protons/printing/libs/bootstrap-components/`
+- Automatically reads available Bootstrap JS components from `node_modules/bootstrap/js/src/`
+- No manual list maintenance required - always stays up-to-date
+
+**2. Interactive Prompts**
+Added two new prompts to the generator flow:
+- "Which Bootstrap CSS components does this pattern use?" (checkbox selection)
+- "Which Bootstrap JS components does this pattern use?" (checkbox selection)
+
+**3. Automatic Import Generation**
+- Generates proper Bootstrap CSS import statements with correct relative paths
+- Generates proper Bootstrap JS import statements from `/src/` (not `/dist/`)
+- Adds `// eslint-disable-next-line no-unused-vars` comments automatically
+- Converts component names to proper PascalCase (e.g., `scrollspy` → `Scrollspy`)
+
+**4. Smart Path Resolution**
+- Calculates correct relative paths based on pattern type (atoms/molecules/organisms)
+- All paths point to `00-protons/printing/libs/bootstrap-components/`
+
+**5. Template Enhancements**
+- Added informative comments about automatic Bootstrap loading
+- Included instructions for manual enqueue function usage
+- Added helper comments to both JS and Twig templates
+- Templates include: `enqueue_bootstrap_component('component-name')` and `{{ function('enqueue_bootstrap_component', 'component-name') }}`
+
+**Files Modified:**
+- `src/tools/patterngen/index.js` (lines 15-146)
+  - Added Bootstrap component path constants
+  - Added `getBootstrapCssComponents()` helper function
+  - Added `getBootstrapJsComponents()` helper function
+  - Added two new prompts for component selection
+  - Added import generation logic with path calculation
+- `src/tools/patterngen/templates/pattern.js` (lines 7-26)
+  - Added Bootstrap component comment header
+  - Added conditional import sections using EJS `<%- %>` (unescaped output)
+  - Fixed HTML entity encoding issue
+- `src/tools/patterngen/templates/_pattern.tpl.twig` (lines 15-17)
+  - Added Bootstrap component documentation to header comment
+
+**Additional Improvements:**
+- Added `.gitkeep` files to track important directories:
+  - `/webpack-plugins/.gitkeep`
+  - `/src/patternlab/source/_patterns/00-protons/printing/libs/bootstrap-components/.gitkeep`
+
+**Example Generated Output:**
+
+```js
+// Example: Modal pattern with Bootstrap components selected
+import $ from 'jquery';
+
+// Bootstrap Components:
+// NOTE: Bootstrap CSS/JS is automatically loaded when this pattern is detected on a page.
+// The PHP loader (bootstrap-loader.php) scans page content and enqueues components conditionally.
+// For manual control in templates, use: enqueue_bootstrap_component('component-name')
+
+// Bootstrap CSS components this pattern uses
+import '../../00-protons/printing/libs/bootstrap-components/modal.scss';
+import '../../00-protons/printing/libs/bootstrap-components/close.scss';
+
+// Bootstrap JS
+// eslint-disable-next-line no-unused-vars
+import Modal from 'bootstrap/js/src/modal';
+
+// Module styles
+import './_modal.scss';
+
+export const name = 'modal';
+// ... pattern code
+```
+
+**Usage:**
+```bash
+npm run new
+```
+
+Generator now prompts for:
+1. Pattern type (atoms/molecules/organisms)
+2. Subfolder location
+3. Files to generate
+4. Pattern name
+5. **Bootstrap CSS components** (NEW!)
+6. **Bootstrap JS components** (NEW!)
+
+**Impact:**
+- Developers no longer need to manually write Bootstrap import statements
+- Ensures correct import paths every time
+- Prevents `/dist/` vs `/src/` mistakes
+- Automatic ESLint comment handling
+- Consistent pattern structure across all new patterns
+
+**Testing:**
+- Generated test pattern in `03-organisms/test/`
+- Verified CSS imports use proper single quotes (not HTML entities)
+- Verified JS imports from `/src/` with proper class names
+- Verified relative paths are correct
+- Verified ESLint comments included
+- Deleted test pattern after verification
+
+**Documentation Updated:**
+- `BOOTSTRAP-SPLITTING-PLAN.md` - Added comprehensive Yeoman Generator section (lines 1145-1220)
+- `BOOTSTRAP-SPLITTING-PLAN.md` - Updated "Future Pattern Development" section (lines 1400-1451)
+- `BOOTSTRAP-SPLITTING-PLAN.md` - Marked JavaScript splitting as complete in Future Optimizations
+
+---
+
 ## Location
 
 **IMPLEMENTATION-STATUS.md Location:**
