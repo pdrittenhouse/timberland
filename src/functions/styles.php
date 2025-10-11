@@ -202,20 +202,28 @@ add_action('wp', function() {
 });
 
 
-// Admin editor: Load all block admin styles (no caching needed - editor needs all blocks available)
+// Admin editor: Load block admin styles (optimized - only load non-empty files)
+// Note: block.json references assets, but WordPress won't auto-enqueue empty files
+// So we handle enqueuing here with content check to skip empty/whitespace-only files
 function dream_enqueue_block_admin_styles() {
 	$blocks_path = dirname(__DIR__) . '/templates/blocks';
 	$blocks = array_filter(scandir($blocks_path), 'filter_block_dir'); // Helper function from helpers.php
 
 	foreach ($blocks as $block) {
-		if (file_exists($blocks_path . '/' . $block . '/index.css')) {
-			wp_enqueue_style(
-				'blocks_css_' . $block,
-				get_template_directory_uri() . '/src/templates/blocks/' . $block . '/index.css',
-				array(),
-				wp_get_theme()->get('Version'),
-				'all'
-			);
+		$index_css_path = $blocks_path . '/' . $block . '/index.css';
+
+		// Only enqueue if file exists AND has actual content (not just whitespace)
+		if (file_exists($index_css_path)) {
+			$content = file_get_contents($index_css_path);
+			if (!empty(trim($content))) {
+				wp_enqueue_style(
+					'blocks_css_' . $block,
+					get_template_directory_uri() . '/src/templates/blocks/' . $block . '/index.css',
+					array(),
+					wp_get_theme()->get('Version'),
+					'all'
+				);
+			}
 		}
 	}
 }

@@ -98,20 +98,28 @@ add_action('enqueue_block_assets', function() {
 });
 
 
-// Admin editor: Load all block admin scripts (no caching needed - editor needs all blocks available)
+// Admin editor: Load block admin scripts (optimized - only load non-empty files)
+// Note: block.json references assets, but WordPress won't auto-enqueue empty files
+// So we handle enqueuing here with content check to skip empty/whitespace-only files
 function dream_enqueue_block_admin_scripts() {
 	$blocks_path = dirname(__DIR__) . '/templates/blocks';
 	$blocks = array_filter(scandir($blocks_path), 'filter_block_dir'); // Helper function from helpers.php
 
 	foreach ($blocks as $block) {
-		if (file_exists($blocks_path . '/' . $block . '/index.js')) {
-			wp_enqueue_script(
-				'block_admin_script_' . $block,
-				get_template_directory_uri() . '/src/templates/blocks/' . $block . '/index.js',
-				array('jquery', 'acf-input'),
-				wp_get_theme()->get('Version'),
-				true
-			);
+		$index_js_path = $blocks_path . '/' . $block . '/index.js';
+
+		// Only enqueue if file exists AND has actual content (not just whitespace)
+		if (file_exists($index_js_path)) {
+			$content = file_get_contents($index_js_path);
+			if (!empty(trim($content))) {
+				wp_enqueue_script(
+					'block_admin_script_' . $block,
+					get_template_directory_uri() . '/src/templates/blocks/' . $block . '/index.js',
+					array('jquery', 'acf-input'),
+					wp_get_theme()->get('Version'),
+					true
+				);
+			}
 		}
 	}
 }

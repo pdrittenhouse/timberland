@@ -1,1 +1,0 @@
-// Table Section Block JavaScript
