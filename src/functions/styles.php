@@ -156,42 +156,56 @@ if (is_admin()) {
 // add_action( 'enqueue_block_editor_assets', 'dream_enqueue_block_admin_styles' );
 
 /**
- * Block Styles
+ * Block Styles - Detect blocks early when post content is guaranteed to be loaded
  * @link https://jasonyingling.me/enqueueing-scripts-and-styles-for-gutenberg-blocks/
  */
 
-function dream_enqueue_block_styles() {
-	if (get_post() === null) {
+// Detect blocks on 'wp' hook (after main query is set, before template loads)
+add_action('wp', function() {
+	// Only run on singular pages where we have a single post
+	if (!is_singular()) {
 		return;
 	}
 
 	$post_id = get_the_ID();
-	$blocks_metadata = dream_get_blocks_metadata();
+	$blocks_metadata = dream_get_blocks_metadata(); // Helper function from helpers.php
+
+	// Detect blocks NOW (when post content is definitely loaded)
 	$used_blocks = dream_get_post_used_blocks($post_id, $blocks_metadata);
-	$blocks_path = dirname(__DIR__) . '/templates/blocks';
 
-	// Only enqueue styles for blocks actually used on this page
-	foreach ($used_blocks as $block_slug) {
-		$style_path = $blocks_path . '/' . $block_slug . '/style.css';
-
-		if (file_exists($style_path)) {
-			wp_enqueue_style(
-				'blocks_css_' . $block_slug,
-				get_template_directory_uri() . '/src/templates/blocks/' . $block_slug . '/style.css',
-				array(),
-				wp_get_theme()->get('Version'),
-				'all'
-			);
-		}
+	// Temporary debug
+	if (defined('WP_DEBUG') && WP_DEBUG) {
+		error_log('wp hook - Post ID: ' . $post_id);
+		error_log('wp hook - Post content length: ' . strlen(get_post($post_id)->post_content));
+		error_log('wp hook - Detected blocks: ' . print_r($used_blocks, true));
 	}
-}
-add_action('enqueue_block_assets', 'dream_enqueue_block_styles');
+
+	// Then hook into enqueue_block_assets to actually enqueue the styles
+	add_action('enqueue_block_assets', function() use ($used_blocks) {
+		$blocks_path = dirname(__DIR__) . '/templates/blocks';
+
+		// Only enqueue styles for blocks actually used on this page
+		foreach ($used_blocks as $block_slug) {
+			$style_path = $blocks_path . '/' . $block_slug . '/style.css';
+
+			if (file_exists($style_path)) {
+				wp_enqueue_style(
+					'blocks_css_' . $block_slug,
+					get_template_directory_uri() . '/src/templates/blocks/' . $block_slug . '/style.css',
+					array(),
+					wp_get_theme()->get('Version'),
+					'all'
+				);
+			}
+		}
+	});
+});
 
 
 // Admin editor: Load all block admin styles (no caching needed - editor needs all blocks available)
 function dream_enqueue_block_admin_styles() {
 	$blocks_path = dirname(__DIR__) . '/templates/blocks';
-	$blocks = array_filter(scandir($blocks_path), 'filter_block_dir');
+	$blocks = array_filter(scandir($blocks_path), 'filter_block_dir'); // Helper function from helpers.php
 
 	foreach ($blocks as $block) {
 		if (file_exists($blocks_path . '/' . $block . '/index.css')) {

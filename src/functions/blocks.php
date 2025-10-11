@@ -31,16 +31,11 @@ if ( version_compare( get_bloginfo( 'version' ), '5.8', '>=' ) ) {
 /**
  *  ACF 6+ BLOCKS
  */
-// Block registation helpers
-function filter_block_dir($file) {
-  return !str_starts_with($file, '.') && !str_ends_with($file, '.twig');
-}
-
 // Ragister blocks
 add_action( 'init', 'dream_register_blocks', 5 );
 function dream_register_blocks() {
   $blocks_path = dirname(__DIR__) . '/templates/blocks';
-  $blocks = array_filter(scandir($blocks_path), 'filter_block_dir');
+  $blocks = array_filter(scandir($blocks_path), 'filter_block_dir'); // Helper function from helpers.php
   foreach ($blocks as $block) {
     if ( file_exists( $blocks_path . '/' . $block . '/block.json' ) ) {
       register_block_type($blocks_path . '/' . $block);
@@ -49,7 +44,7 @@ function dream_register_blocks() {
 
   if (is_child_theme()) {
     $child_theme_blocks_path = dirname(__DIR__, 2) . '-child/src/templates/blocks';
-    $child_theme_blocks = array_filter(scandir($child_theme_blocks_path), 'filter_block_dir');
+    $child_theme_blocks = array_filter(scandir($child_theme_blocks_path), 'filter_block_dir'); // Helper function from helpers.php
 
     foreach ($child_theme_blocks as $block) {
       if ( file_exists( $child_theme_blocks_path . '/' . $block . '/block.json' ) ) {

@@ -145,9 +145,65 @@ add_action('acf/input/admin_head', function() {
  * Block Detection Cache Invalidation Hooks
  */
 
-// Clear post-specific block cache when post is saved
-add_action('save_post', function($post_id) {
-	delete_transient('dream_post_blocks_' . $post_id);
+// DIAGNOSTIC: Check if this file loads during REST requests
+if (!headers_sent()) {
+    header('X-Debug-Cache-Loaded: YES');
+}
+
+add_action('init', function() {
+	if (!headers_sent()) {
+		header('X-Debug-Cache-Init-Fired: YES');
+
+		if (defined('REST_REQUEST') && REST_REQUEST) {
+			header('X-Debug-Cache-Is-REST-Request: TRUE');
+		}
+
+		if (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '/wp-json/') !== false) {
+			header('X-Debug-Cache-URI-Has-JSON: TRUE');
+		}
+	}
+});
+
+
+/**
+ * Clear cache for a specific post
+ * Named function (not closure) for better compatibility with REST/opcache
+ */
+function dream_clear_post_cache($post_id) {
+	if (!headers_sent()) {
+		header('X-Debug-Cache-Clear-Called: ' . $post_id);
+	}
+
+	// Skip autosaves and revisions
+	if (wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
+		if (!headers_sent()) {
+			header('X-Debug-Cache-Clear-Skipped: autosave-or-revision');
+		}
+		return;
+	}
+
+	if (!headers_sent()) {
+		header('X-Debug-Cache-Clear-Executing: ' . $post_id);
+		header('X-Debug-Cache-Clear-Post-Type: ' . get_post_type($post_id));
+	}
+
+	// Check if transient exists before deleting
+	$cache_key = 'dream_post_blocks_' . $post_id;
+	$transient_exists = get_transient($cache_key);
+
+	if (!headers_sent()) {
+		header('X-Debug-Cache-Transient-Exists: ' . ($transient_exists !== false ? 'YES' : 'NO'));
+		if ($transient_exists !== false) {
+			header('X-Debug-Cache-Transient-Value: ' . json_encode($transient_exists));
+		}
+	}
+
+	// Clear the post blocks cache
+	$deleted = delete_transient($cache_key);
+
+	if (!headers_sent()) {
+		header('X-Debug-Cache-Transient-Deleted: ' . ($deleted ? 'TRUE' : 'FALSE'));
+	}
 
 	// Clear block template cache for this specific post
 	global $wpdb;
@@ -160,8 +216,34 @@ add_action('save_post', function($post_id) {
 	// If this is a pattern (wp_block post type), clear pattern cache
 	if (get_post_type($post_id) === 'wp_block') {
 		delete_transient('dream_pattern_blocks_' . $post_id);
+		if (!headers_sent()) {
+			header('X-Debug-Cache-Pattern-Cleared: TRUE');
+		}
 	}
-});
+
+	if (!headers_sent()) {
+		header('X-Debug-Cache-Clear-Completed: ' . $post_id);
+	}
+}
+
+// Hook into ALL save events (catches admin-ajax, REST API, and traditional saves)
+// Priority 99 = run late, after the post is fully saved
+add_action('save_post', 'dream_clear_post_cache', 99, 1);
+add_action('post_updated', 'dream_clear_post_cache', 99, 1);
+add_action('acf/save_post', 'dream_clear_post_cache', 99, 1);
+
+// Add diagnostic headers to track which hooks fire
+add_action('save_post', function($post_id) {
+	if (!headers_sent()) {
+		header('X-Debug-Save-Post-Hook: FIRED-' . $post_id);
+	}
+}, 98, 1);
+
+add_action('post_updated', function($post_id) {
+	if (!headers_sent()) {
+		header('X-Debug-Post-Updated-Hook: FIRED-' . $post_id);
+	}
+}, 98, 1);
 
 // Clear post-specific block cache when post is trashed
 add_action('wp_trash_post', function($post_id) {
@@ -225,3 +307,23 @@ add_action('update_option_sidebars_widgets', function() {
 add_action('switch_theme', function() {
 	delete_transient('dream_blocks_metadata');
 });
+
+
+
+/**
+ * Automatically clear all caches when a post or page is saved or updated.
+ */
+function dream_clear_all_caches_on_save($post_id) {
+	// Skip autosaves and revisions
+	if (wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
+		return;
+	}
+
+	// Run the global cache clear function
+	if (function_exists('dream_clear_timber_cache')) {
+		dream_clear_timber_cache();
+	}
+}
+add_action('save_post', 'dream_clear_all_caches_on_save', 100, 1);
+add_action('post_updated', 'dream_clear_all_caches_on_save', 100, 1);
+add_action('acf/save_post', 'dream_clear_all_caches_on_save', 100, 1);

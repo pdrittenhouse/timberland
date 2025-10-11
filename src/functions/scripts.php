@@ -33,113 +33,6 @@ if ( is_admin() ) {
 
 
 /**
- * Block Detection Caching Helpers
- */
-
-/**
- * Get cached block metadata for parent theme
- * Returns array of ['block-slug' => 'acf/block-name', ...]
- */
-function dream_get_blocks_metadata() {
-	$blocks_metadata = get_transient('dream_blocks_metadata');
-
-	if (false === $blocks_metadata) {
-		$blocks_metadata = [];
-		$blocks_path = dirname(__DIR__) . '/templates/blocks';
-
-		if (file_exists($blocks_path)) {
-			$blocks = array_filter(scandir($blocks_path), 'filter_block_dir');
-
-			foreach ($blocks as $block) {
-				$block_json_path = $blocks_path . '/' . $block . '/block.json';
-
-				if (file_exists($block_json_path)) {
-					$block_json_content = file_get_contents($block_json_path);
-					$block_data = json_decode($block_json_content, true);
-
-					if (isset($block_data['name'])) {
-						$blocks_metadata[$block] = $block_data['name'];
-					}
-				}
-			}
-		}
-
-		// Cache for 1 week
-		set_transient('dream_blocks_metadata', $blocks_metadata, WEEK_IN_SECONDS);
-	}
-
-	return $blocks_metadata;
-}
-
-/**
- * Get blocks used in a specific pattern (cached)
- */
-function dream_get_pattern_used_blocks($pattern_id, $blocks_metadata) {
-	$cache_key = 'dream_pattern_blocks_' . $pattern_id;
-	$used_blocks = get_transient($cache_key);
-
-	if (false === $used_blocks) {
-		$used_blocks = [];
-		$pattern = get_post($pattern_id);
-
-		if ($pattern) {
-			$pattern_content = $pattern->post_content;
-
-			foreach ($blocks_metadata as $block_slug => $block_name) {
-				if (has_block($block_name, $pattern_content)) {
-					$used_blocks[] = $block_slug;
-				}
-			}
-		}
-
-		// Cache for 1 day
-		set_transient($cache_key, $used_blocks, DAY_IN_SECONDS);
-	}
-
-	return $used_blocks;
-}
-
-/**
- * Get all blocks used in a post (including blocks within patterns)
- */
-function dream_get_post_used_blocks($post_id, $blocks_metadata) {
-	$cache_key = 'dream_post_blocks_' . $post_id;
-	$used_blocks = get_transient($cache_key);
-
-	if (false === $used_blocks) {
-		$used_blocks = [];
-		$post = get_post($post_id);
-
-		if ($post) {
-			$post_content = $post->post_content;
-
-			// Check main post content for blocks
-			foreach ($blocks_metadata as $block_slug => $block_name) {
-				if (has_block($block_name, $post_content)) {
-					$used_blocks[] = $block_slug;
-				}
-			}
-
-			// Check for referenced patterns and get their blocks
-			if (preg_match_all('/<!-- wp:block {"ref":(\d+)} \/-->/', $post_content, $matches)) {
-				foreach ($matches[1] as $pattern_id) {
-					$pattern_blocks = dream_get_pattern_used_blocks($pattern_id, $blocks_metadata);
-					$used_blocks = array_merge($used_blocks, $pattern_blocks);
-				}
-			}
-
-			// Remove duplicates
-			$used_blocks = array_unique($used_blocks);
-		}
-
-		// Cache for 1 day
-		set_transient($cache_key, $used_blocks, DAY_IN_SECONDS);
-	}
-
-	return $used_blocks;
-}
-
-/**
  * Block Scripts
  * @link https://jasonyingling.me/enqueueing-scripts-and-styles-for-gutenberg-blocks/
 */
@@ -168,14 +61,24 @@ function dream_get_post_used_blocks($post_id, $blocks_metadata) {
 // }
 // add_action( 'enqueue_block_editor_assets', 'dream_enqueue_block_admin_scripts' );
 
-function dream_enqueue_block_scripts() {
-	if (get_post() === null) {
+/**
+ * Block Scripts - Use the same detection from styles.php (blocks detected on 'wp' hook)
+ * We don't re-detect here, we rely on the cache being populated by styles.php
+ */
+add_action('enqueue_block_assets', function() {
+	// Only on frontend
+	if (is_admin()) {
+		return;
+	}
+
+	// Only on singular pages
+	if (!is_singular()) {
 		return;
 	}
 
 	$post_id = get_the_ID();
-	$blocks_metadata = dream_get_blocks_metadata();
-	$used_blocks = dream_get_post_used_blocks($post_id, $blocks_metadata);
+	$blocks_metadata = dream_get_blocks_metadata(); // Helper function from helpers.php
+	$used_blocks = dream_get_post_used_blocks($post_id, $blocks_metadata); // Will use cached value from 'wp' hook
 	$blocks_path = dirname(__DIR__) . '/templates/blocks';
 
 	// Only enqueue scripts for blocks actually used on this page
@@ -192,14 +95,13 @@ function dream_enqueue_block_scripts() {
 			);
 		}
 	}
-}
-add_action('enqueue_block_assets', 'dream_enqueue_block_scripts');
+});
 
 
 // Admin editor: Load all block admin scripts (no caching needed - editor needs all blocks available)
 function dream_enqueue_block_admin_scripts() {
 	$blocks_path = dirname(__DIR__) . '/templates/blocks';
-	$blocks = array_filter(scandir($blocks_path), 'filter_block_dir');
+	$blocks = array_filter(scandir($blocks_path), 'filter_block_dir'); // Helper function from helpers.php
 
 	foreach ($blocks as $block) {
 		if (file_exists($blocks_path . '/' . $block . '/index.js')) {

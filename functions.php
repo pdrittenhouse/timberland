@@ -77,6 +77,7 @@ define('TIMBER_CACHE_TIME', CACHE_EXPIRATION_TIME);
 $dream_includes = array(
   "paths.php",
   "config.php",
+  "helpers.php",
   "menus.php",
   "theme-support.php",
   "customizer.php",
@@ -108,6 +109,24 @@ $dream_includes = array(
 
 foreach($dream_includes as $inc){
   include_once(get_template_directory() . "/src/functions/$inc");
+}
+
+// DIAGNOSTIC: Use HTTP headers instead of echo (won't break REST JSON)
+if (!headers_sent()) {
+    header('X-Debug-Functions-Loaded: YES');
+    header('X-Debug-REST-Defined: ' . (defined('REST_REQUEST') ? 'YES' : 'NO'));
+    header('X-Debug-REST-Value: ' . (defined('REST_REQUEST') && REST_REQUEST ? 'TRUE' : 'FALSE'));
+    header('X-Debug-Request-URI: ' . ($_SERVER['REQUEST_URI'] ?? 'N/A'));
+}
+
+// Better detection for REST requests - check the request URI
+$is_rest = (
+    (defined('REST_REQUEST') && REST_REQUEST) ||
+    (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '/wp-json/') !== false)
+);
+
+if ($is_rest && !headers_sent()) {
+    header('X-Debug-Is-REST: TRUE');
 }
 
 // Disable Windodws Live Writer Manifest

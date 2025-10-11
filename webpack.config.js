@@ -44,12 +44,34 @@ patternFiles.forEach(filePath => {
   }
 });
 
+// Dynamically generate block SCSS entries
+// Compile block SCSS files and output them back to source directories
+const blockScssEntries = {};
+const blockScssFiles = glob.sync('./src/templates/blocks/**/style.scss');
+
+// Filter out hidden directories (like .block template)
+const filteredBlockScssFiles = blockScssFiles.filter(filePath => !filePath.includes('/.'));
+
+console.log(`[Block SCSS] Found ${filteredBlockScssFiles.length} block SCSS files`);
+
+filteredBlockScssFiles.forEach(filePath => {
+  // Extract block name from path
+  const match = filePath.match(/blocks\/([^\/]+)\/style\.scss$/);
+  if (match && match[1]) {
+    const blockName = match[1];
+    const entryName = `blocks/${blockName}/style`;
+    blockScssEntries[entryName] = [filePath];
+    console.log(`[Block SCSS] Added entry: ${entryName}`);
+  }
+});
+
 module.exports = {
   entry: {
     dream: [`${paths.src}/index.js`],
     admin: [`${paths.src}/admin.js`],
     editor: [`${paths.src}/editor.js`],
     ...patternEntries, // Add all pattern entries
+    ...blockScssEntries, // Add all block SCSS entries
   },
   output: {
     path: paths.build,
@@ -295,6 +317,14 @@ module.exports = {
           copy: [
             { source: `${paths.plsrc}/**/*.json`, destination: `${paths.build}/data` }, // Copy JSON data
             { source: `${paths.build}/spritemap.svg`, destination: `${paths.cache}/svg/`}, // Copy spritemap.svg to cache
+            // Copy compiled block CSS files back to source directories
+            ...Object.keys(blockScssEntries).map(entryName => {
+              const blockName = entryName.replace('blocks/', '').replace('/style', '');
+              return {
+                source: `${paths.build}/css/blocks/${blockName}/style.css`,
+                destination: `./src/templates/blocks/${blockName}/`
+              };
+            }),
           ],
         },
       },

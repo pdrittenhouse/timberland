@@ -1,13 +1,4 @@
 @import 'wp-core/all';
-@import 'section';
-@import 'buttons';
-@import 'icons';
-@import 'slider';
-@import 'slide';
-@import 'posts-loop';
-@import 'search-bar';
-@import 'post-meta';
-@import 'menu';
-@import 'social-share';
-@import 'branding';
-@import 'copyright';
+
+// Custom block styles are now compiled individually from src/templates/blocks/*/style.scss
+// This allows blocks to use variables/mixins while keeping styles modular

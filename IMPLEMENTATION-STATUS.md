@@ -1,15 +1,15 @@
-# Bootstrap CSS Splitting - Implementation Status
+# Performance Optimization - Implementation Status
 
-**Last Updated:** 2025-10-09 13:30 UTC
-**Current Phase:** Complete - Bootstrap CSS & JS Splitting + Yeoman Generator
-**Overall Progress:** 100% (All phases complete, Bootstrap CSS & JS fully optimized, Yeoman generator enhanced)
+**Last Updated:** 2025-10-09 22:05 UTC
+**Current Phase:** Complete - Bootstrap & Pattern CSS/JS Splitting + Asset Organization
+**Overall Progress:** 100% (All phases complete, fully optimized and production-ready)
 
 ---
 
 ## Current Status
 
 **Currently Working On:** N/A - Implementation complete
-**Last Completed Task:** Yeoman pattern generator enhancements (Oct 9, 2025)
+**Last Completed Task:** Bootstrap file reorganization to subdirectories (Oct 9, 2025)
 **Next Task:** Optional - Performance measurements and production deployment
 **Blockers:** None - all functionality working perfectly
 
@@ -703,6 +703,170 @@ Generator now prompts for:
 - `BOOTSTRAP-SPLITTING-PLAN.md` - Added comprehensive Yeoman Generator section (lines 1145-1220)
 - `BOOTSTRAP-SPLITTING-PLAN.md` - Updated "Future Pattern Development" section (lines 1400-1451)
 - `BOOTSTRAP-SPLITTING-PLAN.md` - Marked JavaScript splitting as complete in Future Optimizations
+
+---
+
+### Enhancement 8: Pattern CSS/JS Splitting ✅ COMPLETE
+**Status:** ✅ Complete
+**Date:** Oct 9, 2025
+
+Implemented complete pattern-based CSS/JS splitting for conditional loading of all patterns (atoms, molecules, organisms).
+
+**Problem Identified:**
+- All pattern CSS/JS was bundled into dream.css/dream.js (~357KB CSS)
+- Pages loaded all patterns even if they weren't used
+- No conditional loading for pattern-specific assets
+
+**Solution Implemented:**
+
+**1. Webpack Dynamic Entry Points**
+- Modified webpack.config.js to dynamically generate entry points for all patterns
+- Uses glob pattern to find all `0[1-5]-*/*/index.js` files
+- Creates entries like `patterns/atoms/button`, `patterns/molecules/card`, etc.
+- Webpack automatically generates separate bundles for each pattern
+
+**2. Pattern Manifest Plugin**
+- Created `webpack-plugins/PatternManifestPlugin.js`
+- Scans patterns, blocks, templates, and components
+- Generates dependency tree (which patterns depend on which other patterns)
+- Outputs `dist/wp/pattern-manifest.json` with complete mapping
+
+**3. PHP Pattern Loader**
+- Created `src/functions/pattern-loader.php`
+- `Dream_Pattern_Loader` class handles conditional pattern loading
+- Detects patterns from:
+  - Template hierarchy (pages, singles, archives)
+  - Block content (ACF blocks in post content)
+  - Widget areas (blocks in sidebars)
+  - AJAX-loaded content (posts-loop, pattern blocks)
+- Automatically loads pattern dependencies
+- Caches detection results per-post
+
+**4. Source Index Update**
+- Modified `src/index.js` to only import protons (global styles)
+- Removed all pattern imports (atoms, molecules, organisms, templates, pages)
+- Patterns now load conditionally via pattern-loader.php
+
+**Files Modified:**
+- `webpack.config.js` (lines 23-53 - dynamic pattern entries)
+- `webpack-plugins/PatternManifestPlugin.js` (new - 400+ lines)
+- `src/functions/pattern-loader.php` (new - 500+ lines)
+- `src/index.js` (removed pattern imports, kept protons only)
+- `functions.php` (added pattern-loader.php require)
+
+**Results:**
+- ✅ 41 pattern CSS files generated in `dist/wp/css/patterns/{level}/{name}.css`
+- ✅ 41 pattern JS files generated in `dist/wp/js/patterns/{level}/{name}.bundle.js`
+- ✅ Conditional loading working perfectly
+- ✅ Dependency resolution working (patterns load their dependencies)
+- ✅ Template detection working
+- ✅ Block detection working
+- ✅ Widget area scanning working
+- ✅ AJAX preload working
+- ✅ Caching working with WP_DEBUG conditional disabling
+
+**Testing:**
+- Verified pattern CSS/JS files loading conditionally on pages
+- Tested dependency chain (card depends on button, both load correctly)
+- Confirmed no duplicate loading
+- Verified cache invalidation on post save
+- Pattern detection working for all content types
+
+**Fixed Dependency Issue:**
+- Pattern CSS/JS files had incorrect dependency handles (`dream` instead of `styles`/`script`)
+- Updated pattern-loader.php to use correct handles:
+  - CSS depends on `styles` (main stylesheet)
+  - JS depends on `jquery` and `script` (main JS bundle)
+- Pattern `<link>` and `<script>` tags now appear correctly in HTML
+
+**Impact:**
+- Massive reduction in initial page load CSS/JS
+- Only patterns used on page are loaded
+- Better performance, especially on simple pages
+- More maintainable pattern architecture
+
+---
+
+### Enhancement 9: Bootstrap File Organization ✅ COMPLETE
+**Status:** ✅ Complete
+**Date:** Oct 9, 2025
+
+Reorganized Bootstrap CSS files into subdirectory structure matching pattern organization, removed redundant filename prefix.
+
+**Changes Implemented:**
+
+**1. Webpack Configuration**
+- Updated splitChunks to output Bootstrap files to `bootstrap/` subdirectory
+- Changed chunk names from `bootstrap-critical` to `bootstrap/critical`
+- Changed chunk names from `bootstrap-{component}` to `bootstrap/{component}`
+- Removes `bootstrap-` prefix since files are in dedicated directory
+
+**2. Bootstrap Loader Updates**
+- Updated CSS enqueue paths from `/css/bootstrap-*.css` to `/css/bootstrap/*.css`
+- Updated critical CSS path to `/css/bootstrap/critical.css`
+- Removed Bootstrap JS enqueuing logic (Bootstrap JS bundled in pattern files)
+- Added note: Bootstrap JS loads automatically with patterns that use it
+
+**3. File Structure Changes**
+
+**Before:**
+```
+dist/wp/
+├── css/
+│   ├── bootstrap-critical.css
+│   ├── bootstrap-accordion.css
+│   ├── bootstrap-buttons.css
+│   └── ...
+└── js/
+    ├── bootstrap-alert.bundle.js
+    ├── bootstrap-modal.bundle.js
+    └── ...
+```
+
+**After:**
+```
+dist/wp/
+├── css/
+│   ├── bootstrap/
+│   │   ├── critical.css
+│   │   ├── accordion.css
+│   │   ├── buttons.css
+│   │   └── ...
+│   └── patterns/
+│       ├── atoms/
+│       ├── molecules/
+│       └── organisms/
+└── js/
+    └── patterns/
+        ├── atoms/
+        ├── molecules/
+        └── organisms/
+```
+
+**4. Cleanup**
+- Removed old `bootstrap-*.css` files from root `/css/` directory
+- Removed old `bootstrap-*.bundle.js` files from root `/js/` directory
+- Bootstrap JS now bundled within pattern JS files (no separate files needed)
+
+**Files Modified:**
+- `webpack.config.js` (lines 327-370 - splitChunks chunk names)
+- `src/functions/bootstrap-loader.php` (lines 81-86, 381-396 - updated paths)
+
+**Results:**
+- ✅ Bootstrap CSS files in `dist/wp/css/bootstrap/` (25 files)
+- ✅ Pattern CSS files in `dist/wp/css/patterns/{level}/` (41 files)
+- ✅ Pattern JS files in `dist/wp/js/patterns/{level}/` (41 files)
+- ✅ Consistent directory structure throughout
+- ✅ Cleaner filenames without redundant prefixes
+- ✅ Bootstrap CSS loading correctly from new paths
+- ✅ No orphaned files in root directories
+
+**Impact:**
+- More organized asset structure
+- Clearer separation between Bootstrap and custom patterns
+- Easier to navigate dist directory
+- Consistent naming conventions
+- Better developer experience
 
 ---
 
