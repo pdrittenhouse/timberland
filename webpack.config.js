@@ -326,6 +326,12 @@ module.exports = {
               };
             }),
           ],
+          delete: [
+            // Delete block CSS files from dist after copying to source directories
+            `${paths.build}/css/blocks`,
+            // Delete empty block JS bundles (no JS to compile, just CSS entry points)
+            ...Object.keys(blockScssEntries).map(entryName => `${paths.build}/js/${entryName}.bundle.js`)
+          ],
         },
       },
       runTasksInSeries: false,

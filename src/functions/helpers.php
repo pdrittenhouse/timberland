@@ -135,18 +135,33 @@ function dream_get_pattern_used_blocks($pattern_id, $blocks_metadata) {
  */
 function dream_get_post_used_blocks($post_id, $blocks_metadata) {
 	$cache_key = 'dream_post_blocks_' . $post_id;
+	$cache_time_key = 'dream_post_blocks_time_' . $post_id;
+
 	$used_blocks = get_transient($cache_key);
+	$cache_time = get_transient($cache_time_key);
+
+	// Get post modified time from database (always current)
+	$post = get_post($post_id);
+	$post_modified_time = $post ? strtotime($post->post_modified_gmt) : 0;
+
+	// Cache is stale if the post was modified at or after the cache creation time
+	// We use >= because saves can happen within the same second as cache creation
+	$cache_is_stale = ($cache_time && $post_modified_time >= $cache_time);
 
 	// Temporary debug logging
 	if (defined('WP_DEBUG') && WP_DEBUG) {
 		error_log('dream_get_post_used_blocks - Post ID: ' . $post_id);
 		error_log('dream_get_post_used_blocks - Cache hit: ' . ($used_blocks !== false ? 'YES' : 'NO'));
+		error_log('dream_get_post_used_blocks - Post modified GMT: ' . date('Y-m-d H:i:s', $post_modified_time) . ' (' . $post_modified_time . ')');
+		error_log('dream_get_post_used_blocks - Cache created: ' . ($cache_time ? date('Y-m-d H:i:s', $cache_time) . ' (' . $cache_time . ')' : 'NONE'));
+		error_log('dream_get_post_used_blocks - Cache is stale: ' . ($cache_is_stale ? 'YES' : 'NO'));
 		if ($used_blocks !== false) {
 			error_log('dream_get_post_used_blocks - Cached blocks: ' . print_r($used_blocks, true));
 		}
 	}
 
-	if (false === $used_blocks) {
+	// Rebuild cache if it doesn't exist OR if post was modified at/after cache was created
+	if (false === $used_blocks || $cache_is_stale) {
 		$used_blocks = [];
 		$post = get_post($post_id);
 
@@ -211,10 +226,13 @@ function dream_get_post_used_blocks($post_id, $blocks_metadata) {
 		if (defined('WP_DEBUG') && WP_DEBUG) {
 			error_log('dream_get_post_used_blocks - Detected blocks: ' . print_r($used_blocks, true));
 			error_log('dream_get_post_used_blocks - Setting cache key: ' . $cache_key);
+			error_log('dream_get_post_used_blocks - Storing post modified time as cache time: ' . $post_modified_time);
 		}
 
-		// Cache for 1 day
+		// Cache for 1 day and store the POST'S modified time (not current time)
+		// This way, if the post is saved again, its modified time will be newer than our cached time
 		set_transient($cache_key, $used_blocks, DAY_IN_SECONDS);
+		set_transient($cache_time_key, $post_modified_time, DAY_IN_SECONDS);
 	}
 
 	return $used_blocks;

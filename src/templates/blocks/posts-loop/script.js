@@ -1,5 +1,4 @@
 jQuery(document).ready(function ($) {
-    console.log('this is a test');
     
     // Load More Buttons
     const buttons = jQuery('.load-more--button');
