@@ -26,12 +26,67 @@ function filter_block_dir($file) {
  */
 
 /**
+ * Hybrid cache GET: Tries wp_cache first, falls back to transient
+ *
+ * @param string $key Cache key
+ * @param string $group Cache group (for wp_cache)
+ * @return mixed Cached value or false if not found
+ */
+function dream_cache_get($key, $group = 'dream') {
+	// Try object cache first (Memcached on WP Engine, or in-memory locally)
+	$value = wp_cache_get($key, $group);
+
+	if (false !== $value) {
+		return $value;
+	}
+
+	// Fallback to transient (database)
+	$transient_key = $group . '_' . $key;
+	return get_transient($transient_key);
+}
+
+/**
+ * Hybrid cache SET: Sets both wp_cache and transient
+ *
+ * @param string $key Cache key
+ * @param mixed $value Value to cache
+ * @param string $group Cache group (for wp_cache)
+ * @param int $expiration Expiration time in seconds
+ * @return bool True on success
+ */
+function dream_cache_set($key, $value, $group = 'dream', $expiration = 0) {
+	// Set in object cache (Memcached on WP Engine, or in-memory locally)
+	wp_cache_set($key, $value, $group, $expiration);
+
+	// Also set transient as fallback (database)
+	$transient_key = $group . '_' . $key;
+	return set_transient($transient_key, $value, $expiration);
+}
+
+/**
+ * Hybrid cache DELETE: Removes from both wp_cache and transient
+ *
+ * @param string $key Cache key
+ * @param string $group Cache group (for wp_cache)
+ * @return bool True on success
+ */
+function dream_cache_delete($key, $group = 'dream') {
+	// Delete from object cache
+	wp_cache_delete($key, $group);
+
+	// Delete transient
+	$transient_key = $group . '_' . $key;
+	return delete_transient($transient_key);
+}
+
+/**
  * Get cached block metadata for PARENT theme only
  * Child theme has its own dream_get_child_blocks_metadata() function
  * Returns array of ['block-slug' => 'acf/block-name', ...]
  */
 function dream_get_blocks_metadata() {
-	$blocks_metadata = get_transient('dream_blocks_metadata');
+	// Use hybrid cache: wp_cache (Memcached on WP Engine) + transient fallback
+	$blocks_metadata = dream_cache_get('blocks_metadata', 'dream_blocks');
 
 	// Temporary debug logging
 	if (defined('WP_DEBUG') && WP_DEBUG) {
@@ -72,8 +127,8 @@ function dream_get_blocks_metadata() {
 			error_log('dream_get_blocks_metadata - Blocks: ' . print_r($blocks_metadata, true));
 		}
 
-		// Cache for 1 week
-		set_transient('dream_blocks_metadata', $blocks_metadata, WEEK_IN_SECONDS);
+		// Cache for 1 week (hybrid: both wp_cache and transient)
+		dream_cache_set('blocks_metadata', $blocks_metadata, 'dream_blocks', WEEK_IN_SECONDS);
 	}
 
 	return $blocks_metadata;
@@ -101,8 +156,10 @@ function dream_extract_block_names_recursive($blocks, &$block_names = []) {
  * Get blocks used in a specific pattern (cached)
  */
 function dream_get_pattern_used_blocks($pattern_id, $blocks_metadata) {
-	$cache_key = 'dream_pattern_blocks_' . $pattern_id;
-	$used_blocks = get_transient($cache_key);
+	$cache_key = 'pattern_blocks_' . $pattern_id;
+
+	// Use hybrid cache: wp_cache (Memcached on WP Engine) + transient fallback
+	$used_blocks = dream_cache_get($cache_key, 'dream_blocks');
 
 	if (false === $used_blocks) {
 		$used_blocks = [];
@@ -123,8 +180,8 @@ function dream_get_pattern_used_blocks($pattern_id, $blocks_metadata) {
 			}
 		}
 
-		// Cache for 1 day
-		set_transient($cache_key, $used_blocks, DAY_IN_SECONDS);
+		// Cache for 1 day (hybrid: both wp_cache and transient)
+		dream_cache_set($cache_key, $used_blocks, 'dream_blocks', DAY_IN_SECONDS);
 	}
 
 	return $used_blocks;
@@ -134,11 +191,12 @@ function dream_get_pattern_used_blocks($pattern_id, $blocks_metadata) {
  * Get all blocks used in a post (including blocks within patterns)
  */
 function dream_get_post_used_blocks($post_id, $blocks_metadata) {
-	$cache_key = 'dream_post_blocks_' . $post_id;
-	$cache_time_key = 'dream_post_blocks_time_' . $post_id;
+	$cache_key = 'post_blocks_' . $post_id;
+	$cache_time_key = 'post_blocks_time_' . $post_id;
 
-	$used_blocks = get_transient($cache_key);
-	$cache_time = get_transient($cache_time_key);
+	// Use hybrid cache: wp_cache (Memcached on WP Engine) + transient fallback
+	$used_blocks = dream_cache_get($cache_key, 'dream_blocks');
+	$cache_time = dream_cache_get($cache_time_key, 'dream_blocks');
 
 	// Get post modified time from database (always current)
 	$post = get_post($post_id);
@@ -231,8 +289,9 @@ function dream_get_post_used_blocks($post_id, $blocks_metadata) {
 
 		// Cache for 1 day and store the POST'S modified time (not current time)
 		// This way, if the post is saved again, its modified time will be newer than our cached time
-		set_transient($cache_key, $used_blocks, DAY_IN_SECONDS);
-		set_transient($cache_time_key, $post_modified_time, DAY_IN_SECONDS);
+		// Use hybrid cache: both wp_cache and transient
+		dream_cache_set($cache_key, $used_blocks, 'dream_blocks', DAY_IN_SECONDS);
+		dream_cache_set($cache_time_key, $post_modified_time, 'dream_blocks', DAY_IN_SECONDS);
 	}
 
 	return $used_blocks;
