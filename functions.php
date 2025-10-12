@@ -124,3 +124,8 @@ remove_action( 'wp_head', 'wlwmanifest_link');
 
 // TODO: Add menus programatically
 // URL: https://wordpress.stackexchange.com/questions/44736/programmatically-add-a-navigation-menu-and-menu-items
+
+// TODO: Build plugin for Gutenberg Pattern Asset Management
+//       Add metadata system to attach CSS/JS to pattern JSON exports with conditional loading.
+//       As of Oct 2025, no existing plugin provides this (GitHub issue #61881 still open).
+//       Better suited as editor-level feature than theme implementation.
