@@ -34,6 +34,11 @@ if (get_option('show_on_front ') == 'posts') {
   $template = 'pages/front-page.twig';
 }
 
+// Add pre-calculated page styles
+if (isset($timber_post) && $timber_post && is_object($timber_post) && isset($timber_post->ID)) {
+	$context['page_styles'] = dream_calculate_page_styles($timber_post->ID);
+}
+
 $context['context'] = $context;
 
 

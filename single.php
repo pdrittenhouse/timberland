@@ -14,6 +14,11 @@ $timber_post = Timber::query_post();
 $context['post'] = $timber_post;
 $context['form_action'] = esc_url( site_url( 'wp-login.php?action=postpass', 'login_post' ) );
 
+// Add pre-calculated page styles
+if (isset($timber_post) && $timber_post) {
+	$context['page_styles'] = dream_calculate_page_styles($timber_post->ID);
+}
+
 $prev = get_adjacent_post(false, 6, true);
 $next = get_adjacent_post(false, 6, false);
 if ($prev) {

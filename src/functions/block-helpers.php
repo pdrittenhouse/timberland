@@ -1,14 +1,15 @@
 <?php
 
 /**
- * Shared Helper Functions
+ * Block Helper Functions
  *
- * Utility functions used across multiple files
+ * Block detection, caching, and utility functions for ACF blocks
+ * Used by: blocks.php, scripts.php, styles.php
  */
 
 /**
  * ========================================
- * Block Helper Functions
+ * Block Directory & Metadata Functions
  * ========================================
  */
 
@@ -21,63 +22,10 @@ function filter_block_dir($file) {
 }
 
 /**
- * Block Detection Caching Helpers
+ * Block Detection & Metadata Functions
+ * Uses hybrid cache functions from cache.php (dream_cache_get, dream_cache_set, dream_cache_delete)
  * Used by: scripts.php, styles.php
  */
-
-/**
- * Hybrid cache GET: Tries wp_cache first, falls back to transient
- *
- * @param string $key Cache key
- * @param string $group Cache group (for wp_cache)
- * @return mixed Cached value or false if not found
- */
-function dream_cache_get($key, $group = 'dream') {
-	// Try object cache first (Memcached on WP Engine, or in-memory locally)
-	$value = wp_cache_get($key, $group);
-
-	if (false !== $value) {
-		return $value;
-	}
-
-	// Fallback to transient (database)
-	$transient_key = $group . '_' . $key;
-	return get_transient($transient_key);
-}
-
-/**
- * Hybrid cache SET: Sets both wp_cache and transient
- *
- * @param string $key Cache key
- * @param mixed $value Value to cache
- * @param string $group Cache group (for wp_cache)
- * @param int $expiration Expiration time in seconds
- * @return bool True on success
- */
-function dream_cache_set($key, $value, $group = 'dream', $expiration = 0) {
-	// Set in object cache (Memcached on WP Engine, or in-memory locally)
-	wp_cache_set($key, $value, $group, $expiration);
-
-	// Also set transient as fallback (database)
-	$transient_key = $group . '_' . $key;
-	return set_transient($transient_key, $value, $expiration);
-}
-
-/**
- * Hybrid cache DELETE: Removes from both wp_cache and transient
- *
- * @param string $key Cache key
- * @param string $group Cache group (for wp_cache)
- * @return bool True on success
- */
-function dream_cache_delete($key, $group = 'dream') {
-	// Delete from object cache
-	wp_cache_delete($key, $group);
-
-	// Delete transient
-	$transient_key = $group . '_' . $key;
-	return delete_transient($transient_key);
-}
 
 /**
  * Get cached block metadata for PARENT theme only
@@ -296,11 +244,3 @@ function dream_get_post_used_blocks($post_id, $blocks_metadata) {
 
 	return $used_blocks;
 }
-
-/**
- * ========================================
- * Other Helper Functions
- * ========================================
- */
-
-// Add additional non-block helper functions below as needed

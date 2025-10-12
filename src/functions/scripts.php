@@ -77,7 +77,7 @@ add_action('enqueue_block_assets', function() {
 	}
 
 	$post_id = get_the_ID();
-	$blocks_metadata = dream_get_blocks_metadata(); // Helper function from helpers.php
+	$blocks_metadata = dream_get_blocks_metadata(); // Helper function from block-helpers.php
 	$used_blocks = dream_get_post_used_blocks($post_id, $blocks_metadata); // Will use cached value from 'wp' hook
 	$blocks_path = dirname(__DIR__) . '/templates/blocks';
 
@@ -103,7 +103,7 @@ add_action('enqueue_block_assets', function() {
 // So we handle enqueuing here with content check to skip empty/whitespace-only files
 function dream_enqueue_block_admin_scripts() {
 	$blocks_path = dirname(__DIR__) . '/templates/blocks';
-	$blocks = array_filter(scandir($blocks_path), 'filter_block_dir'); // Helper function from helpers.php
+	$blocks = array_filter(scandir($blocks_path), 'filter_block_dir'); // Helper function from block-helpers.php
 
 	foreach ($blocks as $block) {
 		$index_js_path = $blocks_path . '/' . $block . '/index.js';

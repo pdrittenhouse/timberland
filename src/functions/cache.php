@@ -6,11 +6,78 @@
  * Centralized cache management for:
  * - Timber/Twig template cache
  * - Block detection cache
+ * - Template styles cache
  * - WordPress object cache
  */
 
 /**
- * Clear all caches (Timber, Block Detection, Object Cache)
+ * ========================================
+ * Generic Cache Functions (Hybrid: wp_cache + transient)
+ * ========================================
+ */
+
+/**
+ * Hybrid cache GET: Tries wp_cache first, falls back to transient
+ *
+ * @param string $key Cache key
+ * @param string $group Cache group (for wp_cache)
+ * @return mixed Cached value or false if not found
+ */
+function dream_cache_get($key, $group = 'dream') {
+	// Try object cache first (Memcached on WP Engine, or in-memory locally)
+	$value = wp_cache_get($key, $group);
+
+	if (false !== $value) {
+		return $value;
+	}
+
+	// Fallback to transient (database)
+	$transient_key = $group . '_' . $key;
+	return get_transient($transient_key);
+}
+
+/**
+ * Hybrid cache SET: Sets both wp_cache and transient
+ *
+ * @param string $key Cache key
+ * @param mixed $value Value to cache
+ * @param string $group Cache group (for wp_cache)
+ * @param int $expiration Expiration time in seconds
+ * @return bool True on success
+ */
+function dream_cache_set($key, $value, $group = 'dream', $expiration = 0) {
+	// Set in object cache (Memcached on WP Engine, or in-memory locally)
+	wp_cache_set($key, $value, $group, $expiration);
+
+	// Also set transient as fallback (database)
+	$transient_key = $group . '_' . $key;
+	return set_transient($transient_key, $value, $expiration);
+}
+
+/**
+ * Hybrid cache DELETE: Removes from both wp_cache and transient
+ *
+ * @param string $key Cache key
+ * @param string $group Cache group (for wp_cache)
+ * @return bool True on success
+ */
+function dream_cache_delete($key, $group = 'dream') {
+	// Delete from object cache
+	wp_cache_delete($key, $group);
+
+	// Delete transient
+	$transient_key = $group . '_' . $key;
+	return delete_transient($transient_key);
+}
+
+/**
+ * ========================================
+ * Cache Clearing Functions
+ * ========================================
+ */
+
+/**
+ * Clear all caches (Timber, Block Detection, Template Styles, Object Cache)
  */
 function dream_clear_timber_cache() {
 	global $wpdb;
@@ -58,6 +125,12 @@ function dream_clear_timber_cache() {
 
 	// Clear Pattern dependencies cache (per-post detection)
 	$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_pattern_dependencies_%' OR option_name LIKE '_transient_timeout_pattern_dependencies_%'");
+
+	// Clear Template styles cache (per-post caching of page styles)
+	$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_dream_templates_page_styles_%' OR option_name LIKE '_transient_timeout_dream_templates_page_styles_%'");
+
+	// Clear wp_cache for dream_templates group (Memcached on WP Engine)
+	wp_cache_flush_group('dream_templates');
 
 	// Clear any WordPress object cache
 	if (function_exists('wp_cache_flush')) {
@@ -172,6 +245,10 @@ function dream_clear_post_cache($post_id) {
 	// Clear the post blocks cache (hybrid: both wp_cache and transient)
 	dream_cache_delete('post_blocks_' . $post_id, 'dream_blocks');
 	dream_cache_delete('post_blocks_time_' . $post_id, 'dream_blocks');
+
+	// Clear the post template styles cache (hybrid: both wp_cache and transient)
+	dream_cache_delete('page_styles_' . $post_id, 'dream_templates');
+	dream_cache_delete('page_styles_time_' . $post_id, 'dream_templates');
 
 	// Debug logging
 	if (defined('WP_DEBUG') && WP_DEBUG) {

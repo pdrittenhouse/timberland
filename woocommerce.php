@@ -10,7 +10,13 @@ $context            = Timber::context();
 $context['sidebar'] = Timber::get_widgets( 'shop-sidebar' );
 
 if ( is_singular( 'product' ) ) {
-  $context['post']    = Timber::get_post();
+  $timber_post = Timber::get_post();
+  $context['post'] = $timber_post;
+
+  // Add pre-calculated page styles
+  if (isset($timber_post) && $timber_post) {
+    $context['page_styles'] = dream_calculate_page_styles($timber_post->ID);
+  }
   $product            = wc_get_product( $context['post']->ID );
   $context['product'] = $product;
 

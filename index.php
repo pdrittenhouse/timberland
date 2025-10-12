@@ -15,8 +15,14 @@
 
 $context = Timber::context();
 $context['posts'] = new Timber\PostQuery();
-$context['post'] = new Timber\Post();
+$timber_post = new Timber\Post();
+$context['post'] = $timber_post;
 $templates = array( 'pages/index.twig' );
+
+// Add pre-calculated page styles
+if (isset($timber_post) && $timber_post && isset($timber_post->ID)) {
+	$context['page_styles'] = dream_calculate_page_styles($timber_post->ID);
+}
 
 // Enqueue Bootstrap components used in pages/index.twig
 enqueue_bootstrap_component('pagination');
