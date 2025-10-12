@@ -2,6 +2,13 @@
  * svg
  */
 
+// TODO: Implement dynamic icon loading system (Phase 3.3: Icon Optimization)
+//       Scan all ACF icon fields per-page and generate minimal CSS with only used icons.
+//       Support both Font Awesome and Phosphor Icons.
+//       Similar to page_styles preprocessing - cache per-post with self-invalidation.
+//       Keep full libraries in admin for icon picker UI.
+//       Estimated savings: 25-30KB per page by loading ~5-10 icons instead of full library.
+
 import $ from 'jquery';
 import svg4everybody from 'svg4everybody';
 import fontawesome from './fontawesome';
