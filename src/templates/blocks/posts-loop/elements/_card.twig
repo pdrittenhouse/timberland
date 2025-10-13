@@ -12,6 +12,13 @@
  *  - parent_block_data: Parent block context for margin calculations
  *  - additional_classes: Array of pattern-specific classes
  *  - additional_attributes: Array of pattern-specific attributes
+ *
+ * TODO: Fix button text source for posts-loop cards
+ * - Currently uses fields.card.link['title'] which requires manual link setup
+ * - Should add dedicated "Button Text" field to Posts Loop Content > Card > Button settings
+ * - This would allow customizable button text independent of link field
+ * - Fallback: Use post.link or a translatable string like "Read More" if button text is empty
+ * - Location: Line 391
  */
 #}
 

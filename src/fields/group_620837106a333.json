@@ -622,35 +622,7 @@
             },
             "admin_only": 0,
             "clone": [
-                "field_6363537ea6633",
-                "field_634b9262e0f68",
-                "field_6376898a62ebf",
-                "field_634b9262e0f6d",
-                "field_634b9262e0f6e",
-                "field_634b9262e0f6f",
-                "field_634dca232b6dd",
-                "field_63766afd9f3fa",
-                "field_634dca5c2b6de",
-                "field_634dcab72b6df",
-                "field_634dcb8c637ec",
-                "field_634dcaf72b6e0",
-                "field_634dcb292b6e1",
-                "field_634dc9c42b6dc",
-                "field_634b9262e0f72",
-                "field_634b9262e0f73",
-                "field_634b9262e0f74",
-                "field_634b9262e0f75",
-                "field_634b9262e0f7d",
-                "field_634b9262e0f7e",
-                "field_634b9262e0f7f",
-                "field_634b9262e0f80",
-                "field_634b9262e0f7b",
-                "field_634b9262e0f81",
-                "field_634b9262e0f82",
-                "field_634b9262e0f83",
-                "field_634b9262e0f84",
-                "field_634b9262e0f85",
-                "field_634b9262e0f86"
+                "group_634b92145ab77"
             ],
             "display": "group",
             "layout": "block",
@@ -1227,5 +1199,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1759370389
+    "modified": 1760318125
 }
