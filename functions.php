@@ -78,6 +78,7 @@ $dream_includes = array(
   "paths.php",
   "config.php",
   "cache.php",
+  "performance.php",
   "block-helpers.php",
   "template-helpers.php",
   "menus.php",

@@ -1,0 +1,623 @@
+{
+    "key": "group_68dcb7f3bb47f_module_meta_search",
+    "title": "Module: Posts Loop Query - Meta & Search",
+    "fields": [
+        {
+            "key": "field_68dcb7f3c0d58",
+            "label": "Custom Fields",
+            "name": "custom_fields",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68dcb7f3c0805",
+                        "operator": "==",
+                        "value": "query"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_68dcb7f454148",
+                    "label": "Meta Key",
+                    "name": "meta_key",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_68dcb7f4541d3",
+                    "label": "Meta Value",
+                    "name": "meta_value",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_68dcb7f454241",
+                    "label": "Meta Value Number",
+                    "name": "meta_value_num",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_68dcb7f45434f",
+                    "label": "Meta Compare",
+                    "name": "meta_compare",
+                    "aria-label": "",
+                    "type": "select",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "choices": {
+                        "=": "=",
+                        "!=": "!=",
+                        ">": ">",
+                        ">=": ">=",
+                        "<": "<",
+                        "<=": "<=",
+                        "LIKE": "LIKE",
+                        "NOT LIKE": "NOT LIKE",
+                        "IN": "IN",
+                        "NOT IN": "NOT IN",
+                        "BETWEEN": "BETWEEN",
+                        "NOT BETWEEN": "NOT BETWEEN",
+                        "NOT EXISTS": "NOT EXISTS",
+                        "REGEXP": "REGEXP",
+                        "NOT REGEXP": "NOT REGEXP",
+                        "RLIKE": "RLIKE"
+                    },
+                    "default_value": "=",
+                    "return_format": "value",
+                    "multiple": 0,
+                    "allow_null": 0,
+                    "ui": 0,
+                    "ajax": 0,
+                    "placeholder": ""
+                },
+                {
+                    "key": "field_68dcb7f4543e6",
+                    "label": "Meta Query",
+                    "name": "meta_query",
+                    "aria-label": "",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "layout": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_68dcb7f45e2eb",
+                            "label": "Relation",
+                            "name": "relation",
+                            "aria-label": "",
+                            "type": "select",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "admin_only": 0,
+                            "choices": {
+                                "AND": "AND",
+                                "OR": "OR"
+                            },
+                            "default_value": "AND",
+                            "return_format": "value",
+                            "multiple": 0,
+                            "allow_null": 0,
+                            "ui": 0,
+                            "ajax": 0,
+                            "placeholder": ""
+                        },
+                        {
+                            "key": "field_68dcb7f45e36c",
+                            "label": "Meta Query",
+                            "name": "meta_query",
+                            "aria-label": "",
+                            "type": "repeater",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "admin_only": 0,
+                            "layout": "block",
+                            "pagination": 0,
+                            "min": 0,
+                            "max": 0,
+                            "collapsed": "",
+                            "button_label": "Add Row",
+                            "rows_per_page": 20,
+                            "sub_fields": [
+                                {
+                                    "key": "field_68dcb7f460bff",
+                                    "label": "Key",
+                                    "name": "key",
+                                    "aria-label": "",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "admin_only": 0,
+                                    "default_value": "",
+                                    "maxlength": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "parent_repeater": "field_68dcb7f45e36c"
+                                },
+                                {
+                                    "key": "field_68dcb7f460d18",
+                                    "label": "Value",
+                                    "name": "value",
+                                    "aria-label": "",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_68dcb7f460ea1",
+                                                "operator": "!=",
+                                                "value": "IN"
+                                            },
+                                            {
+                                                "field": "field_68dcb7f460ea1",
+                                                "operator": "!=",
+                                                "value": "NOT IN"
+                                            },
+                                            {
+                                                "field": "field_68dcb7f460ea1",
+                                                "operator": "!=",
+                                                "value": "BETWEEN"
+                                            },
+                                            {
+                                                "field": "field_68dcb7f460ea1",
+                                                "operator": "!=",
+                                                "value": "NOT BETWEEN"
+                                            }
+                                        ]
+                                    ],
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "admin_only": 0,
+                                    "default_value": "",
+                                    "maxlength": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "parent_repeater": "field_68dcb7f45e36c"
+                                },
+                                {
+                                    "key": "field_68dcb7f460dac",
+                                    "label": "Values",
+                                    "name": "values",
+                                    "aria-label": "",
+                                    "type": "repeater",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_68dcb7f460ea1",
+                                                "operator": "==",
+                                                "value": "IN"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "field": "field_68dcb7f460ea1",
+                                                "operator": "==",
+                                                "value": "NOT IN"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "field": "field_68dcb7f460ea1",
+                                                "operator": "==",
+                                                "value": "BETWEEN"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "field": "field_68dcb7f460ea1",
+                                                "operator": "==",
+                                                "value": "NOT BETWEEN"
+                                            }
+                                        ]
+                                    ],
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "admin_only": 0,
+                                    "layout": "block",
+                                    "min": 0,
+                                    "max": 0,
+                                    "collapsed": "",
+                                    "button_label": "Add Value",
+                                    "rows_per_page": 20,
+                                    "parent_repeater": "field_68dcb7f45e36c",
+                                    "sub_fields": [
+                                        {
+                                            "key": "field_68dcb7f4653fb",
+                                            "label": "Value",
+                                            "name": "value",
+                                            "aria-label": "",
+                                            "type": "text",
+                                            "instructions": "",
+                                            "required": 0,
+                                            "conditional_logic": 0,
+                                            "wrapper": {
+                                                "width": "",
+                                                "class": "",
+                                                "id": ""
+                                            },
+                                            "admin_only": 0,
+                                            "default_value": "",
+                                            "maxlength": "",
+                                            "placeholder": "",
+                                            "prepend": "",
+                                            "append": "",
+                                            "parent_repeater": "field_68dcb7f460dac"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "key": "field_68dcb7f460e32",
+                                    "label": "Type",
+                                    "name": "type",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "admin_only": 0,
+                                    "choices": {
+                                        "NUMERIC": "NUMERIC",
+                                        "BINARY": "BINARY",
+                                        "CHAR": "CHAR",
+                                        "DATE": "DATE",
+                                        "DATETIME": "DATETIME",
+                                        "DECIMAL": "DECIMAL",
+                                        "SIGNED": "SIGNED",
+                                        "TIME": "TIME",
+                                        "UNSIGNED": "UNSIGNED"
+                                    },
+                                    "default_value": "CHAR",
+                                    "return_format": "value",
+                                    "multiple": 0,
+                                    "allow_null": 0,
+                                    "ui": 0,
+                                    "ajax": 0,
+                                    "placeholder": "",
+                                    "parent_repeater": "field_68dcb7f45e36c"
+                                },
+                                {
+                                    "key": "field_68dcb7f460ea1",
+                                    "label": "Compare",
+                                    "name": "compare",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "admin_only": 0,
+                                    "choices": {
+                                        "=": "=",
+                                        "!=": "!=",
+                                        ">": ">",
+                                        ">=": ">=",
+                                        "<": "<",
+                                        "<=": "<=",
+                                        "LIKE": "LIKE",
+                                        "NOT LIKE": "NOT LIKE",
+                                        "IN": "IN",
+                                        "NOT IN": "NOT IN",
+                                        "BETWEEN": "BETWEEN",
+                                        "NOT BETWEEN": "NOT BETWEEN",
+                                        "EXISTS": "EXISTS",
+                                        "NOT EXISTS": "NOT EXISTS"
+                                    },
+                                    "default_value": "=",
+                                    "return_format": "value",
+                                    "multiple": 0,
+                                    "allow_null": 0,
+                                    "ui": 0,
+                                    "ajax": 0,
+                                    "placeholder": "",
+                                    "parent_repeater": "field_68dcb7f45e36c"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "field_68dcb7f3c0df8",
+            "label": "Comment Count",
+            "name": "comment_count",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68dcb7f3c0805",
+                        "operator": "==",
+                        "value": "query"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_68dcb7f46de44",
+                    "label": "Value",
+                    "name": "value",
+                    "aria-label": "",
+                    "type": "number",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "default_value": "",
+                    "min": 0,
+                    "max": "",
+                    "placeholder": "",
+                    "step": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_68dcb7f46dec6",
+                    "label": "Compare",
+                    "name": "compare",
+                    "aria-label": "",
+                    "type": "select",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_68dcb7f46de44",
+                                "operator": "!=empty"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "choices": {
+                        "=": "=",
+                        "!=": "!=",
+                        ">": ">",
+                        ">=": ">=",
+                        "<": "<",
+                        "<=": "<="
+                    },
+                    "default_value": "=",
+                    "return_format": "value",
+                    "multiple": 0,
+                    "allow_null": 0,
+                    "ui": 0,
+                    "ajax": 0,
+                    "placeholder": ""
+                }
+            ]
+        },
+        {
+            "key": "field_68dcb7f3c0f82",
+            "label": "Search",
+            "name": "search",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68dcb7f3c0805",
+                        "operator": "==",
+                        "value": "query"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_68dcb7f478ec9",
+                    "label": "Search",
+                    "name": "s",
+                    "aria-label": "",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "message": "",
+                    "default_value": 0,
+                    "ui_on_text": "",
+                    "ui_off_text": "",
+                    "ui": 1
+                },
+                {
+                    "key": "field_68dcb7f478f38",
+                    "label": "Exact",
+                    "name": "exact",
+                    "aria-label": "",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "message": "",
+                    "default_value": 0,
+                    "ui_on_text": "",
+                    "ui_off_text": "",
+                    "ui": 1
+                },
+                {
+                    "key": "field_68dcb7f478fad",
+                    "label": "Sentence",
+                    "name": "sentence",
+                    "aria-label": "",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "message": "",
+                    "default_value": 0,
+                    "ui_on_text": "",
+                    "ui_off_text": "",
+                    "ui": 1
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "block-modules"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": false,
+    "description": "Meta fields, comment count, and search fields for Posts Loop Query",
+    "show_in_rest": 0,
+    "modified": 1760318200
+}

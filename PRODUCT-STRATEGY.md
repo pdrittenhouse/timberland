@@ -3234,3 +3234,333 @@ Please reference the PRODUCT-STRATEGY.md document in the theme directory for ful
 - Prevents Webflow from capturing WordPress market
 - 12-18 month head start (defensible moat)
 - Adobe/Automattic/Salesforce strategic necessity
+
+---
+
+## AI-Powered Design-to-Code Pipeline: Component Generation System
+
+**Last Updated:** 2025-10-12
+**Status:** Conceptual Design Phase
+**Strategic Value:** Removes final creative constraint barrier in Figma-to-WordPress workflow
+
+### Problem Statement
+
+Current Figma integration has a fundamental limitation:
+- **Working Well:** Pre-built Figma components map 1:1 to Timber patterns/ACF blocks
+- **The Gap:** Designers can't create NEW components without developer handoff
+- **Impact:** Creative exploration limited to existing component variants
+
+### Vision
+
+An AI-powered system that bridges Figma design exploration to code generation while maintaining architectural integrity:
+
+```
+Designer creates in Figma → AI analyzes → Yeoman generator scaffolds → Code syncs back to Figma
+```
+
+**Key Innovation:** Use existing Yeoman generators as the bridge between AI intent and code generation, ensuring all generated components follow established conventions.
+
+### Architecture Overview
+
+#### Four-Tier Component Creation Model
+
+**Tier 1: Pure Composition** (No AI)
+- Designer uses existing Figma components
+- Direct 1:1 mapping to code
+- Zero latency, zero risk
+
+**Tier 2: Variants** (Light AI)
+- New variants of existing components
+- AI generates variant config
+- Example: Card with horizontal layout option
+
+**Tier 3: New Molecules/Organisms** (Full AI)
+- New patterns using existing atoms
+- AI scaffolds complete component
+- Example: Feature card combining button + image + heading
+
+**Tier 4: Novel Atoms** (Hybrid)
+- Truly novel components
+- AI generates scaffold, developer refines
+- Example: New interactive element type
+
+#### AI Agent Workflow (n8n)
+
+```
+1. Figma Webhook Trigger (Component tagged @generate-component)
+   ↓
+2. Visual Analysis (GPT-4V/Gemini)
+   - Extract visual hierarchy
+   - Identify layout patterns
+   - Detect text/image placeholders
+   ↓
+3. Semantic Analysis (Claude)
+   - Determine component purpose
+   - Classify atomic level (atom/molecule/organism)
+   - Identify dependencies on existing patterns
+   ↓
+4. Vector Search (Pattern Library DB)
+   - Compare against existing components
+   - Calculate similarity scores
+   - Determine if composition or novel pattern
+   ↓
+5. Decision Branch:
+
+   A. COMPOSITION PATH:
+      - Generate Twig using existing clones
+      - Minimal new CSS (layout only)
+      - ACF fields reference existing modules
+
+   B. NEW PATTERN PATH:
+      - Prepare Yeoman generator inputs
+      - Generate pattern scaffold (Twig, SCSS, JSON)
+      - Generate ACF block + field group
+      - Follow atomic design conventions
+   ↓
+6. Quality Validation (Claude)
+   - Check against CODING-STANDARDS.md
+   - Verify WCAG accessibility
+   - Validate naming conventions
+   - Ensure proper clone usage
+   ↓
+7. Git Operations
+   - Create feature branch
+   - Commit generated files
+   - Push and create PR
+   ↓
+8. Figma Sync Back
+   - Update component metadata
+   - Add field mappings
+   - Link to WordPress block
+   - Mark as "Connected to Code"
+```
+
+#### Key AI Agents
+
+**1. Visual Analyzer Agent** (GPT-4V/Gemini)
+```json
+Input: Figma component screenshot
+Output: {
+  "layout": "flex-column",
+  "children": [
+    {"type": "image", "aspectRatio": "16:9"},
+    {"type": "text", "variant": "heading-3"},
+    {"type": "text", "variant": "body"},
+    {"type": "button", "variant": "primary"}
+  ],
+  "spacing": "var(--spacing-md)",
+  "hasVariants": true
+}
+```
+
+**2. Semantic Architect Agent** (Claude)
+```json
+Input: Visual structure + annotations
+Output: {
+  "name": "feature-card",
+  "atomicLevel": "molecule",
+  "purpose": "Highlight features with image, heading, description, CTA",
+  "dependencies": ["atom/button", "atom/image", "atom/heading"],
+  "isNovel": false,
+  "similarity": {
+    "existingPattern": "card",
+    "confidence": 0.85,
+    "differences": ["horizontal layout variant", "icon placement"]
+  }
+}
+```
+
+**3. Code Generator Agent** (Claude + Yeoman)
+```javascript
+// AI generates Yeoman prompt responses
+{
+  patternType: "molecule",
+  name: "feature-card",
+  category: "cards",
+  usesAtoms: ["button", "image", "heading"],
+  acfFields: [
+    { type: "image", name: "featured_image" },
+    { type: "text", name: "title" },
+    { type: "wysiwyg", name: "description" },
+    { type: "clone", module: "Module: Button" }
+  ],
+  twigTemplate: "// AI-generated structure"
+}
+```
+
+**4. Quality Assurance Agent** (Claude)
+- Validates against coding standards
+- Ensures accessibility compliance
+- Verifies naming conventions
+- Checks for proper modular structure
+
+### Technical Requirements
+
+#### Data Infrastructure
+
+**1. Pattern Library Vector Database** (Pinecone/Weaviate)
+```javascript
+{
+  patternId: "molecule-card",
+  embedding: [...], // Visual + semantic embedding
+  metadata: {
+    atomicLevel: "molecule",
+    usesAtoms: ["button", "image", "heading"],
+    acfFields: [...],
+    variants: [...],
+    twigPath: "02-molecules/card/card.twig"
+  }
+}
+```
+
+**2. Design Tokens Mapping**
+```javascript
+{
+  figmaTokenId: "spacing/md",
+  cssVariable: "--spacing-md",
+  scssVariable: "$spacing-md",
+  value: "1.5rem"
+}
+```
+
+**3. Component Field Mappings**
+```javascript
+{
+  figmaComponentId: "card-primary",
+  wordpressBlock: "acf/card",
+  fieldMappings: {
+    "Title": "field_620837106a334",
+    "Description": "field_620837106a335",
+    "Button": "field_68dcb7f3_clone_button"
+  }
+}
+```
+
+### Implementation Phases
+
+**Phase 1: Foundation** (2-4 weeks)
+- Set up Figma API integration
+- Build pattern library vector database
+- Create basic n8n workflows
+- Test with simple compositions
+
+**Phase 2: AI Integration** (4-6 weeks)
+- Integrate GPT-4V for visual analysis
+- Build Claude-based semantic analyzer
+- Create Yeoman generator bridge
+- Test with new molecule generation
+
+**Phase 3: Code Generation** (6-8 weeks)
+- Build Twig template generator
+- Create ACF field group generator
+- Implement SCSS generator following conventions
+- Add quality validation layer
+
+**Phase 4: Figma Sync** (4-6 weeks)
+- Build Figma plugin for reverse sync
+- Create component library metadata system
+- Implement change detection
+- Add version control integration
+
+**Total Timeline:** 16-24 weeks (4-6 months)
+
+### Challenges & Mitigations
+
+**Challenge 1: Design Intent Ambiguity**
+- Mitigation: Multi-stage AI analysis (visual → semantic → structural)
+- Fallback: Designer annotations and tags
+
+**Challenge 2: Component Boundary Detection**
+- Mitigation: Leverage Figma component/variant structure
+- Fallback: Naming conventions (`Card/Primary`, `Button/Ghost/Large`)
+
+**Challenge 3: Maintaining Code Quality**
+- Mitigation: Quality Assurance Agent validates against standards
+- Fallback: All PRs require developer review
+
+**Challenge 4: Semantic Gaps**
+- Mitigation: Learn from developer refinements
+- Fallback: "Exploratory" tag bypasses AI generation
+
+**Challenge 5: Version Control Complexity**
+- Mitigation: Component metadata tracks Figma-code relationship
+- Fallback: Change detection alerts on drift
+
+### Success Metrics
+
+**Developer Efficiency:**
+- 50% reduction in new component development time
+- 80% of variants generated without code changes
+- 90% of compositions use existing patterns
+
+**Designer Empowerment:**
+- 3x increase in component variant creation
+- 70% of new molecules AI-generated
+- Zero handoff delays for variant creation
+
+**Code Quality:**
+- 100% adherence to coding standards
+- 100% WCAG compliance
+- Zero breaking changes to existing components
+
+### Strategic Value
+
+**Competitive Advantage:**
+- **First-mover:** No competitor has AI-powered component generation for WordPress
+- **Moat:** Pattern library data compounds over time (better predictions)
+- **Stickiness:** Generated components lock customers into platform
+
+**Market Impact:**
+- Removes final creative constraint in no-code workflows
+- Enables designers to operate at developer speed
+- Bridges gap between exploration and production
+
+**Valuation Impact:**
+- Base Figma integration: $50M-150M exit potential
+- **+ AI component generation: $150M-500M+ exit potential**
+- Differentiator: Only platform with design → AI → code → design loop
+
+### Recommended Starting Point
+
+**Proof of Concept: Variant Generation** (2-3 weeks)
+
+1. Pick one existing component (Card)
+2. Have designer create 2-3 new variants in Figma
+3. Build minimal n8n workflow:
+   - Detect new variants (Figma webhook)
+   - Analyze differences (Claude)
+   - Generate variant config
+   - Create PR with updated options
+4. Test and validate
+
+**Success Criteria:**
+- AI correctly identifies variant type
+- Generated config passes code review
+- Designer can iterate without developer
+- Workflow completes in < 5 minutes
+
+**Next Steps After POC:**
+- Expand to composition generation (Tier 3)
+- Add full component scaffolding (new molecules)
+- Build Figma sync-back functionality
+- Scale to all pattern types
+
+### Integration with Existing Strategy
+
+This system enhances the core Figma integration by:
+- **Removing creative bottleneck:** Designers no longer constrained by pre-built components
+- **Accelerating iteration:** Variants and compositions generated in minutes
+- **Maintaining quality:** AI enforces standards, modular architecture preserved
+- **Scaling learning:** Each generation improves future predictions
+
+**Position in Product Roadmap:**
+- Builds on Phase 3 (Figma Integration)
+- Enables Phase 4 (Advanced Design Features)
+- Prepares for Phase 5 (Enterprise Features)
+
+**Revenue Impact:**
+- Justifies premium pricing ($999/month vs $499/month)
+- Reduces churn (designers can self-serve more)
+- Increases customer lifetime value (more components = more lock-in)
+
+---
