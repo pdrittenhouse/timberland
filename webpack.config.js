@@ -11,6 +11,7 @@ const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
 const BootstrapManifestPlugin = require('./webpack-plugins/BootstrapManifestPlugin');
 const PatternManifestPlugin = require('./webpack-plugins/PatternManifestPlugin');
+const { InjectManifest } = require('workbox-webpack-plugin');
 const path = require('path');
 const { ProgressPlugin, ProvidePlugin } = require('webpack');
 // const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
@@ -70,6 +71,7 @@ module.exports = {
     dream: [`${paths.src}/index.js`],
     admin: [`${paths.src}/admin.js`],
     editor: [`${paths.src}/editor.js`],
+    'register-sw': [`${paths.src}/js/register-sw.js`], // Service worker registration
     ...patternEntries, // Add all pattern entries
     ...blockScssEntries, // Add all block SCSS entries
   },
@@ -348,6 +350,27 @@ module.exports = {
       blocksPath: path.resolve(__dirname, 'src/templates/blocks'),
       templatesPath: path.resolve(__dirname, 'src/templates'),
       outputPath: 'pattern-manifest.json'
+    }),
+    // Generate Service Worker with Workbox
+    new InjectManifest({
+      swSrc: `${paths.src}/js/sw.js`, // Source service worker file
+      swDest: path.resolve(__dirname, 'sw.js'), // Output to theme root
+      exclude: [
+        /\.map$/,
+        /^manifest.*\.js$/,
+        /\.json$/,
+        /spritemap\.svg$/,
+        /^data\//,
+        /bootstrap-manifest\.json$/,
+        /pattern-manifest\.json$/,
+      ],
+      // Include critical assets in precache manifest
+      include: [
+        /\.css$/,
+        /\.js$/,
+        /\.(woff|woff2|eot|ttf|otf)$/,
+      ],
+      maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
     }),
     // new BundleAnalyzerPlugin(),
   ],

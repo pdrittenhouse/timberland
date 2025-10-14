@@ -63,3 +63,32 @@ function dream_add_fetchpriority_to_first_image( $attr, $attachment, $size ) {
 	return $attr;
 }
 add_filter( 'wp_get_attachment_image_attributes', 'dream_add_fetchpriority_to_first_image', 10, 3 );
+
+/**
+ * ============================================================================
+ * 2. SERVICE WORKER CACHING
+ * ============================================================================
+ *
+ * Implements a service worker using Workbox for intelligent client-side caching.
+ * This improves repeat visit performance and enables offline functionality.
+ */
+
+/**
+ * Enqueue service worker registration script
+ *
+ * Loads the script that registers the service worker. The service worker itself
+ * is built by webpack and placed in the theme root directory.
+ */
+function dream_enqueue_service_worker() {
+	// Get the service worker version from cache.php settings
+	$sw_version = defined( 'DREAM_SW_VERSION' ) ? DREAM_SW_VERSION : '1.0.0';
+
+	wp_enqueue_script(
+		'dream-service-worker',
+		get_template_directory_uri() . '/dist/wp/js/register-sw.bundle.js',
+		array(),
+		$sw_version,
+		true
+	);
+}
+add_action( 'wp_enqueue_scripts', 'dream_enqueue_service_worker' );

@@ -403,3 +403,17 @@ add_action('switch_theme', function() {
 	dream_cache_delete('blocks_metadata', 'dream_blocks');
 });
 
+/**
+ * ========================================
+ * Service Worker Version Management
+ * ========================================
+ */
+
+/**
+ * Service Worker version constant
+ * Increment this when you want to force service worker updates on all clients
+ */
+if (!defined('DREAM_SW_VERSION')) {
+	define('DREAM_SW_VERSION', '1.0.0');
+}
+

@@ -65,7 +65,6 @@ $(document).ready(() => {
   unitSelector();
 });
 
-
 ////////////////////////////////////////////////////////////////
 // Blocks
 ////////////////////////////////////////////////////////////////
@@ -85,86 +84,84 @@ $(document).ready(() => {
 // }
 
 const scopedBlocks = [
- {
-   block: 'acf/column',
-   parent: 'acf/row',
- },
- {
-   block: 'acf/accordion-item',
-   parent: 'acf/accordion',
- },
- {
-   block: 'acf/button-text',
-   parent: 'acf/button',
- },
- {
-   block: 'acf/group',
-   parent: 'acf/button-group',
- },
- {
-   block: 'acf/slide',
-   parent: 'acf/slider',
- },
- {
-   block: 'acf/tab',
-   parent: 'acf/tabs',
- },
- {
-   block: 'acf/table-head',
-   parent: 'acf/table',
- },
- {
-   block: 'acf/table-body',
-   parent: 'acf/table',
- },
- {
-   block: 'acf/table-foot',
-   parent: 'acf/table',
- },
- {
-   block: 'acf/table-row',
-   parent: ['acf/table-head', 'acf/table-body', 'acf/table-foot'],
- },
- {
-   block: 'acf/table-cell',
-   parent: 'acf/table-row',
- },
+  {
+    block: 'acf/column',
+    parent: 'acf/row',
+  },
+  {
+    block: 'acf/accordion-item',
+    parent: 'acf/accordion',
+  },
+  {
+    block: 'acf/button-text',
+    parent: 'acf/button',
+  },
+  {
+    block: 'acf/group',
+    parent: 'acf/button-group',
+  },
+  {
+    block: 'acf/slide',
+    parent: 'acf/slider',
+  },
+  {
+    block: 'acf/tab',
+    parent: 'acf/tabs',
+  },
+  {
+    block: 'acf/table-head',
+    parent: 'acf/table',
+  },
+  {
+    block: 'acf/table-body',
+    parent: 'acf/table',
+  },
+  {
+    block: 'acf/table-foot',
+    parent: 'acf/table',
+  },
+  {
+    block: 'acf/table-row',
+    parent: ['acf/table-head', 'acf/table-body', 'acf/table-foot'],
+  },
+  {
+    block: 'acf/table-cell',
+    parent: 'acf/table-row',
+  },
 ];
 
 let blocks = [];
 
 scopedBlocks.forEach(block => {
- blocks = [...blocks, block.block];
+  blocks = [...blocks, block.block];
 });
 
 // Build a map: blockName -> Set of parent names
 const parentsByBlock = scopedBlocks.reduce((acc, { block, parent }) => {
- const list = Array.isArray(parent) ? parent : [parent];
- acc[block] = acc[block] || new Set();
- list.forEach((p) => acc[block].add(p));
- return acc;
+  const list = Array.isArray(parent) ? parent : [parent];
+  acc[block] = acc[block] || new Set();
+  list.forEach(p => acc[block].add(p));
+  return acc;
 }, {});
 
 function addParentAttribute(settings, name) {
- const parents = parentsByBlock[name];
- if (!parents) {
-   return settings;
- }
+  const parents = parentsByBlock[name];
+  if (!parents) {
+    return settings;
+  }
 
- return Object.assign(settings, {
-   parent: Array.from(parents),
- });
+  return Object.assign(settings, {
+    parent: Array.from(parents),
+  });
 }
 
 wp.hooks.addFilter('blocks.registerBlockType', 'dream/updater', addParentAttribute);
-
 
 // Register Block Styles
 // wp.blocks.registerBlockStyle( 'core/image', {
 //   name: 'full-height',
 //   label: 'Full Height',
 // } );
-
 
 // Register Block Variations
 wp.blocks.registerBlockVariation('core/query', {
@@ -213,7 +210,6 @@ wp.blocks.registerBlockVariation('core/query', {
     ['core/query-no-results'],
   ],
 });
-
 
 ////////////////////////////////////////////////////////////////
 // ACF Fields
