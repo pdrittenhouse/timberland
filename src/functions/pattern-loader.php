@@ -11,6 +11,7 @@ class Dream_Pattern_Loader {
 	private $enqueued_patterns = [];
 
 	public function __construct() {
+		add_action('wp_head', [$this, 'preload_patterns'], 1); // Very early for preload
 		add_action('wp_enqueue_scripts', [$this, 'enqueue_patterns'], 10); // After Bootstrap
 		add_action('save_post', [$this, 'clear_post_cache']);
 		add_action('update_option_sidebars_widgets', [$this, 'clear_all_post_caches']);
@@ -60,6 +61,63 @@ class Dream_Pattern_Loader {
 		}
 
 		return $this->manifest;
+	}
+
+	/**
+	 * Preload critical patterns (first 3) to speed up page render
+	 * Outputs <link rel="preload"> tags in <head>
+	 */
+	public function preload_patterns() {
+		if (!$this->load_manifest()) {
+			return;
+		}
+
+		// Only preload on singular pages, archives, and home
+		if (!is_singular() && !is_archive() && !is_home()) {
+			return;
+		}
+
+		// Get template patterns (header/footer patterns loaded via Twig includes)
+		$template_patterns = $this->get_template_patterns();
+
+		// Get content patterns (ACF blocks in post content)
+		$content_patterns = $this->detect_required_patterns();
+
+		// Merge template patterns first (they're above the fold), then content patterns
+		$all_patterns = array_unique(array_merge($template_patterns, $content_patterns));
+
+		// Only preload first 3 patterns (most critical above-the-fold)
+		// Limited to 3 to avoid preload overhead on first visit
+		$patterns_to_preload = array_slice($all_patterns, 0, 3);
+
+		foreach ($patterns_to_preload as $pattern_path) {
+			if (!isset($this->manifest['patterns'][$pattern_path])) {
+				continue;
+			}
+
+			$pattern_info = $this->manifest['patterns'][$pattern_path];
+			$pattern_name = $pattern_info['name'] ?? basename($pattern_path);
+			$level = $pattern_info['level'] ?? '';
+			$level_name = preg_replace('/^0\d-/', '', $level);
+
+			// Preload CSS if pattern has it
+			if (!empty($pattern_info['css'])) {
+				$css_file = get_template_directory() . "/dist/wp/css/patterns/{$level_name}/{$pattern_name}.css";
+				if (file_exists($css_file)) {
+					$css_url = get_template_directory_uri() . "/dist/wp/css/patterns/{$level_name}/{$pattern_name}.css";
+					echo "<link rel='preload' href='{$css_url}' as='style'>\n";
+				}
+			}
+
+			// Preload JS if pattern has it
+			if (!empty($pattern_info['js'])) {
+				$js_file = get_template_directory() . "/dist/wp/js/patterns/{$level_name}/{$pattern_name}.bundle.js";
+				if (file_exists($js_file)) {
+					$js_url = get_template_directory_uri() . "/dist/wp/js/patterns/{$level_name}/{$pattern_name}.bundle.js";
+					echo "<link rel='preload' href='{$js_url}' as='script'>\n";
+				}
+			}
+		}
 	}
 
 	/**

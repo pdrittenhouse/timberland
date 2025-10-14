@@ -10,6 +10,7 @@ class Dream_Bootstrap_Loader {
 	private $enqueued_components = [];
 
 	public function __construct() {
+		add_action('wp_head', [$this, 'preload_bootstrap'], 1); // Very early for preload
 		add_action('wp_enqueue_scripts', [$this, 'enqueue_bootstrap'], 5); // Early priority
 		add_action('save_post', [$this, 'clear_post_cache']);
 		add_action('update_option_sidebars_widgets', [$this, 'clear_all_post_caches']);
@@ -59,6 +60,51 @@ class Dream_Bootstrap_Loader {
 		}
 
 		return $this->manifest;
+	}
+
+	/**
+	 * Preload critical Bootstrap components to speed up page render
+	 * Outputs <link rel="preload"> tags in <head>
+	 */
+	public function preload_bootstrap() {
+		if (!$this->load_manifest()) {
+			return;
+		}
+
+		// Only preload on singular pages, archives, and home
+		if (!is_singular() && !is_archive() && !is_home()) {
+			return;
+		}
+
+		$version = $this->manifest['version'] ?? wp_get_theme()->get('Version');
+
+		// Always preload critical Bootstrap CSS
+		$critical_file = get_template_directory() . '/dist/wp/css/bootstrap/critical.css';
+		if (file_exists($critical_file)) {
+			$critical_url = get_template_directory_uri() . '/dist/wp/css/bootstrap/critical.css';
+			echo "<link rel='preload' href='{$critical_url}' as='style'>\n";
+		}
+
+		// Get template components (header/footer components)
+		$template_components = $this->get_template_components();
+
+		// Get content components (from post content blocks)
+		$content_components = $this->detect_required_components();
+
+		// Merge template components first (they're above the fold), then content components
+		$all_components = array_unique(array_merge($template_components, $content_components));
+
+		// Preload first 3 components (most critical above-the-fold)
+		// Limited to 3 to avoid preload overhead on first visit
+		$components_to_preload = array_slice($all_components, 0, 3);
+
+		foreach ($components_to_preload as $component) {
+			$css_file = get_template_directory() . "/dist/wp/css/bootstrap/{$component}.css";
+			if (file_exists($css_file)) {
+				$css_url = get_template_directory_uri() . "/dist/wp/css/bootstrap/{$component}.css";
+				echo "<link rel='preload' href='{$css_url}' as='style'>\n";
+			}
+		}
 	}
 
 	/**
