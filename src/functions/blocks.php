@@ -11,8 +11,8 @@ function dream_block_categories($categories)
         $categories,
         [
             [
-                'slug'  => 'dream',
-                'title' => __('Dream', 'dream'),
+                'slug'  => 'timberland',
+                'title' => __('Timberland', 'timberland'),
             ]
         ]
     );

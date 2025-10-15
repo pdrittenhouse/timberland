@@ -1,0 +1,63 @@
+{
+  "name": "<%= blockNamespace %>",
+  "title": "<%= title %>",
+  "description": "<%= description %>",
+  "category": "<%= category %>",
+  "icon": "<%= icon %>",
+  "keywords": <%- keywordsJson %>,
+  "attributes": {},
+  "providesContext": {
+    "acf/fields": "data"
+  },
+  "usesContext": [ "acf/fields" ],
+  "supports": {
+    "jsx": <%= jsx %>,
+    "align": true,
+    "alignContent": true,
+    "alignText": true,
+    "anchor": true,
+    "className": true,
+    "multiple": true,
+    "html": false,
+    "inserter": true,
+    "fullHeight": false,
+    "color": {
+      "text": false,
+      "background": true,
+      "link": false,
+      "gradients": true,
+      "linkColor": true
+    },
+    "typography": {
+      "fontSize": true
+    }
+  },
+  "styles": [
+    { "name": "default", "label": "Default", "isDefault": true }
+  ],<% if (includeExample) { %>
+  "example": {
+    "attributes": {
+      "data": {
+        "preview_text": "This is a preview of the <%= title %> block."
+      }
+    }
+  },<% } %><% if (includeVariations) { %>
+  "variations": [
+    {
+      "name": "example",
+      "title": "Example",
+      "attributes": {}
+    }
+  ],<% } %>
+  "editorScript": "./index.js",
+  "script": "./script.js",
+  "editorStyle": "./index.css",
+  "style": "./style.css",
+  "viewScript": [ "file:./view.js" ],
+  "acf": {
+    "mode": "<%= acfMode %>",
+    "renderCallback": "dream_block_render",
+    "postTypes": true,
+    "reusable": true
+  }
+}

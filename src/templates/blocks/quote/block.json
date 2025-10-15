@@ -2,7 +2,7 @@
   "name": "acf/quote",
   "title": "Quote",
   "description": "A quote block.",
-  "category": "dream",
+  "category": "timberland",
   "icon": "admin-comments",
   "keywords": ["quote", "blockquote", "pull quote", "testimonial"],
   "attributes": {},
@@ -36,6 +36,7 @@
   "script": "./script.js",
   "editorStyle": "./index.css",
   "style": "./style.css",
+  "viewScript": [ "file:./view.js" ],
   "acf": {
     "mode": "preview",
     "renderCallback": "dream_block_render",

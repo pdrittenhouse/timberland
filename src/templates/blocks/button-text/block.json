@@ -2,7 +2,7 @@
   "name": "acf/button-text",
   "title": "Button Text",
   "description": "A button text block.",
-  "category": "dream",
+  "category": "timberland",
   "icon": "button",
   "keywords": ["button", "buttons", "button group", "button-text"],
   "attributes": {},
@@ -36,6 +36,7 @@
   "script": "./script.js",
   "editorStyle": "./index.css",
   "style": "./style.css",
+  "viewScript": [ "file:./view.js" ],
   "acf": {
     "mode": "auto",
     "renderCallback": "dream_block_render",

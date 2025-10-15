@@ -2,7 +2,7 @@
   "name": "acf/menu",
   "title": "Menu",
   "description": "A menu block.",
-  "category": "dream",
+  "category": "timberland",
   "icon": "menu",
   "keywords": ["menu", "navigation", "nav", "social", "pagination"],
   "attributes": {},
@@ -40,6 +40,7 @@
   "script": "./script.js",
   "editorStyle": "./index.css",
   "style": "./style.css",
+  "viewScript": [ "file:./view.js" ],
   "acf": {
     "mode": "preview",
     "renderCallback": "dream_block_render",

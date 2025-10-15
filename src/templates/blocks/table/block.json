@@ -2,7 +2,7 @@
   "name": "acf/table",
   "title": "Table",
   "description": "A responsive table block with Bootstrap styling options.",
-  "category": "dream",
+  "category": "timberland",
   "icon": "editor-table",
   "keywords": ["table", "data", "grid", "bootstrap"],
   "attributes": {},
@@ -36,6 +36,7 @@
   "script": "./script.js",
   "editorStyle": "./index.css",
   "style": "./style.css",
+  "viewScript": [ "file:./view.js" ],
   "acf": {
     "mode": "preview",
     "renderCallback": "dream_block_render",

@@ -2,7 +2,7 @@
   "name": "acf/search-bar",
   "title": "Search Bar",
   "description": "A search bar block.",
-  "category": "dream",
+  "category": "timberland",
   "icon": "search",
   "keywords": ["search", "posts", "find", "form"],
   "attributes": {},
@@ -40,6 +40,7 @@
   "script": "./script.js",
   "editorStyle": "./index.css",
   "style": "./style.css",
+  "viewScript": [ "file:./view.js" ],
   "acf": {
     "mode": "preview",
     "renderCallback": "dream_block_render",

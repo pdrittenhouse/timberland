@@ -2,7 +2,7 @@
   "name": "acf/pattern",
   "title": "Pattern",
   "description": "Embed a PatternLab component.",
-  "category": "dream",
+  "category": "timberland",
   "icon": "embed-generic",
   "keywords": ["pattern", "patternlab", "embed"],
   "attributes": {},
@@ -36,6 +36,7 @@
   "script": "./script.js",
   "editorStyle": "./index.css",
   "style": "./style.css",
+  "viewScript": [ "file:./view.js" ],
   "acf": {
     "mode": "auto",
     "renderCallback": "dream_block_render",

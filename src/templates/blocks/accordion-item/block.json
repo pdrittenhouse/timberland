@@ -2,7 +2,7 @@
   "name": "acf/accordion-item",
   "title": "Accordion Item",
   "description": "An accordion item block.",
-  "category": "dream",
+  "category": "timberland",
   "icon": "admin-collapse",
   "keywords":  ["accordion", "accordion item"],
   "usesContext": [ "acf/fields" ],
@@ -36,6 +36,7 @@
   "script": "./script.js",
   "editorStyle": "./index.css",
   "style": "./style.css",
+  "viewScript": [ "file:./view.js" ],
   "acf": {
     "mode": "preview",
     "renderCallback": "dream_block_render",

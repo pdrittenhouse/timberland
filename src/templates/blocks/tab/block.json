@@ -2,7 +2,7 @@
   "name": "acf/tab",
   "title": "Tab",
   "description": "A tab block.",
-  "category": "dream",
+  "category": "timberland",
   "icon": "table-row-after",
   "keywords": ["tabs", "tab"],
   "attributes": {},
@@ -40,6 +40,7 @@
   "script": "./script.js",
   "editorStyle": "./index.css",
   "style": "./style.css",
+  "viewScript": [ "file:./view.js" ],
   "acf": {
     "mode": "preview",
     "renderCallback": "dream_block_render",

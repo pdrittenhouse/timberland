@@ -2,7 +2,7 @@
   "name": "acf/table-row",
   "title": "Table Row",
   "description": "A table row block that contains table cells.",
-  "category": "dream",
+  "category": "timberland",
   "icon": "editor-table",
   "keywords": ["table", "row", "tr"],
   "attributes": {},
@@ -36,6 +36,7 @@
   "script": "./script.js",
   "editorStyle": "./index.css",
   "style": "./style.css",
+  "viewScript": [ "file:./view.js" ],
   "acf": {
     "mode": "preview",
     "renderCallback": "dream_block_render",

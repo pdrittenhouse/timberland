@@ -2,7 +2,7 @@
   "name": "acf/icons",
   "title": "Icons",
   "description": "An icons block.",
-  "category": "dream",
+  "category": "timberland",
   "icon": "info-outline",
   "keywords": ["icon", "icons"],
   "attributes": {},
@@ -36,6 +36,7 @@
   "script": "./script.js",
   "editorStyle": "./index.css",
   "style": "./style.css",
+  "viewScript": [ "file:./view.js" ],
   "acf": {
     "mode": "preview",
     "renderCallback": "dream_block_render",

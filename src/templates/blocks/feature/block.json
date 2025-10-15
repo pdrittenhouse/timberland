@@ -2,7 +2,7 @@
   "name": "acf/feature",
   "title": "Feature",
   "description": "A feature block.",
-  "category": "dream",
+  "category": "timberland",
   "icon": "id",
   "keywords": ["feature", "hero"],
   "attributes": {},
@@ -40,6 +40,7 @@
   "script": "./script.js",
   "editorStyle": "./index.css",
   "style": "./style.css",
+  "viewScript": [ "file:./view.js" ],
   "acf": {
     "mode": "preview",
     "renderCallback": "dream_block_render",

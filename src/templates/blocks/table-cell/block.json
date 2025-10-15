@@ -2,7 +2,7 @@
   "name": "acf/table-cell",
   "title": "Table Cell",
   "description": "A table cell block that can contain any content.",
-  "category": "dream",
+  "category": "timberland",
   "icon": "editor-table",
   "keywords": ["table", "cell", "td", "th"],
   "attributes": {},
@@ -36,6 +36,7 @@
   "script": "./script.js",
   "editorStyle": "./index.css",
   "style": "./style.css",
+  "viewScript": [ "file:./view.js" ],
   "acf": {
     "mode": "preview",
     "renderCallback": "dream_block_render",

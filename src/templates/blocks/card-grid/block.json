@@ -2,7 +2,7 @@
   "name": "acf/card-grid",
   "title": "Card Grid",
   "description": "A card grid block.",
-  "category": "dream",
+  "category": "timberland",
   "icon": "grid-view",
   "keywords": ["card", "grid", "cards"],
   "attributes": {},
@@ -39,6 +39,7 @@
   "script": "./script.js",
   "editorStyle": "./index.css",
   "style": "./style.css",
+  "viewScript": [ "file:./view.js" ],
   "acf": {
     "mode": "preview",
     "renderCallback": "dream_block_render",

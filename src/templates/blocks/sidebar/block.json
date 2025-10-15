@@ -2,7 +2,7 @@
   "name": "acf/sidebar",
   "title": "Sidebar",
   "description": "A sidebar block.",
-  "category": "dream",
+  "category": "timberland",
   "icon": "table-col-before",
   "keywords": ["sidebar", "widgets"],
   "attributes": {},
@@ -40,6 +40,7 @@
   "script": "./script.js",
   "editorStyle": "./index.css",
   "style": "./style.css",
+  "viewScript": [ "file:./view.js" ],
   "acf": {
     "mode": "auto",
     "renderCallback": "dream_block_render",

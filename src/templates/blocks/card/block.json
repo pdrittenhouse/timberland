@@ -2,7 +2,7 @@
   "name": "acf/card",
   "title": "Card",
   "description": "A card block.",
-  "category": "dream",
+  "category": "timberland",
   "icon": "excerpt-view",
   "keywords": ["card", "cards"],
   "attributes": {},
@@ -37,6 +37,7 @@
   "script": "./script.js",
   "editorStyle": "./index.css",
   "style": "./style.css",
+  "viewScript": [ "file:./view.js" ],
   "acf": {
     "mode": "preview",
     "renderCallback": "dream_block_render",

@@ -2,7 +2,7 @@
   "name": "acf/blockname",
   "title": "Block Name",
   "description": "A block description.",
-  "category": "dream",
+  "category": "timberland",
   "icon": "block-default",
   "keywords": ["block", "keywords"],
   "attributes": {},

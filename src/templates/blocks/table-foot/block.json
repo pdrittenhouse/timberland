@@ -2,7 +2,7 @@
   "name": "acf/table-foot",
   "title": "Table Foot",
   "description": "A table footer section (tfoot) that contains table footer rows.",
-  "category": "dream",
+  "category": "timberland",
   "icon": "editor-table",
   "keywords": ["table", "foot", "tfoot", "footer"],
   "attributes": {},
@@ -36,6 +36,7 @@
   "script": "./script.js",
   "editorStyle": "./index.css",
   "style": "./style.css",
+  "viewScript": [ "file:./view.js" ],
   "acf": {
     "mode": "preview",
     "renderCallback": "dream_block_render",

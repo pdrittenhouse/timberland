@@ -2,7 +2,7 @@
   "name": "acf/slide",
   "title": "Slide",
   "description": "A slide block.",
-  "category": "dream",
+  "category": "timberland",
   "icon": "slides",
   "keywords": ["slider", "carousel", "slide", "slides"],
   "attributes": {},
@@ -37,6 +37,7 @@
   "script": "./script.js",
   "editorStyle": "./index.css",
   "style": "./style.css",
+  "viewScript": [ "file:./view.js" ],
   "acf": {
     "mode": "preview",
     "renderCallback": "dream_block_render",
