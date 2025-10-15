@@ -192,13 +192,13 @@ add_action('wp', function() {
 				wp_enqueue_style(
 					'blocks_css_' . $block_slug,
 					get_template_directory_uri() . '/src/templates/blocks/' . $block_slug . '/style.css',
-					array(),
+					array('styles'), // Depend on main stylesheet to ensure correct order
 					wp_get_theme()->get('Version'),
 					'all'
 				);
 			}
 		}
-	});
+	}, 15); // Priority 15: Load AFTER patterns (priority 10) but before child blocks (priority 20)
 });
 
 

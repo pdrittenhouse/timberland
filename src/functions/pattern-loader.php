@@ -11,7 +11,7 @@ class Dream_Pattern_Loader {
 	private $enqueued_patterns = [];
 
 	public function __construct() {
-		add_action('wp_enqueue_scripts', [$this, 'enqueue_patterns'], 10); // After Bootstrap
+		add_action('enqueue_block_assets', [$this, 'enqueue_patterns'], 10); // Same hook as blocks for proper ordering
 		add_action('save_post', [$this, 'clear_post_cache']);
 		add_action('update_option_sidebars_widgets', [$this, 'clear_all_post_caches']);
 		add_action('update_option_widget_block', [$this, 'clear_all_post_caches']);
