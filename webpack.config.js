@@ -65,6 +65,25 @@ filteredBlockScssFiles.forEach(filePath => {
   }
 });
 
+// Dynamically generate block index SCSS entries (for admin styles)
+const blockIndexScssFiles = glob.sync('./src/templates/blocks/**/index.scss');
+
+// Filter out hidden directories (like .block template)
+const filteredBlockIndexScssFiles = blockIndexScssFiles.filter(filePath => !filePath.includes('/.'));
+
+console.log(`[Block Index SCSS] Found ${filteredBlockIndexScssFiles.length} block index SCSS files`);
+
+filteredBlockIndexScssFiles.forEach(filePath => {
+  // Extract block name from path
+  const match = filePath.match(/blocks\/([^\/]+)\/index\.scss$/);
+  if (match && match[1]) {
+    const blockName = match[1];
+    const entryName = `blocks/${blockName}/index`;
+    blockScssEntries[entryName] = [filePath];
+    console.log(`[Block Index SCSS] Added entry: ${entryName}`);
+  }
+});
+
 module.exports = {
   entry: {
     dream: [`${paths.src}/index.js`],
@@ -319,12 +338,18 @@ module.exports = {
             { source: `${paths.build}/spritemap.svg`, destination: `${paths.cache}/svg/`}, // Copy spritemap.svg to cache
             // Copy compiled block CSS files back to source directories
             ...Object.keys(blockScssEntries).map(entryName => {
-              const blockName = entryName.replace('blocks/', '').replace('/style', '');
-              return {
-                source: `${paths.build}/css/blocks/${blockName}/style.css`,
-                destination: `./src/templates/blocks/${blockName}/`
-              };
-            }),
+              // Extract block name and file type (style or index)
+              const match = entryName.match(/blocks\/([^\/]+)\/(style|index)$/);
+              if (match && match[1] && match[2]) {
+                const blockName = match[1];
+                const fileType = match[2]; // 'style' or 'index'
+                return {
+                  source: `${paths.build}/css/blocks/${blockName}/${fileType}.css`,
+                  destination: `./src/templates/blocks/${blockName}/`
+                };
+              }
+              return null;
+            }).filter(Boolean), // Remove any null entries
           ],
           delete: [
             // Delete block CSS files from dist after copying to source directories
