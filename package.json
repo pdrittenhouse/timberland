@@ -27,7 +27,8 @@
     "dev:watch": "concurrently -k \"npm run watch:pl\" \"npm run serve\"",
     "dev": "npm run build:env && npm run dev:watch",
     "stylelint-check": "stylelint-config-prettier-check",
-    "new": "yo ./src/tools/patterngen/index.js"
+    "new": "yo ./src/tools/patterngen/index.js",
+    "new:block": "yo ./src/tools/blockgen/index.js"
   },
   "author": "P.D. Rittenhouse",
   "license": "ISC",

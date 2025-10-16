@@ -72,6 +72,29 @@ define('CACHE_EXPIRATION_TIME', 3600); // 1 hour (recommended for development wi
 define('TIMBER_CACHE_TIME', CACHE_EXPIRATION_TIME);
 
 /**
+ * Full Page Cache Configuration
+ * Caches entire rendered HTML pages for maximum performance
+ * - Self-invalidating based on post modified time
+ * - Automatically clears when posts are updated
+ * - Integrated with the "Clear All Caches" admin button
+ */
+// Enable in production, disable in development (same as Timber cache)
+if (!defined('WP_DEBUG') || !WP_DEBUG) {
+  define('ENABLE_FULL_PAGE_CACHE', true);
+} else {
+  define('ENABLE_FULL_PAGE_CACHE', false);
+}
+
+// Page cache expiration (defaults to CACHE_EXPIRATION_TIME if not set)
+define('PAGE_CACHE_EXPIRATION', CACHE_EXPIRATION_TIME);
+
+// Uncomment to cache pages for logged-in users (creates separate cache per user role)
+// define('CACHE_LOGGED_IN_USERS', true);
+
+// For multilingual sites, define locales to cache separately
+// define('CACHE_LOCALES', array('en_US', 'es_ES', 'fr_FR'));
+
+/**
  * Include settings from /src/functions
 */
 $dream_includes = array(

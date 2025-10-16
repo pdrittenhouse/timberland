@@ -12,6 +12,204 @@
 
 /**
  * ========================================
+ * Full Page Cache Functions
+ * ========================================
+ */
+
+/**
+ * Get cached page HTML
+ *
+ * Checks if:
+ * 1. Full page cache is enabled
+ * 2. User is not logged in (or cache variations exist)
+ * 3. Cached page exists and is not expired
+ * 4. Post hasn't been modified since cache was created
+ *
+ * @param int $post_id Post ID (for singular pages)
+ * @param string $cache_key Unique cache key for the page
+ * @return string|false Cached HTML or false if not found/expired
+ */
+function dream_get_page_cache($cache_key, $post_id = null) {
+	// Check if full page cache is enabled
+	if (!defined('ENABLE_FULL_PAGE_CACHE') || !ENABLE_FULL_PAGE_CACHE) {
+		return false;
+	}
+
+	// Don't cache for logged-in users (unless specific variation exists)
+	if (is_user_logged_in() && !defined('CACHE_LOGGED_IN_USERS')) {
+		return false;
+	}
+
+	// Get cached data
+	$cached_data = dream_cache_get($cache_key, 'dream_page_cache');
+
+	if (!$cached_data) {
+		return false;
+	}
+
+	// Validate cache structure
+	if (!is_array($cached_data) || !isset($cached_data['html']) || !isset($cached_data['created_at'])) {
+		return false;
+	}
+
+	// Check if cache has expired based on time
+	$expiration = defined('PAGE_CACHE_EXPIRATION') ? PAGE_CACHE_EXPIRATION : 3600;
+	$cache_age = time() - $cached_data['created_at'];
+	if ($cache_age > $expiration) {
+		// Cache expired, delete it
+		dream_cache_delete($cache_key, 'dream_page_cache');
+		return false;
+	}
+
+	// For singular posts/pages, check if post has been modified since cache was created
+	if ($post_id && isset($cached_data['post_modified']) && $cached_data['post_modified']) {
+		$post = get_post($post_id);
+		if ($post) {
+			$post_modified_time = strtotime($post->post_modified);
+			if ($post_modified_time > $cached_data['post_modified']) {
+				// Post was modified, cache is stale
+				dream_cache_delete($cache_key, 'dream_page_cache');
+				return false;
+			}
+		}
+	}
+
+	// Cache is valid
+	return $cached_data['html'];
+}
+
+/**
+ * Set page cache
+ *
+ * @param string $cache_key Unique cache key for the page
+ * @param string $html HTML content to cache
+ * @param int $post_id Post ID (for singular pages)
+ * @return bool True on success
+ */
+function dream_set_page_cache($cache_key, $html, $post_id = null) {
+	// Check if full page cache is enabled
+	if (!defined('ENABLE_FULL_PAGE_CACHE') || !ENABLE_FULL_PAGE_CACHE) {
+		return false;
+	}
+
+	// Get post modified time if this is a singular page
+	$post_modified_time = null;
+	if ($post_id) {
+		$post = get_post($post_id);
+		if ($post) {
+			$post_modified_time = strtotime($post->post_modified);
+		}
+	}
+
+	// Store HTML with metadata
+	$cache_data = array(
+		'html' => $html,
+		'created_at' => time(),
+		'post_modified' => $post_modified_time,
+		'user_role' => is_user_logged_in() ? wp_get_current_user()->roles[0] : 'guest',
+	);
+
+	$expiration = defined('PAGE_CACHE_EXPIRATION') ? PAGE_CACHE_EXPIRATION : 3600;
+
+	return dream_cache_set($cache_key, $cache_data, 'dream_page_cache', $expiration);
+}
+
+/**
+ * Generate cache key for current request
+ *
+ * @param string $prefix Cache key prefix (e.g., 'page', 'archive', 'search')
+ * @return string Cache key
+ */
+function dream_generate_cache_key($prefix = 'page') {
+	$key_parts = array($prefix);
+
+	// Add post ID for singular pages
+	if (is_singular()) {
+		$key_parts[] = get_the_ID();
+	}
+
+	// Add query vars for archives, search, etc.
+	if (is_archive() || is_search() || is_home()) {
+		global $wp_query;
+
+		if (is_category() || is_tag() || is_tax()) {
+			$key_parts[] = get_queried_object_id();
+		}
+
+		if (is_author()) {
+			$key_parts[] = 'author_' . get_query_var('author');
+		}
+
+		if (is_search()) {
+			$key_parts[] = 's_' . md5(get_search_query());
+		}
+
+		// Add pagination
+		$paged = get_query_var('paged') ? get_query_var('paged') : 1;
+		if ($paged > 1) {
+			$key_parts[] = 'page_' . $paged;
+		}
+	}
+
+	// Add user role for logged-in users (if caching them)
+	if (is_user_logged_in() && defined('CACHE_LOGGED_IN_USERS')) {
+		$user = wp_get_current_user();
+		$key_parts[] = 'role_' . $user->roles[0];
+	}
+
+	// Add locale for multilingual sites
+	if (function_exists('get_locale')) {
+		$key_parts[] = get_locale();
+	}
+
+	return implode('_', $key_parts);
+}
+
+/**
+ * Clear page cache for a specific post
+ *
+ * @param int $post_id Post ID
+ */
+function dream_clear_page_cache_for_post($post_id) {
+	// Clear the specific post page cache
+	$cache_key = 'page_' . $post_id;
+
+	// Clear for all locales and user roles
+	$locales = defined('CACHE_LOCALES') ? CACHE_LOCALES : array(get_locale());
+	$roles = array('guest', 'subscriber', 'contributor', 'author', 'editor', 'administrator');
+
+	foreach ($locales as $locale) {
+		// Guest cache
+		dream_cache_delete($cache_key . '_' . $locale, 'dream_page_cache');
+
+		// Logged-in user caches (if enabled)
+		if (defined('CACHE_LOGGED_IN_USERS')) {
+			foreach ($roles as $role) {
+				dream_cache_delete($cache_key . '_role_' . $role . '_' . $locale, 'dream_page_cache');
+			}
+		}
+	}
+}
+
+/**
+ * Clear all page caches
+ */
+function dream_clear_all_page_caches() {
+	global $wpdb;
+
+	// Clear all page cache transients
+	$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_dream_page_cache_%' OR option_name LIKE '_transient_timeout_dream_page_cache_%'");
+
+	// Clear wp_cache for dream_page_cache group
+	wp_cache_flush_group('dream_page_cache');
+
+	if (defined('WP_DEBUG') && WP_DEBUG) {
+		error_log('FULL PAGE CACHE - All page caches cleared');
+	}
+}
+
+/**
+ * ========================================
  * Generic Cache Functions (Hybrid: wp_cache + transient)
  * ========================================
  */
@@ -77,10 +275,13 @@ function dream_cache_delete($key, $group = 'dream') {
  */
 
 /**
- * Clear all caches (Timber, Block Detection, Template Styles, Object Cache)
+ * Clear all caches (Full Page, Timber, Block Detection, Template Styles, Object Cache)
  */
 function dream_clear_timber_cache() {
 	global $wpdb;
+
+	// Clear full page cache
+	dream_clear_all_page_caches();
 
 	// Clear Timber file cache if it exists
 	if (function_exists('timber_clear_cache_timber')) {
@@ -249,6 +450,9 @@ function dream_clear_post_cache($post_id) {
 	if (defined('WP_DEBUG') && WP_DEBUG) {
 		error_log('CACHE INVALIDATION - Post ID: ' . $post_id . ' | Post Type: ' . get_post_type($post_id));
 	}
+
+	// Clear the full page cache for this post
+	dream_clear_page_cache_for_post($post_id);
 
 	// Clear the post blocks cache (hybrid: both wp_cache and transient)
 	dream_cache_delete('post_blocks_' . $post_id, 'dream_blocks');
