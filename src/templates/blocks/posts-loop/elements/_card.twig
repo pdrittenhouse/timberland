@@ -12,20 +12,7 @@
  *  - parent_block_data: Parent block context for margin calculations
  *  - additional_classes: Array of pattern-specific classes
  *  - additional_attributes: Array of pattern-specific attributes
- *
- * TODO: Fix button text source for posts-loop cards
- * - Currently uses fields.card.link['title'] which requires manual link setup
- * - Should add dedicated "Button Text" field to Posts Loop Content > Card > Button settings
- * - This would allow customizable button text independent of link field
- * - Fallback: Use post.link or a translatable string like "Read More" if button text is empty
- * - Location: Line 391
- *
- * TODO: Add aria_label support for posts-loop card buttons
- * - Currently aria_label is passed through from fields.card.button.aria_label (line 417)
- * - Similar to button text issue above, this requires manual field setup
- * - Should add dedicated "Button Aria Label" field to Posts Loop Content > Card > Button settings
- * - This would allow proper accessibility labeling independent of link field
- * - Consider auto-generating from post title if empty (e.g., "Read more about {post.title}")
+ *  
  */
 #}
 
@@ -396,14 +383,14 @@
         </div>
       {% endblock %}
 
-      {% if fields.card.link and fields.card.link_card != true and fields.card.show_button != true %}
-        <a href="{{ fields.card.link['url'] }}" class="card-link" target="{{ fields.card.link['target'] ? fields.card.link['target'] : '_self' }}">{{ fields.card.link['title'] }}</a>
+      {% if post.link and fields.card.link_card != true and fields.card.show_button != true and fields.hide_card_link != true %}
+        <a href="{{ post.link }}" class="card-link" target="{{ fields.card.link['target'] ? fields.card.link['target'] : '_self' }}" aria-label="{{ fields.element_excerpt.element_read_more_label }}">{{ fields.element_excerpt.element_read_more_label }}</a>
       {% endif %}
       {% if fields.card.show_button == true %}
         {% include "@atoms/button/_button.tpl.twig" with {
           button_element: fields.card.link_card == true ? 'button' : fields.card.button.element,
-          button_text: fields.card.link['title'],
-          button_link: fields.card.link_card != true and fields.include_modals != true ? fields.card.link['url'] : fields.card.link_card != true and fields.include_modals == true ? 'javascript:void(0);',
+          button_text: fields.card.button.link['title'] ? fields.card.button.link['title'] : fields.element_excerpt.element_read_more_label,
+          button_link: fields.card.link_card != true and fields.include_modals != true ? post.link : fields.card.link_card != true and fields.include_modals == true ? 'javascript:void(0);',
           button_target: fields.include_modals == true ? '#' ~ post.slug : fields.card.link['target'],
           button_color: fields.card.button.close != 'black' and fields.card.button.close != 'white' and fields.card.button.style != 'custom' ? fields.card.button.style,
           button_size: fields.card.button.size,
@@ -431,7 +418,8 @@
           button_attributes: [
             fields.include_modals == true ? 'data-bs-target="#' ~ post.slug ~ '"',
             card_btn_bg_color or card_btn_text_color or card_btn_transform or card_btn_padding_top or card_btn_padding_bottom or card_btn_padding_left or card_btn_padding_right or card_btn_border_top_width or card_btn_border_top_style or card_btn_border_top_color or card_btn_border_bottom_width or card_btn_border_bottom_style or card_btn_border_bottom_color or card_btn_border_left_width or card_btn_border_left_style or card_btn_border_left_color or card_btn_border_right_width or card_btn_border_right_style or card_btn_border_right_color or card_btn_border_top_left_radius or card_btn_border_top_right_radius or card_btn_border_bottom_left_radius or card_btn_border_bottom_right_radius or card_btn_box_shadow or card_btn_text_shadow or card_btn_fontsize or card_btn_width or card_btn_min_width or card_btn_max_width or card_btn_margin_top or card_btn_margin_bottom or card_btn_margin_left or card_btn_margin_right ? 'style="' ~ card_btn_bg_color ~ card_btn_text_color ~ card_btn_fontsize ~ card_btn_transform ~ card_btn_padding_top ~ card_btn_padding_bottom ~ card_btn_padding_left ~ card_btn_padding_right ~ card_btn_border_top_width ~ card_btn_border_top_style ~ card_btn_border_top_color ~ card_btn_border_bottom_width ~ card_btn_border_bottom_style ~ card_btn_border_bottom_color ~ card_btn_border_left_width ~ card_btn_border_left_style ~ card_btn_border_left_color ~ card_btn_border_right_width ~ card_btn_border_right_style ~ card_btn_border_right_color ~ card_btn_border_top_left_radius ~ card_btn_border_top_right_radius ~ card_btn_border_bottom_left_radius ~ card_btn_border_bottom_right_radius ~ card_btn_box_shadow ~ card_btn_text_shadow ~ card_btn_width ~ card_btn_min_width ~ card_btn_max_width ~ card_btn_margin_top ~ card_btn_margin_bottom ~ card_btn_margin_left ~ card_btn_margin_right ~ '"'
-          ]
+          ],
+          aria_label: ''
         } %}
       {% endif %}
     </div>
