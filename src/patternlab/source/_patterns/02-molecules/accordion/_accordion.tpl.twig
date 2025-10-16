@@ -92,7 +92,9 @@
             title: item.button.title,
             popover_content: item.button.popover_content,
             context_placement: item.button.context_placement,
-            context_container: item.button.context_container
+            context_container: item.button.context_container,
+            hide_label: item.button.hide_label,
+            aria_label: item.button.aria_label
           } %}
         </{{ item.accordion_header_element | default('h2') }}>
         <div id="collapse_{{ itemId }}" class="accordion-collapse collapse {{ item.item_active == true ? 'show' }}" aria-labelledby="accordionHeader_{{ itemId }}" {{ always_open != true and accordion_id is not empty ? 'data-bs-parent="#' ~ accordion_id ~ '"' : always_open != true and accordion_id is empty ? 'data-bs-parent="#' ~ accordionId ~ '"' }}>

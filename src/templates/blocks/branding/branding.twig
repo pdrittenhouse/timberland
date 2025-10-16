@@ -56,6 +56,8 @@
     colorOriginal: fields.svg_options.use_original_color,
     site_name: fields.branding_name,
     site_slogan: fields.branding_slogan,
+    hide_site_name: fields.hide_branding_name,
+    hide_site_slogan: fields.hide_branding_slogan,
     branding_classes: [
       block_classes
     ],
@@ -90,6 +92,8 @@
     (image_key): brand_url,
     site_name: fields.branding_name,
     site_slogan: fields.branding_slogan,
+    hide_site_name: fields.hide_branding_name,
+    hide_site_slogan: fields.hide_branding_slogan,
     height: fields.non_svg_options.branding_height ? fields.non_svg_options.branding_height ~ 'px',
     width: fields.non_svg_options.branding_width ? fields.non_svg_options.branding_width ~ 'px',
     branding_classes: [
@@ -116,7 +120,7 @@
   } %}
 {% elseif display_header_text == true %}
   <div class="site-header--brand-name">
-    <a href="{{ site.url }}" class="branding--link">
+    <a href="{{ site.url }}" class="branding--link" aria-label="{{ site.name }}">
       <h1 class="branding--site-name">{{ site.name }}</h1>
       <h2 class="branding--site-slogan">{{ site.description }}</h2>
     </a>

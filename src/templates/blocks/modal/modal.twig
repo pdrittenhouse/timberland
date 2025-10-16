@@ -160,6 +160,7 @@
     button_disabled: fields.trigger_button.disabled,
     nowrap: fields.trigger_button.nowrap,
     hide_label: fields.trigger_button.hide_label,
+    aria_label: fields.trigger_button.aria_label,
     button_classes: [
       fields.trigger_button.background_color['bg_color'] == 'palette' and fields.trigger_button.background_color['bg_theme_color'] ? 'bg-' ~ fields.trigger_button.background_color['bg_theme_color'],
       fields.trigger_button.text_color['color'] == 'palette' and fields.trigger_button.text_color['theme_color'] ? 'text-' ~ fields.trigger_button.text_color['theme_color'],
@@ -204,6 +205,7 @@
     button_disabled: fields.header_close_button.disabled,
     nowrap: fields.header_close_button.nowrap,
     hide_label: fields.header_close_button.hide_label,
+    aria_label: fields.header_close_button.aria_label,
     button_classes: [
       fields.header_close_button.close != 'black' and fields.header_close_button.close != 'white' and fields.header_close_button.background_color['bg_color'] == 'palette' and fields.header_close_button.background_color['bg_theme_color'] ? 'bg-' ~ fields.header_close_button.background_color['bg_theme_color'],
       fields.header_close_button.close != 'black' and fields.header_close_button.close != 'white' and fields.header_close_button.text_color['color'] == 'palette' and fields.header_close_button.text_color['theme_color'] ? 'text-' ~ fields.header_close_button.text_color['theme_color'],
@@ -226,6 +228,7 @@
     nowrap: fields.footer_button.nowrap,
     close_button: fields.footer_button.close | default('no-icon'),
     hide_label: fields.footer_button.hide_label,
+    aria_label: fields.footer_button.aria_label,
     button_classes: [
       fields.footer_button.close != 'black' and fields.footer_button.close != 'white' and fields.footer_button.background_color['bg_color'] == 'palette' and fields.footer_button.background_color['bg_theme_color'] ? 'bg-' ~ fields.footer_button.background_color['bg_theme_color'],
       fields.footer_button.close != 'black' and fields.footer_button.close != 'white' and fields.footer_button.text_color['color'] == 'palette' and fields.footer_button.text_color['theme_color'] ? 'text-' ~ fields.footer_button.text_color['theme_color'],

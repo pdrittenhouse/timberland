@@ -146,7 +146,9 @@
                   title: button.title,
                   popover_content: button.popover_content,
                   context_placement: button.context_placement,
-                  context_container: button.context_container
+                  context_container: button.context_container,
+                  hide_label: button.hide_label,
+                  aria_label: button.aria_label
                 } %}
               {% else %}
                 {% include "@atoms/button/_button.tpl.twig" with {
@@ -176,7 +178,9 @@
                   title: button.title,
                   popover_content: button.popover_content,
                   context_placement: button.context_placement,
-                  context_container: button.context_container
+                  context_container: button.context_container,
+                  hide_label: button.hide_label,
+                  aria_label: button.aria_label
                 } %}
               {% endif %}
             {% endfor %}

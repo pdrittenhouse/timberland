@@ -33,7 +33,8 @@
  * - context_placement: [string ('top', 'bottom', 'left', 'right')]: Placement of tooltips and popovers.
  * - context_container: [string]: Container element for contextual content.
  * - close_button: [bool | string: 'black', 'white', 'no-icon']: Display close button.
- * - hide_label: [bool]: Hide button label text.
+ * - hide_label: [bool]: Hide button label (not aria label) text.
+ * - aria_label: [string]: Aria label
  *
  * @see https://getbootstrap.com/docs/4.0/components/buttons
  */
@@ -78,7 +79,7 @@
   contextual_content == 'popover' and popover_content ? 'data-bs-content="' ~ popover_content ~ '"',
   contextual_content and context_placement ? 'data-bs-placement="' ~ context_placement ~ '"',
   contextual_content and context_container ? 'data-bs-container="' ~ context_container ~ '"' : contextual_content ? 'data-bs-container="body"',
-  close_button == true ? 'aria-label="Close"',
+  close_button == true ? 'aria-label="Close"' : aria_label ? 'aria-label="' ~ aria_label ~ '"' : 'aria-label="' ~ button_text ~ '"',
   button_other_attributes,
 ]) | sort | join(' ') | trim %}
 

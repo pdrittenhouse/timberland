@@ -9,7 +9,9 @@
  *  - logo_img_src: [string] The IMG path.
  *  - logo_bg_img_src: [string] The IMG path.
  *  - site_name: [string] The site name provided by the app.
+ *  - hide_site_name: [bool] Hide the site name.
  *  - site_slogan: [string] The site slogan provided by the app.
+ *  - hide_site_slogan: [bool] Hide the site slogan.
  *  - branding_other_classes [array]: Additional component classes.
  */
 #}
@@ -45,6 +47,7 @@
   target ? 'target="' ~ target|default('_self') ~ '"',
   'rel="home"',
   branding_link_other_attributes,
+  site_name ? 'aria-label="' ~ site_name ~ '"',
 ]) | sort | join(' ') | trim %}
 
 {% set alt_text = site_name ~ ': ' ~ site_slogan %}
@@ -85,13 +88,13 @@
     </{{ link_element }}>
   </div>
 
-  {% if site_name %}
+  {% if site_name and hide_site_name != true %}
   <{{ name_element ? name_element : 'h1' }} class="branding--site-name">
     <a title="{{ 'Home' }}" {{ branding_link_attributes }}>{{ site_name }}</a>
   </{{ name_element ? name_element : 'h1' }}>
   {% endif %}
 
-  {% if site_slogan %}
+  {% if site_slogan and hide_site_slogan != true %}
     <p class="lead branding--site-slogan" style="{{ branding_link_styles }}">{{ site_slogan }}</p>
   {% endif %}
 </div>

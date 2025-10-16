@@ -19,6 +19,13 @@
  * - This would allow customizable button text independent of link field
  * - Fallback: Use post.link or a translatable string like "Read More" if button text is empty
  * - Location: Line 391
+ *
+ * TODO: Add aria_label support for posts-loop card buttons
+ * - Currently aria_label is passed through from fields.card.button.aria_label (line 417)
+ * - Similar to button text issue above, this requires manual field setup
+ * - Should add dedicated "Button Aria Label" field to Posts Loop Content > Card > Button settings
+ * - This would allow proper accessibility labeling independent of link field
+ * - Consider auto-generating from post title if empty (e.g., "Read more about {post.title}")
  */
 #}
 
@@ -414,6 +421,7 @@
           context_container: fields.card.button.context['container'],
           close_button: fields.card.button.close,
           hide_label: fields.card.button.hide_label,
+          aria_label: fields.card.button.aria_label,
           button_classes: [
             fields.card.button.close != 'black' and fields.card.button.close != 'white' and fields.card.button.background_color['bg_color'] == 'palette' and fields.card.button.background_color['bg_theme_color'] ? 'bg-' ~ fields.card.button.background_color['bg_theme_color'],
             fields.card.button.close != 'black' and fields.card.button.close != 'white' and fields.card.button.text_color['color'] == 'palette' and fields.card.button.text_color['theme_color'] ? 'text-' ~ fields.card.button.text_color['theme_color'],

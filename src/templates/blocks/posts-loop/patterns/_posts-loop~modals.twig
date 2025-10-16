@@ -140,6 +140,7 @@
             button_disabled: fields.modal.header_close_button.disabled,
             nowrap: fields.modal.header_close_button.nowrap,
             hide_label: fields.modal.header_close_button.hide_label,
+            aria_label: fields.modal.header_close_button.aria_label,
             button_classes: [
               fields.modal.header_close_button.close != 'black' and fields.modal.header_close_button.close != 'white' and fields.modal.header_close_button.background_color['bg_color'] == 'palette' and fields.modal.header_close_button.background_color['bg_theme_color'] ? 'bg-' ~ fields.modal.header_close_button.background_color['bg_theme_color'],
               fields.modal.header_close_button.close != 'black' and fields.modal.header_close_button.close != 'white' and fields.modal.header_close_button.text_color['color'] == 'palette' and fields.modal.header_close_button.text_color['theme_color'] ? 'text-' ~ fields.modal.header_close_button.text_color['theme_color'],
@@ -162,6 +163,7 @@
             nowrap: fields.modal.footer_button.nowrap,
             close_button: fields.modal.footer_button.close | default('no-icon'),
             hide_label: fields.modal.footer_button.hide_label,
+            aria_label: fields.modal.footer_button.aria_label,
             button_classes: [
               fields.modal.footer_button.close != 'black' and fields.modal.footer_button.close != 'white' and fields.modal.footer_button.background_color['bg_color'] == 'palette' and fields.modal.footer_button.background_color['bg_theme_color'] ? 'bg-' ~ fields.modal.footer_button.background_color['bg_theme_color'],
               fields.modal.footer_button.close != 'black' and fields.modal.footer_button.close != 'white' and fields.modal.footer_button.text_color['color'] == 'palette' and fields.modal.footer_button.text_color['theme_color'] ? 'text-' ~ fields.modal.footer_button.text_color['theme_color'],

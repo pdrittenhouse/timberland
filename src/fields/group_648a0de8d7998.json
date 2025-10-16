@@ -79,6 +79,27 @@
             "append": ""
         },
         {
+            "key": "field_68f0747df660a",
+            "label": "Hide Branding Name",
+            "name": "hide_branding_name",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "message": "",
+            "default_value": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
             "key": "field_648a6b66b35ce",
             "label": "Branding Slogan",
             "name": "branding_slogan",
@@ -98,6 +119,27 @@
             "placeholder": "",
             "prepend": "",
             "append": ""
+        },
+        {
+            "key": "field_68f07491f660b",
+            "label": "Hide Branding Slogan",
+            "name": "hide_branding_slogan",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "message": "",
+            "default_value": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
         },
         {
             "key": "field_648a73c8f3ec5",
@@ -398,5 +440,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1711331197
+    "modified": 1760589742
 }

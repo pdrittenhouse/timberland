@@ -30,7 +30,7 @@
   {% if hide_icons == true %}
     {%  set nav_item_text = '<a href="' ~ item.url ~ '" class="social-nav-link" target="' ~ item.target|default('_self') ~ '" title="' ~ link_title ~ '"><span class="label">' ~ item.label ~'</span></a>' %}
   {% else %}
-    {%  set nav_item_text = '<a href="' ~ item.url ~ '" class="social-nav-link" target="' ~ item.target|default('_self') ~ '" style="padding-top:' ~ bullet_icon_size ~ '; min-width:' ~ bullet_icon_size ~ ';" title="' ~ link_title ~ '"><span class="label">' ~ item.label ~'</span></a>' %}
+    {%  set nav_item_text = '<a href="' ~ item.url ~ '" class="social-nav-link" target="' ~ item.target|default('_self') ~ '" style="padding-top:' ~ bullet_icon_size ~ '; min-width:' ~ bullet_icon_size ~ ';" title="' ~ link_title ~ '" aria-label="' ~ link_title ~ '"><span class="label">' ~ item.label ~'</span></a>' %}
   {% endif %}
   {% set item_classes = item.item_classes|default([])|merge([
     'social-nav-item',

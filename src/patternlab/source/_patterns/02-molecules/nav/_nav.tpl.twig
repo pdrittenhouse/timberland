@@ -204,7 +204,7 @@
         ]) | sort | join(' ') | trim %}
 
         <{{ element }} class="{{ item_classes }}" {{ item.item_attributes }}>
-          <a class="{{ link_classes }}" {{ dropdown_menu_toggle_target_display }} href="{{ item.url }}" {{ item.items ? 'role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"' }} {{ link_attributes }}>
+          <a class="{{ link_classes }}" {{ dropdown_menu_toggle_target_display }} href="{{ item.url }}" {{ item.items ? 'role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"' }} aria-label="{{ item.title }}" {{ link_attributes }}>
             <span class="item-label">{{ item.title }}</span> {% if item.description %}<span class="item-description">{{ item.description }}</span>{% endif %} {% if item.items and hover_dropdown == true %}<span class="caret"></span>{% endif %}
           </a>
         {% if item.items %}

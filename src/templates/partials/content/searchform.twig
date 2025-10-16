@@ -2,10 +2,20 @@
 
 {% set color = icon.icon.icon.color == 'custom' ? 'color: ' ~ icon.icon.icon.custom_color ~ ';'  %}
 
+{% set formId = [] %}
+{% set alpha = 'abcdefghijklmnopqrstuvwxyz' %}
+{% set num = '0123456789' %}
+{% for i in 1..10 %}
+	{% set char = random(alpha ~ alpha|upper ~ num ~ '-_') %}
+	{% set formId = formId|merge([char]) %}
+{% endfor %}
+{% set formId = formId|join %}
+
+
 {% embed '@atoms/form/_form.tpl.twig' with {
   attributes: 'role="search"',
   name: name ? name : 'searchform',
-  id: id ? id : 'searchform',
+  id: id ? id : 'searchform-' ~ formId,
   charset: '',
   action: site.link,
   autocomplete: '',
@@ -40,7 +50,8 @@
         button_block: button_block,
         nowrap: button_nowrap,
         button_title: button_text,
-        hide_label: hide_button_label
+        hide_label: hide_button_label,
+        aria_label: 'Submit'
       } %}
         {% block left %}
           {% if hide_icon != true and icon_type == 'custom' %}

@@ -158,7 +158,9 @@
     popover_title: modal_button.popover_title,
     popover_content: modal_button.popover_content,
     context_placement: modal_button.context_placement,
-    context_container: modal_button.context_container
+    context_container: modal_button.context_container,
+    hide_label: modal_button.hide_label,
+    aria_label: modal_button.aria_label
   } %}
 {% endif %}
 
@@ -203,6 +205,7 @@
                 button_attributes: header_close_attributes,
                 button_other_attributes: modal_close_header_button.button_other_attributes,
                 hide_label: modal_close_header_button.hide_label,
+                aria_label: modal_close_header_button.aria_label
               } %}
             {% endif %}
           </div>
@@ -250,7 +253,9 @@
                   button_attributes: footer_close_attributes,
                   button_disabled: modal_close_footer.button_disabled,
                   button_outline: modal_close_footer.button_outline,
-                  close_button: modal_close_footer.close_button
+                  close_button: modal_close_footer.close_button,
+                  hide_label: modal_close_footer.hide_label,
+                  aria_label: modal_close_footer.aria_label
                 } %}
               </div>
             {% endblock %}

@@ -128,6 +128,8 @@ Responsive Tabs options in the json file should include string or integer values
               button_target: '#' ~ btn_target,
               button_role: 'tab',
               button_controls: btn_target,
+              hide_label: tab.hide_label,
+              aria_label: tab.aria_label
             } %}
           {% elseif tabs_type == 'jquery' %}
             <li class="tabs__tab">

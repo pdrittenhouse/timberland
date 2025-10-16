@@ -831,6 +831,27 @@
             ]
         },
         {
+            "key": "field_68f056e052ecf",
+            "label": "Aria Label",
+            "name": "aria_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "admin_only": 0,
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_634b9262e0f86",
             "label": "Button Classes",
             "name": "classes",
@@ -869,5 +890,5 @@
     "active": false,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1759288686
+    "modified": 1760583304
 }
