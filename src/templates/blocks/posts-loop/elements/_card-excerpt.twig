@@ -1,9 +1,11 @@
 {% if function('in_array', 'post_excerpt', fields.elements) %}
-  {% if fields.link_items != true %}
+  {% if fields.link_items != true and fields.include_modals != true %}
     <div class="posts-loop--post-excerpt">
       <span class="post-excerpt">{{ function('get_the_excerpt')|truncate(fields.element_excerpt.element_excerpt_length|number_format) }}</span>
       {% if fields.element_excerpt.element_read_more_label and fields.element_excerpt.element_hide_label != true %}
-        <span class="read-more"><a href="{{ post.link }}">{{ fields.element_excerpt.element_read_more_label }}</a></span>
+        <span class="read-more">
+          <a href="{{ post.link }}" aria-label="{{ fields.element_excerpt.element_read_more_label }}">{{ fields.element_excerpt.element_read_more_label }}</a>
+        </span>
       {% endif %}
     </div>
   {% else %}

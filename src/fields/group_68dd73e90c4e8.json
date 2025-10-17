@@ -3459,6 +3459,27 @@
                             "append": ""
                         },
                         {
+                            "key": "field_68f1d368642b7",
+                            "label": "Hide Label",
+                            "name": "hide_label",
+                            "aria-label": "",
+                            "type": "true_false",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "admin_only": 0,
+                            "message": "",
+                            "default_value": 0,
+                            "ui_on_text": "",
+                            "ui_off_text": "",
+                            "ui": 1
+                        },
+                        {
                             "key": "field_68dd73e9d3949",
                             "label": "Length",
                             "name": "length",
@@ -4712,6 +4733,27 @@
                     "placeholder": "",
                     "prepend": "",
                     "append": ""
+                },
+                {
+                    "key": "field_68f1d52c642b8",
+                    "label": "Hide Label",
+                    "name": "element_hide_label",
+                    "aria-label": "",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "admin_only": 0,
+                    "message": "",
+                    "default_value": 0,
+                    "ui_on_text": "",
+                    "ui_off_text": "",
+                    "ui": 1
                 },
                 {
                     "key": "field_68dd73ea25e58",
@@ -12071,9 +12113,9 @@
     "location": [
         [
             {
-                "param": "block",
+                "param": "options_page",
                 "operator": "==",
-                "value": "acf\/posts-loop"
+                "value": "block-modules"
             }
         ]
     ],
@@ -12086,5 +12128,5 @@
     "active": false,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1759343786
+    "modified": 1760682583
 }

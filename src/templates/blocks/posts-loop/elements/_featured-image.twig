@@ -1,13 +1,13 @@
 {% if element.acf_fc_layout == 'featured_image' and post.thumbnail.src %}
   {# Featured Image #}
   <div class="posts-loop--featured-image--wrapper">
-    {% if fields.link_items != true and element.link_image == true %}
+    {% if fields.link_items != true and fields.include_modals != true and element.link_image == true %}
       <a class="posts-loop--post-thumbnail" href="{{ post.link }}">
     {% else %}
       <span class="posts-loop--post-thumbnail">
     {% endif %}
     <img src="{{ post.thumbnail.src }}" alt="{{ post.thumbnail.alt }}">
-    {% if fields.link_items != true and element.link_image == true %}
+    {% if fields.link_items != true and fields.include_modals != true and element.link_image == true %}
       </a>
     {% else %}
       </span>

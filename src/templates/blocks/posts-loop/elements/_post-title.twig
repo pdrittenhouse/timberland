@@ -1,11 +1,11 @@
 {% if element.acf_fc_layout == 'post_title' and post.post_title %}
   {# Post Title #}
   <div class="posts-loop--post-title--wrapper">
-    {% if fields.link_items != true and element.link_title == true %}
+    {% if fields.link_items != true and fields.include_modals != true and element.link_title == true %}
       <a href="{{ post.link }}">
     {% endif %}
     <{{ element.title_element }} class="posts-loop--post-title">{{ post.title }}</{{ element.title_element }}>
-    {% if fields.link_items != true and element.link_title == true %}
+    {% if fields.link_items != true and fields.include_modals != true and element.link_title == true %}
       </a>
     {% endif %}
   </div>

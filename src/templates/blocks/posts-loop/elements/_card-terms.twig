@@ -17,7 +17,18 @@
       <span class="posts-loop--terms--label">{{ fields.element_terms.label }}</span>
     {% endif %}
     {% for term in post.terms({query:{taxonomy:fields.element_terms.taxonomy, orderby:fields.element_terms.order_by, order: fields.element_terms.order}}) %}
-      {% if fields.link_items != true and fields.element_terms.link_terms == true %}<a class="posts-loop--term--link posts-loop--term" href="/{{ term.taxonomy }}/{{ term.slug }}">{% else %}<span class="posts-loop--term">{% endif %}{{ term.name }}{% if fields.link_items != true and fields.element_terms.link_terms == true %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
+      {% if fields.link_items != true and fields.include_modals != true and fields.element_terms.link_terms == true %}
+        <a class="posts-loop--term--link posts-loop--term" href="/{{ term.taxonomy }}/{{ term.slug }}">
+      {% else %}
+        <span class="posts-loop--term">
+      {% endif %}
+      {{ term.name }}
+      {% if fields.link_items != true and fields.include_modals != true and fields.element_terms.link_terms == true %}
+        </a>
+      {% else %}
+        </span>
+      {% endif %}
+      {% if not loop.last %}, {% endif %}
     {% endfor %}
   </div>
 {% endif %}

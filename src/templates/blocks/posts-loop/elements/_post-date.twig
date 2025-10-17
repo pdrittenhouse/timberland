@@ -17,15 +17,15 @@
     {% if element.label %}
       <span class="posts-loop--post-date--label">{{ element.label }}</span>
     {% endif %}
-    {% if fields.link_items != true and element.link_date == true and post.type.slug == 'post' %}
+    {% if fields.link_items != true and fields.include_modals != true and element.link_date == true and post.type.slug == 'post' %}
       <a class="posts-loop--date--link posts-loop--post-date" href="/{{ post.date|date('Y') }}{{ element.link_to == 'month' or element.link_to == 'day' ? '/' ~ post.date|date('m') }}{{ element.link_to == 'day' ? '/' ~ post.date|date('d') }}">
-    {% elseif fields.link_items != true and element.link_date == true and post.type.has_archive %}
+    {% elseif fields.link_items != true and fields.include_modals != true and element.link_date == true and post.type.has_archive %}
       <a class="posts-loop--date--link posts-loop--post-date" href="/{{ post.type.has_archive }}/{{ post.date|date('Y') }}{{ element.link_to == 'month' or element.link_to == 'day' ? '/' ~ post.date|date('m') }}{{ element.link_to == 'day' ? '/' ~ post.date|date('d') }}">
     {% else %}
       <span class="posts-loop--post-date">
     {% endif %}
       {{ post.date|date(element.date_format) }}
-    {% if fields.link_items != true and element.link_date == true and (post.type.slug == 'post' or post.type.has_archive) %}
+    {% if fields.link_items != true and fields.include_modals != true and element.link_date == true and (post.type.slug == 'post' or post.type.has_archive) %}
       </a>
     {% else %}
       </span>

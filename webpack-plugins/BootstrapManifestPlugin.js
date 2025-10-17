@@ -273,13 +273,24 @@ class BootstrapManifestPlugin {
         return;
       }
 
-      // Recursively scan block and all included patterns
-      const usedPatterns = this.scanTwigFileRecursively(blockTwig);
+      // Scan ALL .twig files in the block directory recursively (including sub-templates)
+      const glob = require('glob');
+      const allTwigFiles = glob.sync(`${blockDir}/**/*.twig`);
+      const allUsedPatterns = new Set();
+
+      allTwigFiles.forEach(twigFile => {
+        // Reset scanned files for each block to allow re-scanning patterns
+        this.scannedFiles.clear();
+
+        // Recursively scan this twig file and all included patterns
+        const usedPatterns = this.scanTwigFileRecursively(twigFile);
+        usedPatterns.forEach(p => allUsedPatterns.add(p));
+      });
 
       // Collect all Bootstrap components from used patterns
       const bootstrapComponents = new Set();
 
-      usedPatterns.forEach(patternPath => {
+      allUsedPatterns.forEach(patternPath => {
         if (manifest.patterns[patternPath]) {
           manifest.patterns[patternPath].forEach(component => {
             bootstrapComponents.add(component);

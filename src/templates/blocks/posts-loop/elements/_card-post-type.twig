@@ -16,9 +16,9 @@
     {% if fields.element_post_type.label %}
       <span class="posts-loop--post-type--label">{{ fields.element_post_type.label }}</span>
     {% endif %}
-    {% if fields.link_items != true and fields.element_post_type.link_post_type == true and post.type.has_archive %}
+    {% if fields.link_items != true and fields.include_modals != true and fields.element_post_type.link_post_type == true and post.type.has_archive %}
       <a class="posts-loop--post-type--link posts-loop--post-type" href="/{{ post.type.has_archive }}">
-    {% elseif fields.link_items != true and fields.element_post_type.link_post_type == true %}
+    {% elseif fields.link_items != true and fields.include_modals != true and fields.element_post_type.link_post_type == true %}
       <a class="posts-loop--post-type--link posts-loop--post-type" href="{{ function('get_post_type_archive_link', post.type.slug) }}">
     {% else %}
       <span class="posts-loop--post-type">
@@ -32,7 +32,7 @@
     {% elseif fields.element_post_type.name_format == 'name_admin_bar' %}
       {{ post.type.labels.name_admin_bar }}
     {% endif %}
-    {% if fields.link_items != true and fields.element_post_type.link_post_type == true %}
+    {% if fields.link_items != true and fields.include_modals != true and fields.element_post_type.link_post_type == true %}
       </a>
     {% else %}
       </span>

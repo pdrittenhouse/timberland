@@ -324,14 +324,19 @@ class PatternManifestPlugin {
         return;
       }
 
-      // Scan block for pattern usage
-      const directPatterns = this.scanTwigFileForPatterns(blockTwig);
-
-      // Resolve all nested dependencies
+      // Scan ALL .twig files in the block directory recursively (including sub-templates in subdirectories)
+      const glob = require('glob');
+      const allTwigFiles = glob.sync(`${blockDir}/**/*.twig`);
       const allPatterns = new Set();
-      directPatterns.forEach(patternPath => {
-        const resolved = this.resolvePatternDependencies(patternPath, manifest);
-        resolved.forEach(p => allPatterns.add(p));
+
+      allTwigFiles.forEach(twigFile => {
+        const directPatterns = this.scanTwigFileForPatterns(twigFile);
+
+        // Resolve all nested dependencies
+        directPatterns.forEach(patternPath => {
+          const resolved = this.resolvePatternDependencies(patternPath, manifest);
+          resolved.forEach(p => allPatterns.add(p));
+        });
       });
 
       if (allPatterns.size > 0) {

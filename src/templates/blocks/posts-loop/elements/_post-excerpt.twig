@@ -3,7 +3,7 @@
   <div class="posts-loop--post-excerpt--wrapper">
     {% if post.post_type == 'page' %}
       <div class="posts-loop--post-excerpt">{{ function('get_the_excerpt') }}</div>
-    {% elseif fields.link_items != true %}
+    {% elseif fields.link_items != true and fields.include_modals != true %}
       <div class="posts-loop--post-excerpt">{{ post.preview.read_more(element.read_more_label).length(element.length|number_format).force }}</div>
     {% else %}
       <div class="posts-loop--post-excerpt">{{ post.preview.read_more('').length(element.length|number_format) }}</div>

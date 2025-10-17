@@ -5,15 +5,15 @@
       <span class="posts-loop--post-modified--label">{{ element.label }}</span>
     {% endif %}
     {% if function('in_array', 'date', element.modified_elements) and post.modified_date %}
-      {% if fields.link_items != true and element.link_date == true and post.type.slug == 'post' %}
+      {% if fields.link_items != true and fields.include_modals != true and element.link_date == true and post.type.slug == 'post' %}
         <a class="posts-loop--post-modified--link posts-loop--post-modified--date" href="/{{ post.modified_date|date('Y') }}{{ element.link_to == 'month' or element.link_to == 'day' ? '/' ~ post.modified_date|date('m') }}{{ element.link_to == 'day' ? '/' ~ post.modified_date|date('d') }}">
-      {% elseif fields.link_items != true and element.link_date == true and post.type.has_archive %}
+      {% elseif fields.link_items != true and fields.include_modals != true and element.link_date == true and post.type.has_archive %}
         <a class="posts-loop--post-modified--link posts-loop--post-modified--date" href="/{{ post.type.has_archive }}/{{ post.modified_date|date('Y') }}{{ element.link_to == 'month' or element.link_to == 'day' ? '/' ~ post.modified_date|date('m') }}{{ element.link_to == 'day' ? '/' ~ post.modified_date|date('d') }}">
       {% else %}
         <span class="posts-loop--post-modified--date">
       {% endif %}
         {{ post.modified_date|date(element.date_format) }}
-      {% if fields.link_items != true and element.link_date == true and (post.type.slug == 'post' or post.type.has_archive) %}
+      {% if fields.link_items != true and fields.include_modals != true and element.link_date == true and (post.type.slug == 'post' or post.type.has_archive) %}
         </a>
       {% else %}
         </span>
@@ -23,26 +23,26 @@
       <span class="posts-loop--post-modified--separator">{{ element.separator }}</span>
     {% endif %}
     {% if function('in_array', 'author', element.modified_elements) and post.modified_author %}
-      {% if fields.link_items != true and element.link_author == true %}
+      {% if fields.link_items != true and fields.include_modals != true and element.link_author == true %}
         <a class="posts-loop--post-modified--link posts-loop--post-modified--author" href="{{ post.modified_author.link }}">
       {% else %}
         <span class="posts-loop--post-modified--author">
       {% endif %}
       {{ post.modified_author.name }}
-      {% if fields.link_items != true and element.link_author == true %}
+      {% if fields.link_items != true and fields.include_modals != true and element.link_author == true %}
         </a>
       {% else %}
         </span>
       {% endif %}
     {% endif %}
     {% if function('in_array', 'email', element.modified_elements) and function('get_user_by', 'id', post.modified_author.id).data.user_email %}
-      {% if fields.link_items != true %}
+      {% if fields.link_items != true and fields.include_modals != true  %}
         <a class="posts-loop--post-modified--link posts-loop--post-modified--author-email" href="mailto:{{ function('get_user_by', 'id', post.modified_author.id).data.user_email }}">
       {% else %}
         <span class="posts-loop--post-modified--author-email">
       {% endif %}
       {{ function('get_user_by', 'id', post.modified_author.id).data.user_email }}
-      {% if fields.link_items != true %}
+      {% if fields.link_items != true and fields.include_modals != true  %}
         </a>
       {% else %}
         </span>

@@ -18,7 +18,7 @@
             },
             "admin_only": 0,
             "clone": [
-                "group_68dcb7f3bb47f"
+                "group_68f1d5ace22a8"
             ],
             "display": "seamless",
             "layout": "block",
@@ -41,7 +41,7 @@
             },
             "admin_only": 0,
             "clone": [
-                "group_68dcb8d25b2a3"
+                "group_68f1d5bacc14a"
             ],
             "display": "seamless",
             "layout": "block",
@@ -67,5 +67,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1759344212
+    "modified": 1760679969
 }

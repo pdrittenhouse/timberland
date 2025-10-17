@@ -17,7 +17,16 @@
       <span class="posts-loop--categories--label">{{ fields.element_categories.label }}</span>
     {% endif %}
     {% for category in post.categories %}
-      {% if fields.link_items != true and fields.element_categories.link_categories == true %}<a class="posts-loop--category--link posts-loop--category" href="/{{ category.taxonomy }}/{{ category.slug }}">{% else %}<span class="posts-loop--category">{% endif %}{{ category.name }}{% if fields.link_items != true and fields.element_categories.link_categories == true %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
+      {% if fields.link_items != true and fields.include_modals != true and fields.element_categories.link_categories == true %}
+        <a class="posts-loop--category--link posts-loop--category" href="/{{ category.taxonomy }}/{{ category.slug }}">
+      {% else %}
+        <span class="posts-loop--category">{% endif %}{{ category.name }}
+      {% if fields.link_items != true and fields.include_modals != true and fields.element_categories.link_categories == true %}
+        </a>
+      {% else %}
+        </span>
+      {% endif %}
+      {% if not loop.last %}, {% endif %}
     {% endfor %}
   </div>
 {% endif %}

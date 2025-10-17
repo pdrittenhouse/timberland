@@ -4,13 +4,13 @@
     {% if element.label %}
       <span class="posts-loop--post-link--label">{{ element.label }}</span>
     {% endif %}
-    {% if fields.link_items != true and element.link_link == true %}
+    {% if fields.link_items != true and element.link_link == true and fields.include_modals != true %}
       <a href="{{ post.link }}" class="posts-loop--post-link posts-loop--post-url">
     {% else %}
       <span class="posts-loop--post-url">
     {% endif %}
     {{ post.link }}
-    {% if fields.link_items != true and element.link_link == true %}
+    {% if fields.link_items != true and element.link_link == true and fields.include_modals != true %}
       </a>
     {% else %}
       </span>

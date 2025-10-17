@@ -5,13 +5,13 @@
       {% for author in post.authors %}
         {% for author_element in element.author_elements %}
           {% if author_element.acf_fc_layout == 'gravatar' and author.avatar %}
-            {% if fields.link_items != true and element.link_author == true %}
+            {% if fields.link_items != true and fields.include_modals != true and element.link_author == true %}
               <a class="posts-loop--post-author--link posts-loop--post-author--gravatar" href="{{ author.link }}">
             {% else %}
               <span class="posts-loop--post-author--gravatar">
             {% endif %}
             <img src="{{ author.avatar }}" alt="{{ author.name }}">
-            {% if fields.link_items != true and element.link_author == true %}
+            {% if fields.link_items != true and fields.include_modals != true and element.link_author == true %}
               </a>
             {% else %}
               </span>
@@ -20,25 +20,25 @@
             {% if author_element.label %}
               <span class="posts-loop--post-author--label">{{ author_element.label }}</span>
             {% endif %}
-            {% if fields.link_items != true and element.link_author == true %}
+            {% if fields.link_items != true and fields.include_modals != true and element.link_author == true %}
               <a class="posts-loop--post-author--link posts-loop--post-author--name" href="{{ author.link }}">
             {% else %}
               <span class="posts-loop--post-author--name">
             {% endif %}
             {{ author.name }}
-            {% if fields.link_items != true and element.link_author == true %}
+            {% if fields.link_items != true and fields.include_modals != true and element.link_author == true %}
               </a>
             {% else %}
               </span>
             {% endif %}
           {% elseif author_element.acf_fc_layout == 'email' and function('get_user_by', 'id', author.id).data.user_email %}
-            {% if fields.link_items != true %}
+            {% if fields.link_items != true and fields.include_modals != true %}
               <a class="posts-loop--post-author--link posts-loop--post-author--email" href="mailto:{{ function('get_user_by', 'id', author.id).data.user_email }}">
             {% else %}
               <span class="posts-loop--post-author--email">
             {% endif %}
             {{ function('get_user_by', 'id', author.id).data.user_email }}
-            {% if fields.link_items != true %}
+            {% if fields.link_items != true and fields.include_modals != true %}
               </a>
             {% else %}
               </span>

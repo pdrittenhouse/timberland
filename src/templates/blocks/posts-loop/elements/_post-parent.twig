@@ -16,13 +16,13 @@
     {% if element.label %}
       <span class="posts-loop--post-parent--label">{{ element.label }}</span>
     {% endif %}
-    {% if fields.link_items != true and element.link_parent == true %}
+    {% if fields.link_items != true and fields.include_modals != true and element.link_parent == true %}
       <a class="posts-loop--post-parent-link posts-loop--post-parent" href="{{ post.parent.link }}">
     {% else %}
       <span class="posts-loop--post-parent">
     {% endif %}
     {{ post.parent.title }}
-    {% if fields.link_items != true and element.link_parent == true %}
+    {% if fields.link_items != true and fields.include_modals != true and element.link_parent == true %}
       </a>
     {% else %}
       </span>

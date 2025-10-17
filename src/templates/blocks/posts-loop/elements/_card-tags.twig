@@ -17,7 +17,18 @@
       <span class="posts-loop--tags--label">{{ fields.element_tags.label }}</span>
     {% endif %}
     {% for tag in post.tags %}
-      {% if fields.link_items != true and fields.element_tags.link_tags == true %}<a class="posts-loop--tag--link posts-loop--tag" href="/tag/{{ tag.slug }}">{% else %}<span class="posts-loop--tag">{% endif %}{{ tag.name }}{% if fields.link_items != true and fields.element_tags.link_tags == true %}</a>{% else %}</span>{% endif %}{% if not loop.last %}, {% endif %}
+      {% if fields.link_items != true and fields.include_modals != true and fields.element_tags.link_tags == true %}
+        <a class="posts-loop--tag--link posts-loop--tag" href="/tag/{{ tag.slug }}">
+      {% else %}
+        <span class="posts-loop--tag">
+      {% endif %}
+      {{ tag.name }}
+      {% if fields.link_items != true and fields.include_modals != true and fields.element_tags.link_tags == true %}
+        </a>
+      {% else %}
+        </span>
+      {% endif %}
+      {% if not loop.last %}, {% endif %}
     {% endfor %}
   </div>
 {% endif %}

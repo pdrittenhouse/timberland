@@ -18,13 +18,13 @@
     {% if fields.element_link.label %}
       <span class="posts-loop--post-link--label">{{ fields.element_link.label }}</span>
     {% endif %}
-    {% if fields.link_items != true and fields.element_link.link_link == true %}
+    {% if fields.link_items != true and fields.include_modals != true and fields.element_link.link_link == true %}
       <a href="{{ post.link }}" class="posts-loop--post-link posts-loop--post-url">
     {% else %}
       <span class="posts-loop--post-url">
     {% endif %}
     {{ post.link }}
-    {% if fields.link_items != true and fields.element_link.link_link == true %}
+    {% if fields.link_items != true and fields.include_modals != true and fields.element_link.link_link == true %}
       </a>
     {% else %}
       </span>

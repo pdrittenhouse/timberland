@@ -157,8 +157,8 @@
   },
   card_label: (function('in_array', 'post_author', fields.elements) and post.authors and fields.element_author.card_author_location == 'label') or (function('in_array', 'post_date', fields.elements) and post.date and fields.element_date.card_date_location == 'label') or (function('in_array', 'post_modified', fields.elements) and post.modified_date and fields.element_modified.card_modified_location == 'label') or (function('in_array', 'post_type', fields.elements) and post.type and fields.element_post_type.card_post_type_location == 'label') or (function('in_array', 'comment_count', fields.elements) and post.comment_count and fields.element_comment_count.card_comment_count_location == 'label') or (function('in_array', 'terms', fields.elements) and post.terms is not empty and fields.element_terms.card_terms_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'categories', fields.elements) and post.categories and fields.element_categories.card_categories_location == 'label') or (function('in_array', 'tags', fields.elements) and post.tags and fields.element_tags.card_tags_location == 'label') or (function('in_array', 'post_parent', fields.elements) and post.parent and fields.element_post_parent.card_post_parent_location == 'label') or (function('in_array', 'children', fields.elements) and post.children and fields.element_children.card_children_location == 'label') or (function('in_array', 'link', fields.elements) and post.link and fields.element_link.card_link_location == 'label') ? true,
   card_title: function('in_array', 'post_title', fields.elements) ? post.title,
-  card_linked: fields.link_items,
-  card_link: fields.link_items ? post.link,
+  card_linked: fields.link_items or fields.card.link_card or fields.include_modals,
+  card_link: post.link ? post.link : fields.include_modals ? 'javascript:void(0);',
   card_link_text: '',
   flip_card: fields.card.flip_card,
   inherit_color: (fields.card.card_text_color['color'] == 'palette' and fields.card.card_text_color['theme_color']) or (fields.card.card_text_color['color'] == 'custom' and fields.card.card_text_color['custom_color']) and fields.card.inherit_text_color ? fields.card.inherit_text_color,
@@ -383,7 +383,7 @@
         </div>
       {% endblock %}
 
-      {% if post.link and fields.card.link_card != true and fields.card.show_button != true and fields.hide_card_link != true %}
+      {% if post.link and fields.card.link_card != true and fields.include_modals != true and fields.card.show_button != true and fields.hide_card_link != true %}
         <a href="{{ post.link }}" class="card-link" target="{{ fields.card.link['target'] ? fields.card.link['target'] : '_self' }}" aria-label="{{ fields.element_excerpt.element_read_more_label }}">{{ fields.element_excerpt.element_read_more_label }}</a>
       {% endif %}
       {% if fields.card.show_button == true %}
