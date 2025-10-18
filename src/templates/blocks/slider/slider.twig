@@ -60,9 +60,14 @@
   width or min_width or max_width or margin_top or margin_bottom or margin_left or margin_right or padding_top or padding_bottom or padding_left or padding_right ? 'style="' ~ width ~ min_width ~ max_width ~ margin_top ~ margin_bottom ~ margin_left ~ margin_right ~ padding_top ~ padding_bottom ~ padding_left ~ padding_right ~ '"'
 ]) | sort | join(' ') | trim %}
 
-{# TODO: Retrieve innerBlock count and replace slideCount #}
+{% if fields.slide_count %}
+  {% set slide_count = fields.slide_count %}
+{% else %}
+  {% set slide_count = inner_blocks_count %}
+{% endif %}
+
 {% set slideCount = [] %}
-{% for i in 1..(fields.slide_count) %}
+{% for i in 1..(slide_count) %}
   {% set slideCount = slideCount|merge([{
     slide: i,
     active: loop.first ? true

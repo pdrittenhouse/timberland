@@ -491,6 +491,11 @@ function dream_block_render($block, $content = '', $is_preview = false, $post_id
     $context[ 'parent_block_data' ] = $wp_block->parsed_block[ 'parent_block_data' ];
   }
 
+  // Slider block innerBlock (slide) count
+  if ( $block['name'] === 'acf/slider' && isset($wp_block->inner_blocks) ) {
+    $context['inner_blocks_count'] = count($wp_block->inner_blocks);
+  }
+
   // Replace acf keys with human readable acf field names (only if filter enabled and data exists)
   if( !empty( $context[ 'parent_block_data' ][ 'data' ] ) && apply_filters('dream_use_acf_field_names', false) ) {
     $context[ 'parent_block_data' ][ 'data' ] = replace_acf_keys_with_names( $context[ 'parent_block_data' ][ 'data' ] );

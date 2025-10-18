@@ -112,7 +112,7 @@
             pause: fields.slider.pause_on_hover == true ? 'hover' : 'false',
             interval: fields.slider.autoplay == true and fields.slider.autoplay_speed ? fields.slider.autoplay_speed,
             ride: fields.slider.autoplay == true and fields.slider.auto_start == true ? 'carousel' : fields.slider.autoplay == true ? 'true' : 'false',
-            slides: slideCount
+            slides: slideCount or slideCount
           } %}
             {% block carousel_slides %}
               {% for post in posts %}
@@ -145,7 +145,7 @@
             setGallerySize: fields.slider.gallery_size,
             resize: fields.slider.resize,
             cellAlign: fields.slider.alignment,
-            slides: slideCount,
+            slides: slideCount or slideCount,
             flickity_carousel_classes: [
               slider_classes
             ],
@@ -208,7 +208,7 @@
             css_ease: fields.slider.css_ease,
             asNavFor: fields.slider.as_nav_for,
             responsive: fields.slider.responsive,
-            slides: slideCount,
+            slides: slideCount or slideCount,
             slick_carousel_classes: [
               slider_classes
             ],
@@ -252,7 +252,7 @@
             pause: fields.slider.pause_on_hover == true ? 'hover' : 'false',
             interval: fields.slider.autoplay == true and fields.slider.autoplay_speed ? fields.slider.autoplay_speed,
             ride: fields.slider.autoplay == true and fields.slider.auto_start == true ? 'carousel' : fields.slider.autoplay == true ? 'true' : 'false',
-            slides: slideCount
+            slides: slideCount or slideCount
           } %}
             {% block carousel_slides %}
               {% for post in posts %}
@@ -285,7 +285,7 @@
             setGallerySize: fields.slider.gallery_size,
             resize: fields.slider.resize,
             cellAlign: fields.slider.alignment,
-            slides: slideCount,
+            slides: slideCount or slideCount,
             flickity_carousel_classes: [
               slider_classes
             ],
@@ -348,7 +348,7 @@
             css_ease: fields.slider.css_ease,
             asNavFor: fields.slider.as_nav_for,
             responsive: fields.slider.responsive,
-            slides: slideCount,
+            slides: slideCount or slideCount,
             slick_carousel_classes: [
               slider_classes
             ],

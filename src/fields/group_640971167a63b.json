@@ -99,7 +99,7 @@
             "name": "slide_count",
             "aria-label": "",
             "type": "number",
-            "instructions": "Enter total number of slides.",
+            "instructions": "Enter total number of slides if needed. Leave empty for auto calculation.",
             "required": 0,
             "conditional_logic": [
                 [
@@ -116,7 +116,7 @@
                 "id": ""
             },
             "admin_only": 0,
-            "default_value": 3,
+            "default_value": "",
             "min": 0,
             "max": "",
             "placeholder": "",
@@ -1970,5 +1970,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1739754878
+    "modified": 1760764475
 }
