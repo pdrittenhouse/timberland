@@ -336,13 +336,13 @@
     {% block card_body %}
         <div class="card-body {{ no_body_padding == true ? 'p-0' }}">
             {% block card_text %}
-                <div class="card-text">{{ fields.body }}</div>
+                <div class="card-text {{ inherit_color == 'true' ? 'text-reset' }}">{{ fields.body }}</div>
             {% endblock %}
             <div class="inner-blocks-wrapper">
                 <InnerBlocks allowedBlocks="{{ ['core/block', 'core/post-title', 'core/avatar', 'core/categories', 'core/cover', 'core/embed', 'core/file', 'core/footnotes', 'core/form', 'core/latest-comments', 'core/latest-posts', 'core/loginout', 'core/missing', 'core/navigation', 'core/navigation-link', 'core/page-list', 'core/post-author', 'core/post-author-biography', 'core/post-author-name', 'core/post-comments-count', 'core/post-comments-form', 'core/post-comments-link', 'core/post-date', 'core/post-excerpt', 'core/post-navigation-link', 'core/post-time-to-read', 'core/post-featured-image', 'core/query-pagination', 'core/query-pagination-next', 'core/query-pagination-numbers', 'core/query-pagination-previous', 'core/read-more', 'core/rss', 'core/site-logo', 'core/site-tagline', 'core/site-title', 'core/social-link', 'core/table-of-contents', 'core/term-description', 'core/image', 'core/paragraph', 'core/heading', 'core/list', 'core/quote', 'core/code', 'core/preformatted', 'core/pullquote', 'core/table', 'core/verse', 'core/gallery', 'core/audio', 'core/cover', 'core/media-text', 'core/video', 'core/buttons', 'core/button', 'core/columns', 'core/group', 'core/row', 'core/separator', 'core/spacer', 'core/calendar', 'core/html', 'core/search', 'core/shortcode', 'core/social-icons', 'core/tag-cloud', 'acf/quote', 'acf/modal', 'acf/buttons', 'acf/button', 'acf/row', 'acf/price', 'acf/icons', 'acf/button-group', 'acf/accordion', 'acf/pattern', 'gravityforms/form', 'acf/price', 'acf/updater-forms', 'acf/provider-grid', 'acf/provider-service'] | json_encode() | escape('html_attr') }}" />
             </div>
             {% if fields.link and fields.link_card != true and fields.show_button != true %}
-                <a href="{{ fields.link['url'] }}" class="card-link" target="{{ fields.link['target'] ? fields.link['target'] : '_self' }}">{{ fields.link['title'] }}</a>
+                <a href="{{ fields.link['url'] }}" class="card-link {{ inherit_color == 'true' ? 'text-reset' }}" target="{{ fields.link['target'] ? fields.link['target'] : '_self' }}">{{ fields.link['title'] }}</a>
             {% endif %}
             {% if fields.show_button == true %}
                 {% include "@atoms/button/_button.tpl.twig" with {
@@ -371,7 +371,8 @@
                     'card-button',
                     fields.button.close != 'black' and fields.button.close != 'white' and fields.button.background_color['bg_color'] == 'palette' and fields.button.background_color['bg_theme_color'] ? 'bg-' ~ fields.button.background_color['bg_theme_color'],
                     fields.button.close != 'black' and fields.button.close != 'white' and fields.button.text_color['color'] == 'palette' and fields.button.text_color['theme_color'] ? 'text-' ~ fields.button.text_color['theme_color'],
-                    fields.button.full_width != true and fields.button.display['display'] is not null ? fields.button.display['display']
+                    fields.button.full_width != true and fields.button.display['display'] is not null ? fields.button.display['display'],
+                    inherit_color == true ? 'text-reset'
                   ],
                   button_other_classes: fields.button.classes,
                   button_attributes: [
@@ -384,7 +385,7 @@
     {% endblock %}
 
     {% block back %}
-      <div class="card-back-content">{{ fields.card_back_content }}</div>
+      <div class="card-back-content {{ inherit_color == 'true' ? 'text-reset' }}">{{ fields.card_back_content }}</div>
     {% endblock back %}
 {% endembed %}
 

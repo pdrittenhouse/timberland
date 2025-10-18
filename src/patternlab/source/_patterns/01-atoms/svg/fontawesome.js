@@ -23,6 +23,10 @@ import {
   faRocket,
   faSpaceShuttle,
   faUser,
+  faArrowRight,
+  faArrowLeft,
+  faChevronRight,
+  faChevronLeft,
 } from '@fortawesome/free-solid-svg-icons/index';
 
 // Import entire icon set
@@ -30,7 +34,7 @@ import '@fortawesome/fontawesome-free/js/all';
 // import '@fortawesome/fontawesome-pro/js/all';
 
 // Add specific icons required
-library.add(faUserAstronaut, faRocket, faSpaceShuttle, faUser, fas, far, fab);
+library.add(faArrowRight, faArrowLeft, faChevronRight, faChevronLeft, faUserAstronaut, faRocket, faSpaceShuttle, faUser, fas, far, fab);
 
 // Replace any existing <i> tags with <svg> and set up a MutationObserver to
 // continue doing this as the DOM changes.

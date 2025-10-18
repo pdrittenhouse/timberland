@@ -175,7 +175,8 @@
     'posts-loop--post',
     'posts-loop--card',
     fields.card.horizontal != true and fields.card.layout.card_layout != 'default' ? 'card-' ~ fields.card.layout.card_layout : fields.card.horizontal == true and fields.card.horizontal_layout.horizontal_card_layout != 'default' ? 'card-' ~ fields.card.horizontal_layout.horizontal_card_layout,
-    fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align
+    fields.card.text_align is not empty and fields.card.text_align != 'null' ? 'text-' ~ fields.card.text_align,
+    fields.card.vertically_center_content == true ? 'vertically-center-content' : ''
   ]|merge(additional_classes|default([])),
   card_styles: [
     fields.card.flip_card != true ? card_bg_image_size,
@@ -377,14 +378,14 @@
   {% block card_body %}
     <div class="card-body {{ no_body_padding == true ? 'p-0' }}">
       {% block card_text %}
-        <div class="card-text">
+        <div class="card-text {{ inherit_color == 'true' ? 'text-reset' }}">
           {% include 'blocks/posts-loop/elements/_card-excerpt.twig' %}
           {% include 'blocks/posts-loop/elements/_card-content.twig' %}
         </div>
       {% endblock %}
 
       {% if post.link and fields.card.link_card != true and fields.include_modals != true and fields.card.show_button != true and fields.hide_card_link != true %}
-        <a href="{{ post.link }}" class="card-link" target="{{ fields.card.link['target'] ? fields.card.link['target'] : '_self' }}" aria-label="{{ fields.element_excerpt.element_read_more_label }}">{{ fields.element_excerpt.element_read_more_label }}</a>
+        <a href="{{ post.link }}" class="card-link {{ inherit_color == 'true' ? 'text-reset' }}" target="{{ fields.card.link['target'] ? fields.card.link['target'] : '_self' }}" aria-label="{{ fields.element_excerpt.element_read_more_label }}">{{ fields.element_excerpt.element_read_more_label }}</a>
       {% endif %}
       {% if fields.card.show_button == true %}
         {% include "@atoms/button/_button.tpl.twig" with {
@@ -412,7 +413,8 @@
           button_classes: [
             fields.card.button.close != 'black' and fields.card.button.close != 'white' and fields.card.button.background_color['bg_color'] == 'palette' and fields.card.button.background_color['bg_theme_color'] ? 'bg-' ~ fields.card.button.background_color['bg_theme_color'],
             fields.card.button.close != 'black' and fields.card.button.close != 'white' and fields.card.button.text_color['color'] == 'palette' and fields.card.button.text_color['theme_color'] ? 'text-' ~ fields.card.button.text_color['theme_color'],
-            fields.card.button.full_width != true and fields.card.button.display['display'] is not null ? fields.card.button.display['display']
+            fields.card.button.full_width != true and fields.card.button.display['display'] is not null ? fields.card.button.display['display'],
+            inherit_color == true ? 'text-reset'
           ],
           button_other_classes: fields.card.button.classes,
           button_attributes: [
@@ -427,7 +429,7 @@
 
   {% block card_footer %}
     {% if fields.card_footer_layout %}
-      <div class="card-footer-content">
+      <div class="card-footer-content {{ inherit_color == true ? 'text-reset' }}">
         {% for element in fields.card_footer_layout %}
           {% if element.acf_fc_layout == 'featured_image' and post.thumbnail.src %}
             {% include 'blocks/posts-loop/elements/_featured-image.twig' %}
@@ -467,7 +469,7 @@
 
   {% block back %}
     {% if fields.card_back_layout and fields.card.flip_card == true %}
-      <div class="card-back-content">
+      <div class="card-back-content {{ inherit_color == true ? 'text-reset' }}">
         {% for element in fields.card_back_layout %}
             {% if element.acf_fc_layout == 'featured_image' and post.thumbnail.src %}
               {% include 'blocks/posts-loop/elements/_featured-image.twig' %}

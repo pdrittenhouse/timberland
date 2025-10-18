@@ -14,6 +14,7 @@
   text-align: var(--card-text-align);
   color: var(--card-text-color);
 
+
   &.vertically-center-content {
     @include flexbox;
     @include flex-flow(column nowrap);
@@ -326,7 +327,7 @@
   }
 
   &--linked {
-    //display: block;
+    display: block;
     color: inherit;
 
     &:hover,

@@ -54,6 +54,8 @@
 
 {% set block_classes = block_classes|default([])|merge([
   'posts-loop',
+  fields.pattern ? 'posts-loop--' ~ fields.pattern,
+  fields.slider.equal_height_slides == true ? 'equal-height-slides',
   block['className']
 ]) | sort | join(' ') | trim %}
 

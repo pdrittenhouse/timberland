@@ -191,7 +191,7 @@
   &--card-grid {}
 
   // Slider
-  &--slider {
+  &--carousel {
 
     &.equal-height-slides {
 
@@ -199,7 +199,7 @@
         min-height: 100%;
       }
 
-      &.flickity-carousel {
+      .flickity-carousel {
 
         .carousel-cell {
           @include flexbox();
@@ -230,7 +230,7 @@
         }
       }
 
-      &.slick-carousel-wrapper {
+      .slick-carousel-wrapper {
 
         .slick-carousel {}
 
@@ -253,11 +253,12 @@
   &--slide {
 
     &.full-height-cards {
-      @include flexbox;
-      @include flex-flow(row nowrap);
+      // @include flexbox;
+      // @include flex-flow(row nowrap);
 
       .posts-loop--card {
-        @include flex(1 1 100%);
+        // @include flex(1 1 100%);
+        min-height: 100%
       }
     }
   }

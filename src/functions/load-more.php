@@ -936,7 +936,7 @@ function dream_post_loop_load_more()
                 {% block card_body %}
                 <div class=\"card-body {{ no_body_padding == 'true' ? 'p-0' }}\">
                     {% block card_text %}
-                    <div class=\"card-text\">
+                    <div class=\"card-text {{ inherit_color == 'true' ? 'text-reset' }}\">
 
                         {% if function('in_array', 'post_excerpt', elements) and link_items != true %}
                             <div class=\"posts-loop--post-excerpt\"><span class=\"post-excerpt\">{{ function('wp_trim_words', function('get_the_excerpt'), element_excerpt.element_excerpt_length|number_format) }}</span> {% if element_excerpt.element_read_more_label %}<a href=\"{{ post.link }}\" class=\"read-more-link read-more\">{{ element_excerpt.element_read_more_label }}</a>{% endif %}</div>
@@ -951,7 +951,7 @@ function dream_post_loop_load_more()
                     {% endblock %}
 
                     {% if card.link and card.link_card != 'true' and card.show_button != 'true' %}
-                    <a href=\"{{ card.link['url'] }}\" class=\"card-link\" target=\"{{ card.link['target'] ? card.link['target'] : '_self' }}\">{{ card.link['title'] }}</a>
+                    <a href=\"{{ card.link['url'] }}\" class=\"card-link {{ inherit_color == 'true' ? 'text-reset' }}\" target=\"{{ card.link['target'] ? card.link['target'] : '_self' }}\">{{ card.link['title'] }}</a>
                     {% endif %}
                     {% if card.show_button == 'true' %}
                         {% include \"@atoms/button/_button.tpl.twig\" with {
@@ -976,9 +976,10 @@ function dream_post_loop_load_more()
                             close_button: card.button.close,
                             hide_label: card.button.hide_label,
                             button_classes: [
-                            card.button.close != 'black' and card.button.close != 'white' and card.button.background_color['bg_color'] == 'palette' and card.button.background_color['bg_theme_color'] ? 'bg-' ~ card.button.background_color['bg_theme_color'],
-                            card.button.close != 'black' and card.button.close != 'white' and card.button.text_color['color'] == 'palette' and card.button.text_color['theme_color'] ? 'text-' ~ card.button.text_color['theme_color'],
-                            card.button.full_width != 'true' and card.button.display['display'] is not null ? card.button.display['display']
+                                card.button.close != 'black' and card.button.close != 'white' and card.button.background_color['bg_color'] == 'palette' and card.button.background_color['bg_theme_color'] ? 'bg-' ~ card.button.background_color['bg_theme_color'],
+                                card.button.close != 'black' and card.button.close != 'white' and card.button.text_color['color'] == 'palette' and card.button.text_color['theme_color'] ? 'text-' ~ card.button.text_color['theme_color'],
+                                card.button.full_width != 'true' and card.button.display['display'] is not null ? card.button.display['display'],
+                                inherit_color == true ? 'text-reset'
                             ],
                             button_other_classes: card.button.classes,
                             button_attributes: [
@@ -992,7 +993,7 @@ function dream_post_loop_load_more()
 
                 {% block card_footer %}
                 {% if card_footer_layout %}
-                <div class=\"card-footer-content\">
+                <div class=\"card-footer-content {{ inherit_color == true ? 'text-reset' }}\">
                     {% for element in card_footer_layout %}
                     {% if element.acf_fc_layout == 'featured_image' and thumbnail.src %}
                     {# Featured Image #}
@@ -1278,7 +1279,7 @@ function dream_post_loop_load_more()
 
                 {% block back %}
                     {% if card_back_layout and card.flip_card == 'true' %}
-                        <div class=\"card-back-content\">
+                        <div class=\"card-back-content {{ inherit_color == true ? 'text-reset' }}\">
                             {% for element in card_back_layout %}
                             {% if element.acf_fc_layout == 'featured_image' and thumbnail.src %}
                             {# Featured Image #}

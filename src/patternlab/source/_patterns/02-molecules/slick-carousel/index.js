@@ -158,7 +158,6 @@ const galleryCarousel = () => {
       const cols = colClass === 'default' ? 3 : parseInt(colClass);
       
       carousel.classList.add('slick-carousel');
-      carousel.classList.add('equal-height-slides');
 
       $(carousel).slick({
         adaptiveHeight: true,

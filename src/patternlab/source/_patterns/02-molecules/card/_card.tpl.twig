@@ -206,17 +206,19 @@
                       <div class="card-body {{ no_body_padding == true ? 'p-0' }}">
                         {% block card_text %}
                           {% if card_text %}
-                            <div class="card-text {{ text_color }}">{{ card_text }}</div>
+                            <div class="card-text {{ text_color }} {{ inherit_color == true ? 'text-reset' }}">{{ card_text }}</div>
                           {% endif %}
                         {% endblock %}
 
                         {% if card_link and card_linked is empty %}
-                          <a href="{{ card_link }}" class="card-link" target="{{ card_link_target ? card_link_target : '_self' }}">{{ card_link_text }}</a>
+                          <a href="{{ card_link }}" class="card-link {{ inherit_color == true ? 'text-reset' }}" target="{{ card_link_target ? card_link_target : '_self' }}">{{ card_link_text }}</a>
                         {% endif %}
 
                         {% if card_button %}
                           {% include "@atoms/button/_button.tpl.twig" with {
-                            button_classes: card_button.button_classes,
+                            button_classes: [
+                              inherit_color == true ? 'text-reset'
+                            ]|merge(card_button.button_classes|default([]))|filter(v => v),
                             button_other_classes: card_button.button_other_classes,
                             button_element: card_button.button_element,
                             button_type: card_button.button_type,
@@ -250,7 +252,9 @@
 
                         {% if card_list %}
                           {% include '@atoms/list/_list.tpl.twig' with {
-                            parent_classes: card_list.parent_classes,
+                            parent_classes: [
+                              inherit_color == true ? 'text-reset'
+                            ]|merge(card_list.parent_classes|default([]))|filter(v => v),
                             parent_other_classes: card_list.parent_other_classes,
                             parent_element: card_list.parent_element,
                             list_id: card_list.list_id,
@@ -270,7 +274,7 @@
                 <div class="card-footer {{ no_footer_padding == true ? 'p-0' }}">
 
                   {% block card_footer %}
-                    <div class="card-footer-content">
+                    <div class="card-footer-content {{ inherit_color == true ? 'text-reset' }}">
                       {{ card_footer }}
                     </div>
                   {% endblock card_footer %}
@@ -313,7 +317,7 @@
           <div class="card-content-wrapper-outer">
             <div class="card-content-wrapper-inner">
               {% block back %}
-                <div class="card-back-content"></div>
+                <div class="card-back-content {{ inherit_color == true ? 'text-reset' }}"></div>
               {% endblock back %}
             </div>
           </div>

@@ -22,15 +22,20 @@
 
       {# Slide Classes #}
       {% set slide_classes = slide_classes|default([])|merge([
+        'posts-loop--slide',
+        'slide',
         fields.slider.slider == 'bootstrap' ? 'carousel-item',
         fields.slider.slider == 'flickity' ? 'carousel-cell',
         fields.slider.slider == 'bootstrap' and fields.active == true ? 'active',
-        fields.slider.slider == 'slick' ? 'slick-slide'
+        fields.slider.slider == 'slick' ? 'slick-slide',
+        fields.slide.slide_layout.slide_layout != 'default' ? 'slide-' ~ fields.slide_layout.slide_layout,
+        fields.slide.bg_color['bg_color'] == 'palette' and fields.slide.bg_color['bg_theme_color'] ? 'bg-' ~ fields.slide.bg_color['bg_theme_color'],
+        fields.full_height_cards == true ? 'full-height-cards'
       ]) | sort | join(' ') | trim %}
 
       {# Slide Attributes #}
       {% set slide_attributes = slide_attributes|default([])|merge([
-        'slide_width' ? 'style="width: ' ~ slide_width ~ ';"'
+        slide_width ? 'style="width: ' ~ slide_width ~ ';"'
       ]) | sort | join(' ') | trim %}
 
       {% if fields.include_cards == true %}
@@ -78,7 +83,9 @@
                   {% endif %}
                   
                   {% include 'blocks/posts-loop/elements/_card.twig' with {
-                    parent_block_data: parent_block_data,
+                    post: post,
+                    fields: fields,
+                    parent_block_data: {'name': 'acf/slider'},
                     additional_attributes: card_attributes
                   } %}
                 </div>
@@ -133,7 +140,9 @@
                   {% endif %}
                   
                   {% include 'blocks/posts-loop/elements/_card.twig' with {
-                    parent_block_data: parent_block_data,
+                    post: post,
+                    fields: fields,
+                    parent_block_data: {'name': 'acf/slider'},
                     additional_attributes: card_attributes
                   } %}
                 </div>
@@ -212,7 +221,9 @@
                   {% endif %}
                   
                   {% include 'blocks/posts-loop/elements/_card.twig' with {
-                    parent_block_data: parent_block_data,
+                    post: post,
+                    fields: fields,
+                    parent_block_data: {'name': 'acf/slider'},
                     additional_attributes: card_attributes
                   } %}
                 </div>
