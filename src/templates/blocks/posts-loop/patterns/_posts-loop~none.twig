@@ -21,7 +21,6 @@
   {% endif %}
 
   {% if fields.link_items == true %}
-    {# TODO: Add modal trigger support - add fields.include_modals conditional for data-bs-toggle="modal" and data-bs-target="#{{ post.slug }}" #}
     <a class="posts-loop--post" href="{{ post.link }}" {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
   {% elseif fields.include_modals == true %}
     <a class="posts-loop--post" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#{{ post.slug }}" {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
