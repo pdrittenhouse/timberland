@@ -115,35 +115,16 @@
             slides: slideCount
           } %}
             {% block carousel_slides %}
-
               {% for post in posts %}
-                {# Categories #}
-                {% if post.categories %}
-                  {% set catArr = [] %}
-                  {% for category in post.categories %}
-                    {% set catArr = catArr | merge([category.name]) %}
-                  {% endfor %}
-                {% endif %}
-
-                <div class="{{ slide_classes }} {{ fields.slider.initial_slide == loop.index0 ? 'active' }}" {{ slide_attributes }}>
-                  {# Include shared card element #}
-                  {% set card_attributes = [] %}
-                  {% if fields.include_modals == true %}
-                    {% set card_attributes = card_attributes|merge(['data-bs-toggle="modal"', 'data-bs-target="#' ~ post.slug ~ '"']) %}
-                  {% endif %}
-                  {% if catArr | length > 0 %}
-                    {% set card_attributes = card_attributes|merge(['data-categories="' ~ catArr | sort | join(', ') | trim ~ '"']) %}
-                  {% endif %}
-                  
-                  {% include 'blocks/posts-loop/elements/_card.twig' with {
-                    post: post,
-                    fields: fields,
-                    parent_block_data: {'name': 'acf/slider'},
-                    additional_attributes: card_attributes
-                  } %}
-                </div>
+                {% include 'blocks/posts-loop/elements/_carousel-slide.twig' with {
+                  post: post,
+                  fields: fields,
+                  slide_classes: slide_classes,
+                  slide_attributes: slide_attributes,
+                  slider_type: 'bootstrap',
+                  loop: loop
+                } %}
               {% endfor %}
-
             {% endblock carousel_slides %}
           {% endembed %}
         {% elseif fields.slider.slider == 'flickity' %}
@@ -174,33 +155,15 @@
           } %}
             {% block slides %}
               {% for post in posts %}
-                {# Categories #}
-                {% if post.categories %}
-                  {% set catArr = [] %}
-                  {% for category in post.categories %}
-                    {% set catArr = catArr | merge([category.name]) %}
-                  {% endfor %}
-                {% endif %}
-
-                <div class="{{ slide_classes }}" {{ slide_attributes }}>
-                  {# Include shared card element #}
-                  {% set card_attributes = [] %}
-                  {% if fields.include_modals == true %}
-                    {% set card_attributes = card_attributes|merge(['data-bs-toggle="modal"', 'data-bs-target="#' ~ post.slug ~ '"']) %}
-                  {% endif %}
-                  {% if catArr | length > 0 %}
-                    {% set card_attributes = card_attributes|merge(['data-categories="' ~ catArr | sort | join(', ') | trim ~ '"']) %}
-                  {% endif %}
-                  
-                  {% include 'blocks/posts-loop/elements/_card.twig' with {
-                    post: post,
-                    fields: fields,
-                    parent_block_data: {'name': 'acf/slider'},
-                    additional_attributes: card_attributes
-                  } %}
-                </div>
+                {% include 'blocks/posts-loop/elements/_carousel-slide.twig' with {
+                  post: post,
+                  fields: fields,
+                  slide_classes: slide_classes,
+                  slide_attributes: slide_attributes,
+                  slider_type: 'flickity',
+                  loop: loop
+                } %}
               {% endfor %}
-
             {% endblock slides %}
           {% endembed %}
         {% elseif fields.slider.slider == 'slick' %}
@@ -255,33 +218,15 @@
           } %}
             {% block slides %}
               {% for post in posts %}
-                {# Categories #}
-                {% if post.categories %}
-                  {% set catArr = [] %}
-                  {% for category in post.categories %}
-                    {% set catArr = catArr | merge([category.name]) %}
-                  {% endfor %}
-                {% endif %}
-
-                <div class="{{ slide_classes }}" {{ slide_attributes }}>
-                  {# Include shared card element #}
-                  {% set card_attributes = [] %}
-                  {% if fields.include_modals == true %}
-                    {% set card_attributes = card_attributes|merge(['data-bs-toggle="modal"', 'data-bs-target="#' ~ post.slug ~ '"']) %}
-                  {% endif %}
-                  {% if catArr | length > 0 %}
-                    {% set card_attributes = card_attributes|merge(['data-categories="' ~ catArr | sort | join(', ') | trim ~ '"']) %}
-                  {% endif %}
-                  
-                  {% include 'blocks/posts-loop/elements/_card.twig' with {
-                    post: post,
-                    fields: fields,
-                    parent_block_data: {'name': 'acf/slider'},
-                    additional_attributes: card_attributes
-                  } %}
-                </div>
+                {% include 'blocks/posts-loop/elements/_carousel-slide.twig' with {
+                  post: post,
+                  fields: fields,
+                  slide_classes: slide_classes,
+                  slide_attributes: slide_attributes,
+                  slider_type: 'slick',
+                  loop: loop
+                } %}
               {% endfor %}
-
             {% endblock slides %}
           {% endembed %}
         {% endif %}
@@ -311,63 +256,14 @@
           } %}
             {% block carousel_slides %}
               {% for post in posts %}
-                {# Categories #}
-                {% if post.categories %}
-                  {% set catArr = [] %}
-                  {% for category in post.categories %}
-                    {% set catArr = catArr | merge([category.name]) %}
-                  {% endfor %}
-                {% endif %}
-
-                <div class="{{ slide_classes }} {{ fields.slider.initial_slide == loop.index0 ? 'active' }}" {{ slide_attributes }} {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
-                  {% if fields.link_items == true %}
-                    <a class="posts-loop--post" href="{{ post.link }}">
-                  {% elseif fields.include_modals == true %}
-                    <a class="posts-loop--post" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#{{ post.slug }}">
-                  {% else %}
-                    <div class="posts-loop--post">
-                  {% endif %}
-
-                    {% for element in fields.posts_query_layout %}
-                      {% if element.acf_fc_layout == 'featured_image' and post.thumbnail.src %}
-                        {% include 'blocks/posts-loop/elements/_featured-image.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_title' and post.post_title %}
-                        {% include 'blocks/posts-loop/elements/_post-title.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_excerpt' and post.post_excerpt %}
-                        {% include 'blocks/posts-loop/elements/_post-excerpt.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_content' and post.content %}
-                        {% include 'blocks/posts-loop/elements/_post-content.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_author' and post.authors %}
-                        {% include 'blocks/posts-loop/elements/_post-author.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_date' and post.date %}
-                        {% include 'blocks/posts-loop/elements/_post-date.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_modified' and post.modified_date %}
-                        {% include 'blocks/posts-loop/elements/_post-modified.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_type' and post.type %}
-                        {% include 'blocks/posts-loop/elements/_post-type.twig' %}
-                      {% elseif element.acf_fc_layout == 'comment_count' and post.comment_count %}
-                        {% include 'blocks/posts-loop/elements/_post-comment-count.twig' %}
-                      {% elseif element.acf_fc_layout == 'terms' and post.terms is not empty %}
-                        {% include 'blocks/posts-loop/elements/_post-terms.twig' %}
-                      {% elseif element.acf_fc_layout == 'categories' and post.categories %}
-                        {% include 'blocks/posts-loop/elements/_post-categories.twig' %}
-                      {% elseif element.acf_fc_layout == 'tags' and post.tags %}
-                        {% include 'blocks/posts-loop/elements/_post-tags.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_parent' and post.parent %}
-                        {% include 'blocks/posts-loop/elements/_post-parent.twig' %}
-                      {% elseif element.acf_fc_layout == 'children' and post.children %}
-                        {% include 'blocks/posts-loop/elements/_post-children.twig' %}
-                      {% elseif element.acf_fc_layout == 'link' and post.link %}
-                        {% include 'blocks/posts-loop/elements/_post-link.twig' %}
-                      {% endif %}
-                    {% endfor %}
-
-                  {% if fields.link_items == true or fields.include_modals == true %}
-                    </a>
-                  {% else %}
-                    </div>
-                  {% endif %}
-                </div>
+                {% include 'blocks/posts-loop/elements/_carousel-slide.twig' with {
+                  post: post,
+                  fields: fields,
+                  slide_classes: slide_classes,
+                  slide_attributes: slide_attributes,
+                  slider_type: 'bootstrap',
+                  loop: loop
+                } %}
               {% endfor %}
             {% endblock carousel_slides %}
           {% endembed %}
@@ -399,63 +295,14 @@
           } %}
             {% block slides %}
               {% for post in posts %}
-                {# Categories #}
-                {% if post.categories %}
-                  {% set catArr = [] %}
-                  {% for category in post.categories %}
-                    {% set catArr = catArr | merge([category.name]) %}
-                  {% endfor %}
-                {% endif %}
-
-                <div class="{{ slide_classes }}" {{ slide_attributes }} {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
-                  {% if fields.link_items == true %}
-                    <a class="posts-loop--post" href="{{ post.link }}">
-                  {% elseif fields.include_modals == true %}
-                    <a class="posts-loop--post" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#{{ post.slug }}">
-                  {% else %}
-                    <div class="posts-loop--post">
-                  {% endif %}
-
-                    {% for element in fields.posts_query_layout %}
-                      {% if element.acf_fc_layout == 'featured_image' and post.thumbnail.src %}
-                        {% include 'blocks/posts-loop/elements/_featured-image.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_title' and post.post_title %}
-                        {% include 'blocks/posts-loop/elements/_post-title.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_excerpt' and post.post_excerpt %}
-                        {% include 'blocks/posts-loop/elements/_post-excerpt.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_content' and post.content %}
-                        {% include 'blocks/posts-loop/elements/_post-content.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_author' and post.authors %}
-                        {% include 'blocks/posts-loop/elements/_post-author.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_date' and post.date %}
-                        {% include 'blocks/posts-loop/elements/_post-date.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_modified' and post.modified_date %}
-                        {% include 'blocks/posts-loop/elements/_post-modified.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_type' and post.type %}
-                        {% include 'blocks/posts-loop/elements/_post-type.twig' %}
-                      {% elseif element.acf_fc_layout == 'comment_count' and post.comment_count %}
-                        {% include 'blocks/posts-loop/elements/_post-comment-count.twig' %}
-                      {% elseif element.acf_fc_layout == 'terms' and post.terms is not empty %}
-                        {% include 'blocks/posts-loop/elements/_post-terms.twig' %}
-                      {% elseif element.acf_fc_layout == 'categories' and post.categories %}
-                        {% include 'blocks/posts-loop/elements/_post-categories.twig' %}
-                      {% elseif element.acf_fc_layout == 'tags' and post.tags %}
-                        {% include 'blocks/posts-loop/elements/_post-tags.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_parent' and post.parent %}
-                        {% include 'blocks/posts-loop/elements/_post-parent.twig' %}
-                      {% elseif element.acf_fc_layout == 'children' and post.children %}
-                        {% include 'blocks/posts-loop/elements/_post-children.twig' %}
-                      {% elseif element.acf_fc_layout == 'link' and post.link %}
-                        {% include 'blocks/posts-loop/elements/_post-link.twig' %}
-                      {% endif %}
-                    {% endfor %}
-
-                  {% if fields.link_items == true or fields.include_modals %}
-                    </a>
-                  {% else %}
-                    </div>
-                  {% endif %}
-                </div>
+                {% include 'blocks/posts-loop/elements/_carousel-slide.twig' with {
+                  post: post,
+                  fields: fields,
+                  slide_classes: slide_classes,
+                  slide_attributes: slide_attributes,
+                  slider_type: 'flickity',
+                  loop: loop
+                } %}
               {% endfor %}
             {% endblock slides %}
           {% endembed %}
@@ -511,63 +358,14 @@
           } %}
             {% block slides %}
               {% for post in posts %}
-                {# Categories #}
-                {% if post.categories %}
-                  {% set catArr = [] %}
-                  {% for category in post.categories %}
-                    {% set catArr = catArr | merge([category.name]) %}
-                  {% endfor %}
-                {% endif %}
-
-                <div class="{{ slide_classes }}" {{ slide_attributes }} {{ catArr | length > 0 ? 'data-categories="' ~ catArr | sort | join(', ') | trim ~ '"' }}>
-                  {% if fields.link_items == true %}
-                    <a class="posts-loop--post" href="{{ post.link }}">
-                  {% elseif fields.include_modals == true %}
-                    <a class="posts-loop--post" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#{{ post.slug }}">
-                  {% else %}
-                    <div class="posts-loop--post">
-                  {% endif %}
-
-                    {% for element in fields.posts_query_layout %}
-                      {% if element.acf_fc_layout == 'featured_image' and post.thumbnail.src %}
-                        {% include 'blocks/posts-loop/elements/_featured-image.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_title' and post.post_title %}
-                        {% include 'blocks/posts-loop/elements/_post-title.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_excerpt' and post.post_excerpt %}
-                        {% include 'blocks/posts-loop/elements/_post-excerpt.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_content' and post.content %}
-                        {% include 'blocks/posts-loop/elements/_post-content.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_author' and post.authors %}
-                        {% include 'blocks/posts-loop/elements/_post-author.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_date' and post.date %}
-                        {% include 'blocks/posts-loop/elements/_post-date.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_modified' and post.modified_date %}
-                        {% include 'blocks/posts-loop/elements/_post-modified.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_type' and post.type %}
-                        {% include 'blocks/posts-loop/elements/_post-type.twig' %}
-                      {% elseif element.acf_fc_layout == 'comment_count' and post.comment_count %}
-                        {% include 'blocks/posts-loop/elements/_post-comment-count.twig' %}
-                      {% elseif element.acf_fc_layout == 'terms' and post.terms is not empty %}
-                        {% include 'blocks/posts-loop/elements/_post-terms.twig' %}
-                      {% elseif element.acf_fc_layout == 'categories' and post.categories %}
-                        {% include 'blocks/posts-loop/elements/_post-categories.twig' %}
-                      {% elseif element.acf_fc_layout == 'tags' and post.tags %}
-                        {% include 'blocks/posts-loop/elements/_post-tags.twig' %}
-                      {% elseif element.acf_fc_layout == 'post_parent' and post.parent %}
-                        {% include 'blocks/posts-loop/elements/_post-parent.twig' %}
-                      {% elseif element.acf_fc_layout == 'children' and post.children %}
-                        {% include 'blocks/posts-loop/elements/_post-children.twig' %}
-                      {% elseif element.acf_fc_layout == 'link' and post.link %}
-                        {% include 'blocks/posts-loop/elements/_post-link.twig' %}
-                      {% endif %}
-                    {% endfor %}
-
-                  {% if fields.link_items == true or fields.include_modals %}
-                    </a>
-                  {% else %}
-                    </div>
-                  {% endif %}
-                </div>
+                {% include 'blocks/posts-loop/elements/_carousel-slide.twig' with {
+                  post: post,
+                  fields: fields,
+                  slide_classes: slide_classes,
+                  slide_attributes: slide_attributes,
+                  slider_type: 'slick',
+                  loop: loop
+                } %}
               {% endfor %}
             {% endblock slides %}
           {% endembed %}
